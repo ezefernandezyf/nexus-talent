@@ -1,0 +1,22 @@
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Dependencias (ej. Node.js)
+node_modules/
+
+# Archivos de entorno y credenciales
+.env
+.env.local
+
+# Archivos compilados/binarios
+*.exe
+*.dll
+*.o
+*.out
+
+# IDEs
+.vscode/
+.idea/
+
+coverage

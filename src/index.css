@@ -1,0 +1,182 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Segoe UI", sans-serif;
+  --font-display: "Inter", "Segoe UI", sans-serif;
+  --font-label: "Space Grotesk", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --color-surface-container-lowest: #0b0e14;
+  --color-surface-container-low: #10131a;
+  --color-surface-container: #1d2026;
+  --color-surface-container-high: #252931;
+  --color-surface-container-highest: #32353c;
+  --color-surface-bright: #171a20;
+  --color-on-surface: #e1e2eb;
+  --color-on-surface-variant: #b7bcc8;
+  --color-outline-variant: #3e484f;
+  --color-primary: #8ed5ff;
+  --color-primary-container: #38bdf8;
+  --color-success: #62d8a6;
+  --color-warning: #f7c66d;
+  --color-error: #ff7d7d;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    background: #0b0e14;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top, rgba(142, 213, 255, 0.12), transparent 34%),
+      linear-gradient(180deg, #0b0e14 0%, #0f1219 46%, #0b0e14 100%);
+    color: #e1e2eb;
+  }
+
+  button,
+  input,
+  textarea {
+    font: inherit;
+  }
+
+  ::selection {
+    background: rgba(142, 213, 255, 0.3);
+    color: #ffffff;
+  }
+}
+
+@layer components {
+  .surface-panel {
+    border-radius: 1.25rem;
+    background: rgba(29, 32, 38, 0.92);
+    backdrop-filter: blur(24px);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 28px 72px rgba(0, 0, 0, 0.34);
+  }
+
+  .ghost-frame {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .label-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #e1e2eb;
+  }
+
+  .tech-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    padding: 0.4rem 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    font-family: var(--font-label);
+    font-size: 0.76rem;
+    color: #e1e2eb;
+  }
+
+  .primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    border: 0;
+    border-radius: 0.9rem;
+    padding: 0.8rem 1.05rem;
+    background: linear-gradient(135deg, #8ed5ff 0%, #38bdf8 100%);
+    color: #0b0e14;
+    font-size: 0.95rem;
+    font-weight: 700;
+    box-shadow:
+      0 14px 36px rgba(56, 189, 248, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.32);
+    transition:
+      transform 160ms ease,
+      filter 160ms ease,
+      opacity 160ms ease;
+  }
+
+  .primary-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.04);
+  }
+
+  .primary-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.62;
+  }
+
+  .secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    border: 0;
+    border-radius: 0.9rem;
+    padding: 0.8rem 1.05rem;
+    background: rgba(142, 213, 255, 0.04);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    color: #8ed5ff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition:
+      background-color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .secondary-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: rgba(142, 213, 255, 0.08);
+  }
+
+  .secondary-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .field-surface {
+    width: 100%;
+    border: 0;
+    border-radius: 0.95rem;
+    background: #0b0e14;
+    color: #e1e2eb;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transition:
+      box-shadow 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .field-surface:focus {
+    outline: none;
+    box-shadow:
+      inset 0 0 0 1px rgba(142, 213, 255, 0.95),
+      0 0 0 4px rgba(142, 213, 255, 0.14);
+  }
+
+  .status-dot {
+    display: inline-block;
+    height: 0.45rem;
+    width: 0.45rem;
+    border-radius: 999px;
+    box-shadow: 0 0 10px currentColor;
+  }
+}
