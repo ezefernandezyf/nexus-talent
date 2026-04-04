@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { createJobAnalysisClient, type JobAnalysisClient } from "../../../lib/ai-client";
+import { isAIOrchestratorError } from "../../../lib/ai-errors";
 import { JOB_ANALYSIS_INPUT_SCHEMA, type JobAnalysisResult } from "../../../schemas/job-analysis";
 
 interface UseJobAnalysisOptions {
@@ -17,6 +18,10 @@ export function useJobAnalysis(options: UseJobAnalysisOptions = {}) {
         const validatedInput = JOB_ANALYSIS_INPUT_SCHEMA.parse({ jobDescription });
         return await client.analyzeJobDescription(validatedInput.jobDescription);
       } catch (error) {
+        if (isAIOrchestratorError(error)) {
+          throw error;
+        }
+
         if (error instanceof Error && error.message.startsWith("La respuesta de IA no es válida")) {
           throw error;
         }

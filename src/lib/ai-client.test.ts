@@ -35,6 +35,47 @@ describe("ai-client", () => {
     expect(result.skillGroups[0]?.category).toBe("Stack principal");
   });
 
+  it("keeps the public client contract stable across transport implementations", async () => {
+    const firstClient = createJobAnalysisClient({
+      transport: async () => ({
+        summary: "Primer transporte",
+        skillGroups: [
+          {
+            category: "Stack principal",
+            skills: [{ name: "React", level: "core" }],
+          },
+        ],
+        outreachMessage: {
+          subject: "Interés A",
+          body: "Hola equipo A,\n\nSaludos,\n[Your Name]",
+        },
+      }),
+    });
+
+    const secondClient = createJobAnalysisClient({
+      transport: async () => ({
+        summary: "Segundo transporte",
+        skillGroups: [
+          {
+            category: "Stack principal",
+            skills: [{ name: "TypeScript", level: "strong" }],
+          },
+        ],
+        outreachMessage: {
+          subject: "Interés B",
+          body: "Hola equipo B,\n\nSaludos,\n[Your Name]",
+        },
+      }),
+    });
+
+    await expect(firstClient.analyzeJobDescription("Senior React engineer")).resolves.toMatchObject({
+      summary: "Primer transporte",
+    });
+    await expect(secondClient.analyzeJobDescription("Senior React engineer")).resolves.toMatchObject({
+      summary: "Segundo transporte",
+    });
+  });
+
   it("wraps malformed transport payloads", async () => {
     const client = createJobAnalysisClient({
       transport: async () => ({
