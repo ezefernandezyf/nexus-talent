@@ -85,6 +85,13 @@ El segundo cambio SDD introduce una capa de orquestación para AI con Groq como 
 - En desarrollo local, el adapter puede caer al transporte de respaldo para no exigir credenciales de Groq desde el primer día.
 - El rate limiting client-side quedó diferido para evitar sobrediseño en la primera integración.
 
+## CI/CD
+
+- El repo ejecuta validación automática con GitHub Actions en pull requests y en pushes a `main`.
+- El workflow corre `npm ci`, `npm run test`, `npm run typecheck` y `npm run build`.
+- Node queda fijado con `.nvmrc` y `package.json` para evitar drift entre local y CI.
+- El despliegue queda listo para Vercel mediante el build de Vite y `vercel.json`.
+
 ## Convenciones
 
 - El UI está pensado en español primero.

@@ -20,18 +20,27 @@ export function createAIOrchestrator<Input>(adapter: ProviderAdapter<Input>, opt
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
     try {
-      const timeoutPromise = new Promise<never>((_, reject) => {
+      const timeoutPromise = new Promise<{ timedOut: true }>((resolve) => {
         timeoutId = setTimeout(() => {
           controller.abort();
-          reject(
-            createAIOrchestratorError(AI_ERROR_CODES.TRANSIENT_FAILURE, "La solicitud superó el tiempo de espera.", {
-              retryable: true,
-            }),
-          );
+          resolve({ timedOut: true });
         }, requestTimeoutMs);
       });
 
-      return await Promise.race([Promise.resolve(execute(controller.signal)), timeoutPromise]);
+      const executionPromise = Promise.resolve(execute(controller.signal));
+      const result = await Promise.race([
+        executionPromise.then((value) => ({ timedOut: false as const, value })),
+        timeoutPromise,
+      ]);
+
+      if ("timedOut" in result && result.timedOut) {
+        executionPromise.catch(() => undefined);
+        throw createAIOrchestratorError(AI_ERROR_CODES.TRANSIENT_FAILURE, "La solicitud superó el tiempo de espera.", {
+          retryable: true,
+        });
+      }
+
+      return result.value;
     } finally {
       if (timeoutId) {
         clearTimeout(timeoutId);

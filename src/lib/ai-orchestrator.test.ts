@@ -124,8 +124,10 @@ describe("createAIOrchestrator", () => {
     );
 
     const pending = orchestrator.run({});
+    const expectation = expect(pending).rejects.toMatchObject({ code: AI_ERROR_CODES.TRANSIENT_FAILURE });
     await vi.advanceTimersByTimeAsync(5);
-    await expect(pending).rejects.toMatchObject({ code: AI_ERROR_CODES.TRANSIENT_FAILURE });
+    await expectation;
+    await vi.runOnlyPendingTimersAsync();
     vi.useRealTimers();
   });
 });
