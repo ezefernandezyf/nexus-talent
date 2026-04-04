@@ -34,6 +34,7 @@ export function createAIOrchestrator<Input>(adapter: ProviderAdapter<Input>, opt
       ]);
 
       if ("timedOut" in result && result.timedOut) {
+        executionPromise.catch(() => undefined);
         throw createAIOrchestratorError(AI_ERROR_CODES.TRANSIENT_FAILURE, "La solicitud superó el tiempo de espera.", {
           retryable: true,
         });
