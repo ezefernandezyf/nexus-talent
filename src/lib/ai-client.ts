@@ -7,6 +7,9 @@ import {
   type JobAnalysisSkill,
   type JobAnalysisSkillGroup,
 } from "../schemas/job-analysis";
+import { createAIOrchestrator } from "./ai-orchestrator";
+import { createGroqProviderAdapter } from "./ai-provider";
+import { isAIOrchestratorError } from "./ai-errors";
 
 export interface JobAnalysisClient {
   analyzeJobDescription(jobDescription: string): Promise<JobAnalysisResult>;
@@ -152,17 +155,27 @@ function parseRawPayload(payload: unknown) {
 
 export function createJobAnalysisClient(options: CreateJobAnalysisClientOptions = {}): JobAnalysisClient {
   const transport = options.transport ?? ((input: JobAnalysisInput) => buildLocalJobAnalysis(input.jobDescription));
+  const orchestrator = createAIOrchestrator(
+    createGroqProviderAdapter({
+      fallbackTransport: transport,
+    }),
+  );
 
   return {
     async analyzeJobDescription(jobDescription: string) {
+      const validatedInput = JOB_ANALYSIS_INPUT_SCHEMA.parse({ jobDescription });
+
       try {
-        const validatedInput = JOB_ANALYSIS_INPUT_SCHEMA.parse({ jobDescription });
-        const payload = await Promise.resolve(transport(validatedInput));
+        const payload = await orchestrator.run(validatedInput);
         const parsedPayload = parseRawPayload(payload);
         return JOB_ANALYSIS_RESULT_SCHEMA.parse(parsedPayload);
       } catch (error) {
         if (error instanceof Error && error.name === "ZodError") {
           throw new Error(`La respuesta de IA no es válida: ${error.message}`);
+        }
+
+        if (isAIOrchestratorError(error)) {
+          throw error;
         }
 
         throw error;

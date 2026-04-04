@@ -76,6 +76,15 @@ Orden esperado para cambios grandes:
 8. `sdd-verify`
 9. `sdd-archive`
 
+## AI Service
+
+El segundo cambio SDD introduce una capa de orquestación para AI con Groq como primer proveedor concreto.
+
+- El cliente de análisis sigue validando entrada y salida con Zod.
+- La capa de orquestación centraliza retries, timeouts y normalización de errores.
+- En desarrollo local, el adapter puede caer al transporte de respaldo para no exigir credenciales de Groq desde el primer día.
+- El rate limiting client-side quedó diferido para evitar sobrediseño en la primera integración.
+
 ## Convenciones
 
 - El UI está pensado en español primero.
