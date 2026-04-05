@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { createGroqProviderAdapter } from "./ai-provider";
+import { GROQ_JOB_ANALYSIS_JSON_SCHEMA } from "./validation/job-analysis";
 
 describe("createGroqProviderAdapter", () => {
   it("exposes Groq as the concrete provider identity", () => {
@@ -33,6 +34,45 @@ describe("createGroqProviderAdapter", () => {
     });
 
     expect(parsed).toMatchObject({ summary: "Ok" });
+  });
+
+  it("reuses the shared Groq response schema from validation", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify({
+                summary: "Ok",
+                skillGroups: [
+                  {
+                    category: "Stack principal",
+                    skills: [{ name: "React", level: "core" }],
+                  },
+                ],
+                outreachMessage: {
+                  subject: "S",
+                  body: "B",
+                },
+              }),
+            },
+          },
+        ],
+      }),
+    });
+
+    const adapter = createGroqProviderAdapter({ apiKey: "test-key", fetchImpl });
+    const request = adapter.buildRequest({ jobDescription: "Senior React engineer" });
+
+    await request.execute(new AbortController().signal);
+
+    const [, requestInit] = fetchImpl.mock.calls[0] ?? [];
+    const requestBody = JSON.parse((requestInit as RequestInit).body as string) as {
+      response_format: { json_schema: { schema: unknown } };
+    };
+
+    expect(requestBody.response_format.json_schema.schema).toEqual(GROQ_JOB_ANALYSIS_JSON_SCHEMA);
   });
 
   it("returns a safe fallback message for unknown errors", () => {
