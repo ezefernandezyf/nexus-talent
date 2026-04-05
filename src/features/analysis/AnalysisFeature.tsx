@@ -51,7 +51,7 @@ export function AnalysisFeature() {
   const errorMessage = analysis.error instanceof Error ? analysis.error.message : "No se pudo completar el análisis.";
 
   return (
-    <section className="surface-panel flex flex-col gap-6 p-6 sm:p-8">
+    <section id="analysis" className="surface-panel flex flex-col gap-6 p-6 sm:p-8">
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-2">
           <span className="label-chip">Espacio de análisis</span>

@@ -1,4 +1,5 @@
 import { AnalysisFeature } from "./features/analysis";
+import { HistoryFeature } from "./features/history";
 
 const APP_BACKGROUND =
   "radial-gradient(circle at 12% 12%, rgba(142, 213, 255, 0.14), transparent 30%), radial-gradient(circle at 88% 18%, rgba(56, 189, 248, 0.12), transparent 24%), radial-gradient(circle at 50% 100%, rgba(99, 102, 241, 0.08), transparent 32%)";
@@ -66,6 +67,8 @@ export function App() {
 
           <AnalysisFeature />
         </section>
+
+        <HistoryFeature />
       </div>
     </main>
   );

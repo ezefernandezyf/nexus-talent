@@ -1,0 +1,24 @@
+interface HistoryEmptyStateProps {
+  analysisHref: string;
+}
+
+export function HistoryEmptyState({ analysisHref }: HistoryEmptyStateProps) {
+  return (
+    <div className="flex min-h-80 items-center justify-center rounded-[1.5rem] bg-surface-container-lowest/45 p-8 sm:p-12">
+      <div className="max-w-xl space-y-4 text-center">
+        <span className="label-chip">Sin historial todavía</span>
+        <div className="space-y-3">
+          <h3 className="text-2xl font-semibold tracking-[-0.02em] text-white sm:text-3xl">
+            Las vacantes analizadas aparecerán acá cuando guardes la primera.
+          </h3>
+          <p className="text-base leading-7 text-on-surface-variant sm:text-lg">
+            El historial conserva los análisis persistidos para que puedas volver a leer el resumen, las señales técnicas y el mensaje sugerido sin repetir trabajo.
+          </p>
+        </div>
+        <a className="primary-button" href={analysisHref}>
+          Ir al análisis
+        </a>
+      </div>
+    </div>
+  );
+}
