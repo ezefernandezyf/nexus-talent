@@ -63,14 +63,15 @@ Para asegurar entregas atómicas y calidad comercial, el proyecto se divide en e
 
 - **01 Job Analysis (core)**: Parseo de job description -> resumen, skills, mensaje sugerido.
 - **02 AI Service / Orchestrator**: Cliente `ai-client`, llamadas a LLM, retries, rate limiting.
-- **03 Validation & Mappers**: Zod schemas, transformadores entre IA <-> dominio.
-- **04 Persistence / History**: Supabase: guardar análisis, notas, historial.
-- **05 UI/UX Feature Shells**: `features/analysis`, `features/history`, componentes desacoplados.
-- **06 Auth & Users**: Supabase auth, perfiles, permisos.
-- **07 Integrations**: GitHub (stack detection), export outreach.
-- **08 CI / Tests / Tooling**: unit tests (mappers, validation), e2e básica, linters.
-- **09 Admin / Settings**: App settings, tokens, consumo.
-- **10 Observability & Errors**: Logging, error states amigables para el usuario.
+- **03 CI / CD**: Añadir CI / CD.
+- **04 Validation & Mappers**: Zod schemas, transformadores entre IA <-> dominio.
+- **05 Persistence / History**: Supabase: guardar análisis, notas, historial.
+- **06 UI/UX Feature Shells**: `features/analysis`, `features/history`, componentes desacoplados.
+- **07 Auth & Users**: Supabase auth, perfiles, permisos.
+- **08 Integrations**: GitHub (stack detection), export outreach.
+- **09 CI / Tests / Tooling**: unit tests (mappers, validation), e2e básica, linters.
+- **10 Admin / Settings**: App settings, tokens, consumo.
+- **11 Observability & Errors**: Logging, error states amigables para el usuario.
 
 ## 7. Flujo de Git y Organización
 

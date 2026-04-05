@@ -2,6 +2,47 @@ import { describe, expect, it } from "vitest";
 import { createJobAnalysisClient, jobAnalysisClient } from "./ai-client";
 
 describe("ai-client", () => {
+  it("normalizes dirty transport payloads before validation", async () => {
+    const client = createJobAnalysisClient({
+      transport: async () => ({
+        summary: "  Un rol enfocado en construir experiencias de producto.  ",
+        skillGroups: [
+          {
+            category: "  Stack principal  ",
+            skills: [
+              { name: "  React  ", level: "CORE", extra: true },
+              { name: "TypeScript", level: "Strong" },
+            ],
+            extraGroupField: "remove-me",
+          },
+        ],
+        outreachMessage: {
+          subject: "  Interés en el puesto  ",
+          body: "  Hola equipo,\n\nMe interesa la oportunidad.  ",
+          draftBody: "  borrador opcional  ",
+        },
+        extraTopLevel: "remove-me",
+      }),
+    });
+
+    await expect(client.analyzeJobDescription("Senior React engineer")).resolves.toEqual({
+      summary: "Un rol enfocado en construir experiencias de producto.",
+      skillGroups: [
+        {
+          category: "Stack principal",
+          skills: [
+            { name: "React", level: "core" },
+            { name: "TypeScript", level: "strong" },
+          ],
+        },
+      ],
+      outreachMessage: {
+        subject: "Interés en el puesto",
+        body: "Hola equipo,\n\nMe interesa la oportunidad.",
+      },
+    });
+  });
+
   it("builds a local analysis when no transport is provided", async () => {
     const result = await jobAnalysisClient.analyzeJobDescription(
       "Senior React engineer with TypeScript, testing, and communication",
@@ -33,6 +74,15 @@ describe("ai-client", () => {
     const result = await client.analyzeJobDescription("Senior React engineer");
 
     expect(result.skillGroups[0]?.category).toBe("Stack principal");
+  });
+
+  it("keeps the local fallback path on the same normalize-then-validate contract", async () => {
+    const result = await jobAnalysisClient.analyzeJobDescription(
+      "Operations lead focused on process clarity and team coordination",
+    );
+
+    expect(result.skillGroups[0]?.category).toBe("Encaje general");
+    expect(result.outreachMessage.body).toContain("[Your Name]");
   });
 
   it("keeps the public client contract stable across transport implementations", async () => {

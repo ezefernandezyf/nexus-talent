@@ -1,15 +1,16 @@
 import {
   JOB_ANALYSIS_INPUT_SCHEMA,
-  JOB_ANALYSIS_RESULT_SCHEMA,
   JOB_ANALYSIS_SKILL_LEVEL,
   type JobAnalysisInput,
   type JobAnalysisResult,
   type JobAnalysisSkill,
   type JobAnalysisSkillGroup,
 } from "../schemas/job-analysis";
+import { normalizeJobAnalysisResponse } from "./mappers";
 import { createAIOrchestrator } from "./ai-orchestrator";
 import { createGroqProviderAdapter } from "./ai-provider";
 import { isAIOrchestratorError } from "./ai-errors";
+import { validateJobAnalysisResult } from "./validation";
 
 export interface JobAnalysisClient {
   analyzeJobDescription(jobDescription: string): Promise<JobAnalysisResult>;
@@ -145,14 +146,6 @@ function buildLocalJobAnalysis(jobDescription: string): JobAnalysisResult {
   };
 }
 
-function parseRawPayload(payload: unknown) {
-  if (typeof payload === "string") {
-    return JSON.parse(payload) as unknown;
-  }
-
-  return payload;
-}
-
 export function createJobAnalysisClient(options: CreateJobAnalysisClientOptions = {}): JobAnalysisClient {
   const transport = options.transport ?? ((input: JobAnalysisInput) => buildLocalJobAnalysis(input.jobDescription));
   const orchestrator = createAIOrchestrator(
@@ -167,8 +160,8 @@ export function createJobAnalysisClient(options: CreateJobAnalysisClientOptions 
 
       try {
         const payload = await orchestrator.run(validatedInput);
-        const parsedPayload = parseRawPayload(payload);
-        return JOB_ANALYSIS_RESULT_SCHEMA.parse(parsedPayload);
+        const normalizedPayload = normalizeJobAnalysisResponse(payload);
+        return validateJobAnalysisResult(normalizedPayload);
       } catch (error) {
         if (error instanceof Error && error.name === "ZodError") {
           throw new Error(`La respuesta de IA no es válida: ${error.message}`);
