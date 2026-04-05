@@ -64,8 +64,15 @@ export const JOB_ANALYSIS_RESULT_SCHEMA = z.object({
   outreachMessage: JOB_ANALYSIS_OUTREACH_SCHEMA,
 }).strict();
 
+export const SAVED_JOB_ANALYSIS_SCHEMA = JOB_ANALYSIS_RESULT_SCHEMA.extend({
+  id: z.string().uuid({ error: "El identificador del historial es obligatorio." }),
+  createdAt: z.string().datetime({ error: "La fecha de creación debe ser una fecha ISO válida." }),
+  jobDescription: JOB_ANALYSIS_INPUT_SCHEMA.shape.jobDescription,
+}).strict();
+
 export type JobAnalysisSkill = z.infer<typeof JOB_ANALYSIS_SKILL_SCHEMA>;
 export type JobAnalysisSkillGroup = z.infer<typeof JOB_ANALYSIS_SKILL_GROUP_SCHEMA>;
 export type JobAnalysisOutreach = z.infer<typeof JOB_ANALYSIS_OUTREACH_SCHEMA>;
 export type JobAnalysisEditableOutreach = z.infer<typeof JOB_ANALYSIS_EDITABLE_OUTREACH_SCHEMA>;
 export type JobAnalysisResult = z.infer<typeof JOB_ANALYSIS_RESULT_SCHEMA>;
+export type SavedJobAnalysis = z.infer<typeof SAVED_JOB_ANALYSIS_SCHEMA>;
