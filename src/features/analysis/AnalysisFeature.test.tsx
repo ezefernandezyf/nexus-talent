@@ -76,6 +76,11 @@ describe("AnalysisFeature", () => {
           subject: "Interés en el puesto",
           body: "Hola equipo,\n\nRevisé la vacante.\n\nSaludos,\n[Your Name]",
         },
+        githubEnrichment: {
+          repositoryName: "ezefernandezyf/nexus-talent",
+          repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
+          detectedStack: [{ name: "TypeScript", source: "languages" }],
+        },
       },
       isSuccess: true,
     });
@@ -84,5 +89,9 @@ describe("AnalysisFeature", () => {
 
     expect(screen.getByText(/análisis estructurado de la vacante/i)).toBeInTheDocument();
     expect(screen.getByText(/Un rol enfocado en construir experiencias de producto\./i)).toBeInTheDocument();
+    expect(screen.getByText(/GitHub enriquecido/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /abrir email/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /descargar markdown/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /descargar json/i })).toBeInTheDocument();
   });
 });
