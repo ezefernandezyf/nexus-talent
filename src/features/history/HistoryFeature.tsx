@@ -52,7 +52,7 @@ export function HistoryFeature({ analysisHref = "#analysis", repository }: Histo
       {history.isPending ? (
         <HistoryLoadingState />
       ) : history.isError ? (
-        <div className="rounded-[1.5rem] bg-surface-container-lowest/50 p-8 text-center sm:p-12" role="alert">
+        <div className="rounded-3xl bg-surface-container-lowest/50 p-8 text-center sm:p-12" role="alert">
           <div className="mx-auto max-w-xl space-y-3">
             <span className="label-chip">No se pudo cargar el historial</span>
             <p className="text-base leading-7 text-on-surface-variant">{errorMessage}</p>

@@ -4,7 +4,7 @@ interface HistoryEmptyStateProps {
 
 export function HistoryEmptyState({ analysisHref }: HistoryEmptyStateProps) {
   return (
-    <div className="flex min-h-80 items-center justify-center rounded-[1.5rem] bg-surface-container-lowest/45 p-8 sm:p-12">
+    <div className="flex min-h-80 items-center justify-center rounded-3xl bg-surface-container-lowest/45 p-8 sm:p-12">
       <div className="max-w-xl space-y-4 text-center">
         <span className="label-chip">Sin historial todavía</span>
         <div className="space-y-3">
