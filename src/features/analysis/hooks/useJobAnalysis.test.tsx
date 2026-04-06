@@ -33,6 +33,23 @@ function createGitHubClientStub(overrides: Partial<GitHubClient> = {}): GitHubCl
   };
 }
 
+function createGitHubClient(overrides: Partial<GitHubClient> = {}): GitHubClient {
+  return {
+    lookupRepository: vi.fn(async () => ({
+      description: "React app with TypeScript",
+      fullName: "ezefernandezyf/nexus-talent",
+      languages: [{ name: "TypeScript", bytes: 1200 }],
+      name: "nexus-talent",
+      owner: "ezefernandezyf",
+      primaryLanguage: "TypeScript",
+      repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
+      topics: ["react"],
+      warnings: [],
+    })),
+    ...overrides,
+  };
+}
+
 describe("useJobAnalysis", () => {
   it("exposes pending and success states", async () => {
     const deferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
