@@ -42,6 +42,10 @@ Toda interfaz generada debe basarse en el `DESIGN.md` existente y las capturas d
 - **Cristales y Luces**: Botones primarios llevan gradientes ligeros, _glassmorphism_ para modales (`surface_variant` 60% + 24px blur), e indicadores de status con "Glow Pulse", no badgets toscos.
 - **Elevación**: Crear volumen con luz (Drop shadows tintados), nunca sombras negras saturadas.
 
+Las capturas de `docs/assets/` fueron generadas con Stitch sobre una base Material UI. Deben tomarse como referencia visual de composición, spacing y jerarquía, no como una obligación de implementar Material UI en la app.
+
+Material UI puede usarse solo como excepción justificada para casos puntuales; no debe convertirse en la base del sistema visual ni reemplazar `DESIGN.md`.
+
 La fase final del roadmap debe dedicarse a **UI parity / visual polish**: alinear las pantallas existentes con `docs/assets/` y `DESIGN.md`, corrigiendo spacing, jerarquía, estados vacíos, loading y detalles responsivos. Esa fase **no** debe introducir features nuevas; su alcance es estrictamente visual.
 
 ## 5. El Flujo de Trabajo (SDD Protocol)

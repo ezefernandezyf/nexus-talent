@@ -1,10 +1,38 @@
+import { Navigate, Route, Routes } from "react-router-dom";
 import { AnalysisFeature } from "./features/analysis";
 import { HistoryFeature } from "./features/history";
+import {
+  AUTH_STATUS,
+  AuthShell,
+  AuthStatusScreen,
+  LogoutButton,
+  ProtectedRoute,
+  PublicAuthRoute,
+  SignInForm,
+  SignUpForm,
+  useAuth,
+} from "./features/auth";
 
 const APP_BACKGROUND =
   "radial-gradient(circle at 12% 12%, rgba(142, 213, 255, 0.14), transparent 30%), radial-gradient(circle at 88% 18%, rgba(56, 189, 248, 0.12), transparent 24%), radial-gradient(circle at 50% 100%, rgba(99, 102, 241, 0.08), transparent 32%)";
 
-export function App() {
+function AppLoadingState() {
+  return <AuthStatusScreen message="Estamos verificando la sesión para decidir si abrimos el shell privado o la pantalla de acceso." title="Cargando acceso" />;
+}
+
+function RootRedirect() {
+  const { status } = useAuth();
+
+  if (status === AUTH_STATUS.LOADING) {
+    return <AppLoadingState />;
+  }
+
+  return <Navigate replace to={status === AUTH_STATUS.AUTHENTICATED ? "/app" : "/auth/sign-in"} />;
+}
+
+function PrivateAppShell() {
+  const { user } = useAuth();
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-surface-container-lowest text-on-surface">
       <div
@@ -23,17 +51,20 @@ export function App() {
             "linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.15) 60%, transparent)",
         }}
       />
+
       <div className="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-8 px-5 py-6 sm:px-8 lg:px-10 lg:py-8">
-        <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-2">
-            <span className="label-chip">Nexus Talent / Análisis de vacantes</span>
+            <span className="label-chip">Nexus Talent / Acceso privado</span>
             <h1 className="max-w-3xl font-sans text-4xl font-semibold tracking-[-0.03em] text-white sm:text-5xl lg:text-6xl">
               Convertí una oferta laboral en bruto en un resumen estructurado y un mensaje de contacto que realmente puedas usar.
             </h1>
           </div>
-          <p className="max-w-sm text-sm leading-6 text-on-surface-variant">
-            Superficies profundas, salida validada y un mensaje editable antes de copiar. Hecho para precisión, no para relleno.
-          </p>
+
+          <div className="flex flex-col items-start gap-3 sm:items-end">
+            <span className="label-chip">{user?.email ?? "Sesión activa"}</span>
+            <LogoutButton />
+          </div>
         </header>
 
         <section className="grid flex-1 gap-6 lg:grid-cols-[0.9fr_1.1fr]">
@@ -45,7 +76,7 @@ export function App() {
               </h2>
               <p className="max-w-2xl text-base leading-7 text-on-surface-variant">
                 Pegá una descripción del puesto, dejá que el analizador local extraiga las señales relevantes y después editá
-                el borrador del mensaje antes de copiarlo. La frontera con IA remota sigue intercambiable para integrarla más adelante.
+                el borrador del mensaje antes de copiarlo. El historial local sigue separado hasta que la migración de auth esté lista.
               </p>
             </div>
 
@@ -71,5 +102,36 @@ export function App() {
         <HistoryFeature />
       </div>
     </main>
+  );
+}
+
+export function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<RootRedirect />} />
+      <Route element={<PublicAuthRoute />} path="/auth">
+        <Route index element={<Navigate replace to="sign-in" />} />
+        <Route
+          path="sign-in"
+          element={
+            <AuthShell mode="sign-in">
+              <SignInForm />
+            </AuthShell>
+          }
+        />
+        <Route
+          path="sign-up"
+          element={
+            <AuthShell mode="sign-up">
+              <SignUpForm />
+            </AuthShell>
+          }
+        />
+      </Route>
+      <Route element={<ProtectedRoute />} path="/app">
+        <Route index element={<PrivateAppShell />} />
+      </Route>
+      <Route path="*" element={<Navigate replace to="/" />} />
+    </Routes>
   );
 }
