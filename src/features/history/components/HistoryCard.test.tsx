@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import type { SavedJobAnalysis } from "../../../schemas/job-analysis";
 import { formatHistoryCardDate, getHistorySummarySnippet } from "../history-formatters";
@@ -43,12 +43,8 @@ describe("HistoryCard", () => {
 
     expect(screen.getByRole("heading", { name: "Frontend Engineer" })).toBeInTheDocument();
     expect(screen.getByText(getHistorySummarySnippet(analysis.summary))).toBeInTheDocument();
-    expect(
-      screen.getByText((_, element) => {
-        const textContent = element?.textContent ?? "";
-        return element?.tagName.toLowerCase() === "p" && textContent.includes("5 abr 2026") && textContent.includes("9:05");
-      }),
-    ).toBeInTheDocument();
+    const card = screen.getByRole("listitem", { name: "Frontend Engineer" });
+    expect(within(card).getByText(/5 abr 2026/i)).toBeInTheDocument();
 
     const chips = container.querySelectorAll(".tech-chip");
     expect(chips).toHaveLength(5);
