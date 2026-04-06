@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import { JOB_ANALYSIS_SKILL_LEVEL, type JobAnalysisResult } from "../../../schemas/job-analysis";
+import {
+  buildOutreachExportPayload,
+  createOutreachExportFilename,
+  downloadTextFile,
+} from "../export";
 
 interface AnalysisResultViewProps {
   result: JobAnalysisResult;
@@ -22,6 +27,22 @@ function levelLabel(level: string) {
   return "Adyacente";
 }
 
+function sourceLabel(source: string) {
+  if (source === "languages") {
+    return "Lenguajes";
+  }
+
+  if (source === "topics") {
+    return "Topics";
+  }
+
+  if (source === "description") {
+    return "Descripción";
+  }
+
+  return "GitHub";
+}
+
 const defaultCopyToClipboard = async (value: string) => {
   await navigator.clipboard.writeText(value);
 };
@@ -29,12 +50,14 @@ const defaultCopyToClipboard = async (value: string) => {
 export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClipboard }: AnalysisResultViewProps) {
   const [subject, setSubject] = useState(result.outreachMessage.subject);
   const [body, setBody] = useState(result.outreachMessage.body);
-  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
+  const [feedbackMessage, setFeedbackMessage] = useState("La acción de copiar siempre usa el último texto editado.");
+  const [feedbackTone, setFeedbackTone] = useState<"idle" | "success" | "error">("idle");
 
   useEffect(() => {
     setSubject(result.outreachMessage.subject);
     setBody(result.outreachMessage.body);
-    setCopyState("idle");
+    setFeedbackMessage("La acción de copiar siempre usa el último texto editado.");
+    setFeedbackTone("idle");
   }, [result]);
 
   async function handleCopy() {
@@ -42,10 +65,62 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
 
     try {
       await copyToClipboard(copyText);
-      setCopyState("copied");
+      setFeedbackTone("success");
+      setFeedbackMessage("Se copió el mensaje editado.");
     } catch {
-      setCopyState("error");
+      setFeedbackTone("error");
+      setFeedbackMessage("No se pudo acceder al portapapeles.");
     }
+  }
+
+  function handleOpenEmailDraft() {
+    const exportPayload = buildOutreachExportPayload({ subject, body });
+    const openedWindow = window.open(exportPayload.mailtoHref, "_self", "noopener,noreferrer");
+
+    if (!openedWindow) {
+      setFeedbackTone("error");
+      setFeedbackMessage("No se pudo abrir el cliente de correo. Usá copiar o descargar el outreach.");
+      return;
+    }
+
+    setFeedbackTone("success");
+    setFeedbackMessage("Se abrió el borrador de email con el outreach editado.");
+  }
+
+  function handleDownloadMarkdown() {
+    const exportPayload = buildOutreachExportPayload({ subject, body });
+    const downloaded = downloadTextFile({
+      content: exportPayload.markdown,
+      filename: createOutreachExportFilename(subject, "md"),
+      mimeType: "text/markdown;charset=utf-8",
+    });
+
+    if (!downloaded) {
+      setFeedbackTone("error");
+      setFeedbackMessage("No se pudo descargar el archivo markdown. Usá copiar como respaldo.");
+      return;
+    }
+
+    setFeedbackTone("success");
+    setFeedbackMessage("Se descargó el outreach en markdown.");
+  }
+
+  function handleDownloadJson() {
+    const exportPayload = buildOutreachExportPayload({ subject, body });
+    const downloaded = downloadTextFile({
+      content: exportPayload.json,
+      filename: createOutreachExportFilename(subject, "json"),
+      mimeType: "application/json;charset=utf-8",
+    });
+
+    if (!downloaded) {
+      setFeedbackTone("error");
+      setFeedbackMessage("No se pudo descargar el archivo JSON. Usá copiar como respaldo.");
+      return;
+    }
+
+    setFeedbackTone("success");
+    setFeedbackMessage("Se descargó el outreach en JSON.");
   }
 
   return (
@@ -99,15 +174,68 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
         </div>
       </div>
 
+      {result.githubEnrichment ? (
+        <div className="surface-panel space-y-5 p-6">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <span className="label-chip">GitHub enriquecido</span>
+              <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Stack observado en el repositorio</h4>
+            </div>
+            <a
+              href={result.githubEnrichment.repositoryUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs uppercase tracking-[0.22em] text-on-surface-variant transition-colors hover:text-white"
+            >
+              {result.githubEnrichment.repositoryName}
+            </a>
+          </div>
+
+          {result.githubEnrichment.warningMessage ? (
+            <p className="rounded-2xl bg-warning/10 px-4 py-3 text-sm leading-7 text-warning">
+              {result.githubEnrichment.warningMessage}
+            </p>
+          ) : null}
+
+          {result.githubEnrichment.detectedStack.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {result.githubEnrichment.detectedStack.map((signal) => (
+                <span key={`${signal.name}-${signal.source}`} className="tech-chip">
+                  {signal.name}
+                  <span className="text-[0.66rem] uppercase tracking-[0.18em] text-on-surface-variant">
+                    {sourceLabel(signal.source)}
+                  </span>
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm leading-7 text-on-surface-variant">
+              No se detectaron señales claras de stack en este repositorio.
+            </p>
+          )}
+        </div>
+      ) : null}
+
       <div className="surface-panel space-y-5 p-6">
         <div className="flex items-center justify-between gap-4">
           <div>
             <span className="label-chip">Borrador de contacto</span>
             <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Editá antes de copiar</h4>
           </div>
-          <button className="secondary-button" type="button" onClick={handleCopy}>
-            Copiar mensaje
-          </button>
+          <div className="flex flex-wrap justify-end gap-2">
+            <button className="secondary-button" type="button" onClick={handleOpenEmailDraft}>
+              Abrir email
+            </button>
+            <button className="secondary-button" type="button" onClick={handleDownloadMarkdown}>
+              Descargar Markdown
+            </button>
+            <button className="secondary-button" type="button" onClick={handleDownloadJson}>
+              Descargar JSON
+            </button>
+            <button className="primary-button" type="button" onClick={handleCopy}>
+              Copiar mensaje
+            </button>
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -133,12 +261,8 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
         </div>
 
         <div className="flex items-center justify-between gap-3 text-sm text-on-surface-variant" aria-live="polite">
-          <span>
-            {copyState === "copied"
-              ? "Se copió el mensaje editado."
-              : copyState === "error"
-                ? "No se pudo acceder al portapapeles."
-                : "La acción de copiar siempre usa el último texto editado."}
+          <span className={feedbackTone === "error" ? "text-error" : feedbackTone === "success" ? "text-success" : ""}>
+            {feedbackMessage}
           </span>
           <span className="font-mono text-xs uppercase tracking-[0.18em] text-on-surface-variant">
             {body.length} chars

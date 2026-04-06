@@ -33,6 +33,24 @@ describe("JobDescriptionForm", () => {
     await user.type(screen.getByLabelText(/descripción del puesto/i), "  Ingeniero React senior con TypeScript  ");
     await user.click(screen.getByRole("button", { name: /analizar vacante/i }));
 
-    expect(onSubmit).toHaveBeenCalledWith("Ingeniero React senior con TypeScript");
+    expect(onSubmit).toHaveBeenCalledWith({
+      jobDescription: "Ingeniero React senior con TypeScript",
+      githubRepositoryUrl: undefined,
+    });
+  });
+
+  it("submits the optional GitHub repository URL", async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+
+    render(<JobDescriptionForm isPending={false} onSubmit={onSubmit} />);
+    await user.type(screen.getByLabelText(/descripción del puesto/i), "Ingeniero React senior con TypeScript");
+    await user.type(screen.getByLabelText(/url del repositorio de github/i), "  https://github.com/ezefernandezyf/nexus-talent  ");
+    await user.click(screen.getByRole("button", { name: /analizar vacante/i }));
+
+    expect(onSubmit).toHaveBeenCalledWith({
+      jobDescription: "Ingeniero React senior con TypeScript",
+      githubRepositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
+    });
   });
 });

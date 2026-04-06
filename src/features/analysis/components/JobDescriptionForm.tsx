@@ -3,11 +3,12 @@ import { useState } from "react";
 interface JobDescriptionFormProps {
   errorMessage?: string | null;
   isPending: boolean;
-  onSubmit: (jobDescription: string) => void;
+  onSubmit: (request: { githubRepositoryUrl?: string; jobDescription: string }) => void;
 }
 
 export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDescriptionFormProps) {
   const [jobDescription, setJobDescription] = useState("");
+  const [githubRepositoryUrl, setGitHubRepositoryUrl] = useState("");
   const [localError, setLocalError] = useState<string | null>(null);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -20,7 +21,12 @@ export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDes
     }
 
     setLocalError(null);
-    onSubmit(normalizedDescription);
+    const normalizedRepositoryUrl = githubRepositoryUrl.trim();
+
+    onSubmit({
+      jobDescription: normalizedDescription,
+      githubRepositoryUrl: normalizedRepositoryUrl.length > 0 ? normalizedRepositoryUrl : undefined,
+    });
   }
 
   return (
@@ -46,6 +52,26 @@ export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDes
         </div>
         <p id="job-description-help" className="text-sm leading-6 text-on-surface-variant">
           La entrada se valida antes de correr el análisis. Los envíos vacíos se bloquean en el momento.
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        <label className="label-chip" htmlFor="github-repository-url">
+          URL del repositorio de GitHub <span className="text-on-surface-variant">(opcional)</span>
+        </label>
+        <input
+          id="github-repository-url"
+          name="github-repository-url"
+          value={githubRepositoryUrl}
+          onChange={(event) => setGitHubRepositoryUrl(event.target.value)}
+          placeholder="https://github.com/owner/repository"
+          className="field-surface w-full px-4 py-3 text-sm"
+          autoComplete="off"
+          inputMode="url"
+          aria-describedby="github-repository-help"
+        />
+        <p id="github-repository-help" className="text-sm leading-6 text-on-surface-variant">
+          Si lo completás, el análisis intentará enriquecer el resultado con señales públicas del stack.
         </p>
       </div>
 
