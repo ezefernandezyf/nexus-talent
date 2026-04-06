@@ -16,7 +16,7 @@ function createDeferred<T>() {
   return { promise, resolve, reject };
 }
 
-function createGitHubClient(overrides: Partial<GitHubClient> = {}): GitHubClient {
+function createGitHubClientStub(overrides: Partial<GitHubClient> = {}): GitHubClient {
   return {
     lookupRepository: vi.fn(async () => ({
       description: "React app with TypeScript",
@@ -111,7 +111,7 @@ describe("useJobAnalysis", () => {
       analyzeJobDescription: vi.fn(() => deferred.promise),
     };
     const repository = createAnalysisRepository();
-    const githubClient = createGitHubClient();
+    const githubClient = createGitHubClientStub();
     const wrapper = createQueryClientWrapper();
     const { result } = renderHook(() => useJobAnalysis({ client, repository, githubClient }), { wrapper });
 
