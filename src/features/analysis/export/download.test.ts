@@ -2,11 +2,27 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { downloadTextFile } from "./download";
 
 describe("downloadTextFile", () => {
-  const createObjectUrlSpy = vi.spyOn(URL, "createObjectURL");
-  const revokeObjectUrlSpy = vi.spyOn(URL, "revokeObjectURL");
-  const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click");
+  let createObjectUrlSpy: ReturnType<typeof vi.spyOn>;
+  let revokeObjectUrlSpy: ReturnType<typeof vi.spyOn>;
+  let clickSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
+    Object.defineProperty(URL, "createObjectURL", {
+      configurable: true,
+      value: vi.fn(),
+    });
+    Object.defineProperty(URL, "revokeObjectURL", {
+      configurable: true,
+      value: vi.fn(),
+    });
+    Object.defineProperty(HTMLAnchorElement.prototype, "click", {
+      configurable: true,
+      value: vi.fn(),
+    });
+
+    createObjectUrlSpy = vi.spyOn(URL, "createObjectURL");
+    revokeObjectUrlSpy = vi.spyOn(URL, "revokeObjectURL");
+    clickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click");
     createObjectUrlSpy.mockReturnValue("blob:outreach");
     revokeObjectUrlSpy.mockImplementation(() => undefined);
     clickSpy.mockImplementation(() => undefined);
