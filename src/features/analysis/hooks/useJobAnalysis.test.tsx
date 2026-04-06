@@ -33,23 +33,6 @@ function createGitHubClientStub(overrides: Partial<GitHubClient> = {}): GitHubCl
   };
 }
 
-function createGitHubClient(overrides: Partial<GitHubClient> = {}): GitHubClient {
-  return {
-    lookupRepository: vi.fn(async () => ({
-      description: "React app with TypeScript",
-      fullName: "ezefernandezyf/nexus-talent",
-      languages: [{ name: "TypeScript", bytes: 1200 }],
-      name: "nexus-talent",
-      owner: "ezefernandezyf",
-      primaryLanguage: "TypeScript",
-      repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
-      topics: ["react"],
-      warnings: [],
-    })),
-    ...overrides,
-  };
-}
-
 describe("useJobAnalysis", () => {
   it("exposes pending and success states", async () => {
     const deferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
@@ -120,6 +103,39 @@ describe("useJobAnalysis", () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
     expect(result.current.error?.message).toContain("La respuesta de IA no es válida");
     expect(repository.save).not.toHaveBeenCalled();
+  });
+
+  it("skips GitHub enrichment when no repository URL is provided", async () => {
+    const deferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
+    const client: JobAnalysisClient = {
+      analyzeJobDescription: vi.fn(() => deferred.promise),
+    };
+    const repository = createAnalysisRepository();
+    const githubClient = createGitHubClientStub();
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useJobAnalysis({ client, repository, githubClient }), { wrapper });
+
+    result.current.submitAnalysis(createAnalysisRequest({ githubRepositoryUrl: undefined }));
+
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+
+    deferred.resolve({
+      summary: "Un rol enfocado en construir experiencias de producto.",
+      skillGroups: [
+        {
+          category: "Stack principal",
+          skills: [{ name: "React", level: "core" }],
+        },
+      ],
+      outreachMessage: {
+        subject: "Interés en el puesto",
+        body: "Hola equipo,\n\nQuisiera conversar sobre la vacante.\n\nSaludos,\n[Your Name]",
+      },
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(githubClient.lookupRepository).not.toHaveBeenCalled();
+    expect(result.current.data?.githubEnrichment).toBeUndefined();
   });
 
   it("enriches the analysis when github lookup succeeds", async () => {
@@ -304,5 +320,45 @@ describe("useJobAnalysis", () => {
     expect(result.current.data?.githubEnrichment?.warningMessage).toContain("GitHub unavailable");
     expect(result.current.data?.githubEnrichment?.detectedStack).toEqual([]);
     expect(repository.save).toHaveBeenCalledTimes(1);
+  });
+
+  it("falls back to the default GitHub error message for non-error rejections", async () => {
+    const deferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
+    const client: JobAnalysisClient = {
+      analyzeJobDescription: vi.fn(() => deferred.promise),
+    };
+    const repository = createAnalysisRepository();
+    const githubClient: GitHubClient = {
+      lookupRepository: vi.fn(async () => {
+        return Promise.reject("timeout");
+      }),
+    };
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useJobAnalysis({ client, repository, githubClient }), { wrapper });
+
+    result.current.submitAnalysis({
+      ...createAnalysisRequest(),
+      githubRepositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
+    });
+
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+
+    deferred.resolve({
+      summary: "Un rol enfocado en construir experiencias de producto.",
+      skillGroups: [
+        {
+          category: "Stack principal",
+          skills: [{ name: "React", level: "core" }],
+        },
+      ],
+      outreachMessage: {
+        subject: "Interés en el puesto",
+        body: "Hola equipo,\n\nQuisiera conversar sobre la vacante.\n\nSaludos,\n[Your Name]",
+      },
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data?.githubEnrichment?.warningMessage).toBe("No se pudo completar la consulta a GitHub.");
+    expect(result.current.data?.githubEnrichment?.detectedStack).toEqual([]);
   });
 });

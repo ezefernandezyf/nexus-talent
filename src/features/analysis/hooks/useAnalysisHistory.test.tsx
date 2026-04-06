@@ -4,6 +4,14 @@ import { createAnalysisRepository, createQueryClientWrapper, createSavedAnalysis
 import { useAnalysisHistory } from "./useAnalysisHistory";
 
 describe("useAnalysisHistory", () => {
+  it("defaults to an empty list before the query resolves", () => {
+    const repository = createAnalysisRepository({ analyses: [] });
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useAnalysisHistory({ repository }), { wrapper });
+
+    expect(result.current.analyses).toEqual([]);
+  });
+
   it("exposes an empty history when no records exist", async () => {
     const repository = createAnalysisRepository({ analyses: [] });
     const wrapper = createQueryClientWrapper();
