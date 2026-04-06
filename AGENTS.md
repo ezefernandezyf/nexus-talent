@@ -42,6 +42,12 @@ Toda interfaz generada debe basarse en el `DESIGN.md` existente y las capturas d
 - **Cristales y Luces**: Botones primarios llevan gradientes ligeros, _glassmorphism_ para modales (`surface_variant` 60% + 24px blur), e indicadores de status con "Glow Pulse", no badgets toscos.
 - **Elevación**: Crear volumen con luz (Drop shadows tintados), nunca sombras negras saturadas.
 
+Las capturas de `docs/assets/` fueron generadas con Stitch sobre una base Material UI. Deben tomarse como referencia visual de composición, spacing y jerarquía, no como una obligación de implementar Material UI en la app.
+
+Material UI puede usarse solo como excepción justificada para casos puntuales; no debe convertirse en la base del sistema visual ni reemplazar `DESIGN.md`.
+
+La fase final del roadmap debe dedicarse a **UI parity / visual polish**: alinear las pantallas existentes con `docs/assets/` y `DESIGN.md`, corrigiendo spacing, jerarquía, estados vacíos, loading y detalles responsivos. Esa fase **no** debe introducir features nuevas; su alcance es estrictamente visual.
+
 ## 5. El Flujo de Trabajo (SDD Protocol)
 
 La ejecución DEBE orquestarse con SDD. Este proyecto utiliza un enfoque **Hybrid** (Engram + Openspec) para asegurar que las especificaciones sean tanto buscables como auditables en el repositorio.
@@ -72,6 +78,7 @@ Para asegurar entregas atómicas y calidad comercial, el proyecto se divide en e
 - **09 CI / Tests / Tooling**: unit tests (mappers, validation), e2e básica, linters.
 - **10 Admin / Settings**: App settings, tokens, consumo.
 - **11 Observability & Errors**: Logging, error states amigables para el usuario.
+- **12 UI Parity / Visual Polish**: Ajuste final de todas las pantallas para calcar `docs/assets/` y cerrar inconsistencias visuales sin sumar features.
 
 ## 7. Flujo de Git y Organización
 

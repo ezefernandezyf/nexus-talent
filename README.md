@@ -15,6 +15,8 @@ La primera capacidad del producto convierte una descripción de puesto en tres s
 - Tailwind CSS 4
 - Zod 4
 - TanStack Query
+- Supabase Auth
+- React Router
 - Vitest
 - React Testing Library
 - Vite
@@ -84,6 +86,17 @@ El segundo cambio SDD introduce una capa de orquestación para AI con Groq como 
 - La capa de orquestación centraliza retries, timeouts y normalización de errores.
 - En desarrollo local, el adapter puede caer al transporte de respaldo para no exigir credenciales de Groq desde el primer día.
 - El rate limiting client-side quedó diferido para evitar sobrediseño en la primera integración.
+
+## Supabase Auth
+
+La autenticación del módulo 07 usa Supabase como origen de verdad para la sesión.
+
+- `VITE_SUPABASE_URL`: URL del proyecto de Supabase.
+- `VITE_SUPABASE_ANON_KEY`: clave pública anon del proyecto.
+
+Si estas variables faltan, la app se mantiene en el shell público de autenticación y no expone las rutas privadas.
+
+La base mínima de esquema vive en `supabase/migrations/20260405_module_07_auth_users.sql`.
 
 ## CI/CD
 
