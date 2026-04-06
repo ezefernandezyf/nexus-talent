@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createJobAnalysisClient, jobAnalysisClient } from "./ai-client";
+import { AI_ERROR_CODES, createAIOrchestratorError } from "./ai-errors";
 
 describe("ai-client", () => {
   it("normalizes dirty transport payloads before validation", async () => {
@@ -136,6 +137,32 @@ describe("ai-client", () => {
     });
 
     await expect(client.analyzeJobDescription("Senior React engineer")).rejects.toThrow(/La respuesta de IA no es válida/i);
+  });
+
+  it("preserves AI orchestrator errors from the transport layer", async () => {
+    const client = createJobAnalysisClient({
+      transport: async () => {
+        throw createAIOrchestratorError(AI_ERROR_CODES.TRANSIENT_FAILURE, "Temporary upstream failure");
+      },
+    });
+
+    await expect(client.analyzeJobDescription("Senior React engineer")).rejects.toMatchObject({
+      name: "AIOrchestratorError",
+      code: AI_ERROR_CODES.TRANSIENT_FAILURE,
+      retryable: true,
+    });
+  });
+
+  it("rethrows unexpected transport errors as-is", async () => {
+    const client = createJobAnalysisClient({
+      transport: async () => {
+        throw new Error("Transport unavailable");
+      },
+    });
+
+    await expect(client.analyzeJobDescription("Senior React engineer")).rejects.toThrow(
+      /No se pudo completar la solicitud contra Groq/i,
+    );
   });
 
   it("rejects empty job descriptions", async () => {

@@ -11,10 +11,12 @@ export default defineConfig({
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
     coverage: {
       provider: "v8",
+      reporter: ["text", "html"],
+      reportsDirectory: "./coverage",
       include: [
         "src/features/analysis/**/*.{ts,tsx}",
         "src/lib/ai-client.ts",
-        "src/schemas/job-analysis.ts"
+        "src/schemas/job-analysis.ts",
       ],
       thresholds: {
         lines: 90,

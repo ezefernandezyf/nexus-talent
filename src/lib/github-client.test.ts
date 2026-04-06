@@ -1,13 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { createGitHubClient, parseGitHubRepositoryReference } from "./github-client";
-
-function createResponse(body: unknown, status = 200) {
-  return {
-    ok: status >= 200 && status < 300,
-    status,
-    json: vi.fn(async () => body),
-  };
-}
+import { createGitHubFetchResponse, createGitHubRepositoryApiPayload } from "../test/factories/github";
 
 describe("github-client", () => {
   it("parses GitHub repository references", () => {
@@ -21,17 +14,10 @@ describe("github-client", () => {
   it("looks up public repository metadata and languages", async () => {
     const fetchMock = vi.fn(async (url: string) => {
       if (url.endsWith("/languages")) {
-        return createResponse({ TypeScript: 1200, JavaScript: 300 });
+        return createGitHubFetchResponse({ TypeScript: 1200, JavaScript: 300 });
       }
 
-      return createResponse({
-        description: "React app with TypeScript",
-        full_name: "ezefernandezyf/nexus-talent",
-        language: "TypeScript",
-        name: "nexus-talent",
-        owner: { login: "ezefernandezyf" },
-        topics: ["react", "vite"],
-      });
+      return createGitHubFetchResponse(createGitHubRepositoryApiPayload());
     });
 
     const client = createGitHubClient({ fetch: fetchMock as unknown as typeof fetch, timeoutMs: 100 });
@@ -50,14 +36,7 @@ describe("github-client", () => {
         throw new Error("languages unavailable");
       }
 
-      return createResponse({
-        description: "React app with TypeScript",
-        full_name: "ezefernandezyf/nexus-talent",
-        language: "TypeScript",
-        name: "nexus-talent",
-        owner: { login: "ezefernandezyf" },
-        topics: ["react", "vite"],
-      });
+      return createGitHubFetchResponse(createGitHubRepositoryApiPayload());
     });
 
     const client = createGitHubClient({ fetch: fetchMock as unknown as typeof fetch, timeoutMs: 100 });
