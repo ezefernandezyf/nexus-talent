@@ -1,23 +1,9 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { createJobAnalysisClient, type JobAnalysisClient } from "../../../lib/ai-client";
 import { type GitHubClient } from "../../../lib/github-client";
-import { type AnalysisRepository } from "../../../lib/repositories";
+import { createAnalysisRequest, createAnalysisRepository, createQueryClientWrapper } from "../../../test/factories/analysis";
 import { useJobAnalysis } from "./useJobAnalysis";
-
-function createWrapper() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      mutations: { retry: false },
-      queries: { retry: false },
-    },
-  });
-
-  return function Wrapper({ children }: { children: React.ReactNode }) {
-    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
-  };
-}
 
 function createDeferred<T>() {
   let resolve!: (value: T | PromiseLike<T>) => void;
@@ -28,26 +14,6 @@ function createDeferred<T>() {
   });
 
   return { promise, resolve, reject };
-}
-
-function createRepository(overrides: Partial<AnalysisRepository> = {}): AnalysisRepository {
-  return {
-    save: vi.fn(async () => ({
-      id: "550e8400-e29b-41d4-a716-446655440000",
-      createdAt: "2026-04-05T12:00:00.000Z",
-      jobDescription: "Senior React engineer with TypeScript and testing",
-      summary: "Persisted summary",
-      skillGroups: [],
-      outreachMessage: {
-        subject: "Persisted subject",
-        body: "Persisted body",
-      },
-    })),
-    getAll: vi.fn(async () => []),
-    getById: vi.fn(async () => null),
-    delete: vi.fn(async () => undefined),
-    ...overrides,
-  };
 }
 
 function createGitHubClient(overrides: Partial<GitHubClient> = {}): GitHubClient {
@@ -73,11 +39,11 @@ describe("useJobAnalysis", () => {
     const client: JobAnalysisClient = {
       analyzeJobDescription: vi.fn(() => deferred.promise),
     };
-    const repository = createRepository();
-    const wrapper = createWrapper();
+    const repository = createAnalysisRepository();
+    const wrapper = createQueryClientWrapper();
     const { result } = renderHook(() => useJobAnalysis({ client, repository }), { wrapper });
 
-    result.current.submitAnalysis({ jobDescription: "Senior React engineer with TypeScript and testing" });
+    result.current.submitAnalysis(createAnalysisRequest());
 
     await waitFor(() => expect(result.current.isPending).toBe(true));
 
@@ -106,11 +72,11 @@ describe("useJobAnalysis", () => {
         throw new Error("Network unavailable");
       }),
     };
-    const repository = createRepository();
-    const wrapper = createWrapper();
+    const repository = createAnalysisRepository();
+    const wrapper = createQueryClientWrapper();
     const { result } = renderHook(() => useJobAnalysis({ client, repository }), { wrapper });
 
-    result.current.submitAnalysis({ jobDescription: "Senior React engineer with TypeScript and testing" });
+    result.current.submitAnalysis(createAnalysisRequest());
 
     await waitFor(() => expect(result.current.isError).toBe(true));
     expect(result.current.error).toMatchObject({ message: "No se pudo completar el análisis." });
@@ -128,11 +94,11 @@ describe("useJobAnalysis", () => {
         },
       }),
     });
-    const repository = createRepository();
-    const wrapper = createWrapper();
+    const repository = createAnalysisRepository();
+    const wrapper = createQueryClientWrapper();
     const { result } = renderHook(() => useJobAnalysis({ client, repository }), { wrapper });
 
-    result.current.submitAnalysis({ jobDescription: "Senior React engineer with TypeScript and testing" });
+    result.current.submitAnalysis(createAnalysisRequest());
 
     await waitFor(() => expect(result.current.isError).toBe(true));
     expect(result.current.error?.message).toContain("La respuesta de IA no es válida");
@@ -144,13 +110,13 @@ describe("useJobAnalysis", () => {
     const client: JobAnalysisClient = {
       analyzeJobDescription: vi.fn(() => deferred.promise),
     };
-    const repository = createRepository();
+    const repository = createAnalysisRepository();
     const githubClient = createGitHubClient();
-    const wrapper = createWrapper();
+    const wrapper = createQueryClientWrapper();
     const { result } = renderHook(() => useJobAnalysis({ client, repository, githubClient }), { wrapper });
 
     result.current.submitAnalysis({
-      jobDescription: "Senior React engineer with TypeScript and testing",
+      ...createAnalysisRequest(),
       githubRepositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
     });
 
@@ -186,22 +152,118 @@ describe("useJobAnalysis", () => {
     );
   });
 
+  it("surfaces GitHub warnings when the repository metadata includes them", async () => {
+    const deferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
+    const client: JobAnalysisClient = {
+      analyzeJobDescription: vi.fn(() => deferred.promise),
+    };
+    const repository = createAnalysisRepository();
+    const githubClient: GitHubClient = {
+      lookupRepository: vi.fn(async () => ({
+        description: "",
+        fullName: "ezefernandezyf/empty-repo",
+        languages: [],
+        name: "empty-repo",
+        owner: "ezefernandezyf",
+        primaryLanguage: null,
+        repositoryUrl: "https://github.com/ezefernandezyf/empty-repo",
+        topics: [],
+        warnings: ["Repo archived"],
+      })),
+    };
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useJobAnalysis({ client, repository, githubClient }), { wrapper });
+
+    result.current.submitAnalysis({
+      ...createAnalysisRequest(),
+      githubRepositoryUrl: "https://github.com/ezefernandezyf/empty-repo",
+    });
+
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+
+    deferred.resolve({
+      summary: "Un rol enfocado en construir experiencias de producto.",
+      skillGroups: [
+        {
+          category: "Stack principal",
+          skills: [{ name: "React", level: "core" }],
+        },
+      ],
+      outreachMessage: {
+        subject: "Interés en el puesto",
+        body: "Hola equipo,\n\nQuisiera conversar sobre la vacante.\n\nSaludos,\n[Your Name]",
+      },
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data?.githubEnrichment?.warningMessage).toContain("Repo archived");
+    expect(result.current.data?.githubEnrichment?.detectedStack).toEqual([]);
+  });
+
+  it("adds a fallback warning when GitHub metadata has no stack signals", async () => {
+    const deferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
+    const client: JobAnalysisClient = {
+      analyzeJobDescription: vi.fn(() => deferred.promise),
+    };
+    const repository = createAnalysisRepository();
+    const githubClient: GitHubClient = {
+      lookupRepository: vi.fn(async () => ({
+        description: "",
+        fullName: "ezefernandezyf/empty-repo",
+        languages: [],
+        name: "empty-repo",
+        owner: "ezefernandezyf",
+        primaryLanguage: null,
+        repositoryUrl: "https://github.com/ezefernandezyf/empty-repo",
+        topics: [],
+        warnings: [],
+      })),
+    };
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useJobAnalysis({ client, repository, githubClient }), { wrapper });
+
+    result.current.submitAnalysis({
+      ...createAnalysisRequest(),
+      githubRepositoryUrl: "https://github.com/ezefernandezyf/empty-repo",
+    });
+
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+
+    deferred.resolve({
+      summary: "Un rol enfocado en construir experiencias de producto.",
+      skillGroups: [
+        {
+          category: "Stack principal",
+          skills: [{ name: "React", level: "core" }],
+        },
+      ],
+      outreachMessage: {
+        subject: "Interés en el puesto",
+        body: "Hola equipo,\n\nQuisiera conversar sobre la vacante.\n\nSaludos,\n[Your Name]",
+      },
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data?.githubEnrichment?.warningMessage).toContain("No se detectaron señales claras");
+    expect(result.current.data?.githubEnrichment?.detectedStack).toEqual([]);
+  });
+
   it("keeps the base analysis when github lookup fails", async () => {
     const deferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
     const client: JobAnalysisClient = {
       analyzeJobDescription: vi.fn(() => deferred.promise),
     };
-    const repository = createRepository();
+    const repository = createAnalysisRepository();
     const githubClient: GitHubClient = {
       lookupRepository: vi.fn(async () => {
         throw new Error("GitHub unavailable");
       }),
     };
-    const wrapper = createWrapper();
+    const wrapper = createQueryClientWrapper();
     const { result } = renderHook(() => useJobAnalysis({ client, repository, githubClient }), { wrapper });
 
     result.current.submitAnalysis({
-      jobDescription: "Senior React engineer with TypeScript and testing",
+      ...createAnalysisRequest(),
       githubRepositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
     });
 

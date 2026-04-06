@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { AnalysisFeature } from "./AnalysisFeature";
+import { createAnalysisResult } from "../../test/factories/analysis";
 
 const submitAnalysis = vi.fn();
 
@@ -64,24 +65,13 @@ describe("AnalysisFeature", () => {
 
   it("renders the analysis result when data is available", () => {
     mockAnalysisState({
-      data: {
-        summary: "Un rol enfocado en construir experiencias de producto.",
-        skillGroups: [
-          {
-            category: "Stack principal",
-            skills: [{ name: "React", level: "core" }],
-          },
-        ],
-        outreachMessage: {
-          subject: "Interés en el puesto",
-          body: "Hola equipo,\n\nRevisé la vacante.\n\nSaludos,\n[Your Name]",
-        },
+      data: createAnalysisResult({
         githubEnrichment: {
           repositoryName: "ezefernandezyf/nexus-talent",
           repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
           detectedStack: [{ name: "TypeScript", source: "languages" }],
         },
-      },
+      }),
       isSuccess: true,
     });
 

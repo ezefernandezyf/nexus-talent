@@ -2,31 +2,14 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { AnalysisResultView } from "./AnalysisResultView";
+import { createAnalysisResult } from "../../../test/factories/analysis";
+import { mockClipboard, mockDownloadApis, mockWindowOpen } from "../../../test/mocks/browser";
 
 describe("AnalysisResultView", () => {
   beforeEach(() => {
-    Object.defineProperty(navigator, "clipboard", {
-      configurable: true,
-      value: {
-        writeText: vi.fn().mockResolvedValue(undefined),
-      },
-    });
-    Object.defineProperty(window, "open", {
-      configurable: true,
-      value: vi.fn().mockReturnValue({} as Window),
-    });
-    Object.defineProperty(URL, "createObjectURL", {
-      configurable: true,
-      value: vi.fn().mockReturnValue("blob:outreach"),
-    });
-    Object.defineProperty(URL, "revokeObjectURL", {
-      configurable: true,
-      value: vi.fn(),
-    });
-    Object.defineProperty(HTMLAnchorElement.prototype, "click", {
-      configurable: true,
-      value: vi.fn(),
-    });
+    mockClipboard();
+    mockWindowOpen();
+    mockDownloadApis();
   });
 
   it("preserves edits when copying outreach", async () => {
@@ -36,8 +19,7 @@ describe("AnalysisResultView", () => {
     render(
       <AnalysisResultView
         copyToClipboard={copyToClipboard}
-        result={{
-          summary: "Un rol enfocado en construir experiencias de producto.",
+        result={createAnalysisResult({
           skillGroups: [
             {
               category: "Stack principal",
@@ -47,11 +29,7 @@ describe("AnalysisResultView", () => {
               ],
             },
           ],
-          outreachMessage: {
-            subject: "Interés en el puesto",
-            body: "Hola equipo,\n\nRevisé la vacante.\n\nSaludos,\n[Your Name]",
-          },
-        }}
+        })}
       />,
     );
 
@@ -81,19 +59,14 @@ describe("AnalysisResultView", () => {
     render(
       <AnalysisResultView
         copyToClipboard={copyToClipboard}
-        result={{
-          summary: "Un rol enfocado en construir experiencias de producto.",
+        result={createAnalysisResult({
           skillGroups: [
             {
               category: "Stack principal",
               skills: [{ name: "React", level: "adjacent" }],
             },
           ],
-          outreachMessage: {
-            subject: "Interés en el puesto",
-            body: "Hola equipo,\n\nRevisé la vacante.\n\nSaludos,\n[Your Name]",
-          },
-        }}
+        })}
       />,
     );
 
@@ -108,19 +81,14 @@ describe("AnalysisResultView", () => {
 
     render(
       <AnalysisResultView
-        result={{
-          summary: "Un rol enfocado en construir experiencias de producto.",
+        result={createAnalysisResult({
           skillGroups: [
             {
               category: "Stack principal",
               skills: [{ name: "React", level: "core" }],
             },
           ],
-          outreachMessage: {
-            subject: "Interés en el puesto",
-            body: "Hola equipo,\n\nRevisé la vacante.\n\nSaludos,\n[Your Name]",
-          },
-        }}
+        })}
       />,
     );
 
@@ -138,18 +106,7 @@ describe("AnalysisResultView", () => {
   it("renders GitHub enrichment when available", () => {
     render(
       <AnalysisResultView
-        result={{
-          summary: "Un rol enfocado en construir experiencias de producto.",
-          skillGroups: [
-            {
-              category: "Stack principal",
-              skills: [{ name: "React", level: "core" }],
-            },
-          ],
-          outreachMessage: {
-            subject: "Interés en el puesto",
-            body: "Hola equipo,\n\nRevisé la vacante.\n\nSaludos,\n[Your Name]",
-          },
+        result={createAnalysisResult({
           githubEnrichment: {
             repositoryName: "ezefernandezyf/nexus-talent",
             repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
@@ -158,7 +115,7 @@ describe("AnalysisResultView", () => {
               { name: "React", source: "topics" },
             ],
           },
-        }}
+        })}
       />,
     );
 
@@ -168,25 +125,37 @@ describe("AnalysisResultView", () => {
     expect(screen.getByRole("link", { name: /ezefernandezyf\/nexus-talent/i })).toBeInTheDocument();
   });
 
+  it("falls back to the default GitHub label for unknown enrichment sources", () => {
+    render(
+      <AnalysisResultView
+        result={createAnalysisResult({
+          githubEnrichment: {
+            repositoryName: "ezefernandezyf/nexus-talent",
+            repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
+            detectedStack: [{ name: "Documentation", source: "unknown" }],
+          },
+        })}
+      />,
+    );
+
+    expect(screen.getByText(/GitHub enriquecido/i)).toBeInTheDocument();
+    expect(screen.getByText("GitHub")).toBeInTheDocument();
+  });
+
   it("falls back to a copy-friendly error when email export is blocked", async () => {
     const user = userEvent.setup();
     vi.mocked(window.open).mockReturnValueOnce(null);
 
     render(
       <AnalysisResultView
-        result={{
-          summary: "Un rol enfocado en construir experiencias de producto.",
+        result={createAnalysisResult({
           skillGroups: [
             {
               category: "Stack principal",
               skills: [{ name: "React", level: "core" }],
             },
           ],
-          outreachMessage: {
-            subject: "Interés en el puesto",
-            body: "Hola equipo,\n\nRevisé la vacante.\n\nSaludos,\n[Your Name]",
-          },
-        }}
+        })}
       />,
     );
 

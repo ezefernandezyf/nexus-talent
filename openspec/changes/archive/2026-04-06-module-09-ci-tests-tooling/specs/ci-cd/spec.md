@@ -1,23 +1,6 @@
-# CI/CD Specification
+# Delta for CI/CD
 
-## Purpose
-
-Define the repository automation that validates every change and keeps the main branch deployable to Vercel.
-
-## Requirements
-
-### Requirement: Run validation on pull requests and main pushes
-The system MUST run install, typecheck, test, and build on every pull request and every push to `main`, in that order.
-
-#### Scenario: PR validation succeeds
-- GIVEN a pull request is opened
-- WHEN the workflow runs
-- THEN the workflow MUST execute `npm ci`, `npm run typecheck`, `npm run test`, and `npm run build` in that order
-
-#### Scenario: Test failure blocks merge
-- GIVEN one validation command fails
-- WHEN the workflow completes
-- THEN the check MUST fail and report the error
+## ADDED Requirements
 
 ### Requirement: Type validation gates CI
 The system MUST fail the CI workflow when `npm run typecheck` fails.
@@ -73,36 +56,18 @@ The repository MUST provide shared test utilities for repeated analysis and libr
 - WHEN they run in CI
 - THEN they MUST behave consistently across suites.
 
-### Requirement: Pin the Node runtime
-The system MUST use the same major Node version locally and in CI.
+## MODIFIED Requirements
 
-#### Scenario: Local and CI use the same Node line
-- GIVEN a developer opens the repo
-- WHEN they inspect the Node pin
-- THEN `.nvmrc` and the workflow MUST point to the same Node major version
+### Requirement: Run validation on pull requests and main pushes
+The system MUST run install, typecheck, test, and build on every pull request and every push to `main`, in that order.
+(Previously: install, test, typecheck, and build on every pull request and every push to `main`.)
 
-#### Scenario: Unsupported Node version is avoided
-- GIVEN CI starts on an unsupported Node version
-- WHEN the workflow reads the repo pin
-- THEN the job MUST select the pinned version before running validation
+#### Scenario: PR validation succeeds
+- GIVEN a pull request is opened
+- WHEN the workflow runs
+- THEN the workflow MUST execute `npm ci`, `npm run typecheck`, `npm run test`, and `npm run build` in that order.
 
-### Requirement: Keep the repository Vercel-deployable
-The system MUST remain deployable through Vercel without storing secrets in the repository.
-
-#### Scenario: Main branch is deploy-ready
-- GIVEN a commit reaches `main`
-- WHEN Vercel builds the app
-- THEN it MUST use the repo build settings and output directory
-
-#### Scenario: Secrets stay external
-- GIVEN deployment or preview variables are needed
-- WHEN the repo is committed
-- THEN secrets MUST remain outside the repository files
-
-### Requirement: Ignore build output in source control
-The system MUST ignore generated build artifacts.
-
-#### Scenario: Local build does not pollute git status
-- GIVEN `npm run build` is executed locally
-- WHEN the build output is produced
-- THEN `dist/` MUST be ignored by git
+#### Scenario: Typecheck failure stops later steps
+- GIVEN `npm run typecheck` fails during validation
+- WHEN the workflow runs
+- THEN `npm run test` and `npm run build` MUST not be treated as successful validation for that run.

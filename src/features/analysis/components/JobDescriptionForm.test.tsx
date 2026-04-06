@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { JobDescriptionForm } from "./JobDescriptionForm";
+import { createAnalysisRequest } from "../../../test/factories/analysis";
 
 describe("JobDescriptionForm", () => {
   it("blocks empty submissions inline", async () => {
@@ -33,10 +34,11 @@ describe("JobDescriptionForm", () => {
     await user.type(screen.getByLabelText(/descripción del puesto/i), "  Ingeniero React senior con TypeScript  ");
     await user.click(screen.getByRole("button", { name: /analizar vacante/i }));
 
-    expect(onSubmit).toHaveBeenCalledWith({
-      jobDescription: "Ingeniero React senior con TypeScript",
-      githubRepositoryUrl: undefined,
-    });
+    expect(onSubmit).toHaveBeenCalledWith(
+      createAnalysisRequest({
+        jobDescription: "Ingeniero React senior con TypeScript",
+      }),
+    );
   });
 
   it("submits the optional GitHub repository URL", async () => {
@@ -48,9 +50,11 @@ describe("JobDescriptionForm", () => {
     await user.type(screen.getByLabelText(/url del repositorio de github/i), "  https://github.com/ezefernandezyf/nexus-talent  ");
     await user.click(screen.getByRole("button", { name: /analizar vacante/i }));
 
-    expect(onSubmit).toHaveBeenCalledWith({
-      jobDescription: "Ingeniero React senior con TypeScript",
-      githubRepositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
-    });
+    expect(onSubmit).toHaveBeenCalledWith(
+      createAnalysisRequest({
+        jobDescription: "Ingeniero React senior con TypeScript",
+        githubRepositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
+      }),
+    );
   });
 });

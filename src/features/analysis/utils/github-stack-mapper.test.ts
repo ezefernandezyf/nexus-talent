@@ -1,19 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { mapGitHubRepositoryToStack } from "./github-stack-mapper";
+import { createGitHubRepositoryMetadata } from "../../../test/factories/github";
 
 describe("mapGitHubRepositoryToStack", () => {
   it("extracts stack signals from repository metadata", () => {
-    const signals = mapGitHubRepositoryToStack({
-      description: "React app with TypeScript, Supabase and Tailwind CSS",
-      fullName: "ezefernandezyf/nexus-talent",
-      languages: [{ name: "TypeScript", bytes: 1200 }],
-      name: "nexus-talent",
-      owner: "ezefernandezyf",
-      primaryLanguage: "TypeScript",
-      repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
-      topics: ["react", "tailwind"],
-      warnings: [],
-    });
+    const signals = mapGitHubRepositoryToStack(
+      createGitHubRepositoryMetadata({
+        description: "React app with TypeScript, Supabase and Tailwind CSS",
+        topics: ["react", "tailwind"],
+      }),
+    );
 
     expect(signals).toEqual(
       expect.arrayContaining([
@@ -27,17 +23,19 @@ describe("mapGitHubRepositoryToStack", () => {
 
   it("returns no signals when the repo metadata is uninformative", () => {
     expect(
-      mapGitHubRepositoryToStack({
-        description: "",
-        fullName: "unknown/unknown",
-        languages: [],
-        name: "unknown",
-        owner: "unknown",
-        primaryLanguage: null,
-        repositoryUrl: "https://github.com/unknown/unknown",
-        topics: [],
-        warnings: [],
-      }),
+      mapGitHubRepositoryToStack(
+        createGitHubRepositoryMetadata({
+          description: "",
+          fullName: "unknown/unknown",
+          languages: [],
+          name: "unknown",
+          owner: "unknown",
+          primaryLanguage: null,
+          repositoryUrl: "https://github.com/unknown/unknown",
+          topics: [],
+          warnings: [],
+        }),
+      ),
     ).toEqual([]);
   });
 });
