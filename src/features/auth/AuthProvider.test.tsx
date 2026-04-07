@@ -6,7 +6,7 @@ import { AuthProvider } from "./AuthProvider";
 import { useAuth } from "./hooks/useAuth";
 import type { AuthClientLike } from "../../lib/supabase";
 
-function createUser(email: string): User {
+function createUser(email: string, role: "admin" | "authenticated" = "authenticated"): User {
   const now = new Date("2026-04-05T12:00:00.000Z").toISOString();
 
   return {
@@ -22,13 +22,13 @@ function createUser(email: string): User {
     phone: "",
     role: "authenticated",
     updated_at: now,
-    user_metadata: {},
+    user_metadata: { role },
   } as User;
 }
 
-function createSession(email: string): Session {
+function createSession(email: string, role: "admin" | "authenticated" = "authenticated"): Session {
   const now = new Date("2026-04-05T12:00:00.000Z").toISOString();
-  const user = createUser(email);
+  const user = createUser(email, role);
 
   return {
     access_token: "session-token",
@@ -86,11 +86,12 @@ function createAuthClient(options: {
 }
 
 function AuthProbe() {
-  const { errorMessage, signOut, session, status, user } = useAuth();
+  const { errorMessage, isAdmin, signOut, session, status, user } = useAuth();
 
   return (
     <div>
       <p data-testid="status">{status}</p>
+      <p data-testid="admin">{isAdmin ? "admin" : "user"}</p>
       <p data-testid="email">{user?.email ?? "no-user"}</p>
       <p data-testid="session">{session?.access_token ?? "no-session"}</p>
       <p data-testid="error">{errorMessage ?? "no-error"}</p>
@@ -114,8 +115,22 @@ describe("AuthProvider", () => {
     expect(screen.getByTestId("status")).toHaveTextContent("loading");
 
     await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("authenticated"));
+    expect(screen.getByTestId("admin")).toHaveTextContent("user");
     expect(screen.getByTestId("email")).toHaveTextContent("ana@empresa.com");
     expect(screen.getByTestId("session")).toHaveTextContent("session-token");
+  });
+
+  it("exposes admin users through the auth context", async () => {
+    const client = createAuthClient({ session: createSession("admin@empresa.com", "admin") });
+
+    render(
+      <AuthProvider client={client}>
+        <AuthProbe />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("authenticated"));
+    expect(screen.getByTestId("admin")).toHaveTextContent("admin");
   });
 
   it("signs out and clears the stored session", async () => {

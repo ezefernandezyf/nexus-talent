@@ -21,6 +21,7 @@ type AuthActionResponse = {
 
 interface AuthContextValue {
   errorMessage: string | null;
+  isAdmin: boolean;
   isConfigured: boolean;
   session: Session | null;
   signIn: (email: string, password: string) => Promise<AuthActionResponse>;
@@ -45,6 +46,12 @@ function getErrorMessage(error: unknown, fallback: string) {
   return fallback;
 }
 
+function getIsAdmin(user: User | null | undefined) {
+  const role = user?.user_metadata?.role ?? user?.app_metadata?.role;
+
+  return role === "admin";
+}
+
 function createClientState(client: AuthClientLike | null | undefined) {
   if (client) {
     return {
@@ -61,6 +68,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
   const [clientState] = useState(() => createClientState(client));
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [status, setStatus] = useState<AuthStatus>(clientState.isConfigured ? AUTH_STATUS.LOADING : AUTH_STATUS.UNAUTHENTICATED);
   const [errorMessage, setErrorMessage] = useState<string | null>(clientState.isConfigured ? null : AUTH_MESSAGES.MISSING_CONFIGURATION);
 
@@ -85,6 +93,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
         if (error) {
           setSession(null);
           setUser(null);
+          setIsAdmin(false);
           setStatus(AUTH_STATUS.UNAUTHENTICATED);
           setErrorMessage(getErrorMessage(error, AUTH_MESSAGES.SESSION_CHECK_FAILED));
           return;
@@ -92,6 +101,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
 
         setSession(data.session);
         setUser(data.session?.user ?? null);
+        setIsAdmin(getIsAdmin(data.session?.user));
         setStatus(data.session ? AUTH_STATUS.AUTHENTICATED : AUTH_STATUS.UNAUTHENTICATED);
       })
       .catch((error: unknown) => {
@@ -101,6 +111,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
 
         setSession(null);
         setUser(null);
+        setIsAdmin(false);
         setStatus(AUTH_STATUS.UNAUTHENTICATED);
         setErrorMessage(getErrorMessage(error, AUTH_MESSAGES.SESSION_CHECK_FAILED));
       });
@@ -112,6 +123,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
 
       setSession(nextSession);
       setUser(nextSession?.user ?? null);
+      setIsAdmin(getIsAdmin(nextSession?.user));
       setStatus(nextSession ? AUTH_STATUS.AUTHENTICATED : AUTH_STATUS.UNAUTHENTICATED);
       setErrorMessage(null);
     });
@@ -139,6 +151,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     if (data.session) {
       setSession(data.session);
       setUser(data.session.user ?? null);
+      setIsAdmin(getIsAdmin(data.session.user));
       setStatus(AUTH_STATUS.AUTHENTICATED);
       setErrorMessage(null);
     }
@@ -165,6 +178,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     if (data.session) {
       setSession(data.session);
       setUser(data.session.user ?? null);
+      setIsAdmin(getIsAdmin(data.session.user));
       setStatus(AUTH_STATUS.AUTHENTICATED);
       setErrorMessage(null);
       return {
@@ -174,6 +188,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
 
     setSession(null);
     setUser(null);
+    setIsAdmin(false);
     setStatus(AUTH_STATUS.UNAUTHENTICATED);
     return {
       message: "Cuenta creada. Revisá tu correo para confirmar el acceso.",
@@ -193,12 +208,14 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
 
     setSession(null);
     setUser(null);
+    setIsAdmin(false);
     setStatus(AUTH_STATUS.UNAUTHENTICATED);
     setErrorMessage(null);
   }
 
   const value: AuthContextValue = {
     errorMessage,
+    isAdmin,
     isConfigured: clientState.isConfigured,
     session,
     signIn,
