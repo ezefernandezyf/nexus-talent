@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "../../../components/ui/Button";
 import { useAuth } from "../hooks/useAuth";
 
 interface LogoutButtonProps {
@@ -20,8 +21,8 @@ export function LogoutButton({ className }: LogoutButtonProps) {
   }
 
   return (
-    <button className={className ?? "secondary-button"} type="button" onClick={handleClick} disabled={isPending}>
+    <Button variant="secondary" className={className} onClick={handleClick} disabled={isPending}>
       {isPending ? "Cerrando..." : "Cerrar sesión"}
-    </button>
+    </Button>
   );
 }

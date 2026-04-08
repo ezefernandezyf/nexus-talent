@@ -1,4 +1,5 @@
 import React from 'react'
+import { Card } from './ui/Card'
 import mapError from '../lib/error-mapper'
 import logger from '../lib/logger'
 import { toast } from '../lib/toast'
@@ -39,9 +40,9 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div
+        <Card
           role="alert"
-          className="surface-panel mx-auto mt-10 flex max-w-2xl flex-col gap-4 p-6 text-on-surface"
+          className="mx-auto mt-10 flex max-w-2xl flex-col gap-4 p-6 text-on-surface"
         >
           <div className="space-y-2">
             <h2 className="font-sans text-2xl font-semibold tracking-[-0.02em] text-white">Ups — algo salió mal</h2>
@@ -55,7 +56,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, State> {
               Recargar aplicación
             </button>
           </div>
-        </div>
+        </Card>
       )
     }
 

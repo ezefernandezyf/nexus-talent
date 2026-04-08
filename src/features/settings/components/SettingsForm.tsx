@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { Button } from "../../../components/ui/Button";
 import { APP_SETTINGS_INPUT_SCHEMA, type AppSettings, type AppSettingsInput } from "../../../lib/validation/settings";
 
 interface SettingsFormProps {
@@ -53,21 +54,33 @@ export function SettingsForm({ errorMessage, isPending = false, onSubmit, settin
   }
 
   return (
-    <form className="surface-panel flex flex-col gap-6 p-6 sm:p-8" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-6 p-6 sm:p-8" onSubmit={handleSubmit}>
       <div className="space-y-2">
         <span className="label-chip">Configuración global</span>
         <h2 className="text-2xl font-semibold tracking-[-0.02em] text-white sm:text-3xl">Administrá ajustes operativos sin tocar código.</h2>
         <p className="text-base leading-7 text-on-surface-variant">{helperText}</p>
       </div>
 
-      {errorMessage ? <p className="text-sm leading-6 text-error" role="alert">{errorMessage}</p> : null}
-      {validationMessage ? <p className="text-sm leading-6 text-error" role="alert">{validationMessage}</p> : null}
-      {successMessage ? <p className="text-sm leading-6 text-success" role="status">{successMessage}</p> : null}
+      {errorMessage ? (
+        <p className="ghost-frame rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
+          {errorMessage}
+        </p>
+      ) : null}
+      {validationMessage ? (
+        <p className="ghost-frame rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
+          {validationMessage}
+        </p>
+      ) : null}
+      {successMessage ? (
+        <p className="ghost-frame rounded-2xl bg-success/10 px-4 py-3 text-sm leading-6 text-success" role="status">
+          {successMessage}
+        </p>
+      ) : null}
 
-      <label className="flex items-center gap-3">
+      <label className="flex items-center gap-3 rounded-2xl bg-surface-container-lowest/60 px-4 py-3">
         <input
           checked={maintenanceMode}
-          className="h-5 w-5 rounded border border-outline_variant bg-surface-container-lowest accent-white"
+          className="h-5 w-5 rounded-md bg-surface-container-lowest shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)] accent-primary"
           disabled={isPending}
           type="checkbox"
           onChange={(event) => setMaintenanceMode(event.target.checked)}
@@ -78,7 +91,7 @@ export function SettingsForm({ errorMessage, isPending = false, onSubmit, settin
       <label className="space-y-2">
         <span className="text-sm font-medium uppercase tracking-[0.2em] text-on-surface-variant">Dominios permitidos</span>
         <textarea
-          className="min-h-36 w-full rounded-3xl border-0 bg-surface-container-lowest px-4 py-3 text-base text-on-surface outline-none ring-1 ring-inset ring-outline_variant/40 placeholder:text-on-surface-variant/60 focus:ring-surface-bright"
+          className="field-surface min-h-36 resize-y px-4 py-3 text-base text-on-surface placeholder:text-on-surface-variant/60"
           disabled={isPending}
           placeholder="empresa.com\npartners.dev"
           value={allowedDomains}
@@ -86,13 +99,12 @@ export function SettingsForm({ errorMessage, isPending = false, onSubmit, settin
         />
       </label>
 
-      <button
-        className="inline-flex items-center justify-center rounded-full bg-surface-bright px-5 py-3 text-sm font-semibold text-surface-container-highest transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+      <Button
         disabled={isPending}
         type="submit"
       >
         {isPending ? "Guardando..." : "Guardar configuración"}
-      </button>
+      </Button>
     </form>
   );
 }

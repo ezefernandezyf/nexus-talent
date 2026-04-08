@@ -1,10 +1,12 @@
+import { Card } from "../../../components/ui/Card";
+
 interface HistoryEmptyStateProps {
   analysisHref: string;
 }
 
 export function HistoryEmptyState({ analysisHref }: HistoryEmptyStateProps) {
   return (
-    <div className="flex min-h-80 items-center justify-center rounded-3xl bg-surface-container-lowest/45 p-8 sm:p-12">
+    <Card className="flex min-h-80 items-center justify-center p-8 sm:p-12">
       <div className="max-w-xl space-y-4 text-center">
         <span className="label-chip">Sin historial todavía</span>
         <div className="space-y-3">
@@ -19,6 +21,6 @@ export function HistoryEmptyState({ analysisHref }: HistoryEmptyStateProps) {
           Ir al análisis
         </a>
       </div>
-    </div>
+    </Card>
   );
 }

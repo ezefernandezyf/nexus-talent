@@ -1,4 +1,5 @@
 import type { SavedJobAnalysis } from "../../../schemas/job-analysis";
+import { Button } from "../../../components/ui/Button";
 import {
   formatHistoryCardDate,
   getHistoryCardTitle,
@@ -30,9 +31,9 @@ export function HistoryCard({ analysis, isDeleting = false, onDelete }: HistoryC
           </div>
         </div>
 
-        <button className="secondary-button shrink-0" type="button" onClick={() => onDelete(analysis.id)} disabled={isDeleting}>
+        <Button variant="secondary" className="shrink-0" type="button" onClick={() => onDelete(analysis.id)} disabled={isDeleting}>
           {isDeleting ? "Eliminando..." : "Eliminar"}
-        </button>
+        </Button>
       </div>
 
       <div className="space-y-3">
