@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import type { Session } from "@supabase/supabase-js";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
 
 const SUPABASE_ENV = {
   ANON_KEY: "VITE_SUPABASE_ANON_KEY",
@@ -43,6 +43,9 @@ export type SupabaseClientState = {
   missingVariables: string[];
 };
 
+let cachedClientState: SupabaseClientState | null = null;
+let cachedSupabaseClient: SupabaseClient | null = null;
+
 function readSupabaseVariable(name: keyof typeof SUPABASE_ENV) {
   const value = import.meta.env[SUPABASE_ENV[name]];
   return typeof value === "string" ? value.trim() : "";
@@ -63,27 +66,52 @@ function getMissingVariables(url: string, anonKey: string) {
 }
 
 export function createSupabaseClient(): SupabaseClientState {
+  if (cachedClientState) {
+    return cachedClientState;
+  }
+
   const url = readSupabaseVariable("URL");
   const anonKey = readSupabaseVariable("ANON_KEY");
   const missingVariables = getMissingVariables(url, anonKey);
 
   if (missingVariables.length > 0) {
-    return {
+    cachedClientState = {
       client: null,
       isConfigured: false,
       missingVariables,
     };
+
+    return cachedClientState;
   }
 
-  return {
-    client: createClient(url, anonKey, {
-      auth: {
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        persistSession: true,
-      },
-    }) as AuthClientLike,
+  cachedClientState = {
+    client: getSupabaseClient(url, anonKey) as AuthClientLike,
     isConfigured: true,
     missingVariables: [],
   };
+
+  return cachedClientState;
+}
+
+export function getSupabaseClient(url?: string, anonKey?: string): SupabaseClient | null {
+  if (cachedSupabaseClient) {
+    return cachedSupabaseClient;
+  }
+
+  const resolvedUrl = url ?? readSupabaseVariable("URL");
+  const resolvedAnonKey = anonKey ?? readSupabaseVariable("ANON_KEY");
+
+  if (!resolvedUrl || !resolvedAnonKey) {
+    return null;
+  }
+
+  cachedSupabaseClient = createClient(resolvedUrl, resolvedAnonKey, {
+    auth: {
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      persistSession: true,
+    },
+  });
+
+  return cachedSupabaseClient;
 }
