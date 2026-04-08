@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import {
   APP_SETTINGS_ID,
@@ -9,6 +9,7 @@ import {
   type AppSettings,
   type AppSettingsInput,
 } from "../validation/settings";
+import { getSupabaseClient } from "../supabase";
 
 const SETTINGS_TABLE = "settings";
 
@@ -24,28 +25,6 @@ type SettingsRow = z.infer<typeof SETTINGS_ROW_SCHEMA>;
 export interface SettingsRepository {
   get(): Promise<AppSettings>;
   save(settings: AppSettingsInput): Promise<AppSettings>;
-}
-
-function readSupabaseEnv(name: "VITE_SUPABASE_URL" | "VITE_SUPABASE_ANON_KEY") {
-  const value = import.meta.env[name];
-  return typeof value === "string" ? value.trim() : "";
-}
-
-function createSupabaseSettingsClient(): SupabaseClient | null {
-  const url = readSupabaseEnv("VITE_SUPABASE_URL");
-  const anonKey = readSupabaseEnv("VITE_SUPABASE_ANON_KEY");
-
-  if (!url || !anonKey) {
-    return null;
-  }
-
-  return createClient(url, anonKey, {
-    auth: {
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      persistSession: true,
-    },
-  });
 }
 
 function getStorage() {
@@ -182,7 +161,7 @@ function createSupabaseRepository(client: SupabaseClient): SettingsRepository {
   };
 }
 
-export function createSettingsRepository(client: SupabaseClient | null = createSupabaseSettingsClient()): SettingsRepository {
+export function createSettingsRepository(client: SupabaseClient | null = getSupabaseClient()): SettingsRepository {
 
   if (!client) {
     return createFallbackRepository();

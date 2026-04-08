@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import type { Session } from "@supabase/supabase-js";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
 
 const SUPABASE_ENV = {
   ANON_KEY: "VITE_SUPABASE_ANON_KEY",
@@ -44,6 +44,7 @@ export type SupabaseClientState = {
 };
 
 let cachedClientState: SupabaseClientState | null = null;
+let cachedSupabaseClient: SupabaseClient | null = null;
 
 function readSupabaseVariable(name: keyof typeof SUPABASE_ENV) {
   const value = import.meta.env[SUPABASE_ENV[name]];
@@ -84,16 +85,33 @@ export function createSupabaseClient(): SupabaseClientState {
   }
 
   cachedClientState = {
-    client: createClient(url, anonKey, {
-      auth: {
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        persistSession: true,
-      },
-    }) as AuthClientLike,
+    client: getSupabaseClient(url, anonKey) as AuthClientLike,
     isConfigured: true,
     missingVariables: [],
   };
 
   return cachedClientState;
+}
+
+export function getSupabaseClient(url?: string, anonKey?: string): SupabaseClient | null {
+  if (cachedSupabaseClient) {
+    return cachedSupabaseClient;
+  }
+
+  const resolvedUrl = url ?? readSupabaseVariable("URL");
+  const resolvedAnonKey = anonKey ?? readSupabaseVariable("ANON_KEY");
+
+  if (!resolvedUrl || !resolvedAnonKey) {
+    return null;
+  }
+
+  cachedSupabaseClient = createClient(resolvedUrl, resolvedAnonKey, {
+    auth: {
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      persistSession: true,
+    },
+  });
+
+  return cachedSupabaseClient;
 }
