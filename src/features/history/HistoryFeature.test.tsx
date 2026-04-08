@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MemoryRouter } from "react-router-dom";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -58,9 +59,11 @@ describe("HistoryFeature", () => {
     const Wrapper = createWrapper(queryClient);
 
     render(
-      <Wrapper>
-        <HistoryFeature repository={repository} />
-      </Wrapper>,
+      <MemoryRouter>
+        <Wrapper>
+          <HistoryFeature repository={repository} />
+        </Wrapper>
+      </MemoryRouter>,
     );
 
     expect(screen.getByRole("status", { name: /cargando historial/i })).toBeInTheDocument();
@@ -82,13 +85,15 @@ describe("HistoryFeature", () => {
     const Wrapper = createWrapper(queryClient);
 
     render(
-      <Wrapper>
-        <HistoryFeature repository={repository} />
-      </Wrapper>,
+      <MemoryRouter>
+        <Wrapper>
+          <HistoryFeature repository={repository} />
+        </Wrapper>
+      </MemoryRouter>,
     );
 
-    await waitFor(() => expect(screen.getByText(/Las vacantes analizadas aparecerán acá/i)).toBeInTheDocument());
-    expect(screen.getByRole("link", { name: /ir al análisis/i })).toHaveAttribute("href", "#analysis");
+    await waitFor(() => expect(screen.getByRole("link", { name: /ir al análisis/i })).toBeInTheDocument());
+    expect(screen.getByRole("link", { name: /ir al análisis/i })).toHaveAttribute("href", "/app/analysis");
   });
 
   it("renders analyses sorted by most recent first", async () => {
@@ -120,9 +125,11 @@ describe("HistoryFeature", () => {
     const Wrapper = createWrapper(queryClient);
 
     const { container } = render(
-      <Wrapper>
-        <HistoryFeature repository={repository} />
-      </Wrapper>,
+      <MemoryRouter>
+        <Wrapper>
+          <HistoryFeature repository={repository} />
+        </Wrapper>
+      </MemoryRouter>,
     );
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /Frontend Engineer/i })).toBeInTheDocument());
@@ -149,9 +156,11 @@ describe("HistoryFeature", () => {
     const Wrapper = createWrapper(queryClient);
 
     render(
-      <Wrapper>
-        <HistoryFeature repository={repository} />
-      </Wrapper>,
+      <MemoryRouter>
+        <Wrapper>
+          <HistoryFeature repository={repository} />
+        </Wrapper>
+      </MemoryRouter>,
     );
 
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/Repository unavailable/i));
@@ -180,16 +189,18 @@ describe("HistoryFeature", () => {
     const user = userEvent.setup();
 
     render(
-      <Wrapper>
-        <HistoryFeature repository={repository} />
-      </Wrapper>,
+      <MemoryRouter>
+        <Wrapper>
+          <HistoryFeature repository={repository} />
+        </Wrapper>
+      </MemoryRouter>,
     );
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /Frontend Engineer/i })).toBeInTheDocument());
 
     await user.click(screen.getByRole("button", { name: /eliminar/i }));
 
-    await waitFor(() => expect(screen.getByText(/Las vacantes analizadas aparecerán acá/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("link", { name: /ir al análisis/i })).toBeInTheDocument());
   });
 
   it("removes the targeted card after deleting a specific analysis", async () => {
@@ -224,9 +235,11 @@ describe("HistoryFeature", () => {
     const user = userEvent.setup();
 
     const { container } = render(
-      <Wrapper>
-        <HistoryFeature repository={repository} />
-      </Wrapper>,
+      <MemoryRouter>
+        <Wrapper>
+          <HistoryFeature repository={repository} />
+        </Wrapper>
+      </MemoryRouter>,
     );
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /Frontend Engineer/i })).toBeInTheDocument());

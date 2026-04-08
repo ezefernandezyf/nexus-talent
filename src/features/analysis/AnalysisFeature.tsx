@@ -2,6 +2,13 @@ import { useJobAnalysis } from "./hooks/useJobAnalysis";
 import { JobDescriptionForm } from "./components/JobDescriptionForm";
 import { AnalysisResultView } from "./components/AnalysisResultView";
 import { Card } from "../../components/ui/Card";
+import type { AnalysisPersistenceScope } from "./hooks/useAnalysisRepository";
+import type { AnalysisRepository } from "../../lib/repositories";
+
+interface AnalysisFeatureProps {
+  repository?: AnalysisRepository;
+  scope?: AnalysisPersistenceScope;
+}
 
 function LoadingState() {
   return (
@@ -47,8 +54,8 @@ function ErrorState({ message }: { message: string }) {
   );
 }
 
-export function AnalysisFeature() {
-  const analysis = useJobAnalysis();
+export function AnalysisFeature({ repository, scope }: AnalysisFeatureProps) {
+  const analysis = useJobAnalysis({ repository, scope });
   const errorMessage = analysis.error instanceof Error ? analysis.error.message : "No se pudo completar el análisis.";
 
   return (

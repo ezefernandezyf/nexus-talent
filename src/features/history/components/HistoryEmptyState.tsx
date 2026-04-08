@@ -1,4 +1,5 @@
 import { Card } from "../../../components/ui/Card";
+import { Link } from "react-router-dom";
 
 interface HistoryEmptyStateProps {
   analysisHref: string;
@@ -17,9 +18,9 @@ export function HistoryEmptyState({ analysisHref }: HistoryEmptyStateProps) {
             El historial conserva los análisis persistidos para que puedas volver a leer el resumen, las señales técnicas y el mensaje sugerido sin repetir trabajo.
           </p>
         </div>
-        <a className="primary-button" href={analysisHref}>
+        <Link className="primary-button" to={analysisHref}>
           Ir al análisis
-        </a>
+        </Link>
       </div>
     </Card>
   );

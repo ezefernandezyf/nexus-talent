@@ -9,12 +9,14 @@ import {
   type JobAnalysisResult,
 } from "../../../schemas/job-analysis";
 import { mapGitHubRepositoryToStack } from "../utils/github-stack-mapper";
-import { ANALYSIS_HISTORY_QUERY_KEY } from "./useAnalysisHistory";
+import { getAnalysisHistoryQueryKey } from "./useAnalysisHistory";
+import type { AnalysisPersistenceScope } from "./useAnalysisRepository";
 
 interface UseJobAnalysisOptions {
   client?: JobAnalysisClient;
   githubClient?: GitHubClient;
   repository?: AnalysisRepository;
+  scope?: AnalysisPersistenceScope;
 }
 
 const defaultClient = createJobAnalysisClient();
@@ -25,6 +27,7 @@ export function useJobAnalysis(options: UseJobAnalysisOptions = {}) {
   const client = options.client ?? defaultClient;
   const githubClient = options.githubClient ?? defaultGitHubClient;
   const repository = options.repository ?? defaultRepository;
+  const scope = options.scope ?? "anonymous";
   const queryClient = useQueryClient();
 
   const mutation = useMutation<JobAnalysisResult, Error, JobAnalysisRequest>({
@@ -98,7 +101,7 @@ export function useJobAnalysis(options: UseJobAnalysisOptions = {}) {
     onSuccess: (analysis, submission) => {
       void repository
         .save(submission.jobDescription, analysis)
-        .then(() => queryClient.invalidateQueries({ queryKey: ANALYSIS_HISTORY_QUERY_KEY }))
+        .then(() => queryClient.invalidateQueries({ queryKey: getAnalysisHistoryQueryKey(scope) }))
         .catch(() => undefined);
     },
     retry: false,
