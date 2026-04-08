@@ -43,6 +43,8 @@ export type SupabaseClientState = {
   missingVariables: string[];
 };
 
+let cachedClientState: SupabaseClientState | null = null;
+
 function readSupabaseVariable(name: keyof typeof SUPABASE_ENV) {
   const value = import.meta.env[SUPABASE_ENV[name]];
   return typeof value === "string" ? value.trim() : "";
@@ -63,19 +65,25 @@ function getMissingVariables(url: string, anonKey: string) {
 }
 
 export function createSupabaseClient(): SupabaseClientState {
+  if (cachedClientState) {
+    return cachedClientState;
+  }
+
   const url = readSupabaseVariable("URL");
   const anonKey = readSupabaseVariable("ANON_KEY");
   const missingVariables = getMissingVariables(url, anonKey);
 
   if (missingVariables.length > 0) {
-    return {
+    cachedClientState = {
       client: null,
       isConfigured: false,
       missingVariables,
     };
+
+    return cachedClientState;
   }
 
-  return {
+  cachedClientState = {
     client: createClient(url, anonKey, {
       auth: {
         autoRefreshToken: true,
@@ -86,4 +94,6 @@ export function createSupabaseClient(): SupabaseClientState {
     isConfigured: true,
     missingVariables: [],
   };
+
+  return cachedClientState;
 }
