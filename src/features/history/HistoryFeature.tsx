@@ -1,11 +1,14 @@
 import type { AnalysisRepository } from "../../lib/repositories";
 import { useAnalysisHistory } from "../analysis";
+import { Card } from "../../components/ui/Card";
 import { HistoryCard, HistoryEmptyState, HistoryLoadingState } from "./components";
 import { useDeleteAnalysis } from "./hooks";
+import type { AnalysisPersistenceScope } from "../analysis/hooks/useAnalysisRepository";
 
 interface HistoryFeatureProps {
   analysisHref?: string;
   repository?: AnalysisRepository;
+  scope?: AnalysisPersistenceScope;
 }
 
 function getHistoryErrorMessage(error: unknown) {
@@ -16,9 +19,9 @@ function getHistoryErrorMessage(error: unknown) {
   return "No se pudo cargar el historial.";
 }
 
-export function HistoryFeature({ analysisHref = "#analysis", repository }: HistoryFeatureProps) {
-  const history = useAnalysisHistory({ repository });
-  const deleteMutation = useDeleteAnalysis({ repository });
+export function HistoryFeature({ analysisHref = "/app/analysis", repository, scope }: HistoryFeatureProps) {
+  const history = useAnalysisHistory({ repository, scope });
+  const deleteMutation = useDeleteAnalysis({ repository, scope });
   const errorMessage = getHistoryErrorMessage(history.error);
 
   function handleDelete(analysisId: string) {
@@ -26,7 +29,7 @@ export function HistoryFeature({ analysisHref = "#analysis", repository }: Histo
   }
 
   return (
-    <section className="surface-panel flex flex-col gap-6 p-6 sm:p-8">
+    <Card className="flex flex-col gap-6 p-6 sm:p-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-2">
           <span className="label-chip">Historial persistido</span>
@@ -72,6 +75,6 @@ export function HistoryFeature({ analysisHref = "#analysis", repository }: Histo
           ))}
         </div>
       )}
-    </section>
+    </Card>
   );
 }

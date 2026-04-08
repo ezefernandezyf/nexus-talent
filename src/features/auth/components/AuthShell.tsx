@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { Card } from "../../../components/ui/Card";
 import { useAuth } from "../hooks/useAuth";
 
 const AUTH_SHELL_COPY = {
@@ -63,7 +64,7 @@ export function AuthShell({ children, mode }: AuthShellProps) {
       />
 
       <div className="relative mx-auto grid min-h-screen w-full max-w-7xl gap-6 px-5 py-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-8">
-        <section className="surface-panel flex flex-col justify-between gap-8 p-7 sm:p-8 lg:p-10">
+        <Card className="flex flex-col justify-between gap-8 p-7 sm:p-8 lg:p-10">
           <div className="space-y-5">
             <span className="label-chip">{copy.eyebrow}</span>
             <div className="space-y-3">
@@ -89,9 +90,9 @@ export function AuthShell({ children, mode }: AuthShellProps) {
               El acceso queda cerrado por defecto si faltan variables de entorno o si la sesión no está validada.
             </p>
           </div>
-        </section>
+        </Card>
 
-        <section className="surface-panel flex flex-col gap-5 p-6 sm:p-8 lg:p-10">
+        <Card className="flex flex-col gap-5 p-6 sm:p-8 lg:p-10">
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-2">
               <span className="label-chip">{copy.title}</span>
@@ -126,7 +127,7 @@ export function AuthShell({ children, mode }: AuthShellProps) {
           <p className="text-sm leading-6 text-on-surface-variant">
             {copy.actionPrompt} <Link className="text-primary hover:underline" to={copy.actionHref}>{copy.actionLabel}</Link>
           </p>
-        </section>
+        </Card>
       </div>
     </main>
   );

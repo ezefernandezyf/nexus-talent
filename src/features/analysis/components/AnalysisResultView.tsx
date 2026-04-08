@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Button } from "../../../components/ui/Button";
+import { Input } from "../../../components/ui/Input";
 import { JOB_ANALYSIS_SKILL_LEVEL, type JobAnalysisResult } from "../../../schemas/job-analysis";
 import {
   buildOutreachExportPayload,
@@ -132,7 +134,7 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
             <h3 className="mt-3 text-2xl font-semibold tracking-[-0.02em] text-white">Análisis estructurado de la vacante</h3>
           </div>
           <span className="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
-            <span className="status-dot bg-success text-success" aria-hidden="true" />
+            <span className="status-dot glow-pulse bg-success text-success" aria-hidden="true" />
             Listo
           </span>
         </div>
@@ -223,28 +225,27 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
             <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Editá antes de copiar</h4>
           </div>
           <div className="flex flex-wrap justify-end gap-2">
-            <button className="secondary-button" type="button" onClick={handleOpenEmailDraft}>
+            <Button variant="secondary" type="button" onClick={handleOpenEmailDraft}>
               Abrir email
-            </button>
-            <button className="secondary-button" type="button" onClick={handleDownloadMarkdown}>
+            </Button>
+            <Button variant="secondary" type="button" onClick={handleDownloadMarkdown}>
               Descargar Markdown
-            </button>
-            <button className="secondary-button" type="button" onClick={handleDownloadJson}>
+            </Button>
+            <Button variant="secondary" type="button" onClick={handleDownloadJson}>
               Descargar JSON
-            </button>
-            <button className="primary-button" type="button" onClick={handleCopy}>
+            </Button>
+            <Button type="button" onClick={handleCopy}>
               Copiar mensaje
-            </button>
+            </Button>
           </div>
         </div>
 
         <div className="space-y-4">
           <label className="space-y-2">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Asunto</span>
-            <input
+            <Input
               value={subject}
               onChange={(event) => setSubject(event.target.value)}
-              className="field-surface px-4 py-3 text-sm"
               aria-label="Asunto del mensaje"
             />
           </label>

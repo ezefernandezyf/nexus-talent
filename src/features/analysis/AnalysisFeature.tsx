@@ -1,10 +1,18 @@
 import { useJobAnalysis } from "./hooks/useJobAnalysis";
 import { JobDescriptionForm } from "./components/JobDescriptionForm";
 import { AnalysisResultView } from "./components/AnalysisResultView";
+import { Card } from "../../components/ui/Card";
+import type { AnalysisPersistenceScope } from "./hooks/useAnalysisRepository";
+import type { AnalysisRepository } from "../../lib/repositories";
+
+interface AnalysisFeatureProps {
+  repository?: AnalysisRepository;
+  scope?: AnalysisPersistenceScope;
+}
 
 function LoadingState() {
   return (
-    <div className="surface-panel flex min-h-112 flex-col justify-between gap-6 p-6">
+    <Card className="flex min-h-112 flex-col justify-between gap-6 p-6">
       <div className="space-y-4">
         <span className="label-chip">Procesando</span>
         <div className="space-y-3">
@@ -18,40 +26,40 @@ function LoadingState() {
           El analizador determinista está dando forma ahora al resumen, a los grupos de señales y al borrador del mensaje.
         </p>
       </div>
-    </div>
+    </Card>
   );
 }
 
 function EmptyState() {
   return (
-    <div className="surface-panel flex min-h-112 items-center justify-center p-6 text-center">
+    <Card className="flex min-h-112 items-center justify-center p-6 text-center">
       <div className="max-w-sm space-y-3">
         <span className="label-chip">Listo cuando vos lo estés</span>
         <p className="text-base leading-7 text-on-surface-variant">
           Pegá una descripción del puesto y ejecutá el análisis para generar el resumen, la matriz de habilidades y el borrador editable del mensaje.
         </p>
       </div>
-    </div>
+    </Card>
   );
 }
 
 function ErrorState({ message }: { message: string }) {
   return (
-    <div className="surface-panel flex min-h-112 items-center justify-center p-6 text-center">
+    <Card className="flex min-h-112 items-center justify-center p-6 text-center">
       <div className="max-w-md space-y-3">
         <span className="label-chip">El análisis falló</span>
         <p className="text-base leading-7 text-on-surface-variant">{message}</p>
       </div>
-    </div>
+    </Card>
   );
 }
 
-export function AnalysisFeature() {
-  const analysis = useJobAnalysis();
+export function AnalysisFeature({ repository, scope }: AnalysisFeatureProps) {
+  const analysis = useJobAnalysis({ repository, scope });
   const errorMessage = analysis.error instanceof Error ? analysis.error.message : "No se pudo completar el análisis.";
 
   return (
-    <section id="analysis" className="surface-panel flex flex-col gap-6 p-6 sm:p-8">
+    <Card id="analysis" className="flex flex-col gap-6 p-6 sm:p-8">
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-2">
           <span className="label-chip">Espacio de análisis</span>
@@ -75,6 +83,6 @@ export function AnalysisFeature() {
       ) : (
         <EmptyState />
       )}
-    </section>
+    </Card>
   );
 }

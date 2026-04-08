@@ -1,10 +1,13 @@
+import { Card } from "../../../components/ui/Card";
+import { Link } from "react-router-dom";
+
 interface HistoryEmptyStateProps {
   analysisHref: string;
 }
 
 export function HistoryEmptyState({ analysisHref }: HistoryEmptyStateProps) {
   return (
-    <div className="flex min-h-80 items-center justify-center rounded-3xl bg-surface-container-lowest/45 p-8 sm:p-12">
+    <Card className="flex min-h-80 items-center justify-center p-8 sm:p-12">
       <div className="max-w-xl space-y-4 text-center">
         <span className="label-chip">Sin historial todavía</span>
         <div className="space-y-3">
@@ -15,10 +18,10 @@ export function HistoryEmptyState({ analysisHref }: HistoryEmptyStateProps) {
             El historial conserva los análisis persistidos para que puedas volver a leer el resumen, las señales técnicas y el mensaje sugerido sin repetir trabajo.
           </p>
         </div>
-        <a className="primary-button" href={analysisHref}>
+        <Link className="primary-button" to={analysisHref}>
           Ir al análisis
-        </a>
+        </Link>
       </div>
-    </div>
+    </Card>
   );
 }

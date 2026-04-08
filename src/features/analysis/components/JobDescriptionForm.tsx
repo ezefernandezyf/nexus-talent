@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Button } from "../../../components/ui/Button";
+import { Input } from "../../../components/ui/Input";
 
 interface JobDescriptionFormProps {
   errorMessage?: string | null;
@@ -59,13 +61,12 @@ export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDes
         <label className="label-chip" htmlFor="github-repository-url">
           URL del repositorio de GitHub <span className="text-on-surface-variant">(opcional)</span>
         </label>
-        <input
+        <Input
           id="github-repository-url"
           name="github-repository-url"
           value={githubRepositoryUrl}
           onChange={(event) => setGitHubRepositoryUrl(event.target.value)}
           placeholder="https://github.com/owner/repository"
-          className="field-surface w-full px-4 py-3 text-sm"
           autoComplete="off"
           inputMode="url"
           aria-describedby="github-repository-help"
@@ -79,9 +80,9 @@ export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDes
         <p id="job-description-error" className="min-h-6 text-sm text-error" aria-live="polite">
           {localError ?? errorMessage ?? " "}
         </p>
-        <button className="primary-button sm:min-w-44" type="submit" disabled={isPending}>
+        <Button className="sm:min-w-44" type="submit" disabled={isPending}>
           {isPending ? "Analizando..." : "Analizar vacante"}
-        </button>
+        </Button>
       </div>
     </form>
   );

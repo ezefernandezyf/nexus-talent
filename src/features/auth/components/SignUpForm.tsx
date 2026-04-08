@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Button } from "../../../components/ui/Button";
+import { Input } from "../../../components/ui/Input";
 import { useAuth } from "../hooks/useAuth";
 
 export function SignUpForm() {
@@ -41,7 +43,7 @@ export function SignUpForm() {
         <label className="label-chip" htmlFor="sign-up-email">
           Email
         </label>
-        <input
+        <Input
           id="sign-up-email"
           name="email"
           type="email"
@@ -53,7 +55,6 @@ export function SignUpForm() {
             setMessage(null);
           }}
           placeholder="vos@empresa.com"
-          className="field-surface px-4 py-3 text-sm leading-6 text-on-surface placeholder:text-on-surface-variant"
           aria-describedby="sign-up-status"
         />
       </div>
@@ -62,7 +63,7 @@ export function SignUpForm() {
         <label className="label-chip" htmlFor="sign-up-password">
           Contraseña
         </label>
-        <input
+        <Input
           id="sign-up-password"
           name="password"
           type="password"
@@ -74,7 +75,6 @@ export function SignUpForm() {
             setMessage(null);
           }}
           placeholder="Elegí una contraseña robusta"
-          className="field-surface px-4 py-3 text-sm leading-6 text-on-surface placeholder:text-on-surface-variant"
           aria-describedby="sign-up-status"
         />
       </div>
@@ -83,9 +83,9 @@ export function SignUpForm() {
         <p id="sign-up-status" className="min-h-6 text-sm leading-6 text-on-surface-variant" aria-live="polite">
           {errorMessage ?? message ?? (isConfigured ? " " : "Configurá Supabase para habilitar el acceso.")}
         </p>
-        <button className="primary-button sm:min-w-44" type="submit" disabled={isSubmitting || !isConfigured}>
+        <Button className="sm:min-w-44" type="submit" disabled={isSubmitting || !isConfigured}>
           {isSubmitting ? "Creando..." : "Crear cuenta"}
-        </button>
+        </Button>
       </div>
     </form>
   );
