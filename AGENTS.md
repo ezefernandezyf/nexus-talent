@@ -111,3 +111,86 @@ Para asegurar entregas atómicas y calidad comercial, el proyecto se divide en e
   - `tailwind-4`: Estilado moderno y performance.
   - `typescript`: Tipado fuerte y avanzado.
   - `zod-4`: Validaciones rigurasa de esquemas.
+
+## 9. Fase Activa: Stitch HTML to React Migration
+
+La fase actual consiste en migrar la UI desde los HTML exportados por Stitch hacia componentes React reutilizables, preservando fidelidad visual y separando la presentación de la lógica.
+
+### Objetivo Global
+
+- Los HTML de `docs/assets/` son la fuente de verdad visual.
+- No reinterpretar el diseño, no simplificarlo y no cambiar estilos por gusto.
+- Toda pantalla nueva o rehecha debe ser pixel-perfect respecto del HTML de referencia.
+- El contenido textual de la UI debe ser dinámico cuando represente datos de la app, usando props o estructuras de datos.
+- No implementar lógica de negocio nueva en esta fase salvo la mínima necesaria para que la pantalla funcione.
+
+### Principios de Ejecución
+
+- No mezclar UI vieja con nueva en la misma pantalla.
+- No hacer mejoras incrementales sobre layouts rotos: reconstruir desde el asset.
+- Separar siempre UI de lógica.
+- Si una pantalla necesita funcionalidad existente, primero se replica la UI y después se reincorpora la lógica real.
+- Cualquier refactor de negocio que no sea imprescindible queda fuera de este corte.
+
+### Patrón de Trabajo por Módulos
+
+Cada módulo debe pasar por esta secuencia, en este orden:
+
+1. **UI Extraction Agent**
+  - Analiza el HTML de referencia.
+  - Identifica secciones, jerarquía, spacing, tipografía, íconos y estados visuales.
+  - Devuelve un mapa de bloques UI sin escribir código de producción.
+
+2. **Componentization Agent**
+  - Convierte cada bloque en componentes React reutilizables.
+  - Mantiene estilos exactos y estructura visual.
+  - No añade lógica de negocio.
+
+3. **Content Refactor Agent**
+  - Reemplaza textos hardcodeados por props, constantes o data models.
+  - Adapta el contenido a `Nexus Talent` según el naming definido por producto.
+  - Mantiene fidelidad del layout mientras vuelve dinámico el contenido.
+
+4. **Page Assembly Agent**
+  - Ensambla los componentes en páginas reales.
+  - Reincorpora la funcionalidad existente solo después de cerrar la composición visual.
+  - No introduce features nuevas.
+
+5. **Verification Agent**
+  - Comprueba que la página coincida con el HTML de referencia.
+  - Valida que los tests relevantes sigan pasando.
+  - Señala desvíos visuales o funcionales antes de considerar el módulo cerrado.
+
+### Mapa de Módulos
+
+1. **Landing y Auth Pública**
+  - Rehacer `Landing`, `Login` y `Signup` desde `docs/assets/`.
+  - Mantener los flujos de autenticación existentes.
+  - Ajustar botones, logos e íconos a la referencia HTML.
+
+2. **Shell y Navegación**
+  - Rehacer `AppLayout`, mobile drawer, footer y navegación superior.
+  - Eliminar copy técnico visible.
+  - Centralizar iconografía compartida.
+
+3. **Analysis**
+  - Rehacer la página de análisis según `referenciaAnalisis.html` y `referenciaResultadoAnalisis.html`.
+  - Integrar después el flujo actual de análisis IA, preservando validación y estados.
+  - Ajustar el tono del mensaje IA cuando el asset o la funcionalidad lo requiera.
+
+4. **History**
+  - Rehacer la pantalla de historial según `referenciaHistorial.html`.
+  - Mantener detalle, edición, renombre y borrado como funcionalidades posteriores al ensamblado visual.
+
+5. **Settings**
+  - Rehacer la pantalla de settings/admin con la misma lógica de separación UI/lógica.
+  - Mantener persistencia y validación existentes.
+
+6. **UI Parity / Visual Polish**
+  - Cerrar inconsistencias finales de spacing, jerarquía, estados vacíos y responsive.
+  - No sumar features nuevas.
+  - Esta fase solo pule lo que ya existe.
+
+### Regla Operativa
+
+Cada pantalla o familia de pantallas debe entrar por su propio corte SDD para mantener trazabilidad, reducir riesgo y evitar mezclar shell, auth y feature work en el mismo commit. Si un módulo todavía no tiene su asset definitivo, no se avanza por intuición: se espera la referencia correcta.

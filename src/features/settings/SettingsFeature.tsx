@@ -40,11 +40,6 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
 
   return (
     <Card className="flex flex-col gap-6 p-6 sm:p-8">
-      <div className="space-y-2">
-        <span className="label-chip">Panel admin</span>
-        <h1 className="text-3xl font-semibold tracking-[-0.02em] text-white sm:text-4xl">Settings</h1>
-      </div>
-
       <SettingsForm
         errorMessage={settingsQuery.saveSettingsError instanceof Error ? settingsQuery.saveSettingsError.message : null}
         isPending={settingsQuery.saveSettingsPending}

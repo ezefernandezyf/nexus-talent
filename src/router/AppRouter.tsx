@@ -39,6 +39,8 @@ export function AppRouter() {
         </Route>
         <Route path="*" element={<Navigate replace to="analysis" />} />
       </Route>
+      <Route path="/login" element={<Navigate replace to="/auth/sign-in" />} />
+      <Route path="/signup" element={<Navigate replace to="/auth/sign-up" />} />
       <Route path="*" element={<Navigate replace to="/" />} />
     </Routes>
   );

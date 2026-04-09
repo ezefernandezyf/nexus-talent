@@ -42,7 +42,7 @@ export function AuthShell({ children, mode }: AuthShellProps) {
   const { errorMessage, isConfigured } = useAuth();
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-surface-container-lowest text-on-surface">
+    <main className="relative flex min-h-screen flex-col overflow-hidden bg-surface-container-lowest text-on-surface">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
@@ -63,72 +63,76 @@ export function AuthShell({ children, mode }: AuthShellProps) {
         }}
       />
 
-      <div className="relative mx-auto grid min-h-screen w-full max-w-7xl gap-6 px-5 py-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-8">
-        <Card className="flex flex-col justify-between gap-8 p-7 sm:p-8 lg:p-10">
-          <div className="space-y-5">
-            <span className="label-chip">{copy.eyebrow}</span>
-            <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-on-surface-variant">{copy.kicker}</p>
-              <h1 className="max-w-2xl text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
-                {copy.heading}
-              </h1>
-              <p className="max-w-2xl text-base leading-7 text-on-surface-variant">{copy.subtitle}</p>
-            </div>
-          </div>
+      <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 sm:px-8">
+        <div className="text-xl font-bold tracking-tighter text-on-surface font-headline">Nexus Talent</div>
+        <button className="text-on-surface-variant transition-colors hover:text-primary" type="button">
+          <span aria-hidden="true">help_outline</span>
+        </button>
+      </header>
 
-          <div className="grid gap-3 sm:grid-cols-3">
-            {copy.stats.map((stat) => (
-              <div key={stat} className="ghost-frame rounded-2xl bg-surface-container-lowest/80 p-4">
-                <p className="text-sm leading-6 text-on-surface-variant">{stat}</p>
+      <div className="relative z-10 flex flex-1 items-center justify-center px-6 pb-24 pt-4 sm:px-8">
+        <div className="w-full max-w-md">
+          <Card className="glass-panel ghost-border rounded-xl p-8 shadow-2xl sm:p-10">
+            <div className="mb-10 text-center">
+              <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-on-surface font-headline">{copy.title}</h1>
+              <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant">{copy.kicker}</p>
+            </div>
+
+            <div className="space-y-6">
+              {errorMessage ? (
+                <div className="ghost-frame rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
+                  {errorMessage}
+                </div>
+              ) : null}
+
+              {!isConfigured ? (
+                <div className="ghost-frame rounded-2xl bg-warning/10 px-4 py-3 text-sm leading-6 text-warning" role="status">
+                  Faltan variables de entorno. La app se mantiene en modo público hasta que configures Supabase.
+                </div>
+              ) : null}
+
+              <div className="space-y-3">
+                <p className="text-base leading-7 text-on-surface-variant">{copy.subtitle}</p>
+                <div className="relative flex items-center py-4">
+                  <div className="grow border-t border-outline-variant/20"></div>
+                  <span className="mx-4 shrink text-[10px] uppercase tracking-widest text-on-surface-variant font-label">
+                    {copy.actionPrompt}
+                  </span>
+                  <div className="grow border-t border-outline-variant/20"></div>
+                </div>
               </div>
-            ))}
-          </div>
 
-          <div className="ghost-frame rounded-3xl bg-surface-container-lowest/80 p-5">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-on-surface-variant">{copy.title}</p>
-            <p className="mt-3 text-sm leading-7 text-on-surface-variant">
-              El acceso queda cerrado por defecto si faltan variables de entorno o si la sesión no está validada.
-            </p>
-          </div>
-        </Card>
+              <div>{children}</div>
 
-        <Card className="flex flex-col gap-5 p-6 sm:p-8 lg:p-10">
-          <div className="flex items-start justify-between gap-4">
-            <div className="space-y-2">
-              <span className="label-chip">{copy.title}</span>
-              <h2 className="max-w-lg text-2xl font-semibold tracking-[-0.03em] text-white sm:text-3xl">{copy.title}</h2>
+              <div className="pt-2 text-center">
+                <p className="text-sm leading-6 text-on-surface-variant">
+                  {copy.actionPrompt}{" "}
+                  <Link className="text-primary hover:underline" to={copy.actionHref}>
+                    {copy.actionLabel}
+                  </Link>
+                </p>
+              </div>
             </div>
-            <Link className="tech-chip shrink-0 text-primary" to={copy.actionHref}>
-              {copy.actionLabel}
-            </Link>
-          </div>
-
-          <div className="space-y-2">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-on-surface-variant">{copy.actionPrompt}</p>
-            <p className="text-base leading-7 text-on-surface-variant">
-              Autenticación simple, sesión persistente y rutas privadas protegidas desde el primer render.
-            </p>
-          </div>
-
-          {errorMessage ? (
-            <div className="ghost-frame rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
-              {errorMessage}
-            </div>
-          ) : null}
-
-          {!isConfigured ? (
-            <div className="ghost-frame rounded-2xl bg-warning/10 px-4 py-3 text-sm leading-6 text-warning" role="status">
-              Faltan variables de entorno. La app se mantiene en modo público hasta que configures Supabase.
-            </div>
-          ) : null}
-
-          <div className="flex-1">{children}</div>
-
-          <p className="text-sm leading-6 text-on-surface-variant">
-            {copy.actionPrompt} <Link className="text-primary hover:underline" to={copy.actionHref}>{copy.actionLabel}</Link>
-          </p>
-        </Card>
+          </Card>
+        </div>
       </div>
+
+      <footer className="relative z-10 mt-auto flex w-full flex-col items-center justify-between gap-4 border-t border-white/5 px-8 py-6 opacity-60 sm:flex-row">
+        <div className="font-label text-[10px] uppercase tracking-widest text-[#475569]">
+          © 2026 Nexus Talent. Engineered for Precision.
+        </div>
+        <div className="flex gap-8">
+          <a className="font-label text-[10px] uppercase tracking-widest text-[#475569] transition-colors hover:text-[#38BDF8]" href="#">
+            Privacy Policy
+          </a>
+          <a className="font-label text-[10px] uppercase tracking-widest text-[#475569] transition-colors hover:text-[#38BDF8]" href="#">
+            Terms
+          </a>
+          <a className="font-label text-[10px] uppercase tracking-widest text-[#475569] transition-colors hover:text-[#38BDF8]" href="#">
+            Support
+          </a>
+        </div>
+      </footer>
     </main>
   );
 }

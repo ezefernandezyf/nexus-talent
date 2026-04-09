@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { createGroqProviderAdapter } from "./ai-provider";
 import { GROQ_JOB_ANALYSIS_JSON_SCHEMA } from "./validation/job-analysis";
+import { JOB_ANALYSIS_MESSAGE_TONE } from "../schemas/job-analysis";
 
 describe("createGroqProviderAdapter", () => {
   it("exposes Groq as the concrete provider identity", () => {
@@ -14,7 +15,7 @@ describe("createGroqProviderAdapter", () => {
     const fallbackTransport = vi.fn().mockResolvedValue({ summary: "Fallback summary", skillGroups: [], outreachMessage: { subject: "S", body: "B" } });
     const adapter = createGroqProviderAdapter({ fallbackTransport });
 
-    const request = adapter.buildRequest({ jobDescription: "Senior React engineer" });
+    const request = adapter.buildRequest({ jobDescription: "Senior React engineer", messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL });
     const result = await request.execute(new AbortController().signal);
 
     expect(fallbackTransport).toHaveBeenCalledTimes(1);
@@ -63,7 +64,7 @@ describe("createGroqProviderAdapter", () => {
     });
 
     const adapter = createGroqProviderAdapter({ apiKey: "test-key", fetchImpl });
-    const request = adapter.buildRequest({ jobDescription: "Senior React engineer" });
+    const request = adapter.buildRequest({ jobDescription: "Senior React engineer", messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL });
 
     await request.execute(new AbortController().signal);
 

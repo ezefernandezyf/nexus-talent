@@ -76,6 +76,22 @@ function createAuthClient(signInErrorMessage: string | null): AuthClientLike {
 }
 
 describe("SignInForm", () => {
+  it("shows validation errors for empty submit", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient(null);
+
+    render(
+      <AuthProvider client={client}>
+        <SignInForm />
+      </AuthProvider>,
+    );
+
+    await user.click(screen.getByRole("button", { name: /iniciar sesión/i }));
+
+    await waitFor(() => expect(screen.getByText(/el email debe ser válido/i)).toBeInTheDocument());
+    expect(screen.getByText(/la contraseña debe tener al menos 6 caracteres/i)).toBeInTheDocument();
+  });
+
   it("surfaces invalid login errors", async () => {
     const user = userEvent.setup();
     const client = createAuthClient("Invalid login credentials");

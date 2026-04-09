@@ -8,6 +8,14 @@ export const JOB_ANALYSIS_SKILL_LEVEL = {
 
 export type JobAnalysisSkillLevel = (typeof JOB_ANALYSIS_SKILL_LEVEL)[keyof typeof JOB_ANALYSIS_SKILL_LEVEL];
 
+export const JOB_ANALYSIS_MESSAGE_TONE = {
+  FORMAL: "formal",
+  CASUAL: "casual",
+  PERSUASIVE: "persuasive",
+} as const;
+
+export type JobAnalysisMessageTone = (typeof JOB_ANALYSIS_MESSAGE_TONE)[keyof typeof JOB_ANALYSIS_MESSAGE_TONE];
+
 export const JOB_ANALYSIS_INPUT_SCHEMA = z.object({
   jobDescription: z
     .string({ error: "Pegá una descripción del puesto antes de analizarla." })
@@ -95,6 +103,11 @@ export const JOB_ANALYSIS_RESULT_SCHEMA = z.object({
 
 export const JOB_ANALYSIS_REQUEST_SCHEMA = z.object({
   jobDescription: JOB_ANALYSIS_INPUT_SCHEMA.shape.jobDescription,
+  messageTone: z.enum([
+    JOB_ANALYSIS_MESSAGE_TONE.FORMAL,
+    JOB_ANALYSIS_MESSAGE_TONE.CASUAL,
+    JOB_ANALYSIS_MESSAGE_TONE.PERSUASIVE,
+  ]),
   githubRepositoryUrl: z
     .string({ error: "La URL de GitHub debe ser texto válido." })
     .trim()

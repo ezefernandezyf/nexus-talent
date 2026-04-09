@@ -30,22 +30,6 @@ export function HistoryFeature({ analysisHref = "/app/analysis", repository, sco
 
   return (
     <Card className="flex flex-col gap-6 p-6 sm:p-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-2">
-          <span className="label-chip">Historial persistido</span>
-          <h2 className="max-w-2xl text-2xl font-semibold tracking-[-0.02em] text-white sm:text-3xl">
-            Revisitá análisis anteriores sin perder el foco del flujo principal.
-          </h2>
-          <p className="max-w-2xl text-base leading-7 text-on-surface-variant">
-            Cada guardado queda disponible para volver a leer la síntesis ejecutiva, las señales técnicas y los mensajes sugeridos.
-          </p>
-        </div>
-
-        <span className="rounded-full bg-surface-container-high px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-on-surface-variant">
-          {history.analyses.length} guardados
-        </span>
-      </div>
-
       {deleteMutation.error ? (
         <p className="text-sm leading-6 text-error" role="alert">
           {deleteMutation.error.message}
