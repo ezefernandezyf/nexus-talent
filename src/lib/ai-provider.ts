@@ -4,7 +4,7 @@ import {
   isAIOrchestratorError,
   type AIErrorCode,
 } from "./ai-errors";
-import { type JobAnalysisInput } from "../schemas/job-analysis";
+import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisMessageTone } from "../schemas/job-analysis";
 import { GROQ_JOB_ANALYSIS_JSON_SCHEMA } from "./validation";
 
 const GROQ_CHAT_COMPLETIONS_URL = "https://api.groq.com/openai/v1/chat/completions";
@@ -27,9 +27,14 @@ export type ProviderFallbackTransport<Input> = (input: Input) => Promise<unknown
 
 interface GroqProviderAdapterOptions {
   apiKey?: string;
-  fallbackTransport?: ProviderFallbackTransport<JobAnalysisInput>;
+  fallbackTransport?: ProviderFallbackTransport<JobAnalysisPromptInput>;
   fetchImpl?: typeof fetch;
   model?: string;
+}
+
+export interface JobAnalysisPromptInput {
+  jobDescription: string;
+  messageTone: JobAnalysisMessageTone;
 }
 
 interface GroqChatMessage {
@@ -58,16 +63,22 @@ function readStatus(error: unknown) {
   return undefined;
 }
 
-function buildGroqMessages(input: JobAnalysisInput): GroqChatMessage[] {
+function buildGroqMessages(input: JobAnalysisPromptInput): GroqChatMessage[] {
+  const toneInstruction =
+    input.messageTone === JOB_ANALYSIS_MESSAGE_TONE.CASUAL
+      ? "Usá un tono casual, directo y cercano."
+      : input.messageTone === JOB_ANALYSIS_MESSAGE_TONE.PERSUASIVE
+        ? "Usá un tono persuasivo, enérgico y orientado a resultados."
+        : "Usá un tono formal, ejecutivo y claro.";
+
   return [
     {
       role: "system",
-      content:
-        "Sos un analizador de vacantes. Devolvé un JSON estricto con summary, skillGroups y outreachMessage, sin texto extra.",
+      content: `Sos un analizador de vacantes. Devolvé un JSON estricto con summary, skillGroups y outreachMessage, sin texto extra. ${toneInstruction}`,
     },
     {
       role: "user",
-      content: input.jobDescription,
+      content: `Tono del mensaje: ${input.messageTone}\n\nDescripción del puesto:\n${input.jobDescription}`,
     },
   ];
 }
@@ -110,7 +121,7 @@ function parseGroqEnvelope(response: GroqChatCompletionEnvelope) {
   return JSON.parse(content) as unknown;
 }
 
-export function createGroqProviderAdapter(options: GroqProviderAdapterOptions = {}): ProviderAdapter<JobAnalysisInput> {
+export function createGroqProviderAdapter(options: GroqProviderAdapterOptions = {}): ProviderAdapter<JobAnalysisPromptInput> {
   const apiKey = options.apiKey ?? import.meta.env.VITE_GROQ_API_KEY;
   const model = options.model ?? import.meta.env.VITE_GROQ_MODEL ?? DEFAULT_GROQ_MODEL;
   const fetchImpl = options.fetchImpl ?? globalThis.fetch?.bind(globalThis);

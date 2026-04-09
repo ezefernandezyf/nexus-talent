@@ -41,19 +41,20 @@ describe("JobDescriptionForm", () => {
     );
   });
 
-  it("submits the optional GitHub repository URL", async () => {
+  it("exposes the tone selector without blocking submit", async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
 
     render(<JobDescriptionForm isPending={false} onSubmit={onSubmit} />);
+
+    expect(screen.getByLabelText(/tono del mensaje/i)).toBeInTheDocument();
+
     await user.type(screen.getByLabelText(/descripción del puesto/i), "Ingeniero React senior con TypeScript");
-    await user.type(screen.getByLabelText(/url del repositorio de github/i), "  https://github.com/ezefernandezyf/nexus-talent  ");
     await user.click(screen.getByRole("button", { name: /analizar vacante/i }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       createAnalysisRequest({
         jobDescription: "Ingeniero React senior con TypeScript",
-        githubRepositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
       }),
     );
   });

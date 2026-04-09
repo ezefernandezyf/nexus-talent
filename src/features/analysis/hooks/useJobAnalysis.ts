@@ -35,7 +35,7 @@ export function useJobAnalysis(options: UseJobAnalysisOptions = {}) {
       try {
         const validatedInput = JOB_ANALYSIS_REQUEST_SCHEMA.parse(request);
         const githubRepositoryUrl = validatedInput.githubRepositoryUrl?.trim() || undefined;
-        const analysisPromise = client.analyzeJobDescription(validatedInput.jobDescription);
+        const analysisPromise = client.analyzeJobDescription(validatedInput.jobDescription, validatedInput.messageTone);
         const githubPromise = githubRepositoryUrl ? githubClient.lookupRepository(githubRepositoryUrl) : Promise.resolve(null);
 
         const [analysisResult, githubResult] = await Promise.allSettled([analysisPromise, githubPromise]);

@@ -76,6 +76,22 @@ function createAuthClient(signUpErrorMessage: string | null): AuthClientLike {
 }
 
 describe("SignUpForm", () => {
+  it("shows validation errors for empty submit", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient(null);
+
+    render(
+      <AuthProvider client={client}>
+        <SignUpForm />
+      </AuthProvider>,
+    );
+
+    await user.click(screen.getByRole("button", { name: /crear cuenta/i }));
+
+    await waitFor(() => expect(screen.getByText(/el email debe ser válido/i)).toBeInTheDocument());
+    expect(screen.getByText(/la contraseña debe tener al menos 6 caracteres/i)).toBeInTheDocument();
+  });
+
   it("surfaces existing-email signup errors", async () => {
     const user = userEvent.setup();
     const client = createAuthClient("User already registered");

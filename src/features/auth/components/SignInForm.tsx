@@ -1,87 +1,82 @@
-import { useState } from "react";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
 import { useAuth } from "../hooks/useAuth";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type LoginFormValues } from "../schemas/auth";
+import { useState } from "react";
 
 export function SignInForm() {
   const { isConfigured, signIn } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const [serverError, setServerError] = useState<string | null>(null);
 
-    const normalizedEmail = email.trim();
-    if (normalizedEmail.length === 0 || password.length === 0) {
-      setErrorMessage("Completá email y contraseña para iniciar sesión.");
-      setMessage(null);
-      return;
-    }
-
-    setIsSubmitting(true);
-    setErrorMessage(null);
-    setMessage(null);
-
+  async function onSubmit(values: LoginFormValues) {
+    setServerError(null);
     try {
-      const response = await signIn(normalizedEmail, password);
-      setMessage(response.message);
-      setEmail("");
-      setPassword("");
+      await signIn(values.email.trim(), values.password);
+      reset();
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "No se pudo iniciar sesión.");
-    } finally {
-      setIsSubmitting(false);
+      setServerError(error instanceof Error ? error.message : "No se pudo iniciar sesión.");
     }
   }
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
+    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      <div className="space-y-4">
+        <button
+          type="button"
+          className="w-full flex items-center justify-center gap-3 bg-white text-[#0B0E14] font-semibold py-3 px-4 rounded-xl hover:opacity-90 transition-opacity duration-200"
+          onClick={() => setServerError("Redirigiendo a GitHub...")}
+        >
+          <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fillRule="evenodd"></path>
+          </svg>
+          <span className="font-headline tracking-tight">Ingresar con GitHub</span>
+        </button>
+
+        <button
+          type="button"
+          className="w-full flex items-center justify-center gap-3 bg-white border border-surface-container p-0.5 rounded-xl hover:opacity-90 transition-opacity duration-200"
+          onClick={() => setServerError("Redirigiendo a Google...")}
+        >
+          <span className="flex items-center gap-3 px-4 py-3">
+            <svg className="w-5 h-5" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+              <path d="M23 9.5c3.6 0 6.1 1.6 7.5 2.9l5.5-5.5C33.1 4 28.5 2 23 2 14.9 2 7.8 6.7 4.1 13.6l6.6 5.1C12.9 13.2 17.5 9.5 23 9.5z" fill="#EA4335"/>
+              <path d="M38.9 18.1c.3 1.5.5 3.1.5 4.4 0 1.2-.2 2.1-.6 3.1-.6 1.6-1.6 3-2.8 4.2-1.3 1.2-2.9 2.1-4.7 2.7-1.7.6-3.6.9-5.5.9-3.6 0-6.1-1.6-7.5-2.9l-5.5 5.5C12.9 42 17.5 46 23 46c8.1 0 15.2-4.7 18.9-11.6 0 0-6.6-5.1-6.6-5.1 0 0 1.8-5.2 3.6-6.4.9-.6 1.9-1.2 2.1-2.8.1-.9.1-1.7.1-2.7 0-1.3-.2-2.6-.6-3.8L38.9 18.1z" fill="#4285F4"/>
+              <path d="M9.5 30.9c-.6-1.6-.9-3.3-.9-5 0-1.7.3-3.4.9-5l-6.6-5.1C1.1 18.4 0 20.6 0 23c0 2.4 1.1 4.6 2.9 6.2l6.6 1.7z" fill="#FBBC05"/>
+              <path d="M23 37c4.5 0 8.1-1.6 10.7-3.9 1.1-.9 2.1-2 2.8-3.2.5-.9.9-1.9 1.1-2.9.1-.9.1-1.7.1-2.6 0-1.3-.2-2.6-.6-3.8L23 37z" fill="#34A853"/>
+            </svg>
+            <span className="font-headline tracking-tight">Ingresar con Google</span>
+          </span>
+        </button>
+      </div>
+
       <div className="space-y-2">
         <label className="label-chip" htmlFor="sign-in-email">
           Email
         </label>
-        <Input
-          id="sign-in-email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          value={email}
-          onChange={(event) => {
-            setEmail(event.target.value);
-            setErrorMessage(null);
-            setMessage(null);
-          }}
-          placeholder="vos@empresa.com"
-          aria-describedby="sign-in-status"
-        />
+        <Input id="sign-in-email" {...register("email")} type="email" autoComplete="email" placeholder="vos@empresa.com" aria-describedby="sign-in-status" />
+        {errors.email && <p className="text-sm text-red-400">{errors.email.message}</p>}
       </div>
 
       <div className="space-y-2">
         <label className="label-chip" htmlFor="sign-in-password">
           Contraseña
         </label>
-        <Input
-          id="sign-in-password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(event) => {
-            setPassword(event.target.value);
-            setErrorMessage(null);
-            setMessage(null);
-          }}
-          placeholder="Tu contraseña segura"
-          aria-describedby="sign-in-status"
-        />
+        <Input id="sign-in-password" {...register("password")} type="password" autoComplete="current-password" placeholder="Tu contraseña segura" aria-describedby="sign-in-status" />
+        {errors.password && <p className="text-sm text-red-400">{errors.password.message}</p>}
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p id="sign-in-status" className="min-h-6 text-sm leading-6 text-on-surface-variant" aria-live="polite">
-          {errorMessage ?? message ?? (isConfigured ? " " : "Configurá Supabase para habilitar el acceso.")}
+          {serverError ?? (isConfigured ? " " : "Configurá Supabase para habilitar el acceso.")}
         </p>
         <Button className="sm:min-w-44" type="submit" disabled={isSubmitting || !isConfigured}>
           {isSubmitting ? "Ingresando..." : "Iniciar sesión"}

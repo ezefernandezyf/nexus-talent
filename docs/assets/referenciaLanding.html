@@ -1,0 +1,302 @@
+<!DOCTYPE html><html class="dark" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Nexus Talent | De Job Description a Postulación Ganadora</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "tertiary-fixed": "#ffddb8",
+            "primary-fixed": "#c4e7ff",
+            "on-primary-fixed": "#001e2c",
+            "secondary-fixed-dim": "#a4cce6",
+            "surface-variant": "#32353c",
+            "tertiary-fixed-dim": "#ffb960",
+            "tertiary-container": "#f1a02b",
+            "surface-container-lowest": "#0b0e14",
+            "surface-dim": "#10131a",
+            "on-tertiary-fixed-variant": "#653e00",
+            "on-error": "#690005",
+            "background": "#10131a",
+            "on-tertiary": "#472a00",
+            "on-secondary-container": "#92bad4",
+            "on-secondary-fixed-variant": "#214b61",
+            "surface-container-highest": "#32353c",
+            "surface-container-high": "#272a31",
+            "primary": "#8ed5ff",
+            "on-tertiary-container": "#613b00",
+            "on-background": "#e1e2eb",
+            "outline": "#87929a",
+            "surface-bright": "#363940",
+            "surface-container-low": "#191c22",
+            "secondary-fixed": "#c4e7ff",
+            "on-secondary": "#023449",
+            "inverse-on-surface": "#2e3037",
+            "surface-container": "#1d2026",
+            "tertiary": "#ffc176",
+            "primary-fixed-dim": "#7bd0ff",
+            "on-error-container": "#ffdad6",
+            "surface": "#10131a",
+            "on-tertiary-fixed": "#2a1700",
+            "error-container": "#93000a",
+            "on-secondary-fixed": "#001e2c",
+            "on-primary-container": "#004965",
+            "error": "#ffb4ab",
+            "surface-tint": "#7bd0ff",
+            "secondary": "#a4cce6",
+            "on-surface-variant": "#bdc8d1",
+            "inverse-surface": "#e1e2eb",
+            "primary-container": "#38bdf8",
+            "on-primary": "#00354a",
+            "secondary-container": "#214b61",
+            "outline-variant": "#3e484f",
+            "on-primary-fixed-variant": "#004c69",
+            "inverse-primary": "#00668a",
+            "on-surface": "#e1e2eb"
+          },
+          fontFamily: {
+            "headline": ["Inter", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+            "label": ["Space Grotesk", "monospace"]
+          },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-panel {
+      background: rgba(29, 32, 38, 0.6);
+      backdrop-filter: blur(24px);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #8ed5ff 0%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .glow-pulse {
+      box-shadow: 0 0 15px rgba(142, 213, 255, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body selection:bg-primary/30">
+<!-- Top Navigation (Shared Component) -->
+<nav class="w-full border-b border-[#3e484f]/15 bg-[#0B0E14] dark:bg-[#0B0E14]">
+<div class="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto font-['Inter'] tracking-tight">
+<div class="text-xl font-bold tracking-tighter text-[#e1e2eb]" style="">
+        Nexus Talent</div>
+<div class="hidden md:flex items-center space-gap-8 gap-8">
+<a class="text-[#e1e2eb]/70 hover:text-[#e1e2eb] transition-colors" href="#" style=""><br></a>
+<a class="text-[#e1e2eb]/70 hover:text-[#e1e2eb] transition-colors" href="#" style=""><br></a>
+<a class="text-[#e1e2eb]/70 hover:text-[#e1e2eb] transition-colors" href="#" style=""><br></a>
+<a class="text-[#e1e2eb]/70 hover:text-[#e1e2eb] transition-colors" href="#" style=""><br></a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#e1e2eb]/70 hover:text-[#e1e2eb] transition-colors px-4 py-2 text-sm font-medium" style="">Login</button>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-xl text-sm font-bold hover:bg-primary transition-all duration-200 active:scale-95" style="">Sign Up</button>
+</div>
+</div>
+</nav>
+<main class="relative">
+<!-- Hero Section -->
+<section class="relative pt-24 pb-16 px-8 max-w-screen-2xl mx-auto overflow-hidden">
+<!-- Ambient Background Decor -->
+<div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-10"></div>
+<div class="absolute -bottom-24 -left-24 w-[400px] h-[400px] bg-secondary-container/10 rounded-full blur-[100px] -z-10"></div>
+<div class="grid lg:grid-cols-2 gap-16 items-center">
+<div class="flex flex-col space-y-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container w-fit rounded-full border border-outline-variant/15">
+<span class="w-2 h-2 rounded-full bg-primary glow-pulse"></span>
+<span class="font-label text-xs uppercase tracking-widest text-on-surface-variant" style="">Eficiencia Radical</span>
+</div>
+<h1 class="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight text-on-surface" style="">
+            De Job Description a <span class="gradient-text" style="">Postulación Ganadora</span> en Segundos.
+          </h1>
+<p class="text-xl text-on-surface-variant max-w-xl leading-relaxed" style="">
+            Optimiza tu perfil para vacantes de desarrollo con inteligencia artificial de grado técnico. Diseñado por y para desarrolladores.
+          </p>
+<div class="flex flex-col sm:flex-row items-center gap-4 pt-4">
+<button class="w-full sm:w-auto flex items-center justify-center gap-3 bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-primary/20 transition-all active:scale-[0.98]" style="">
+<svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg>
+              Ingresar con GitHub
+            </button>
+<button class="w-full sm:w-auto border border-outline-variant text-primary font-bold py-4 px-8 rounded-xl hover:bg-primary/5 transition-all" style="">
+              Ver Demo
+            </button>
+</div>
+</div>
+<!-- Visual Preview / Bento Grid Fragment -->
+<div class="relative group">
+<div class="absolute inset-0 bg-primary/20 blur-[100px] group-hover:bg-primary/30 transition-all"></div>
+<div class="grid grid-cols-6 grid-rows-6 gap-4 h-[600px] relative">
+<!-- Analysis Card 1: Skills Matrix -->
+<div class="col-span-4 row-span-3 glass-panel border border-outline-variant/20 rounded-xl p-6 flex flex-col justify-between">
+<div>
+<h3 class="font-label text-sm text-primary mb-4 flex items-center gap-2" style="">
+<span class="material-symbols-outlined text-[18px]" style="">analytics</span>
+                  SKILLS_MATRIX_V4
+                </h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="font-label text-xs" style="">TYPESCRIPT / NEXT.JS</span>
+<span class="text-primary text-xs" style="">98% Match</span>
+</div>
+<div class="h-1 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[98%]"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label text-xs" style="">AWS LAMBDA / IAC</span>
+<span class="text-on-surface-variant text-xs" style="">74% Match</span>
+</div>
+<div class="h-1 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-on-surface-variant w-[74%]"></div>
+</div>
+</div>
+</div>
+<div class="pt-6 mt-auto border-t border-outline-variant/10">
+<p class="text-[10px] font-label text-on-surface-variant/60 leading-tight" style="">
+                  ANALYSIS_CORE_RUNNING: OPTIMIZING_KEYWORDS...
+                </p>
+</div>
+</div>
+<!-- Analysis Card 2: Message Generator -->
+<div class="col-span-2 row-span-4 bg-surface-container border border-outline-variant/15 rounded-xl p-4 overflow-hidden">
+<h3 class="font-label text-[10px] text-on-surface-variant mb-3" style="">OUTREACH_GEN</h3>
+<div class="space-y-2">
+<div class="w-full h-2 bg-surface-container-high rounded"></div>
+<div class="w-3/4 h-2 bg-surface-container-high rounded"></div>
+<div class="w-full h-2 bg-surface-container-high rounded"></div>
+<div class="w-1/2 h-2 bg-primary/20 rounded"></div>
+</div>
+<div class="mt-6 flex flex-col gap-2">
+<div class="p-2 bg-surface-container-lowest rounded text-[9px] font-label border border-outline-variant/10" style="">
+<span class="text-primary" style="">Recruiter:</span> "I noticed your architecture pattern matches our..."
+                </div>
+<div class="p-2 bg-surface-container-lowest rounded text-[9px] font-label border border-outline-variant/10" style="">
+<span class="text-primary" style="">Dev Manager:</span> "The way you handled the legacy migration..."
+                </div>
+</div>
+</div>
+<!-- Analysis Card 3: Performance -->
+<div class="col-span-4 row-span-3 bg-surface-container-low border border-outline-variant/15 rounded-xl p-6 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<h4 class="text-2xl font-bold" style="">4.2s</h4>
+<p class="font-label text-[10px] uppercase text-on-surface-variant" style="">Time to Apply</p>
+</div>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: &quot;FILL&quot; 1;">bolt</span>
+</div>
+<img alt="Performance visualization" class="w-full h-24 object-cover rounded-lg opacity-40 grayscale hover:grayscale-0 transition-all" data-alt="Abstract data visualization of speed and connectivity, glowing neon blue lines on a dark technical background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAL8ha-PY4Sig1ZKefTBgYRmDAsvOhREFFboseKeOnBtXyNfpxzAqQtcI4hiHlCmdmILytA4aVgPIl_T_tmTJtspG4vfopDcXqqVoPk-2n2b3SOreaAown8qMxTeld5YBkQh8hhK9eonj2P-OsoTzHLkOMlCCgRnqf2GnPL8evUv13XiY17vhA8ZXiOXD9JBbSZwiyBHdyvqhA17HXieeVjXDCkS_CP8DwaMA6PheJDogPVmhlDC44YjQ0GrnaJzhwXLTI464MSsqwj" style="">
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Segment / Asymmetric Layout -->
+<section class="py-24 px-8 max-w-screen-2xl mx-auto">
+<div class="flex flex-col md:flex-row gap-12 items-start">
+<div class="md:w-1/3 sticky top-24">
+<h2 class="font-label text-sm text-primary mb-4" style="">01 // SISTEMA CORE</h2>
+<h3 class="text-4xl font-bold tracking-tight mb-6" style="">Arquitectura de Decisión.</h3>
+<p class="text-on-surface-variant leading-relaxed mb-8" style="">
+            Nuestra IA no escribe texto genérico. Analiza el AST de tus proyectos en GitHub y lo cruza con los requerimientos técnicos de la vacante para generar argumentos técnicos irrefutables.
+          </p>
+<ul class="space-y-4">
+<li class="flex items-center gap-3" style="">
+<span class="material-symbols-outlined text-primary text-sm" style="">check_circle</span>
+<span class="text-sm font-medium" style="">Análisis de Stack en tiempo real</span>
+</li>
+<li class="flex items-center gap-3" style="">
+<span class="material-symbols-outlined text-primary text-sm" style="">check_circle</span>
+<span class="text-sm font-medium" style="">Detección de "Keywords" fantasmas</span>
+</li>
+<li class="flex items-center gap-3" style="">
+<span class="material-symbols-outlined text-primary text-sm" style="">check_circle</span>
+<span class="text-sm font-medium" style="">Validación de Skills via GitHub API</span>
+</li>
+</ul>
+</div>
+<div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-6">
+<!-- Feature Card 1 -->
+<div class="p-8 bg-surface-container rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-colors">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary" style="">terminal</span>
+</div>
+<h4 class="text-xl font-bold mb-3" style="">Integración con IDE</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed" style="">
+              Extrae información directamente de tus repositorios locales. Sin copiar y pegar código sensible.
+            </p>
+</div>
+<!-- Feature Card 2 -->
+<div class="p-8 bg-surface-container rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-colors">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary" style="">auto_awesome</span>
+</div>
+<h4 class="text-xl font-bold mb-3" style="">Refactor de CV</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed" style="">
+              Transformamos tu experiencia en bullets points de alto impacto orientados a logros técnicos medibles.
+            </p>
+</div>
+<!-- Feature Card 3 -->
+<div class="p-8 bg-surface-container rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-colors">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary" style="">data_object</span>
+</div>
+<h4 class="text-xl font-bold mb-3" style="">Postulación en un Click</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed" style="">
+              Generamos el cover letter y el perfil optimizado en el formato que los ATS de las Big Tech aman.
+            </p>
+</div>
+<!-- Feature Card 4 -->
+<div class="p-8 bg-surface-container rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-colors">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary" style="">security</span>
+</div>
+<h4 class="text-xl font-bold mb-3" style="">Privacidad Hardened</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed" style="">
+              Tus datos nunca entrenan modelos públicos. Procesamiento local y cifrado de grado bancario.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTAs / Social Proof -->
+<section class="py-24 bg-surface-container-low">
+<div class="max-w-4xl mx-auto text-center px-8">
+<h2 class="text-4xl md:text-5xl font-bold mb-6 italic" style="">"Menos aplicaciones, más entrevistas."</h2>
+<p class="text-on-surface-variant text-lg mb-12" style="">
+          Únete a más de 5,000 desarrolladores que han automatizado la parte más tediosa de su carrera.
+        </p>
+<button class="inline-flex items-center gap-3 bg-on-surface text-surface-container-lowest font-black py-5 px-12 rounded-xl text-lg hover:bg-primary transition-all duration-300" style="">
+          Empieza ahora gratis
+          <span class="material-symbols-outlined" style="">trending_flat</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full py-12 px-8 border-t border-[#3e484f]/15 bg-[#0B0E14] dark:bg-[#0B0E14]">
+<div class="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 font-['Space_Grotesk'] text-xs uppercase tracking-widest">
+<div class="text-lg font-black text-[#e1e2eb]" style="">
+        Nexus talent</div>
+<div class="flex items-center gap-8">
+<a class="text-[#e1e2eb]/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="#" style="">Privacy</a>
+<a class="text-[#e1e2eb]/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="#" style=""><br></a>
+<a class="text-[#e1e2eb]/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="#" style="">GitHub</a>
+<a class="text-[#e1e2eb]/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="#" style=""><br></a>
+</div>
+<div class="text-[#e1e2eb]/50" style="">
+        © 2026&nbsp; Nexus talent. Built for the machine era.
+      </div>
+</div>
+</footer>
+</body></html>

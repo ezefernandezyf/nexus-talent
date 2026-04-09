@@ -60,18 +60,6 @@ export function AnalysisFeature({ repository, scope }: AnalysisFeatureProps) {
 
   return (
     <Card id="analysis" className="flex flex-col gap-6 p-6 sm:p-8">
-      <div className="flex items-start justify-between gap-4">
-        <div className="space-y-2">
-          <span className="label-chip">Espacio de análisis</span>
-          <h2 className="max-w-xl text-2xl font-semibold tracking-[-0.02em] text-white sm:text-3xl">
-            Pegá una vacante y dejá que el sistema extraiga lo que importa.
-          </h2>
-        </div>
-        <span className="rounded-full bg-success/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-success">
-          Frontera local de IA
-        </span>
-      </div>
-
       <JobDescriptionForm errorMessage={analysis.isError ? errorMessage : null} isPending={analysis.isPending} onSubmit={analysis.submitAnalysis} />
 
       {analysis.isPending ? (

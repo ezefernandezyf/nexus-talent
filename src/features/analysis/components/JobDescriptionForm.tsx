@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Button } from "../../../components/ui/Button";
-import { Input } from "../../../components/ui/Input";
+import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisMessageTone } from "../../../schemas/job-analysis";
 
 interface JobDescriptionFormProps {
   errorMessage?: string | null;
   isPending: boolean;
-  onSubmit: (request: { githubRepositoryUrl?: string; jobDescription: string }) => void;
+  onSubmit: (request: { jobDescription: string; messageTone: JobAnalysisMessageTone }) => void;
 }
 
 export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDescriptionFormProps) {
   const [jobDescription, setJobDescription] = useState("");
-  const [githubRepositoryUrl, setGitHubRepositoryUrl] = useState("");
+  const [messageTone, setMessageTone] = useState<JobAnalysisMessageTone>(JOB_ANALYSIS_MESSAGE_TONE.FORMAL);
   const [localError, setLocalError] = useState<string | null>(null);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -23,11 +23,9 @@ export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDes
     }
 
     setLocalError(null);
-    const normalizedRepositoryUrl = githubRepositoryUrl.trim();
-
     onSubmit({
       jobDescription: normalizedDescription,
-      githubRepositoryUrl: normalizedRepositoryUrl.length > 0 ? normalizedRepositoryUrl : undefined,
+      messageTone,
     });
   }
 
@@ -58,21 +56,24 @@ export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDes
       </div>
 
       <div className="space-y-2">
-        <label className="label-chip" htmlFor="github-repository-url">
-          URL del repositorio de GitHub <span className="text-on-surface-variant">(opcional)</span>
+        <label className="label-chip" htmlFor="message-tone">
+          Tono del mensaje
         </label>
-        <Input
-          id="github-repository-url"
-          name="github-repository-url"
-          value={githubRepositoryUrl}
-          onChange={(event) => setGitHubRepositoryUrl(event.target.value)}
-          placeholder="https://github.com/owner/repository"
-          autoComplete="off"
-          inputMode="url"
-          aria-describedby="github-repository-help"
-        />
-        <p id="github-repository-help" className="text-sm leading-6 text-on-surface-variant">
-          Si lo completás, el análisis intentará enriquecer el resultado con señales públicas del stack.
+        <div className="field-surface overflow-hidden">
+          <select
+            id="message-tone"
+            name="message-tone"
+            value={messageTone}
+            onChange={(event) => setMessageTone(event.target.value as JobAnalysisMessageTone)}
+            className="w-full bg-transparent px-4 py-3 text-sm leading-6 text-on-surface focus:outline-none"
+          >
+            <option value={JOB_ANALYSIS_MESSAGE_TONE.FORMAL}>Formal & Ejecutivo</option>
+            <option value={JOB_ANALYSIS_MESSAGE_TONE.CASUAL}>Casual & Directo</option>
+            <option value={JOB_ANALYSIS_MESSAGE_TONE.PERSUASIVE}>Persuasivo & Entusiasta</option>
+          </select>
+        </div>
+        <p className="text-sm leading-6 text-on-surface-variant">
+          El tono todavía no altera el prompt de IA, pero ya queda preparado para conectarlo en el siguiente corte.
         </p>
       </div>
 

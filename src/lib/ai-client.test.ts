@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createJobAnalysisClient, jobAnalysisClient } from "./ai-client";
 import { AI_ERROR_CODES, createAIOrchestratorError } from "./ai-errors";
+import { JOB_ANALYSIS_MESSAGE_TONE } from "../schemas/job-analysis";
 
 describe("ai-client", () => {
   it("normalizes dirty transport payloads before validation", async () => {
@@ -52,6 +53,26 @@ describe("ai-client", () => {
     expect(result.summary).toContain("Senior React engineer");
     expect(result.skillGroups.length).toBeGreaterThan(0);
     expect(result.outreachMessage.body).toContain("[Your Name]");
+  });
+
+  it("builds a casual outreach message when requested", async () => {
+    const result = await jobAnalysisClient.analyzeJobDescription(
+      "Senior React engineer with TypeScript, testing, and communication",
+      JOB_ANALYSIS_MESSAGE_TONE.CASUAL,
+    );
+
+    expect(result.outreachMessage.body).toContain("Te escribo porque");
+    expect(result.outreachMessage.body).toContain("cómo puedo aportar rápido y con foco al equipo");
+  });
+
+  it("builds a persuasive outreach message when requested", async () => {
+    const result = await jobAnalysisClient.analyzeJobDescription(
+      "Senior React engineer with TypeScript, testing, and communication",
+      JOB_ANALYSIS_MESSAGE_TONE.PERSUASIVE,
+    );
+
+    expect(result.outreachMessage.body).toContain("Veo una oportunidad muy fuerte para sumar valor porque");
+    expect(result.outreachMessage.body).toContain("convertir esas prioridades en resultados concretos");
   });
 
   it("parses transport responses from JSON strings", async () => {
@@ -125,6 +146,33 @@ describe("ai-client", () => {
     await expect(secondClient.analyzeJobDescription("Senior React engineer")).resolves.toMatchObject({
       summary: "Segundo transporte",
     });
+  });
+
+  it("passes the selected tone to the transport fallback", async () => {
+    const transport = vi.fn(async (input) => ({
+      summary: input.messageTone,
+      skillGroups: [
+        {
+          category: "Stack principal",
+          skills: [{ name: input.messageTone, level: "core" }],
+        },
+      ],
+      outreachMessage: {
+        subject: "Interés",
+        body: input.messageTone,
+      },
+    }));
+
+    const client = createJobAnalysisClient({ transport });
+
+    await client.analyzeJobDescription("Senior React engineer", JOB_ANALYSIS_MESSAGE_TONE.CASUAL);
+
+    expect(transport).toHaveBeenCalledWith(
+      expect.objectContaining({
+        jobDescription: "Senior React engineer",
+        messageTone: JOB_ANALYSIS_MESSAGE_TONE.CASUAL,
+      }),
+    );
   });
 
   it("wraps malformed transport payloads", async () => {

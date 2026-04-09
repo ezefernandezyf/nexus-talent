@@ -1,11 +1,18 @@
 import { vi } from "vitest";
 import { type AnalysisRepository } from "../../lib/repositories";
-import { JOB_ANALYSIS_SKILL_LEVEL, type JobAnalysisRequest, type JobAnalysisResult, type SavedJobAnalysis } from "../../schemas/job-analysis";
+import {
+  JOB_ANALYSIS_MESSAGE_TONE,
+  JOB_ANALYSIS_SKILL_LEVEL,
+  type JobAnalysisRequest,
+  type JobAnalysisResult,
+  type SavedJobAnalysis,
+} from "../../schemas/job-analysis";
 import { createQueryClientWrapper } from "../mocks/query-client";
 
 export function createAnalysisRequest(overrides: Partial<JobAnalysisRequest> = {}): JobAnalysisRequest {
   return {
     jobDescription: "Senior React engineer with TypeScript and testing",
+    messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL,
     githubRepositoryUrl: undefined,
     ...overrides,
   };

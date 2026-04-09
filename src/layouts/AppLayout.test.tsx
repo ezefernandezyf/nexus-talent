@@ -1,6 +1,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { AppLayout } from "./AppLayout";
 import { AuthProvider } from "../features/auth";
@@ -21,6 +22,7 @@ function createAuthClient() {
 describe("AppLayout", () => {
   it("renders the shared shell and outlet content for public users", async () => {
     const queryClient = createTestQueryClient();
+    const user = userEvent.setup();
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -40,5 +42,13 @@ describe("AppLayout", () => {
     expect(screen.getByRole("link", { name: "Nexus Talent" })).toHaveAttribute("href", "/app/analysis");
     expect(screen.getByRole("link", { name: /nuevo análisis/i })).toHaveAttribute("href", "/app/analysis");
     expect(screen.getByRole("link", { name: /iniciar sesión/i })).toHaveAttribute("href", "/auth/sign-in");
+    expect(screen.getByText("© 2026 Nexus Talent — Precision Recruiting Layer")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /abrir menú/i }));
+    const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });
+    expect(within(drawer).getByRole("link", { name: "Análisis" })).toHaveAttribute("href", "/app/analysis");
+
+    await user.click(within(drawer).getByRole("link", { name: "Historial" }));
+    expect(screen.queryByRole("dialog", { name: "Nexus Talent" })).not.toBeInTheDocument();
   });
 });

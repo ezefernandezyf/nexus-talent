@@ -73,8 +73,9 @@ describe("AppRouter", () => {
   it("renders the public landing page at the root path", () => {
     renderApp("/");
 
-    expect(screen.getByRole("heading", { name: /convertí una job description/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /entrar a la app/i })).toHaveAttribute("href", "/app/analysis");
+    expect(screen.getByRole("heading", { name: /de job description a postulación ganadora en segundos\./i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /ingresar/i })).toHaveAttribute("href", "/auth/sign-in");
+    expect(screen.getByRole("link", { name: /crear cuenta/i })).toHaveAttribute("href", "/auth/sign-up");
   });
 
   it("renders the app shell and analysis page for anonymous users", async () => {
@@ -90,10 +91,16 @@ describe("AppRouter", () => {
     await waitFor(() => expect(screen.getByRole("heading", { name: /iniciá sesión/i })).toBeInTheDocument());
   });
 
+  it("redirects authenticated users away from public auth pages", async () => {
+    renderApp("/auth/sign-in", createSession("ana@empresa.com"));
+
+    await waitFor(() => expect(screen.getByRole("heading", { name: /nuevo análisis de reclutamiento/i })).toBeInTheDocument());
+  });
+
   it("redirects unknown routes to the public landing page", () => {
     renderApp("/ruta-inexistente");
 
-    expect(screen.getByRole("heading", { name: /convertí una job description/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /de job description a postulación ganadora en segundos\./i })).toBeInTheDocument();
   });
 
   it("keeps the same app shell for authenticated users", async () => {

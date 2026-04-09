@@ -1,6 +1,8 @@
 import {
   JOB_ANALYSIS_INPUT_SCHEMA,
   JOB_ANALYSIS_SKILL_LEVEL,
+  JOB_ANALYSIS_MESSAGE_TONE,
+  type JobAnalysisMessageTone,
   type JobAnalysisInput,
   type JobAnalysisResult,
   type JobAnalysisSkill,
@@ -8,15 +10,15 @@ import {
 } from "../schemas/job-analysis";
 import { normalizeJobAnalysisResponse } from "./mappers";
 import { createAIOrchestrator } from "./ai-orchestrator";
-import { createGroqProviderAdapter } from "./ai-provider";
+import { createGroqProviderAdapter, type JobAnalysisPromptInput } from "./ai-provider";
 import { isAIOrchestratorError } from "./ai-errors";
 import { validateJobAnalysisResult } from "./validation";
 
 export interface JobAnalysisClient {
-  analyzeJobDescription(jobDescription: string): Promise<JobAnalysisResult>;
+  analyzeJobDescription(jobDescription: string, messageTone?: JobAnalysisMessageTone): Promise<JobAnalysisResult>;
 }
 
-export type JobAnalysisTransport = (input: JobAnalysisInput) => Promise<unknown> | unknown;
+export type JobAnalysisTransport = (input: JobAnalysisPromptInput) => Promise<unknown> | unknown;
 
 interface CreateJobAnalysisClientOptions {
   transport?: JobAnalysisTransport;
@@ -116,18 +118,40 @@ function buildSummary(jobDescription: string, skillGroups: JobAnalysisSkillGroup
   return `La vacante para ${roleTitle} se concentra en ${signalSummary} y parece un rol que valora la ejecución práctica por encima del brillo genérico.`;
 }
 
-function buildOutreachMessage(jobDescription: string, summary: string, skillGroups: JobAnalysisSkillGroup[]) {
+function getToneCopy(messageTone: JobAnalysisMessageTone) {
+  if (messageTone === JOB_ANALYSIS_MESSAGE_TONE.CASUAL) {
+    return {
+      intro: "Te escribo porque",
+      close: "Me gustaría charlar sobre cómo puedo aportar rápido y con foco al equipo.",
+    };
+  }
+
+  if (messageTone === JOB_ANALYSIS_MESSAGE_TONE.PERSUASIVE) {
+    return {
+      intro: "Veo una oportunidad muy fuerte para sumar valor porque",
+      close: "Creo que mi perfil puede convertir esas prioridades en resultados concretos desde el primer ciclo.",
+    };
+  }
+
+  return {
+    intro: "Revisé la vacante y",
+    close: "Me gustaría conversar sobre cómo puedo convertir esas prioridades en una entrega concreta y sostenida.",
+  };
+}
+
+function buildOutreachMessage(jobDescription: string, summary: string, skillGroups: JobAnalysisSkillGroup[], messageTone: JobAnalysisMessageTone) {
   const roleTitle = inferRoleTitle(jobDescription);
   const topSkills = summarizeSignals(skillGroups) || "entrega estructurada y comunicación clara";
+  const toneCopy = getToneCopy(messageTone);
 
   return {
     subject: `Interés en ${roleTitle}`,
     body: [
       "Hola equipo,",
       "",
-      `Revisé la vacante de ${roleTitle} y las señales más fuertes que identifiqué fueron ${topSkills}. ${summary}`,
+      `${toneCopy.intro} las señales más fuertes que identifiqué fueron ${topSkills}. ${summary}`,
       "",
-      "Me gustaría conversar sobre cómo puedo convertir esas prioridades en una entrega concreta y sostenida.",
+      toneCopy.close,
       "",
       "Saludos,",
       "[Your Name]",
@@ -135,19 +159,19 @@ function buildOutreachMessage(jobDescription: string, summary: string, skillGrou
   };
 }
 
-function buildLocalJobAnalysis(jobDescription: string): JobAnalysisResult {
+function buildLocalJobAnalysis(jobDescription: string, messageTone: JobAnalysisMessageTone): JobAnalysisResult {
   const skillGroups = collectSkills(jobDescription);
   const summary = buildSummary(jobDescription, skillGroups);
 
   return {
     summary,
     skillGroups,
-    outreachMessage: buildOutreachMessage(jobDescription, summary, skillGroups),
+    outreachMessage: buildOutreachMessage(jobDescription, summary, skillGroups, messageTone),
   };
 }
 
 export function createJobAnalysisClient(options: CreateJobAnalysisClientOptions = {}): JobAnalysisClient {
-  const transport = options.transport ?? ((input: JobAnalysisInput) => buildLocalJobAnalysis(input.jobDescription));
+  const transport = options.transport ?? ((input: JobAnalysisPromptInput) => buildLocalJobAnalysis(input.jobDescription, input.messageTone));
   const orchestrator = createAIOrchestrator(
     createGroqProviderAdapter({
       fallbackTransport: transport,
@@ -155,11 +179,14 @@ export function createJobAnalysisClient(options: CreateJobAnalysisClientOptions 
   );
 
   return {
-    async analyzeJobDescription(jobDescription: string) {
+    async analyzeJobDescription(jobDescription: string, messageTone: JobAnalysisMessageTone = JOB_ANALYSIS_MESSAGE_TONE.FORMAL) {
       const validatedInput = JOB_ANALYSIS_INPUT_SCHEMA.parse({ jobDescription });
 
       try {
-        const payload = await orchestrator.run(validatedInput);
+        const payload = await orchestrator.run({
+          ...validatedInput,
+          messageTone,
+        });
         const normalizedPayload = normalizeJobAnalysisResponse(payload);
         return validateJobAnalysisResult(normalizedPayload);
       } catch (error) {
