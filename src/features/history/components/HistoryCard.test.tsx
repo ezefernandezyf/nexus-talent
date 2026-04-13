@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import type { SavedJobAnalysis } from "../../../schemas/job-analysis";
-import { formatHistoryCardDate, getHistorySummarySnippet } from "../history-formatters";
+import { getHistoryMatchPercentage, getHistoryUid } from "../history-formatters";
 import { HistoryCard } from "./HistoryCard";
 
 const analysis: SavedJobAnalysis = {
@@ -39,23 +39,23 @@ describe("HistoryCard", () => {
   it("renders the title fallback, summary snippet and up to five unique skills", () => {
     const onDelete = vi.fn();
 
-    const { container } = render(<HistoryCard analysis={analysis} onDelete={onDelete} />);
+    render(<HistoryCard analysis={analysis} iconName="apartment" onDelete={onDelete} />);
 
-    expect(screen.getByRole("heading", { name: "Frontend Engineer" })).toBeInTheDocument();
-    expect(screen.getByText(getHistorySummarySnippet(analysis.summary))).toBeInTheDocument();
-    const card = screen.getByRole("listitem", { name: "Frontend Engineer" });
-    expect(within(card).getByText(/5 abr 2026/i)).toBeInTheDocument();
+    const row = screen.getByRole("listitem", { name: "Frontend Engineer" });
 
-    const chips = container.querySelectorAll(".tech-chip");
-    expect(chips).toHaveLength(5);
+    expect(within(row).getByText("Frontend Engineer")).toBeInTheDocument();
+    expect(within(row).getByText(getHistoryUid(analysis))).toBeInTheDocument();
+    expect(within(row).getByText("React, testing and TypeScript")).toBeInTheDocument();
+    expect(within(row).getByText(/5 abr 2026/i)).toBeInTheDocument();
+    expect(within(row).getByText(String(getHistoryMatchPercentage(analysis)))).toBeInTheDocument();
   });
 
   it("delegates delete actions to the provided callback", async () => {
     const onDelete = vi.fn();
 
-    render(<HistoryCard analysis={analysis} onDelete={onDelete} />);
+    render(<HistoryCard analysis={analysis} iconName="apartment" onDelete={onDelete} />);
 
-    await screen.getByRole("button", { name: /eliminar/i }).click();
+    await screen.getByRole("button", { name: /eliminar frontend engineer/i }).click();
 
     expect(onDelete).toHaveBeenCalledWith(analysis.id);
   });

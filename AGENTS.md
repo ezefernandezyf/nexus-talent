@@ -63,7 +63,7 @@ Antes de modificar el código estructural, usa las siguientes fases:
 7. `sdd-verify` - Comprobar con la Spec original y el estándar de diseño.
 8. `sdd-archive` - Guardar los deltas terminados al master-spec.
 
-## 6. Mapa de Módulos (Roadmap)
+## 6. Mapa de Módulos (Roadmap) YA COMPLETADO
 
 Para asegurar entregas atómicas y calidad comercial, el proyecto se divide en estos hitos:
 
@@ -161,7 +161,7 @@ Cada módulo debe pasar por esta secuencia, en este orden:
   - Valida que los tests relevantes sigan pasando.
   - Señala desvíos visuales o funcionales antes de considerar el módulo cerrado.
 
-### Mapa de Módulos
+### Mapa de Módulos actual
 
 1. **Landing y Auth Pública**
   - Rehacer `Landing`, `Login` y `Signup` desde `docs/assets/`.

@@ -67,6 +67,7 @@ describe("HistoryFeature", () => {
     );
 
     expect(screen.getByRole("status", { name: /cargando historial/i })).toBeInTheDocument();
+    expect(screen.getByText(/compañía \/ id/i)).toBeInTheDocument();
   });
 
   it("renders the empty state when no analyses exist", async () => {
@@ -132,10 +133,10 @@ describe("HistoryFeature", () => {
       </MemoryRouter>,
     );
 
-    await waitFor(() => expect(screen.getByRole("heading", { name: /Frontend Engineer/i })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("listitem", { name: /Frontend Engineer/i })).toBeInTheDocument());
 
-    const titles = Array.from(container.querySelectorAll("[role='listitem'] h3")).map((node) => node.textContent);
-    expect(titles).toEqual(["Frontend Engineer", "Platform Engineer"]);
+    const companies = Array.from(container.querySelectorAll("[role='listitem'] p.text-sm.font-semibold")).map((node) => node.textContent);
+    expect(companies).toEqual(["Frontend Engineer", "Platform Engineer"]);
   });
 
   it("renders an error state when the history query fails", async () => {
@@ -196,7 +197,7 @@ describe("HistoryFeature", () => {
       </MemoryRouter>,
     );
 
-    await waitFor(() => expect(screen.getByRole("heading", { name: /Frontend Engineer/i })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("listitem", { name: /Frontend Engineer/i })).toBeInTheDocument());
 
     await user.click(screen.getByRole("button", { name: /eliminar/i }));
 
@@ -242,12 +243,12 @@ describe("HistoryFeature", () => {
       </MemoryRouter>,
     );
 
-    await waitFor(() => expect(screen.getByRole("heading", { name: /Frontend Engineer/i })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("listitem", { name: /Frontend Engineer/i })).toBeInTheDocument());
 
     const cards = container.querySelectorAll("[role='listitem']");
     await user.click(within(cards[0] as HTMLElement).getByRole("button", { name: /eliminar/i }));
 
-    await waitFor(() => expect(screen.getByRole("heading", { name: /Frontend Engineer/i })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("listitem", { name: /Frontend Engineer/i })).toBeInTheDocument());
     expect(screen.queryByRole("heading", { name: /Platform Engineer/i })).not.toBeInTheDocument();
     expect(repository.delete).toHaveBeenCalledWith("660e8400-e29b-41d4-a716-446655440000");
   });

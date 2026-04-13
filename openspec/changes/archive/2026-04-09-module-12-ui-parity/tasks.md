@@ -16,4 +16,4 @@
 
 ## Phase 5: Quality Assurance
 - [x] 4.1 Perform a Lighthouse audit on core screens.
-- [ ] 4.2 Fix any performance or accessibility issues found (aim for 95+ score).
+- [x] 4.2 Fix any performance or accessibility issues found (aim for 95+ score).

@@ -11,7 +11,7 @@ describe("JobDescriptionForm", () => {
 
     render(<JobDescriptionForm isPending={false} onSubmit={onSubmit} />);
 
-    await user.click(screen.getByRole("button", { name: /analizar vacante/i }));
+    await user.click(screen.getByRole("button", { name: /analizar con ia/i }));
 
     expect(onSubmit).not.toHaveBeenCalled();
     expect(screen.getByText(/pegá una descripción del puesto antes de ejecutar el análisis/i)).toBeInTheDocument();
@@ -32,11 +32,29 @@ describe("JobDescriptionForm", () => {
 
     render(<JobDescriptionForm isPending={false} onSubmit={onSubmit} />);
     await user.type(screen.getByLabelText(/descripción del puesto/i), "  Ingeniero React senior con TypeScript  ");
-    await user.click(screen.getByRole("button", { name: /analizar vacante/i }));
+    await user.click(screen.getByRole("button", { name: /analizar con ia/i }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       createAnalysisRequest({
         jobDescription: "Ingeniero React senior con TypeScript",
+      }),
+    );
+  });
+
+  it("submits an optional GitHub repository URL", async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+
+    render(<JobDescriptionForm isPending={false} onSubmit={onSubmit} />);
+
+    await user.type(screen.getByLabelText(/descripción del puesto/i), "Ingeniero React senior con TypeScript");
+    await user.type(screen.getByLabelText(/url de github/i), "  https://github.com/acme/design-system.git  ");
+    await user.click(screen.getByRole("button", { name: /analizar con ia/i }));
+
+    expect(onSubmit).toHaveBeenCalledWith(
+      createAnalysisRequest({
+        jobDescription: "Ingeniero React senior con TypeScript",
+        githubRepositoryUrl: "https://github.com/acme/design-system.git",
       }),
     );
   });
@@ -50,7 +68,7 @@ describe("JobDescriptionForm", () => {
     expect(screen.getByLabelText(/tono del mensaje/i)).toBeInTheDocument();
 
     await user.type(screen.getByLabelText(/descripción del puesto/i), "Ingeniero React senior con TypeScript");
-    await user.click(screen.getByRole("button", { name: /analizar vacante/i }));
+    await user.click(screen.getByRole("button", { name: /analizar con ia/i }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       createAnalysisRequest({

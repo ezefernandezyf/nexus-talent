@@ -10,8 +10,8 @@ export function LandingFooter() {
         <div className="flex items-center gap-8">
           <a className="text-on-surface/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="#features" style={{}}>Features</a>
           <a className="text-on-surface/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="#security" style={{}}>Security</a>
-          <a className="text-on-surface/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="/auth/sign-in" style={{}}>Login</a>
-          <a className="text-on-surface/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="/auth/sign-up" style={{}}>Signup</a>
+          <a className="text-on-surface/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="/auth/sign-in" style={{}}>Ingresar</a>
+          <a className="text-on-surface/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="/auth/sign-up" style={{}}>Crear cuenta</a>
         </div>
         <div className="text-on-surface/50" style={{}}>
           © 2026&nbsp; Nexus talent. Built for the machine era.
