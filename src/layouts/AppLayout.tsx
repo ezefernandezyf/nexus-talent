@@ -25,7 +25,7 @@ export function AppLayout() {
   const sessionLabel = status === AUTH_STATUS.AUTHENTICATED ? user?.email ?? "Sesión activa" : status === AUTH_STATUS.LOADING ? "Verificando acceso" : "Modo público";
   const recentAnalyses = history.analyses.slice(0, 3);
 
-  const mobileActions =
+  const mobileDrawerActions =
     status === AUTH_STATUS.AUTHENTICATED ? (
       <div className="space-y-3">
         <div className="rounded-2xl bg-surface-container-lowest/50 px-4 py-3 text-sm leading-6 text-on-surface-variant">{sessionLabel}</div>
@@ -160,7 +160,7 @@ export function AppLayout() {
         <Footer />
       </div>
 
-      <MobileDrawer actions={mobileActions} heading="Nexus Talent" isOpen={isMobileMenuOpen} items={appNavItems} onClose={() => setIsMobileMenuOpen(false)} />
+      <MobileDrawer actions={mobileDrawerActions} heading="Nexus Talent" isOpen={isMobileMenuOpen} items={appNavItems} onClose={() => setIsMobileMenuOpen(false)} />
     </main>
   );
 }
