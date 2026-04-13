@@ -44,6 +44,25 @@ export function AppLayout() {
       </div>
     );
 
+  const mobileActions =
+    status === AUTH_STATUS.AUTHENTICATED ? (
+      <div className="space-y-3">
+        <div className="rounded-2xl bg-surface-container-lowest/50 px-4 py-3 text-sm leading-6 text-on-surface-variant">{sessionLabel}</div>
+        <div onClick={() => setIsMobileMenuOpen(false)}>
+          <LogoutButton className="w-full justify-center" />
+        </div>
+      </div>
+    ) : status === AUTH_STATUS.LOADING ? (
+      <div className="rounded-2xl bg-surface-container-lowest/50 px-4 py-3 text-sm leading-6 text-on-surface-variant">Verificando acceso</div>
+    ) : (
+      <div className="space-y-3">
+        <Link className="secondary-button w-full justify-center" to="/auth/sign-in" onClick={() => setIsMobileMenuOpen(false)}>
+          Iniciar sesión
+        </Link>
+        <div className="rounded-2xl bg-surface-container-lowest/50 px-4 py-3 text-sm leading-6 text-on-surface-variant">Modo público activo</div>
+      </div>
+    );
+
   return (
     <main className="deep-space-shell relative min-h-screen overflow-hidden bg-surface-container-lowest text-on-surface">
       <div
@@ -137,6 +156,8 @@ export function AppLayout() {
             <Outlet />
           </div>
         </div>
+
+        <Footer />
       </div>
 
       <MobileDrawer actions={mobileActions} heading="Nexus Talent" isOpen={isMobileMenuOpen} items={appNavItems} onClose={() => setIsMobileMenuOpen(false)} />
