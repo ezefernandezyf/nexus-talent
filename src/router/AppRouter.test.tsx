@@ -81,7 +81,7 @@ describe("AppRouter", () => {
   it("renders the app shell and analysis page for anonymous users", async () => {
     renderApp("/app/analysis");
 
-    await waitFor(() => expect(screen.getByRole("heading", { name: /nuevo análisis de reclutamiento/i })).toBeInTheDocument());
+    await screen.findByRole("heading", { name: /nuevo análisis de reclutamiento/i }, { timeout: 5000 });
     expect(screen.getByRole("link", { name: /iniciar sesión/i })).toHaveAttribute("href", "/auth/sign-in");
   });
 

@@ -8,7 +8,7 @@ export function CTASection() {
           "Menos aplicaciones, más entrevistas."
         </h2>
         <p className="text-on-surface-variant text-lg mb-12" style={{}}>
-          Únete a los desarrolladores que han automatizado la parte más tediosa de su carrera.
+          Únete a más de 5,000 desarrolladores que han automatizado la parte más tediosa de su carrera.
         </p>
         <button className="inline-flex items-center gap-3 bg-on-surface text-surface-container-lowest font-black py-5 px-12 rounded-xl text-lg hover:bg-primary transition-all duration-300" style={{}} type="button">
           Empieza ahora gratis

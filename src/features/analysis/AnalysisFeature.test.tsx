@@ -35,12 +35,13 @@ function mockAnalysisState(state = {}) {
 }
 
 describe("AnalysisFeature", () => {
-  it("renders the empty state", () => {
+  it("does not render an empty panel before first analysis", () => {
     mockAnalysisState();
 
     render(<AnalysisFeature />);
 
-    expect(screen.getByText(/Pegá una descripción del puesto y ejecutá el análisis/i)).toBeInTheDocument();
+    expect(screen.queryByText(/todavía no hay análisis/i)).not.toBeInTheDocument();
+    expect(screen.getByLabelText(/descripción del puesto/i)).toBeInTheDocument();
   });
 
   it("renders the loading state", () => {

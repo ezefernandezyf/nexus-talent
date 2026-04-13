@@ -1,10 +1,13 @@
 import { MemoryRouter } from "react-router-dom";
-import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { LandingPage } from "./LandingPage";
 
 describe("LandingPage", () => {
-  it("renders the stitched landing composition", () => {
+  it("renders the stitched landing composition and mobile navigation", async () => {
+    const user = userEvent.setup();
+
     render(
       <MemoryRouter>
         <LandingPage />
@@ -21,7 +24,14 @@ describe("LandingPage", () => {
     expect(screen.getByText("4.2s")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /menos aplicaciones, más entrevistas\./i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /empieza ahora gratis/i })).toBeInTheDocument();
-    expect(screen.getByText("Nexus talent")).toBeInTheDocument();
-    expect(screen.getByText(/© 2026\s+nexus talent\. built for the machine era\./i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /abrir menú/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /ingresar/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /crear cuenta/i })).toBeInTheDocument();
+    expect(screen.getByText("© 2026 Nexus talent. Built for the machine era.")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /abrir menú/i }));
+    const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });
+    expect(within(drawer).getAllByRole("link", { name: "Ingresar" }).map((element) => element.getAttribute("href"))).toContain("/auth/sign-in");
+    expect(within(drawer).getAllByRole("link", { name: "Crear cuenta" }).map((element) => element.getAttribute("href"))).toContain("/auth/sign-up");
   });
 });

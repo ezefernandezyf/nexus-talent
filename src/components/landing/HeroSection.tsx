@@ -34,7 +34,7 @@ export function HeroSection() {
 
         <div className="relative group">
           <div className="absolute inset-0 bg-primary/20 blur-[100px] group-hover:bg-primary/30 transition-all"></div>
-          <div className="grid grid-cols-6 grid-rows-6 gap-4 h-150 relative">
+          <div className="grid h-150 grid-cols-6 grid-rows-6 gap-4 relative">
             <div className="col-span-4 row-span-3 glass-panel border border-outline-variant/20 rounded-xl p-6 flex flex-col justify-between">
               <div>
                 <h3 className="font-label text-sm text-primary mb-4 flex items-center gap-2" style={{}}>

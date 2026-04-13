@@ -2,57 +2,94 @@ import type { SavedJobAnalysis } from "../../../schemas/job-analysis";
 import { Button } from "../../../components/ui/Button";
 import {
   formatHistoryCardDate,
-  getHistoryCardTitle,
-  getHistorySummarySnippet,
-  getTopHistorySkills,
+  getHistoryCompanyLabel,
+  getHistoryMatchPercentage,
+  getHistoryMatchTone,
+  getHistoryRoleLabel,
+  getHistoryUid,
 } from "../history-formatters";
 
 interface HistoryCardProps {
   analysis: SavedJobAnalysis;
   isDeleting?: boolean;
+  iconName: string;
   onDelete: (analysisId: string) => void;
 }
 
-export function HistoryCard({ analysis, isDeleting = false, onDelete }: HistoryCardProps) {
-  const title = getHistoryCardTitle(analysis);
-  const summary = getHistorySummarySnippet(analysis.summary);
-  const skills = getTopHistorySkills(analysis);
+export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }: HistoryCardProps) {
+  const companyLabel = getHistoryCompanyLabel(analysis);
+  const roleLabel = getHistoryRoleLabel(analysis);
+  const uidLabel = getHistoryUid(analysis);
+  const matchPercentage = getHistoryMatchPercentage(analysis);
+  const matchTone = getHistoryMatchTone(matchPercentage);
+
+  const matchValueClassName =
+    matchTone === "primary"
+      ? "text-primary"
+      : matchTone === "on-surface"
+      ? "text-on-surface"
+      : "text-on-surface-variant";
+
+  const progressClassName =
+    matchTone === "primary"
+      ? "bg-primary"
+      : matchTone === "on-surface"
+      ? "bg-on-surface-variant"
+      : "bg-outline-variant/40";
 
   return (
-    <article className="surface-panel flex flex-col gap-5 p-5 sm:p-6" aria-label={title} role="listitem">
-      <div className="flex items-start justify-between gap-4">
-        <div className="space-y-3">
-          <span className="label-chip">Guardado</span>
-          <div className="space-y-2">
-            <h3 className="text-xl font-semibold tracking-[-0.02em] text-white sm:text-2xl">{title}</h3>
-            <p className="text-sm uppercase tracking-[0.22em] text-on-surface-variant">
-              {formatHistoryCardDate(analysis.createdAt)}
-            </p>
+    <article
+      className="group grid grid-cols-1 lg:grid-cols-12 items-center rounded-xl border border-transparent bg-surface-container-low/40 px-4 py-4 transition-all duration-200 hover:border-outline-variant/10 hover:bg-surface-container"
+      aria-labelledby={`history-title-${analysis.id}`}
+      role="listitem"
+      tabIndex={0}
+    >
+      <div className="lg:col-span-4 flex items-center gap-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-outline-variant/20 bg-surface-container-lowest">
+          <span className="material-symbols-outlined text-primary" aria-hidden="true">
+            {iconName}
+          </span>
+        </div>
+        <div>
+          <p id={`history-title-${analysis.id}`} className="text-sm font-semibold text-on-surface">{companyLabel}</p>
+          <p className="font-label text-[10px] tracking-widest text-primary/70">{uidLabel}</p>
+        </div>
+      </div>
+
+      <div className="lg:col-span-3 mt-3 lg:mt-0">
+        <span className="rounded-full border border-outline-variant/10 bg-surface-container-highest/50 px-3 py-1 font-label text-[11px] text-on-surface-variant">
+          {roleLabel}
+        </span>
+      </div>
+
+      <div className="lg:col-span-2 text-xs text-on-surface-variant text-left lg:text-right mt-2 lg:mt-0">
+        {formatHistoryCardDate(analysis.createdAt)}
+      </div>
+
+      <div className="lg:col-span-2 text-right mt-2 lg:mt-0">
+        <div className="flex flex-col items-end gap-1">
+          <span className={`text-lg font-bold font-headline ${matchValueClassName}`}>
+            {matchPercentage}
+            <span className="ml-0.5 text-[10px] font-label opacity-60">%</span>
+          </span>
+          <div className="h-1 w-full lg:w-24 overflow-hidden rounded-full bg-surface-container-lowest">
+            <div className={`h-full ${progressClassName}`} style={{ width: `${matchPercentage}%` }} />
           </div>
         </div>
+      </div>
 
-        <Button variant="secondary" className="shrink-0" type="button" onClick={() => onDelete(analysis.id)} disabled={isDeleting}>
-          {isDeleting ? "Eliminando..." : "Eliminar"}
+      <div className="lg:col-span-1 flex justify-end mt-3 lg:mt-0">
+        <Button
+          aria-label={`Eliminar ${companyLabel}`}
+          className="opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 focus-visible:ring-2 focus-visible:ring-primary/40"
+          disabled={isDeleting}
+          type="button"
+          variant="secondary"
+          onClick={() => onDelete(analysis.id)}
+        >
+          {isDeleting ? "..." : "Eliminar"}
         </Button>
       </div>
-
-      <div className="space-y-3">
-        <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">Resumen ejecutivo</h4>
-        <p className="text-sm leading-7 text-on-surface sm:text-base">{summary}</p>
-      </div>
-
-      {skills.length > 0 ? (
-        <div className="space-y-3">
-          <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">Skills clave</h4>
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill) => (
-              <span key={skill} className="tech-chip bg-surface-container-high text-[0.76rem]">
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
-      ) : null}
     </article>
   );
 }

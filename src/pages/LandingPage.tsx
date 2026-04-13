@@ -1,33 +1,30 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "../components/landing/Navbar";
 import { HeroSection } from "../components/landing/HeroSection";
 import { FeatureSection } from "../components/landing/FeatureSection";
 import { CTASection } from "../components/landing/CTASection";
-import { LandingFooter } from "../components/landing/Footer";
+import { Footer } from "../components/ui/Footer";
+import { MobileDrawer } from "../components/ui/MobileDrawer";
+import { MobileMenuButton } from "../components/ui/MobileMenuButton";
+
+const publicDrawerItems = [
+  { label: "Inicio", to: "/" },
+  { label: "Ingresar", to: "/auth/sign-in" },
+  { label: "Crear cuenta", to: "/auth/sign-up" },
+  { label: "Análisis", to: "/app/analysis" },
+] as const;
 
 export function LandingPage() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <main className="relative bg-surface-container-lowest text-on-surface">
       <Navbar
         brand="Nexus Talent"
-        links={
-          <div className="hidden items-center gap-8 md:flex">
-            <a className="text-sm font-medium text-on-surface-variant transition-colors hover:text-on-surface" href="#hero">
-              Hero
-            </a>
-            <a className="text-sm font-medium text-on-surface-variant transition-colors hover:text-on-surface" href="#features">
-              Features
-            </a>
-            <a className="text-sm font-medium text-on-surface-variant transition-colors hover:text-on-surface" href="#security">
-              Security
-            </a>
-            <a className="text-sm font-medium text-on-surface-variant transition-colors hover:text-on-surface" href="#contact">
-              Contact
-            </a>
-          </div>
-        }
         actions={
           <div className="flex items-center gap-4">
+            <MobileMenuButton isOpen={isMobileMenuOpen} onClick={() => setIsMobileMenuOpen((current) => !current)} />
             <Link className="secondary-button" to="/auth/sign-in">
               Ingresar
             </Link>
@@ -41,7 +38,24 @@ export function LandingPage() {
       <HeroSection />
       <FeatureSection />
       <CTASection />
-      <LandingFooter />
+      <Footer />
+
+      <MobileDrawer
+        actions={
+          <div className="space-y-3">
+            <Link className="secondary-button w-full justify-center" to="/auth/sign-in" onClick={() => setIsMobileMenuOpen(false)}>
+              Ingresar
+            </Link>
+            <Link className="primary-button w-full justify-center" to="/auth/sign-up" onClick={() => setIsMobileMenuOpen(false)}>
+              Crear cuenta
+            </Link>
+          </div>
+        }
+        heading="Nexus Talent"
+        isOpen={isMobileMenuOpen}
+        items={publicDrawerItems}
+        onClose={() => setIsMobileMenuOpen(false)}
+      />
     </main>
   );
 }

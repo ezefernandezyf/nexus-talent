@@ -18,6 +18,21 @@ The system MUST allow the user to paste or type a raw job description as free te
 - WHEN the form is validated
 - THEN the system MUST block submission and show a clear validation error
 
+### Requirement: Optional GitHub repository URL input
+The system MUST expose an optional GitHub repository URL input in the analysis form.
+
+#### Scenario: User provides a GitHub URL
+- GIVEN a valid job description and a valid GitHub repository URL
+- WHEN the user fills the analysis form
+- THEN the form MUST accept the URL as optional input
+- AND the analysis request MUST be able to use it for enrichment.
+
+#### Scenario: User leaves the GitHub URL blank
+- GIVEN a valid job description and no GitHub repository URL
+- WHEN the user submits the analysis form
+- THEN the system MUST still accept the submission
+- AND the base analysis result MUST remain available.
+
 ### Requirement: Produce structured analysis output
 The system MUST return a structured result containing a job summary, a list of key skills, and a suggested outreach message that the user can edit before copying.
 

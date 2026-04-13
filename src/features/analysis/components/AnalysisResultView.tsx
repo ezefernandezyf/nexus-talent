@@ -8,7 +8,7 @@ import {
   downloadTextFile,
 } from "../export";
 
-interface AnalysisResultViewProps {
+export interface AnalysisResultViewProps {
   result: JobAnalysisResult;
   copyToClipboard?: (value: string) => Promise<void> | void;
 }
@@ -126,12 +126,12 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
   }
 
   return (
-    <section className="space-y-6">
-      <div className="surface-panel space-y-5 p-6">
-        <div className="flex items-center justify-between gap-4">
+    <section className="flex flex-col gap-6">
+      <div className="surface-panel space-y-5 p-6 sm:p-8">
+        <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <span className="label-chip">Análisis validado</span>
-            <h3 className="mt-3 text-2xl font-semibold tracking-[-0.02em] text-white">Análisis estructurado de la vacante</h3>
+            <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white sm:text-3xl">Análisis estructurado de la vacante</h3>
           </div>
           <span className="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
             <span className="status-dot glow-pulse bg-success text-success" aria-hidden="true" />
@@ -145,40 +145,31 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
         </div>
       </div>
 
-      <div className="surface-panel space-y-5 p-6">
-        <div className="flex items-center justify-between gap-4">
+      <div className="surface-panel space-y-5 p-6 sm:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <span className="label-chip">Matriz de habilidades</span>
+            <span className="label-chip">Skills Matrix</span>
             <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Señales que vale la pena destacar</h4>
           </div>
-          <span className="text-xs uppercase tracking-[0.22em] text-on-surface-variant">Escaneo preciso</span>
+          <div className="flex items-center gap-2">
+            <span className="status-dot glow-pulse bg-primary text-primary" aria-hidden="true" />
+            <span className="text-xs uppercase tracking-[0.22em] text-primary/80">Verified</span>
+          </div>
         </div>
 
-        <div className="grid gap-4 xl:grid-cols-2">
-          {result.skillGroups.map((group) => (
-            <article key={group.category} className="ghost-frame rounded-2xl bg-surface-container-lowest/85 p-4">
-              <div className="flex items-center justify-between gap-3">
-                <h5 className="text-sm font-semibold text-white">{group.category}</h5>
-                <span className="text-xs uppercase tracking-[0.2em] text-on-surface-variant">{group.skills.length} skills</span>
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {group.skills.map((skill) => (
-                  <span key={`${group.category}-${skill.name}`} className="tech-chip">
-                    {skill.name}
-                    <span className="text-[0.66rem] uppercase tracking-[0.18em] text-on-surface-variant">
-                      {levelLabel(skill.level)}
-                    </span>
-                  </span>
-                ))}
-              </div>
-            </article>
+        <div className="flex snap-x gap-3 overflow-x-auto pb-2 pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {result.skillGroups.flatMap((group) => group.skills).map((skill) => (
+            <span key={`${skill.name}-${skill.level}`} className="tech-chip shrink-0 snap-start border border-outline-variant/10 bg-surface-container-high px-4 py-2">
+              <span className="text-xs font-medium text-on-surface">{skill.name}</span>
+              <span className="text-[0.66rem] uppercase tracking-[0.18em] text-on-surface-variant">{levelLabel(skill.level)}</span>
+            </span>
           ))}
         </div>
       </div>
 
       {result.githubEnrichment ? (
-        <div className="surface-panel space-y-5 p-6">
-          <div className="flex items-center justify-between gap-4">
+        <div className="surface-panel space-y-5 p-6 sm:p-8">
+          <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <span className="label-chip">GitHub enriquecido</span>
               <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Stack observado en el repositorio</h4>
@@ -194,9 +185,7 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
           </div>
 
           {result.githubEnrichment.warningMessage ? (
-            <p className="rounded-2xl bg-warning/10 px-4 py-3 text-sm leading-7 text-warning">
-              {result.githubEnrichment.warningMessage}
-            </p>
+            <p className="rounded-2xl bg-warning/10 px-4 py-3 text-sm leading-7 text-warning">{result.githubEnrichment.warningMessage}</p>
           ) : null}
 
           {result.githubEnrichment.detectedStack.length > 0 ? (
@@ -204,24 +193,24 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
               {result.githubEnrichment.detectedStack.map((signal) => (
                 <span key={`${signal.name}-${signal.source}`} className="tech-chip">
                   {signal.name}
-                  <span className="text-[0.66rem] uppercase tracking-[0.18em] text-on-surface-variant">
-                    {sourceLabel(signal.source)}
-                  </span>
+                  <span className="text-[0.66rem] uppercase tracking-[0.18em] text-on-surface-variant">{sourceLabel(signal.source)}</span>
                 </span>
               ))}
             </div>
           ) : (
-            <p className="text-sm leading-7 text-on-surface-variant">
-              No se detectaron señales claras de stack en este repositorio.
-            </p>
+            <p className="text-sm leading-7 text-on-surface-variant">No se detectaron señales claras de stack en este repositorio.</p>
           )}
         </div>
       ) : null}
 
-      <div className="surface-panel space-y-5 p-6">
-        <div className="flex items-center justify-between gap-4">
+      <div className="surface-panel relative overflow-hidden space-y-5 p-6 sm:p-8">
+        <div className="absolute right-0 top-0 p-4 opacity-25">
+          <span className="text-4xl text-primary">✦</span>
+        </div>
+
+        <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <span className="label-chip">Borrador de contacto</span>
+            <span className="label-chip">Message Generator</span>
             <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Editá antes de copiar</h4>
           </div>
           <div className="flex flex-wrap justify-end gap-2">
@@ -240,34 +229,30 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="rounded-lg bg-surface-container-lowest p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]">
+          <p className="text-sm leading-7 text-on-surface italic">{body}</p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
           <label className="space-y-2">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Asunto</span>
-            <Input
-              value={subject}
-              onChange={(event) => setSubject(event.target.value)}
-              aria-label="Asunto del mensaje"
-            />
+            <Input value={subject} onChange={(event) => setSubject(event.target.value)} aria-label="Asunto del mensaje" />
           </label>
 
-          <label className="space-y-2">
+          <label className="space-y-2 md:col-span-2">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Mensaje</span>
             <textarea
               value={body}
               onChange={(event) => setBody(event.target.value)}
-              className="field-surface min-h-52 px-4 py-4 text-sm leading-7"
+              className="field-surface min-h-40 px-4 py-4 text-sm leading-7"
               aria-label="Mensaje de contacto"
             />
           </label>
         </div>
 
         <div className="flex items-center justify-between gap-3 text-sm text-on-surface-variant" aria-live="polite">
-          <span className={feedbackTone === "error" ? "text-error" : feedbackTone === "success" ? "text-success" : ""}>
-            {feedbackMessage}
-          </span>
-          <span className="font-mono text-xs uppercase tracking-[0.18em] text-on-surface-variant">
-            {body.length} chars
-          </span>
+          <span className={feedbackTone === "error" ? "text-error" : feedbackTone === "success" ? "text-success" : ""}>{feedbackMessage}</span>
+          <span className="font-mono text-xs uppercase tracking-[0.18em] text-on-surface-variant">{body.length} chars</span>
         </div>
       </div>
     </section>

@@ -19,8 +19,8 @@ export default function Hero({
             <h1 className="text-3xl md:text-5xl font-bold leading-tight">{title}</h1>
             <p className="mt-4 text-slate-300 text-base md:text-lg">{subtitle}</p>
             <div className="mt-6">
-              <a href="/signup" className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-md">{ctaText}</a>
-              <a href="/login" className="ml-4 text-sm text-slate-300 hover:underline">Login</a>
+              <a href="/auth/sign-up" className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-md">Crear cuenta</a>
+              <a href="/auth/sign-in" className="ml-4 text-sm text-slate-300 hover:underline">Ingresar</a>
             </div>
           </div>
           <div className="flex-1">

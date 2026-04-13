@@ -1,35 +1,31 @@
-import { Card } from "../../../components/ui/Card";
+import { LoadingSkeleton } from "../../../components/ui";
 
 export function HistoryLoadingState() {
   return (
-    <div className="space-y-4" aria-label="Cargando historial" aria-busy="true" role="status">
-      <Card className="p-5 sm:p-6">
-        <div className="space-y-4 animate-pulse">
-          <div className="h-4 w-36 rounded-full bg-surface-bright" />
-          <div className="h-7 w-3/4 rounded-full bg-surface-bright/80" />
-          <div className="h-4 w-40 rounded-full bg-surface-bright/80" />
-          <div className="h-4 w-full rounded-full bg-surface-bright/80" />
-          <div className="flex gap-2 pt-2">
-            <div className="h-9 w-24 rounded-full bg-surface-bright/80" />
-            <div className="h-9 w-28 rounded-full bg-surface-bright/80" />
-            <div className="h-9 w-20 rounded-full bg-surface-bright/80" />
-          </div>
-        </div>
-      </Card>
+    <div className="space-y-3" aria-busy="true" aria-label="Cargando historial" role="status">
+      <div className="grid grid-cols-1 lg:grid-cols-12 px-4 py-2 text-[10px] font-label uppercase tracking-widest text-on-surface-variant/50">
+        <div className="lg:col-span-4">Compañía / ID</div>
+        <div className="lg:col-span-3">Rol Aplicado</div>
+        <div className="lg:col-span-2">Fecha</div>
+        <div className="lg:col-span-3 text-right">Match Index</div>
+      </div>
 
-      <Card className="p-5 sm:p-6">
-        <div className="space-y-4 animate-pulse">
-          <div className="h-4 w-28 rounded-full bg-surface-bright" />
-          <div className="h-7 w-2/3 rounded-full bg-surface-bright/80" />
-          <div className="h-4 w-36 rounded-full bg-surface-bright/80" />
-          <div className="h-4 w-full rounded-full bg-surface-bright/80" />
-          <div className="flex gap-2 pt-2">
-            <div className="h-9 w-20 rounded-full bg-surface-bright/80" />
-            <div className="h-9 w-24 rounded-full bg-surface-bright/80" />
-            <div className="h-9 w-28 rounded-full bg-surface-bright/80" />
+      {[0, 1, 2, 3].map((row) => (
+        <div key={row} className="grid grid-cols-1 lg:grid-cols-12 items-center rounded-xl bg-surface-container-low/40 px-4 py-4">
+          <div className="lg:col-span-4 flex items-center gap-4">
+            <LoadingSkeleton />
+          </div>
+          <div className="lg:col-span-3">
+            <LoadingSkeleton />
+          </div>
+          <div className="lg:col-span-2">
+            <LoadingSkeleton />
+          </div>
+          <div className="lg:col-span-3 flex flex-col items-end gap-2">
+            <LoadingSkeleton />
           </div>
         </div>
-      </Card>
+      ))}
     </div>
   );
 }
