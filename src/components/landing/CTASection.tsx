@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { LandingIcon } from "./LandingIcon";
 
 export function CTASection() {
@@ -10,10 +11,10 @@ export function CTASection() {
         <p className="text-on-surface-variant text-lg mb-12" style={{}}>
           Únete a más de 5,000 desarrolladores que han automatizado la parte más tediosa de su carrera.
         </p>
-        <button className="inline-flex items-center gap-3 bg-on-surface text-surface-container-lowest font-black py-5 px-12 rounded-xl text-lg hover:bg-primary transition-all duration-300" style={{}} type="button">
+        <Link className="inline-flex items-center gap-3 bg-on-surface text-surface-container-lowest font-black py-5 px-12 rounded-xl text-lg hover:bg-primary transition-all duration-300" style={{}} to="/auth/sign-up">
           Empieza ahora gratis
           <LandingIcon className="h-5 w-5" name="trending_flat" />
-        </button>
+        </Link>
       </div>
     </section>
   );

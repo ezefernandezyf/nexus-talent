@@ -24,6 +24,19 @@ export interface AuthClientLike {
       };
       error: { message: string } | null;
     }>;
+    signInWithOAuth: (credentials: {
+      options?: {
+        redirectTo?: string;
+        queryParams?: Record<string, string>;
+      };
+      provider: string;
+    }) => Promise<{
+      data: {
+        provider: string;
+        url: string | null;
+      };
+      error: { message: string } | null;
+    }>;
     signOut: () => Promise<{
       error: { message: string } | null;
     }>;

@@ -1,2 +1,3 @@
 export { GROQ_JOB_ANALYSIS_JSON_SCHEMA, validateJobAnalysisResult } from "./job-analysis";
+export { PROFILE_FORM_SCHEMA, PROFILE_RECORD_SCHEMA, PROFILE_SAVE_INPUT_SCHEMA, type ProfileFormInput, type ProfileRecord, type ProfileSaveInput } from "./profile";
 export { APP_SETTINGS_ID, APP_SETTINGS_INPUT_SCHEMA, APP_SETTINGS_SCHEMA, SETTINGS_STORAGE_KEY, createDefaultSettings, type AppSettings, type AppSettingsInput } from "./settings";

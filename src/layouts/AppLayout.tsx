@@ -5,6 +5,7 @@ import { MobileDrawer } from "../components/ui/MobileDrawer";
 import { MobileMenuButton } from "../components/ui/MobileMenuButton";
 import { LogoutButton, AUTH_STATUS, useAuth } from "../features/auth";
 import { useAnalysisHistory } from "../features/analysis";
+import { ThemeProvider, useTheme } from "../lib/theme";
 
 const appNavItems = [
   { label: "Análisis", to: "/app/analysis" },
@@ -20,8 +21,17 @@ function getNavLinkClassName({ isActive }: { isActive: boolean }) {
 }
 
 export function AppLayout() {
+  return (
+    <ThemeProvider>
+      <AppLayoutContent />
+    </ThemeProvider>
+  );
+}
+
+function AppLayoutContent() {
   const { status, user } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const history = useAnalysisHistory();
   const sessionLabel = status === AUTH_STATUS.AUTHENTICATED ? user?.email ?? "Sesión activa" : status === AUTH_STATUS.LOADING ? "Verificando acceso" : "Modo público";
   const recentAnalyses = history.analyses.slice(0, 3);
@@ -61,7 +71,7 @@ export function AppLayout() {
       <div className="relative mx-auto flex min-h-screen w-full flex-col gap-6 px-4 py-4 sm:px-6 lg:px-8">
         <header className="fixed left-0 top-0 z-30 flex h-16 w-full items-center justify-between bg-surface-container-low px-6">
           <div className="flex items-center gap-8">
-            <Link className="text-xl font-bold tracking-tight text-on-surface transition-opacity hover:opacity-90" to="/app/analysis">
+            <Link className="text-xl font-bold tracking-tight text-on-surface transition-opacity hover:opacity-90" to="/app">
               Nexus Talent
             </Link>
             <div className="hidden items-center gap-6 md:flex" aria-label="App primary navigation">
@@ -84,15 +94,20 @@ export function AppLayout() {
               {status === AUTH_STATUS.AUTHENTICATED ? (
                 <span className="text-sm font-medium text-on-surface-variant">{user?.email}</span>
               ) : null}
-              <button className="material-symbols-outlined rounded-full p-2 text-on-surface-variant transition-colors hover:text-primary" type="button">
-                contrast
+              <button
+                aria-label={theme === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro"}
+                className="material-symbols-outlined rounded-full p-2 text-on-surface-variant transition-colors hover:text-primary"
+                type="button"
+                onClick={toggleTheme}
+              >
+                {theme === "dark" ? "light_mode" : "dark_mode"}
               </button>
             </div>
           </div>
         </header>
 
         <div className="flex flex-1 gap-6 pt-16">
-          <aside className="fixed left-0 top-16 hidden h-[calc(100vh-64px)] w-64 flex-col gap-5 bg-[#0B0E14] p-4 lg:flex">
+          <aside className="fixed left-0 top-16 hidden h-[calc(100vh-64px)] w-64 flex-col gap-5 bg-surface-container-lowest p-4 lg:flex">
             <div className="mb-4 px-2">
               <h2 className="mb-1 text-sm font-semibold uppercase tracking-widest text-on-surface opacity-50">Mis Postulaciones</h2>
               <p className="text-[10px] uppercase tracking-[0.28em] text-on-surface/40">Historial Reciente</p>

@@ -13,6 +13,7 @@ function createAuthClient(session: { user: { email?: string } } | null = null) {
       getSession: vi.fn(async () => ({ data: { session }, error: null })),
       onAuthStateChange: vi.fn(() => ({ data: { subscription: { unsubscribe: vi.fn() } } })),
       signInWithPassword: vi.fn(async () => ({ data: { session: null, user: null }, error: null })),
+      signInWithOAuth: vi.fn(async () => ({ data: { provider: "github", url: null }, error: null })),
       signOut: vi.fn(async () => ({ error: null })),
       signUp: vi.fn(async () => ({ data: { session: null, user: null }, error: null })),
     },
@@ -39,7 +40,7 @@ describe("AppLayout", () => {
     );
 
     await waitFor(() => expect(screen.getByText("Analysis Content")).toBeInTheDocument());
-    expect(screen.getByRole("link", { name: "Nexus Talent" })).toHaveAttribute("href", "/app/analysis");
+    expect(screen.getByRole("link", { name: "Nexus Talent" })).toHaveAttribute("href", "/app");
     expect(screen.getAllByRole("link", { name: /análisis/i })[0]).toHaveAttribute("href", "/app/analysis");
     expect(screen.getAllByRole("link", { name: /historial/i })[0]).toHaveAttribute("href", "/app/history");
     expect(screen.getAllByRole("link", { name: /settings/i })[0]).toHaveAttribute("href", "/app/admin/settings");
@@ -75,5 +76,51 @@ describe("AppLayout", () => {
     await user.click(screen.getByRole("button", { name: /abrir menú/i }));
     const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });
     expect(within(drawer).getByText(/analyst@nexustalent.dev/i)).toBeInTheDocument();
+  });
+
+  it("persists the theme toggle across reloads", async () => {
+    const queryClient = createTestQueryClient();
+    const user = userEvent.setup();
+
+    localStorage.clear();
+
+    const firstRender = render(
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider client={createAuthClient()}>
+          <MemoryRouter initialEntries={["/app/analysis"]}>
+            <Routes>
+              <Route element={<AppLayout />} path="/app">
+                <Route path="analysis" element={<div>Analysis Content</div>} />
+              </Route>
+            </Routes>
+          </MemoryRouter>
+        </AuthProvider>
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => expect(screen.getByRole("button", { name: /cambiar a tema claro/i })).toBeInTheDocument());
+    await user.click(screen.getByRole("button", { name: /cambiar a tema claro/i }));
+
+    expect(document.documentElement.getAttribute("data-theme")).toBe("light");
+    expect(localStorage.getItem("nexus-talent:theme:v1")).toBe("light");
+
+    firstRender.unmount();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider client={createAuthClient()}>
+          <MemoryRouter initialEntries={["/app/analysis"]}>
+            <Routes>
+              <Route element={<AppLayout />} path="/app">
+                <Route path="analysis" element={<div>Analysis Content</div>} />
+              </Route>
+            </Routes>
+          </MemoryRouter>
+        </AuthProvider>
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => expect(document.documentElement.getAttribute("data-theme")).toBe("light"));
+    expect(screen.getByRole("button", { name: /cambiar a tema oscuro/i })).toBeInTheDocument();
   });
 });

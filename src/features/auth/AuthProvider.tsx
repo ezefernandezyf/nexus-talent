@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
-import { createSupabaseClient, type AuthClientLike } from "../../lib/supabase";
+import { createSupabaseClient, getOAuthProviderConfig, getOAuthRedirectTo, type AuthClientLike, type OAuthProviderKey } from "../../lib/supabase";
 
 const AUTH_STATUS = {
   AUTHENTICATED: "authenticated",
@@ -25,6 +25,7 @@ interface AuthContextValue {
   isConfigured: boolean;
   session: Session | null;
   signIn: (email: string, password: string) => Promise<AuthActionResponse>;
+  signInWithOAuth: (provider: OAuthProviderKey) => Promise<AuthActionResponse>;
   signOut: () => Promise<void>;
   signUp: (email: string, password: string) => Promise<AuthActionResponse>;
   status: AuthStatus;
@@ -72,6 +73,17 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
   const [status, setStatus] = useState<AuthStatus>(clientState.isConfigured ? AUTH_STATUS.LOADING : AUTH_STATUS.UNAUTHENTICATED);
   const [errorMessage, setErrorMessage] = useState<string | null>(clientState.isConfigured ? null : AUTH_MESSAGES.MISSING_CONFIGURATION);
 
+  function syncSession(nextSession: Session | null) {
+    setSession(nextSession);
+    setUser(nextSession?.user ?? null);
+    setIsAdmin(getIsAdmin(nextSession?.user));
+    setStatus(nextSession ? AUTH_STATUS.AUTHENTICATED : AUTH_STATUS.UNAUTHENTICATED);
+  }
+
+  function clearSession() {
+    syncSession(null);
+  }
+
   useEffect(() => {
     if (!clientState.client) {
       setStatus(AUTH_STATUS.UNAUTHENTICATED);
@@ -91,28 +103,19 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
         }
 
         if (error) {
-          setSession(null);
-          setUser(null);
-          setIsAdmin(false);
-          setStatus(AUTH_STATUS.UNAUTHENTICATED);
+          clearSession();
           setErrorMessage(getErrorMessage(error, AUTH_MESSAGES.SESSION_CHECK_FAILED));
           return;
         }
 
-        setSession(data.session);
-        setUser(data.session?.user ?? null);
-        setIsAdmin(getIsAdmin(data.session?.user));
-        setStatus(data.session ? AUTH_STATUS.AUTHENTICATED : AUTH_STATUS.UNAUTHENTICATED);
+        syncSession(data.session);
       })
       .catch((error: unknown) => {
         if (!isActive) {
           return;
         }
 
-        setSession(null);
-        setUser(null);
-        setIsAdmin(false);
-        setStatus(AUTH_STATUS.UNAUTHENTICATED);
+        clearSession();
         setErrorMessage(getErrorMessage(error, AUTH_MESSAGES.SESSION_CHECK_FAILED));
       });
 
@@ -121,10 +124,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
         return;
       }
 
-      setSession(nextSession);
-      setUser(nextSession?.user ?? null);
-      setIsAdmin(getIsAdmin(nextSession?.user));
-      setStatus(nextSession ? AUTH_STATUS.AUTHENTICATED : AUTH_STATUS.UNAUTHENTICATED);
+      syncSession(nextSession);
       setErrorMessage(null);
     });
 
@@ -139,6 +139,8 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
       throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
     }
 
+    setErrorMessage(null);
+
     const { data, error } = await clientState.client.auth.signInWithPassword({
       email: email.trim(),
       password,
@@ -148,13 +150,8 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
       throw new Error(error.message);
     }
 
-    if (data.session) {
-      setSession(data.session);
-      setUser(data.session.user ?? null);
-      setIsAdmin(getIsAdmin(data.session.user));
-      setStatus(AUTH_STATUS.AUTHENTICATED);
-      setErrorMessage(null);
-    }
+    syncSession(data.session);
+    setErrorMessage(null);
 
     return {
       message: "Sesión iniciada. Redirigiendo al panel privado.",
@@ -166,6 +163,8 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
       throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
     }
 
+    setErrorMessage(null);
+
     const { data, error } = await clientState.client.auth.signUp({
       email: email.trim(),
       password,
@@ -175,21 +174,15 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
       throw new Error(error.message);
     }
 
+    syncSession(data.session);
+
     if (data.session) {
-      setSession(data.session);
-      setUser(data.session.user ?? null);
-      setIsAdmin(getIsAdmin(data.session.user));
-      setStatus(AUTH_STATUS.AUTHENTICATED);
       setErrorMessage(null);
       return {
         message: "Cuenta creada y sesión iniciada.",
       };
     }
 
-    setSession(null);
-    setUser(null);
-    setIsAdmin(false);
-    setStatus(AUTH_STATUS.UNAUTHENTICATED);
     return {
       message: "Cuenta creada. Revisá tu correo para confirmar el acceso.",
     };
@@ -200,17 +193,48 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
       throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
     }
 
+    setErrorMessage(null);
+
     const { error } = await clientState.client.auth.signOut();
 
     if (error) {
       throw new Error(error.message);
     }
 
-    setSession(null);
-    setUser(null);
-    setIsAdmin(false);
-    setStatus(AUTH_STATUS.UNAUTHENTICATED);
+    clearSession();
     setErrorMessage(null);
+  }
+
+  async function signInWithOAuth(provider: OAuthProviderKey) {
+    if (!clientState.client) {
+      throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
+    }
+
+    const providerConfig = getOAuthProviderConfig(provider);
+
+    if (!providerConfig.enabled) {
+      const message = `${providerConfig.label} no está habilitado en esta instancia.`;
+      setErrorMessage(message);
+      throw new Error(message);
+    }
+
+    setErrorMessage(null);
+
+    const { error } = await clientState.client.auth.signInWithOAuth({
+      options: {
+        redirectTo: getOAuthRedirectTo(),
+      },
+      provider: providerConfig.provider,
+    });
+
+    if (error) {
+      setErrorMessage(error.message);
+      throw new Error(error.message);
+    }
+
+    return {
+      message: `Redirigiendo a ${providerConfig.label}...`,
+    };
   }
 
   const value: AuthContextValue = {
@@ -219,6 +243,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     isConfigured: clientState.isConfigured,
     session,
     signIn,
+    signInWithOAuth,
     signOut,
     signUp,
     status,
