@@ -7,7 +7,7 @@ import { loginSchema, type LoginFormValues } from "../schemas/auth";
 import { useState } from "react";
 
 export function SignInForm() {
-  const { isConfigured, signIn, signInWithOAuth } = useAuth();
+  const { errorMessage, isConfigured, signIn, signInWithOAuth } = useAuth();
   const {
     register,
     handleSubmit,
@@ -92,7 +92,7 @@ export function SignInForm() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p id="sign-in-status" className="min-h-6 text-sm leading-6 text-on-surface-variant" aria-live="polite">
-          {serverError ?? (isConfigured ? " " : "Configurá Supabase para habilitar el acceso.")}
+          {serverError ?? errorMessage ?? (isConfigured ? " " : "Configurá Supabase para habilitar el acceso.")}
         </p>
         <Button className="sm:min-w-44" type="submit" disabled={isSubmitting || isOAuthSubmitting || !isConfigured}>
           {isSubmitting ? "Ingresando..." : "Iniciar sesión"}
