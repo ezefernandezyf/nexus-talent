@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import { createSavedAnalysis } from "../../../test/factories/analysis";
 import { HistoryList } from "./HistoryList";
@@ -8,13 +9,15 @@ describe("HistoryList", () => {
     const onDelete = vi.fn();
 
     render(
-      <HistoryList
-        analyses={[createSavedAnalysis()]}
-        isDeletingId={null}
-        onDelete={onDelete}
-        totalPages={1}
-        visibleCount={1}
-      />,
+      <MemoryRouter>
+        <HistoryList
+          analyses={[createSavedAnalysis()]}
+          isDeletingId={null}
+          onDelete={onDelete}
+          totalPages={1}
+          visibleCount={1}
+        />
+      </MemoryRouter>,
     );
 
     const list = screen.getByRole("list", { name: /historial de análisis/i });

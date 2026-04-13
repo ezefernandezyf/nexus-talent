@@ -215,7 +215,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     if (!providerConfig.enabled) {
       const message = `${providerConfig.label} no está habilitado en esta instancia.`;
       setErrorMessage(message);
-      throw new Error(message);
+      return { message };
     }
 
     setErrorMessage(null);
@@ -229,7 +229,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
 
     if (error) {
       setErrorMessage(error.message);
-      throw new Error(error.message);
+      return { message: error.message };
     }
 
     return {

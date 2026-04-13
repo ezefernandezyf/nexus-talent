@@ -127,11 +127,15 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
           isUnavailable={Boolean(profileLoadErrorMessage)}
           successMessage={saveProfileSuccess ? "Perfil guardado correctamente." : null}
           onSubmit={async (payload) => {
-            await saveProfile({
-              displayName: payload.displayName,
-              email: user.email ?? "",
-              userId: user.id,
-            });
+            try {
+              await saveProfile({
+                displayName: payload.displayName,
+                email: user.email ?? "",
+                userId: user.id,
+              });
+            } catch {
+              // Error state is handled by the hook; avoid unhandled rejections.
+            }
           }}
         />
       </Card>
