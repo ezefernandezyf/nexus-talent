@@ -1,3 +1,4 @@
+import { MemoryRouter } from "react-router-dom";
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import type { SavedJobAnalysis } from "../../../schemas/job-analysis";
@@ -39,7 +40,11 @@ describe("HistoryCard", () => {
   it("renders the title fallback, summary snippet and up to five unique skills", () => {
     const onDelete = vi.fn();
 
-    render(<HistoryCard analysis={analysis} iconName="apartment" onDelete={onDelete} />);
+    render(
+      <MemoryRouter>
+        <HistoryCard analysis={analysis} iconName="apartment" onDelete={onDelete} />
+      </MemoryRouter>,
+    );
 
     const row = screen.getByRole("listitem", { name: "Frontend Engineer" });
 
@@ -48,12 +53,20 @@ describe("HistoryCard", () => {
     expect(within(row).getByText("React, testing and TypeScript")).toBeInTheDocument();
     expect(within(row).getByText(/5 abr 2026/i)).toBeInTheDocument();
     expect(within(row).getByText(String(getHistoryMatchPercentage(analysis)))).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /abrir detalle de frontend engineer/i })).toHaveAttribute(
+      "href",
+      `/app/history/${analysis.id}`,
+    );
   });
 
   it("delegates delete actions to the provided callback", async () => {
     const onDelete = vi.fn();
 
-    render(<HistoryCard analysis={analysis} iconName="apartment" onDelete={onDelete} />);
+    render(
+      <MemoryRouter>
+        <HistoryCard analysis={analysis} iconName="apartment" onDelete={onDelete} />
+      </MemoryRouter>,
+    );
 
     await screen.getByRole("button", { name: /eliminar frontend engineer/i }).click();
 

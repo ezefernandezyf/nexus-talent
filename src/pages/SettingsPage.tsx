@@ -1,34 +1,55 @@
+import { FeaturePageShell, PageHeader } from "../components/ui";
+import { Button } from "../components/ui/Button";
+import { useAuth } from "../features/auth";
+import { downloadTextFile } from "../features/analysis/export";
 import { SettingsFeature } from "../features/settings";
+import { buildSettingsExportPayload } from "../features/settings/settings-export";
+import { useTheme } from "../lib/theme";
 
 export function SettingsPage() {
-  return (
-    <div className="flex flex-col gap-6">
-      <section className="flex flex-col gap-3 pt-2 sm:pt-4">
-        <span className="label-chip">Panel admin</span>
-        <h1 className="max-w-4xl text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
-          Settings
-        </h1>
-        <p className="max-w-3xl text-base leading-7 text-on-surface-variant sm:text-lg">
-          Administrá los ajustes operativos sin tocar código y mantené el comportamiento global bajo control.
-        </p>
-      </section>
+  const { session, user, status } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <article className="surface-panel p-5">
-          <h2 className="mb-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Modo mantenimiento</h2>
-          <p className="text-sm leading-6 text-on-surface-variant">Apagá el acceso público cuando necesites frenar la operación temporalmente.</p>
-        </article>
-        <article className="surface-panel p-5">
-          <h2 className="mb-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Dominios permitidos</h2>
-          <p className="text-sm leading-6 text-on-surface-variant">Definí quién puede entrar al panel y evitá cambios fuera del entorno esperado.</p>
-        </article>
-        <article className="surface-panel p-5">
-          <h2 className="mb-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Estado guardado</h2>
-          <p className="text-sm leading-6 text-on-surface-variant">La configuración se persiste con validación y feedback visible al guardar.</p>
-        </article>
-      </section>
+  function handleExport() {
+    if (status !== "authenticated") {
+      return;
+    }
+
+    const exportPayload = buildSettingsExportPayload({ session, theme, user });
+
+    downloadTextFile({
+      content: exportPayload.content,
+      filename: exportPayload.filename,
+      mimeType: "application/json;charset=utf-8",
+    });
+  }
+
+  const isExportDisabled = status !== "authenticated";
+
+  return (
+    <FeaturePageShell>
+      <PageHeader
+        action={
+          <div className="flex flex-wrap items-center gap-3">
+            <Button variant="secondary" onClick={toggleTheme} type="button">
+              <span className="material-symbols-outlined text-sm" aria-hidden="true">
+                {theme === "dark" ? "light_mode" : "dark_mode"}
+              </span>
+              {theme === "dark" ? "Tema claro" : "Tema oscuro"}
+            </Button>
+            <Button disabled={isExportDisabled} type="button" onClick={handleExport}>
+              <span className="material-symbols-outlined text-sm" aria-hidden="true">
+                download
+              </span>
+              Exportar datos
+            </Button>
+          </div>
+        }
+        description="Gestioná identidad, conexiones y preferencias compartidas desde una sola vista."
+        title="Configuración"
+      />
 
       <SettingsFeature />
-    </div>
+    </FeaturePageShell>
   );
 }

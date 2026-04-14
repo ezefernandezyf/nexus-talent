@@ -63,22 +63,19 @@ Antes de modificar el código estructural, usa las siguientes fases:
 7. `sdd-verify` - Comprobar con la Spec original y el estándar de diseño.
 8. `sdd-archive` - Guardar los deltas terminados al master-spec.
 
-## 6. Mapa de Módulos (Roadmap) YA COMPLETADO
+## 6. Mapa de Módulos (Roadmap) Pendiente
 
-Para asegurar entregas atómicas y calidad comercial, el proyecto se divide en estos hitos:
+El roadmap activo se organiza por módulos pequeños y secuenciales. Cada módulo debe entrar por su propio corte SDD para evitar mezclar shell, auth, settings y UI polish en el mismo cambio.
 
-- **01 Job Analysis (core)**: Parseo de job description -> resumen, skills, mensaje sugerido.
-- **02 AI Service / Orchestrator**: Cliente `ai-client`, llamadas a LLM, retries, rate limiting.
-- **03 CI / CD**: Añadir CI / CD.
-- **04 Validation & Mappers**: Zod schemas, transformadores entre IA <-> dominio.
-- **05 Persistence / History**: Supabase: guardar análisis, notas, historial.
-- **06 UI/UX Feature Shells**: `features/analysis`, `features/history`, componentes desacoplados.
-- **07 Auth & Users**: Supabase auth, perfiles, permisos.
-- **08 Integrations**: GitHub (stack detection), export outreach.
-- **09 CI / Tests / Tooling**: unit tests (mappers, validation), e2e básica, linters.
-- **10 Admin / Settings**: App settings, tokens, consumo.
-- **11 Observability & Errors**: Logging, error states amigables para el usuario.
-- **12 UI Parity / Visual Polish**: Ajuste final de todas las pantallas para calcar `docs/assets/` y cerrar inconsistencias visuales sin sumar features.
+- **13 Auth y acceso social**: Supabase login con email/password más GitHub, Google y LinkedIn; wiring de los botones de acceso de landing y signup.
+- **14 Settings rewrite**: Rehacer la página de settings desde la referencia, incluyendo theme toggle, export y controles de cuenta/persistencia.
+- **15 History interactions**: Hacer clickeables las cards/items del historial, abrir el detalle completo, revisar si `matchIndex` aporta valor real y eliminarlo si no tiene fundamento.
+- **16 Shell y navegación**: Conectar el logo de Nexus Talent a home, cerrar el switch light/dark de la navbar, corregir el layout mobile de la homepage y terminar la navegación global.
+- **17 Pages públicas**: Crear `privacy` y `404` para que el footer y las rutas rotas tengan destino real.
+- **18 Limpieza de legado**: Eliminar o mover a `old/` los componentes y pages que ya no se usan, solo después de confirmar reemplazo funcional.
+- **19 UI parity y responsive polish**: Corregir overlaps, spacing, jerarquía, estados vacíos y detalles mobile sin introducir features nuevas.
+
+Regla operativa: antes de implementar un módulo, hacer una exploración corta del área afectada y confirmar qué ya existe, qué falta y qué puede reutilizarse.
 
 ## 7. Flujo de Git y Organización
 
@@ -112,85 +109,36 @@ Para asegurar entregas atómicas y calidad comercial, el proyecto se divide en e
   - `typescript`: Tipado fuerte y avanzado.
   - `zod-4`: Validaciones rigurasa de esquemas.
 
-## 9. Fase Activa: Stitch HTML to React Migration
+## 9. Fase Activa: Funcionalidad Pendiente y Hardening
 
-La fase actual consiste en migrar la UI desde los HTML exportados por Stitch hacia componentes React reutilizables, preservando fidelidad visual y separando la presentación de la lógica.
-
-### Objetivo Global
-
-- Los HTML de `docs/assets/` son la fuente de verdad visual.
-- No reinterpretar el diseño, no simplificarlo y no cambiar estilos por gusto.
-- Toda pantalla nueva o rehecha debe ser pixel-perfect respecto del HTML de referencia.
-- El contenido textual de la UI debe ser dinámico cuando represente datos de la app, usando props o estructuras de datos.
-- No implementar lógica de negocio nueva en esta fase salvo la mínima necesaria para que la pantalla funcione.
+La UI base ya está migrada en varias áreas. La fase activa ahora es convertir pantallas y controles en funcionalidad real, cerrar navegación, y luego limpiar legado y pulir responsive.
 
 ### Principios de Ejecución
 
-- No mezclar UI vieja con nueva en la misma pantalla.
-- No hacer mejoras incrementales sobre layouts rotos: reconstruir desde el asset.
-- Separar siempre UI de lógica.
-- Si una pantalla necesita funcionalidad existente, primero se replica la UI y después se reincorpora la lógica real.
-- Cualquier refactor de negocio que no sea imprescindible queda fuera de este corte.
+- Los assets de `docs/assets/` siguen siendo la referencia visual cuando exista una pantalla nueva o una reescritura.
+- No mezclar lógica compleja dentro de componentes presentacionales.
+- Cada interacción visible debe tener una ruta o acción real, o una decisión explícita de por qué se mantiene solo visual.
+- Antes de borrar componentes o pages viejas, confirmar reemplazo funcional y cobertura mínima.
 
-### Patrón de Trabajo por Módulos
+### Secuencia de Trabajo Recomendada
 
-Cada módulo debe pasar por esta secuencia, en este orden:
+1. **Exploración del módulo**
+  - Revisar la pantalla, componentes, hooks, rutas y servicios relacionados.
+  - Identificar qué ya funciona y qué está solo en UI.
 
-1. **UI Extraction Agent**
-  - Analiza el HTML de referencia.
-  - Identifica secciones, jerarquía, spacing, tipografía, íconos y estados visuales.
-  - Devuelve un mapa de bloques UI sin escribir código de producción.
+2. **Implementación funcional**
+  - Conectar handlers, rutas, providers o servicios sin romper la composición visual existente.
 
-2. **Componentization Agent**
-  - Convierte cada bloque en componentes React reutilizables.
-  - Mantiene estilos exactos y estructura visual.
-  - No añade lógica de negocio.
+3. **Limpieza controlada**
+  - Mover a `old/` o eliminar solo lo que quedó sin uso comprobado.
 
-3. **Content Refactor Agent**
-  - Reemplaza textos hardcodeados por props, constantes o data models.
-  - Adapta el contenido a `Nexus Talent` según el naming definido por producto.
-  - Mantiene fidelidad del layout mientras vuelve dinámico el contenido.
+4. **Verificación**
+  - Confirmar rutas, tests y comportamiento responsive mínimo.
 
-4. **Page Assembly Agent**
-  - Ensambla los componentes en páginas reales.
-  - Reincorpora la funcionalidad existente solo después de cerrar la composición visual.
-  - No introduce features nuevas.
+### Orden Recomendado
 
-5. **Verification Agent**
-  - Comprueba que la página coincida con el HTML de referencia.
-  - Valida que los tests relevantes sigan pasando.
-  - Señala desvíos visuales o funcionales antes de considerar el módulo cerrado.
-
-### Mapa de Módulos actual
-
-1. **Landing y Auth Pública**
-  - Rehacer `Landing`, `Login` y `Signup` desde `docs/assets/`.
-  - Mantener los flujos de autenticación existentes.
-  - Ajustar botones, logos e íconos a la referencia HTML.
-
-2. **Shell y Navegación**
-  - Rehacer `AppLayout`, mobile drawer, footer y navegación superior.
-  - Eliminar copy técnico visible.
-  - Centralizar iconografía compartida.
-
-3. **Analysis**
-  - Rehacer la página de análisis según `referenciaAnalisis.html` y `referenciaResultadoAnalisis.html`.
-  - Integrar después el flujo actual de análisis IA, preservando validación y estados.
-  - Ajustar el tono del mensaje IA cuando el asset o la funcionalidad lo requiera.
-
-4. **History**
-  - Rehacer la pantalla de historial según `referenciaHistorial.html`.
-  - Mantener detalle, edición, renombre y borrado como funcionalidades posteriores al ensamblado visual.
-
-5. **Settings**
-  - Rehacer la pantalla de settings/admin con la misma lógica de separación UI/lógica.
-  - Mantener persistencia y validación existentes.
-
-6. **UI Parity / Visual Polish**
-  - Cerrar inconsistencias finales de spacing, jerarquía, estados vacíos y responsive.
-  - No sumar features nuevas.
-  - Esta fase solo pule lo que ya existe.
-
-### Regla Operativa
-
-Cada pantalla o familia de pantallas debe entrar por su propio corte SDD para mantener trazabilidad, reducir riesgo y evitar mezclar shell, auth y feature work en el mismo commit. Si un módulo todavía no tiene su asset definitivo, no se avanza por intuición: se espera la referencia correcta.
+- **13 Auth y acceso social** primero, porque habilita los flujos de entrada.
+- **14 Settings rewrite** después, porque centraliza preferencias y acciones globales.
+- **15 History interactions** y **16 Shell y navegación** en paralelo si hacen falta, porque comparten rutas y layout.
+- **17 Pages públicas** y **18 Limpieza de legado** cuando las rutas principales ya estén cerradas.
+- **19 UI parity y responsive polish** al final, sin features nuevas.

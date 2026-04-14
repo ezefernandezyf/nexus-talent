@@ -56,6 +56,10 @@ function createAuthClient(signUpErrorMessage: string | null): AuthClientLike {
         },
       })),
       signInWithPassword: vi.fn(async () => ({ data: { session: null, user: null }, error: null })),
+      signInWithOAuth: vi.fn(async ({ provider }) => ({
+        data: { provider, url: null },
+        error: signUpErrorMessage ? { message: signUpErrorMessage } : null,
+      })),
       signOut: vi.fn(async () => ({ error: null })),
       signUp: vi.fn(async () => {
         if (signUpErrorMessage) {
@@ -107,6 +111,26 @@ describe("SignUpForm", () => {
     await user.click(screen.getByRole("button", { name: /crear cuenta/i }));
 
     await waitFor(() => expect(screen.getByText(/user already registered/i)).toBeInTheDocument());
+  });
+
+  it("starts google oauth from the sign-up entry point", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient(null);
+
+    render(
+      <AuthProvider client={client}>
+        <SignUpForm />
+      </AuthProvider>,
+    );
+
+    await user.click(screen.getByRole("button", { name: /continuar con google/i }));
+
+    await waitFor(() =>
+      expect(client.auth.signInWithOAuth).toHaveBeenCalledWith({
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+        provider: "google",
+      }),
+    );
   });
 
   it("redirects into the private shell after a successful signup", async () => {

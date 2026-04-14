@@ -69,6 +69,10 @@ function createAuthClient(signInErrorMessage: string | null): AuthClientLike {
           error: null,
         };
       }),
+      signInWithOAuth: vi.fn(async ({ provider }) => ({
+        data: { provider, url: null },
+        error: signInErrorMessage ? { message: signInErrorMessage } : null,
+      })),
       signOut: vi.fn(async () => ({ error: null })),
       signUp: vi.fn(async () => ({ data: { session: null, user: null }, error: null })),
     },
@@ -107,6 +111,42 @@ describe("SignInForm", () => {
     await user.click(screen.getByRole("button", { name: /iniciar sesión/i }));
 
     await waitFor(() => expect(screen.getByText(/invalid login credentials/i)).toBeInTheDocument());
+  });
+
+  it("starts github oauth from the sign-in entry point", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient(null);
+
+    render(
+      <AuthProvider client={client}>
+        <SignInForm />
+      </AuthProvider>,
+    );
+
+    await user.click(screen.getByRole("button", { name: /ingresar con github/i }));
+
+    await waitFor(() =>
+      expect(client.auth.signInWithOAuth).toHaveBeenCalledWith({
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+        provider: "github",
+      }),
+    );
+  });
+
+  it("surfaces oauth errors without breaking the password form", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient("GitHub is temporarily unavailable");
+
+    render(
+      <AuthProvider client={client}>
+        <SignInForm />
+      </AuthProvider>,
+    );
+
+    await user.click(screen.getByRole("button", { name: /ingresar con github/i }));
+
+    await waitFor(() => expect(screen.getByText(/github is temporarily unavailable/i)).toBeInTheDocument());
+    expect(screen.getByRole("button", { name: /iniciar sesión/i })).toBeEnabled();
   });
 
   it("redirects into the private shell after a successful login", async () => {

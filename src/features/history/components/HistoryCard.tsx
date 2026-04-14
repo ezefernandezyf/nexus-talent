@@ -1,4 +1,5 @@
 import type { SavedJobAnalysis } from "../../../schemas/job-analysis";
+import { Link } from "react-router-dom";
 import { Button } from "../../../components/ui/Button";
 import {
   formatHistoryCardDate,
@@ -39,11 +40,19 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
 
   return (
     <article
-      className="group grid grid-cols-1 lg:grid-cols-12 items-center rounded-xl border border-transparent bg-surface-container-low/40 px-4 py-4 transition-all duration-200 hover:border-outline-variant/10 hover:bg-surface-container"
+      className="group relative grid grid-cols-1 items-center rounded-xl border border-transparent bg-surface-container-low/40 px-4 py-4 transition-all duration-200 hover:border-outline-variant/10 hover:bg-surface-container lg:grid-cols-12"
       aria-labelledby={`history-title-${analysis.id}`}
       role="listitem"
       tabIndex={0}
     >
+      <Link
+        aria-label={`Abrir detalle de ${companyLabel}`}
+        className="absolute inset-0 z-0 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+        to={`/app/history/${analysis.id}`}
+      >
+        <span className="sr-only">Abrir detalle</span>
+      </Link>
+
       <div className="lg:col-span-4 flex items-center gap-4">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-outline-variant/20 bg-surface-container-lowest">
           <span className="material-symbols-outlined text-primary" aria-hidden="true">
@@ -78,7 +87,7 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
         </div>
       </div>
 
-      <div className="lg:col-span-1 flex justify-end mt-3 lg:mt-0">
+      <div className="relative z-10 lg:col-span-1 flex justify-end mt-3 lg:mt-0">
         <Button
           aria-label={`Eliminar ${companyLabel}`}
           className="opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 focus-visible:ring-2 focus-visible:ring-primary/40"

@@ -43,7 +43,10 @@ function createSession(email: string, role: "admin" | "authenticated" = "authent
 }
 
 function createAuthClient(options: {
+  oauthErrorMessage?: string | null;
   session?: Session | null;
+  signInSession?: Session | null;
+  signUpSession?: Session | null;
 } = {}): AuthClientLike {
   let currentSession = options.session ?? null;
   const listeners = new Set<(event: string, session: Session | null) => void>();
@@ -67,9 +70,17 @@ function createAuthClient(options: {
           },
         };
       }),
-      signInWithPassword: vi.fn(async () => ({
-        data: { session: currentSession, user: currentSession?.user ?? null },
-        error: null,
+      signInWithPassword: vi.fn(async () => {
+        const session = options.signInSession ?? currentSession;
+
+        return {
+          data: { session, user: session?.user ?? null },
+          error: null,
+        };
+      }),
+      signInWithOAuth: vi.fn(async ({ provider }) => ({
+        data: { provider, url: null },
+        error: options.oauthErrorMessage ? { message: options.oauthErrorMessage } : null,
       })),
       signOut: vi.fn(async () => {
         currentSession = null;
@@ -77,16 +88,20 @@ function createAuthClient(options: {
 
         return { error: null };
       }),
-      signUp: vi.fn(async () => ({
-        data: { session: currentSession, user: currentSession?.user ?? null },
-        error: null,
-      })),
+      signUp: vi.fn(async () => {
+        const session = options.signUpSession ?? currentSession;
+
+        return {
+          data: { session, user: session?.user ?? null },
+          error: null,
+        };
+      }),
     },
   };
 }
 
 function AuthProbe() {
-  const { errorMessage, isAdmin, signOut, session, status, user } = useAuth();
+  const { errorMessage, isAdmin, signIn, signInWithOAuth, signOut, signUp, session, status, user } = useAuth();
 
   return (
     <div>
@@ -95,6 +110,15 @@ function AuthProbe() {
       <p data-testid="email">{user?.email ?? "no-user"}</p>
       <p data-testid="session">{session?.access_token ?? "no-session"}</p>
       <p data-testid="error">{errorMessage ?? "no-error"}</p>
+      <button type="button" onClick={() => signIn("ana@empresa.com", "secure-password")}>
+        Iniciar sesión
+      </button>
+      <button type="button" onClick={() => signUp("sofia@empresa.com", "secure-password")}>
+        Crear cuenta
+      </button>
+      <button type="button" onClick={() => signInWithOAuth("github")}>
+        GitHub OAuth
+      </button>
       <button type="button" onClick={() => signOut()}>
         Cerrar sesión
       </button>
@@ -133,9 +157,12 @@ describe("AuthProvider", () => {
     expect(screen.getByTestId("admin")).toHaveTextContent("admin");
   });
 
-  it("signs out and clears the stored session", async () => {
+  it("syncs password sign-in, sign-up, and sign-out through the shared auth context", async () => {
     const user = userEvent.setup();
-    const client = createAuthClient({ session: createSession("ana@empresa.com") });
+    const client = createAuthClient({
+      signInSession: createSession("ana@empresa.com"),
+      signUpSession: createSession("sofia@empresa.com"),
+    });
 
     render(
       <AuthProvider client={client}>
@@ -143,11 +170,74 @@ describe("AuthProvider", () => {
       </AuthProvider>,
     );
 
-    await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("authenticated"));
-    await user.click(screen.getByRole("button", { name: /cerrar sesión/i }));
+    await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("unauthenticated"));
 
+    await user.click(screen.getByRole("button", { name: /iniciar sesión/i }));
+    await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("authenticated"));
+    expect(screen.getByTestId("email")).toHaveTextContent("ana@empresa.com");
+    expect(screen.getByTestId("session")).toHaveTextContent("session-token");
+
+    await user.click(screen.getByRole("button", { name: /cerrar sesión/i }));
     await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("unauthenticated"));
     expect(screen.getByTestId("email")).toHaveTextContent("no-user");
     expect(screen.getByTestId("session")).toHaveTextContent("no-session");
+
+    await user.click(screen.getByRole("button", { name: /crear cuenta/i }));
+    await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("authenticated"));
+    expect(screen.getByTestId("email")).toHaveTextContent("sofia@empresa.com");
+    expect(screen.getByTestId("session")).toHaveTextContent("session-token");
+
+    expect(client.auth.signInWithPassword).toHaveBeenCalledTimes(1);
+    expect(client.auth.signOut).toHaveBeenCalledTimes(1);
+    expect(client.auth.signUp).toHaveBeenCalledTimes(1);
+  });
+
+  it("starts the oauth flow with a callback redirect and surfaces provider errors", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient({ oauthErrorMessage: "GitHub is temporarily unavailable" });
+
+    render(
+      <AuthProvider client={client}>
+        <AuthProbe />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("unauthenticated"));
+
+    await user.click(screen.getByRole("button", { name: /github oauth/i }));
+
+    await waitFor(() =>
+      expect(client.auth.signInWithOAuth).toHaveBeenCalledWith({
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+        provider: "github",
+      }),
+    );
+
+    await waitFor(() => expect(screen.getByTestId("error")).toHaveTextContent("GitHub is temporarily unavailable"));
+    expect(screen.getByTestId("status")).toHaveTextContent("unauthenticated");
+  });
+
+  it("starts the oauth flow with the shared auth entry point when the provider is available", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient();
+
+    render(
+      <AuthProvider client={client}>
+        <AuthProbe />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("unauthenticated"));
+
+    await user.click(screen.getByRole("button", { name: /github oauth/i }));
+
+    await waitFor(() =>
+      expect(client.auth.signInWithOAuth).toHaveBeenCalledWith({
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+        provider: "github",
+      }),
+    );
+
+    expect(screen.getByTestId("error")).toHaveTextContent("no-error");
   });
 });

@@ -3,7 +3,6 @@ import { HistoryCard } from "./HistoryCard";
 
 interface HistoryListProps {
   analyses: SavedJobAnalysis[];
-  analysisHref?: string;
   isDeletingId?: string | null;
   onDelete: (analysisId: string) => void;
   totalPages: number;
@@ -17,7 +16,7 @@ export function HistoryList({ analyses, isDeletingId, onDelete, totalPages, visi
         <div className="lg:col-span-4">Compañía / ID</div>
         <div className="lg:col-span-3">Rol Aplicado</div>
         <div className="lg:col-span-2">Fecha</div>
-        <div className="text-right lg:col-span-3">Match Index</div>
+        <div className="text-right lg:col-span-3">Compatibilidad</div>
       </div>
 
       {analyses.map((analysis, index) => (

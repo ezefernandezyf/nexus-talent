@@ -164,4 +164,41 @@ describe("AnalysisResultView", () => {
     expect(screen.getByText(/no se pudo abrir el cliente de correo/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /copiar mensaje/i })).toBeInTheDocument();
   });
+
+  it("renders GitHub topic and description signals and surfaces download failures", async () => {
+    const user = userEvent.setup();
+    const createObjectURL = vi.spyOn(URL, "createObjectURL").mockImplementation(() => {
+      throw new Error("Downloads unavailable");
+    });
+
+    render(
+      <AnalysisResultView
+        result={createAnalysisResult({
+          githubEnrichment: {
+            repositoryName: "ezefernandezyf/nexus-talent",
+            repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
+            detectedStack: [
+              { name: "Architecture", source: "description" },
+              { name: "React", source: "topics" },
+            ],
+          },
+        })}
+      />,
+    );
+
+    expect(screen.getByText("Architecture")).toBeInTheDocument();
+    expect(screen.getByText(/Descripción/i)).toBeInTheDocument();
+
+    const topicSignal = screen.getAllByText("React").find((element) => element.closest(".tech-chip")?.textContent?.includes("Topics"));
+    expect(topicSignal).toBeDefined();
+    expect(screen.getByText(/Topics/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /descargar markdown/i }));
+    expect(screen.getByText(/no se pudo descargar el archivo markdown/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /descargar json/i }));
+    expect(screen.getByText(/no se pudo descargar el archivo json/i)).toBeInTheDocument();
+
+    createObjectURL.mockRestore();
+  });
 });

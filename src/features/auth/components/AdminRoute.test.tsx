@@ -62,6 +62,7 @@ function createAuthClient(session: Session | null): AuthClientLike {
         };
       }),
       signInWithPassword: vi.fn(async () => ({ data: { session: currentSession, user: currentSession?.user ?? null }, error: null })),
+      signInWithOAuth: vi.fn(async () => ({ data: { provider: "github", url: null }, error: null })),
       signOut: vi.fn(async () => ({ error: null })),
       signUp: vi.fn(async () => ({ data: { session: currentSession, user: currentSession?.user ?? null }, error: null })),
     },
