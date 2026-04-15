@@ -108,7 +108,7 @@ describe("SignUpForm", () => {
     );
 
     await user.type(screen.getByLabelText(/email/i), "ana@empresa.com");
-      await user.type(screen.getByLabelText(/^contraseña$/i), "secure-password");
+    await user.type(screen.getByLabelText(/^contraseña$/i), "secure-password");
     await user.type(screen.getByLabelText(/confirmar contraseña/i), "different-password");
     await user.click(screen.getByRole("button", { name: /crear cuenta/i }));
 
@@ -127,7 +127,7 @@ describe("SignUpForm", () => {
     );
 
     await user.type(screen.getByLabelText(/email/i), "ana@empresa.com");
-      await user.type(screen.getByLabelText(/^contraseña$/i), "secure-password");
+    await user.type(screen.getByLabelText(/^contraseña$/i), "secure-password");
     await user.type(screen.getByLabelText(/confirmar contraseña/i), "secure-password");
     await user.click(screen.getByRole("button", { name: /crear cuenta/i }));
 
@@ -177,7 +177,7 @@ describe("SignUpForm", () => {
     await screen.findByLabelText(/email/i);
 
     await user.type(screen.getByLabelText(/email/i), "ana@empresa.com");
-      await user.type(screen.getByLabelText(/^contraseña$/i), "secure-password");
+    await user.type(screen.getByLabelText(/^contraseña$/i), "secure-password");
     await user.type(screen.getByLabelText(/confirmar contraseña/i), "secure-password");
     await user.click(screen.getByRole("button", { name: /crear cuenta/i }));
 
