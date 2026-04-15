@@ -49,7 +49,7 @@ The auth shell MUST not display developer placeholder wording or non-functional 
 
 ### Requirement: Social Provider Enablement Must Be Explicit
 
-GitHub, Google, and LinkedIn provider availability MUST be represented clearly so that frontend failures are not mistaken for code bugs when the Supabase provider is not enabled.
+GitHub and Google provider availability MUST be represented clearly so that frontend failures are not mistaken for code bugs when the Supabase provider is not enabled.
 
 #### Scenario: Provider is not enabled in Supabase
 - GIVEN a provider is disabled or missing in Supabase Auth settings
@@ -57,8 +57,8 @@ GitHub, Google, and LinkedIn provider availability MUST be represented clearly s
 - THEN the UI MUST surface a clear provider-not-enabled state
 - AND the implementation MUST make the dependency on Supabase configuration explicit
 
-#### Scenario: LinkedIn remains disabled by configuration
-- GIVEN LinkedIn is not yet configured in Supabase
+#### Scenario: Disabled provider remains hidden or inactive
+- GIVEN a supported provider is not yet configured in Supabase
 - WHEN the provider list is rendered
-- THEN LinkedIn MUST remain disabled or hidden according to the current config
+- THEN that provider MUST remain disabled or hidden according to the current config
 - AND the code MUST not claim social login is fully available

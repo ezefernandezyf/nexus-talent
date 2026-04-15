@@ -28,7 +28,7 @@ export function SignUpForm() {
     }
   }
 
-  async function handleOAuthSignIn(provider: "github" | "google" | "linkedin") {
+  async function handleOAuthSignIn(provider: "github" | "google") {
     setServerError(null);
     setIsOAuthSubmitting(true);
 
@@ -73,17 +73,6 @@ export function SignUpForm() {
           </span>
         </button>
 
-        <button
-          type="button"
-          className="w-full flex items-center justify-center gap-3 rounded-xl bg-white px-4 py-3 font-semibold text-[#0B0E14] transition-opacity duration-200 hover:opacity-90"
-          disabled={isOAuthSubmitting || !isConfigured}
-          onClick={() => handleOAuthSignIn("linkedin")}
-        >
-          <svg aria-hidden="true" className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.024-3.038-1.85-3.038-1.852 0-2.135 1.445-2.135 2.94v5.667H9.355V9h3.414v1.561h.049c.476-.9 1.637-1.85 3.37-1.85 3.602 0 4.27 2.37 4.27 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.123 2.062 2.062 0 0 1 0 4.123zM7.115 20.452H3.558V9h3.557v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.731v20.539C0 23.228.792 24 1.771 24h20.451C23.206 24 24 23.228 24 22.271V1.731C24 .774 23.206 0 22.225 0z" />
-          </svg>
-          <span className="font-headline tracking-tight">{isOAuthSubmitting ? "Redirigiendo..." : "Continuar con LinkedIn"}</span>
-        </button>
       </div>
 
       <div className="space-y-2">
