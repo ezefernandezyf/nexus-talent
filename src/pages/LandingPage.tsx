@@ -22,6 +22,7 @@ export function LandingPage() {
     <main className="relative bg-surface-container-lowest text-on-surface">
       <Navbar
         brand="Nexus Talent"
+        brandHref="/"
         actions={
           <div className="flex items-center gap-4">
             <MobileMenuButton isOpen={isMobileMenuOpen} onClick={() => setIsMobileMenuOpen((current) => !current)} />
