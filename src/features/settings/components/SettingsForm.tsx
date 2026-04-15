@@ -54,11 +54,11 @@ export function SettingsForm({
   const isFormDisabled = isPending || isUnavailable || isLoading;
 
   return (
-    <form className="flex flex-col gap-6 p-6 sm:p-8" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-5 p-6 sm:gap-6 sm:p-8" onSubmit={handleSubmit}>
       <div className="space-y-2">
         <span className="label-chip">Cuenta y perfil</span>
         <h2 className="text-2xl font-semibold tracking-[-0.02em] text-white sm:text-3xl">Actualizá tu perfil sin salir del panel.</h2>
-        <p className="text-base leading-7 text-on-surface-variant">{helperText}</p>
+        <p className="max-w-2xl text-base leading-7 text-on-surface-variant">{helperText}</p>
       </div>
 
       {errorMessage ? (

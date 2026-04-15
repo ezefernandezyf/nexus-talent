@@ -38,7 +38,7 @@ export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDes
   };
 
   return (
-    <form className="grid gap-6" onSubmit={handleSubmit}>
+    <form className="grid gap-5 sm:gap-6" onSubmit={handleSubmit}>
       <div className="space-y-2">
         <label className="label-chip" htmlFor="job-description">
           Descripción del puesto
@@ -70,8 +70,8 @@ export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDes
         </div>
       </div>
 
-      <div className="rounded-xl bg-surface-container p-6 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]">
-        <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-end">
+      <div className="rounded-xl bg-surface-container p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)] sm:p-6">
+        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-end md:gap-5">
           <div className="space-y-2">
             <label className="label-chip" htmlFor="message-tone">
               Tono del mensaje
@@ -114,11 +114,11 @@ export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDes
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <p id="job-description-error" className="min-h-6 text-sm text-error" aria-live="polite">
           {localError ?? errorMessage ?? " "}
         </p>
-        <div className="flex flex-col items-center gap-1 sm:items-end">
+        <div className="flex flex-col items-stretch gap-1 sm:items-end">
           <Button className="w-full px-10 py-4 font-headline text-sm tracking-wide sm:w-auto" type="submit" disabled={isPending}>
             <span className="material-symbols-outlined text-[18px]" aria-hidden="true" style={{ fontVariationSettings: '"FILL" 1' }}>
               bolt

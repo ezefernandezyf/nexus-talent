@@ -208,22 +208,22 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
           <span className="text-4xl text-primary">✦</span>
         </div>
 
-        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <span className="label-chip">Message Generator</span>
             <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Editá antes de copiar</h4>
           </div>
-          <div className="flex flex-wrap justify-end gap-2">
-            <Button variant="secondary" type="button" onClick={handleOpenEmailDraft}>
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">
+            <Button className="w-full sm:w-auto" variant="secondary" type="button" onClick={handleOpenEmailDraft}>
               Abrir email
             </Button>
-            <Button variant="secondary" type="button" onClick={handleDownloadMarkdown}>
+            <Button className="w-full sm:w-auto" variant="secondary" type="button" onClick={handleDownloadMarkdown}>
               Descargar Markdown
             </Button>
-            <Button variant="secondary" type="button" onClick={handleDownloadJson}>
+            <Button className="w-full sm:w-auto" variant="secondary" type="button" onClick={handleDownloadJson}>
               Descargar JSON
             </Button>
-            <Button type="button" onClick={handleCopy}>
+            <Button className="w-full sm:w-auto" type="button" onClick={handleCopy}>
               Copiar mensaje
             </Button>
           </div>

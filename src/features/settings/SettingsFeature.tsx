@@ -28,15 +28,15 @@ function StatusPill({ connected }: { connected: boolean }) {
 
 function SectionHeader({ action, description, eyebrow, title }: SectionHeaderProps) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
       <div className="space-y-2">
         <span className="label-chip">{eyebrow}</span>
         <div className="space-y-2">
-          <h2 className="text-2xl font-semibold tracking-[-0.02em] text-white sm:text-3xl">{title}</h2>
+          <h2 className="text-2xl font-semibold tracking-[-0.02em] text-white sm:text-[2rem]">{title}</h2>
           <p className="max-w-2xl text-base leading-7 text-on-surface-variant">{description}</p>
         </div>
       </div>
-      {action ? <div className="pt-1">{action}</div> : null}
+      {action ? <div className="pt-1 sm:pt-0">{action}</div> : null}
     </div>
   );
 }
@@ -95,7 +95,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
 
   return (
     <div className="space-y-6">
-      <Card className="flex flex-col gap-8 p-6 sm:p-8" tone="low">
+      <Card className="flex flex-col gap-7 p-6 sm:gap-8 sm:p-8" tone="low">
         <SectionHeader
           action={<span className="label-chip">Tema {theme === "dark" ? "oscuro" : "claro"}</span>}
           description="Revisá tu email, editá el nombre visible y guardá el perfil en la base de datos compartida."
@@ -140,7 +140,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
         />
       </Card>
 
-      <Card className="flex flex-col gap-8 p-6 sm:p-8" tone="low">
+      <Card className="flex flex-col gap-7 p-6 sm:gap-8 sm:p-8" tone="low">
         <SectionHeader
           description="Solo mostramos el estado actual. No hay flujo de vinculación ni desvinculación en esta pantalla."
           eyebrow="Linked Accounts"
