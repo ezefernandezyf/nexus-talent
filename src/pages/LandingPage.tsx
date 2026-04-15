@@ -10,8 +10,6 @@ import { MobileMenuButton } from "../components/ui/MobileMenuButton";
 
 const publicDrawerItems = [
   { label: "Inicio", to: "/" },
-  { label: "Ingresar", to: "/auth/sign-in" },
-  { label: "Crear cuenta", to: "/auth/sign-up" },
   { label: "Análisis", to: "/app/analysis" },
 ] as const;
 

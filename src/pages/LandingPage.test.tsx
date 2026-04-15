@@ -32,8 +32,10 @@ describe("LandingPage", () => {
 
     await user.click(screen.getByRole("button", { name: /abrir menú/i }));
     const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });
-    expect(within(drawer).getAllByRole("link", { name: "Ingresar" }).map((element) => element.getAttribute("href"))).toContain("/auth/sign-in");
-    expect(within(drawer).getAllByRole("link", { name: "Crear cuenta" }).map((element) => element.getAttribute("href"))).toContain("/auth/sign-up");
+    expect(within(drawer).getByRole("link", { name: "Inicio" })).toHaveAttribute("href", "/");
+    expect(within(drawer).getByRole("link", { name: "Análisis" })).toHaveAttribute("href", "/app/analysis");
+    expect(within(drawer).getByRole("link", { name: /ingresar/i })).toHaveAttribute("href", "/auth/sign-in");
+    expect(within(drawer).getByRole("link", { name: /crear cuenta/i })).toHaveAttribute("href", "/auth/sign-up");
 
     await user.click(within(drawer).getByRole("button", { name: /cerrar menú/i }));
     expect(screen.queryByRole("dialog", { name: "Nexus Talent" })).not.toBeInTheDocument();

@@ -69,7 +69,6 @@ export function MobileDrawer({ actions, heading, isOpen, items, onClose }: Mobil
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1">
             <p className="text-xl font-semibold tracking-[-0.03em] text-white">{heading}</p>
-            <p className="text-xs uppercase tracking-[0.28em] text-on-surface-variant">Mobile drawer</p>
           </div>
           <button
             aria-label="Cerrar menú"

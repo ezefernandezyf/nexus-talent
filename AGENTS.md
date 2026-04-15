@@ -63,9 +63,11 @@ Antes de modificar el código estructural, usa las siguientes fases:
 7. `sdd-verify` - Comprobar con la Spec original y el estándar de diseño.
 8. `sdd-archive` - Guardar los deltas terminados al master-spec.
 
-## 6. Mapa de Módulos (Roadmap) Pendiente
+## 6. Mapa de Módulos (Roadmap)
 
-El roadmap activo se organiza por módulos pequeños y secuenciales. Cada módulo debe entrar por su propio corte SDD para evitar mezclar shell, auth, settings y UI polish en el mismo cambio.
+El roadmap activo se organiza por módulos pequeños y secuenciales. Cada módulo debe entrar por su propio corte SDD para evitar mezclar shell, auth, settings, navegación y UI polish en el mismo cambio.
+
+### Módulos cerrados
 
 - **13 Auth y acceso social**: Supabase login con email/password más GitHub, Google y LinkedIn; wiring de los botones de acceso de landing y signup.
 - **14 Settings rewrite**: Rehacer la página de settings desde la referencia, incluyendo theme toggle, export y controles de cuenta/persistencia.
@@ -75,7 +77,16 @@ El roadmap activo se organiza por módulos pequeños y secuenciales. Cada módul
 - **18 Limpieza de legado**: Eliminar o mover a `old/` los componentes y pages que ya no se usan, solo después de confirmar reemplazo funcional.
 - **19 UI parity y responsive polish**: Corregir overlaps, spacing, jerarquía, estados vacíos y detalles mobile sin introducir features nuevas.
 
-Regla operativa: antes de implementar un módulo, hacer una exploración corta del área afectada y confirmar qué ya existe, qué falta y qué puede reutilizarse.
+### Nuevo bloque de hardening
+
+- **20 Landing mobile y drawer**: Corregir el solapamiento de la landing en mobile, limpiar el menú hamburguesa y ordenar los accesos públicos sin duplicados.
+- **21 Auth UX y proveedores sociales**: Arreglar signup/signin, confirmación de contraseña, iconografía, estilos light/dark y habilitación real de GitHub, Google y LinkedIn con Supabase.
+- **22 Navegación y shell global**: Llevar el logo a la home, exponer settings y logout en desktop, y revisar el mapa de navegación completo.
+- **23 Análisis y fiabilidad IA**: Corregir el selector de tono en light mode, validar que los outputs cambien por vacante y revisar el flujo de análisis para evitar respuestas repetidas.
+- **24 Historial avanzado**: Permitir reanálisis, edición de resumen/nota de la vacante y generación de un nuevo mensaje para la misma vacante.
+- **25 Settings y cuenta**: Asegurar que settings sea accesible desde todos los puntos esperados y completar los controles de cuenta/persistencia que falten.
+
+Regla operativa: antes de implementar un módulo, hacer una exploración corta del área afectada y confirmar qué ya existe, qué falta, qué depende de Supabase y qué puede reutilizarse.
 
 ## 7. Flujo de Git y Organización
 
@@ -111,13 +122,14 @@ Regla operativa: antes de implementar un módulo, hacer una exploración corta d
 
 ## 9. Fase Activa: Funcionalidad Pendiente y Hardening
 
-La UI base ya está migrada en varias áreas. La fase activa ahora es convertir pantallas y controles en funcionalidad real, cerrar navegación, y luego limpiar legado y pulir responsive.
+La UI base ya está migrada en varias áreas. La fase activa ahora es cerrar huecos de producto, corregir navegación, resolver dependencias de autenticación y Supabase, y terminar el hardening responsive sin abrir frentes mezclados.
 
 ### Principios de Ejecución
 
 - Los assets de `docs/assets/` siguen siendo la referencia visual cuando exista una pantalla nueva o una reescritura.
 - No mezclar lógica compleja dentro de componentes presentacionales.
 - Cada interacción visible debe tener una ruta o acción real, o una decisión explícita de por qué se mantiene solo visual.
+- Las integraciones externas como Supabase Auth deben tratarse como dependencia explícita del módulo, no como detalle implícito del frontend.
 - Antes de borrar componentes o pages viejas, confirmar reemplazo funcional y cobertura mínima.
 
 ### Secuencia de Trabajo Recomendada
@@ -137,8 +149,9 @@ La UI base ya está migrada en varias áreas. La fase activa ahora es convertir 
 
 ### Orden Recomendado
 
-- **13 Auth y acceso social** primero, porque habilita los flujos de entrada.
-- **14 Settings rewrite** después, porque centraliza preferencias y acciones globales.
-- **15 History interactions** y **16 Shell y navegación** en paralelo si hacen falta, porque comparten rutas y layout.
-- **17 Pages públicas** y **18 Limpieza de legado** cuando las rutas principales ya estén cerradas.
-- **19 UI parity y responsive polish** al final, sin features nuevas.
+- **20 Landing mobile y drawer** primero, porque corrige el primer impacto público y limpia la entrada.
+- **21 Auth UX y proveedores sociales** después, porque estabiliza el acceso y evita errores de proveedor.
+- **22 Navegación y shell global** luego, porque ordena el acceso a settings, logout y home.
+- **23 Análisis y fiabilidad IA** una vez que la navegación y el acceso estén sanos.
+- **24 Historial avanzado** después, porque depende del análisis estable y del modelo de persistencia.
+- **25 Settings y cuenta** al final, cuando las rutas y la autenticación ya estén cerradas.
