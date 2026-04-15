@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   ANALYSIS_HISTORY_STORAGE_KEY,
+  type AnalysisUpdatePatch,
   type AnalysisRepository,
 } from "./analysis-repository";
 import { SAVED_JOB_ANALYSIS_SCHEMA, type JobAnalysisResult, type SavedJobAnalysis } from "../../schemas/job-analysis";
@@ -61,6 +62,14 @@ function writePersistedAnalyses(storage: Storage | null, analyses: SavedJobAnaly
   storage.setItem(ANALYSIS_HISTORY_STORAGE_KEY, JSON.stringify(analyses));
 }
 
+function applyAnalysisPatch(analysis: SavedJobAnalysis, patch: AnalysisUpdatePatch) {
+  return SAVED_JOB_ANALYSIS_SCHEMA.parse({
+    ...analysis,
+    ...(patch.displayName !== undefined ? { displayName: patch.displayName } : {}),
+    ...(patch.notes !== undefined ? { notes: patch.notes } : {}),
+  });
+}
+
 function buildSavedAnalysis(jobDescription: string, result: JobAnalysisResult): SavedJobAnalysis {
   return {
     ...result,
@@ -89,6 +98,24 @@ export function createLocalAnalysisRepository(): AnalysisRepository {
 
     async getById(id) {
       return readPersistedAnalyses(getStorage()).find((analysis) => analysis.id === id) ?? null;
+    },
+
+    async update(id, patch) {
+      const storage = getStorage();
+      const existingAnalyses = readPersistedAnalyses(storage);
+      const index = existingAnalyses.findIndex((analysis) => analysis.id === id);
+
+      if (index < 0) {
+        return null;
+      }
+
+      const updatedAnalysis = applyAnalysisPatch(existingAnalyses[index], patch);
+      const nextAnalyses = [...existingAnalyses];
+      nextAnalyses[index] = updatedAnalysis;
+
+      writePersistedAnalyses(storage, nextAnalyses);
+
+      return updatedAnalysis;
     },
 
     async delete(id) {

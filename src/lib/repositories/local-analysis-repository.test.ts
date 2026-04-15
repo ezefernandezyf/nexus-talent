@@ -42,10 +42,41 @@ describe("createLocalAnalysisRepository", () => {
     expect(localStorage.getItem(ANALYSIS_HISTORY_STORAGE_KEY)).toBe("[]");
   });
 
+  it("updates editable metadata without changing the stored analysis payload", async () => {
+    const repository = createLocalAnalysisRepository();
+    const saved = await repository.save("Senior React engineer", buildResult("Summary", "Subject"));
+
+    const updated = await repository.update(saved.id, {
+      displayName: "Frontend lead",
+      notes: "Prioritize product polish",
+    });
+
+    expect(updated).toEqual({
+      ...saved,
+      displayName: "Frontend lead",
+      notes: "Prioritize product polish",
+    });
+    expect(await repository.getById(saved.id)).toEqual(updated);
+    expect(await repository.getAll()).toEqual([updated]);
+    expect(updated).not.toHaveProperty("matchIndex");
+  });
+
   it("returns null for missing analysis ids", async () => {
     const repository = createLocalAnalysisRepository();
 
     expect(await repository.getById("550e8400-e29b-41d4-a716-446655440000")).toBeNull();
+  });
+
+  it("returns null when updating a missing analysis", async () => {
+    const repository = createLocalAnalysisRepository();
+
+    expect(
+      await repository.update("550e8400-e29b-41d4-a716-446655440000", {
+        displayName: "Missing analysis",
+        notes: "Should not persist",
+      }),
+    ).toBeNull();
+    expect(localStorage.getItem(ANALYSIS_HISTORY_STORAGE_KEY)).toBeNull();
   });
 
   it("returns analyses in descending createdAt order", async () => {

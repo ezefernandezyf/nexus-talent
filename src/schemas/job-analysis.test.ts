@@ -71,6 +71,8 @@ describe("job analysis schemas", () => {
         id: "550e8400-e29b-41d4-a716-446655440000",
         createdAt: "2026-04-05T12:00:00.000Z",
         jobDescription: "Senior React engineer needed for a product team.",
+        displayName: "Frontend Lead",
+        notes: "Keep the outreach message focused on product impact.",
         summary: "A focused role for building modern product experiences.",
         skillGroups: [
           {
@@ -87,6 +89,8 @@ describe("job analysis schemas", () => {
       id: "550e8400-e29b-41d4-a716-446655440000",
       createdAt: "2026-04-05T12:00:00.000Z",
       jobDescription: "Senior React engineer needed for a product team.",
+      displayName: "Frontend Lead",
+      notes: "Keep the outreach message focused on product impact.",
       summary: "A focused role for building modern product experiences.",
       skillGroups: [
         {
@@ -125,6 +129,29 @@ describe("job analysis schemas", () => {
         id: "550e8400-e29b-41d4-a716-446655440000",
         createdAt: "not-an-iso-date",
         jobDescription: "Senior React engineer needed for a product team.",
+        summary: "A focused role for building modern product experiences.",
+        skillGroups: [
+          {
+            category: "Core stack",
+            skills: [{ name: "React", level: "core" }],
+          },
+        ],
+        outreachMessage: {
+          subject: "Interest in the role",
+          body: "Hi team,\n\nI would love to discuss the opportunity.\n\nBest,\n[Your Name]",
+        },
+      }),
+    ).toThrowError();
+  });
+
+  it("rejects saved analyses with malformed editable metadata", () => {
+    expect(() =>
+      SAVED_JOB_ANALYSIS_SCHEMA.parse({
+        id: "550e8400-e29b-41d4-a716-446655440000",
+        createdAt: "2026-04-05T12:00:00.000Z",
+        jobDescription: "Senior React engineer needed for a product team.",
+        displayName: 123,
+        notes: "Valid note",
         summary: "A focused role for building modern product experiences.",
         skillGroups: [
           {

@@ -118,6 +118,14 @@ export const SAVED_JOB_ANALYSIS_SCHEMA = JOB_ANALYSIS_RESULT_SCHEMA.extend({
   id: z.string().uuid({ error: "El identificador del historial es obligatorio." }),
   createdAt: z.string().datetime({ error: "La fecha de creación debe ser una fecha ISO válida." }),
   jobDescription: JOB_ANALYSIS_INPUT_SCHEMA.shape.jobDescription,
+  displayName: z
+    .string({ error: "El nombre visible del guardado debe ser texto válido." })
+    .trim()
+    .optional(),
+  notes: z
+    .string({ error: "Las notas del guardado deben ser texto válido." })
+    .trim()
+    .optional(),
 }).strict();
 
 export type JobAnalysisSkill = z.infer<typeof JOB_ANALYSIS_SKILL_SCHEMA>;

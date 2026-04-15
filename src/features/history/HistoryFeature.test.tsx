@@ -48,6 +48,7 @@ describe("HistoryFeature", () => {
       save: vi.fn(async () => createAnalysis()),
       getAll: vi.fn(() => deferred.promise),
       getById: vi.fn(async () => null),
+      update: vi.fn(async () => null),
       delete: vi.fn(async () => undefined),
     };
     const queryClient = new QueryClient({
@@ -75,6 +76,7 @@ describe("HistoryFeature", () => {
       save: vi.fn(async () => createAnalysis()),
       getAll: vi.fn(async () => []),
       getById: vi.fn(async () => null),
+      update: vi.fn(async () => null),
       delete: vi.fn(async () => undefined),
     };
     const queryClient = new QueryClient({
@@ -115,6 +117,7 @@ describe("HistoryFeature", () => {
         },
       ]),
       getById: vi.fn(async () => null),
+      update: vi.fn(async () => null),
       delete: vi.fn(async () => undefined),
     };
     const queryClient = new QueryClient({
@@ -146,6 +149,7 @@ describe("HistoryFeature", () => {
         throw new Error("Repository unavailable");
       }),
       getById: vi.fn(async () => null),
+      update: vi.fn(async () => null),
       delete: vi.fn(async () => undefined),
     };
     const queryClient = new QueryClient({
@@ -173,6 +177,7 @@ describe("HistoryFeature", () => {
       save: vi.fn(async () => analyses[0]),
       getAll: vi.fn(async () => [...analyses]),
       getById: vi.fn(async (id) => analyses.find((analysis) => analysis.id === id) ?? null),
+      update: vi.fn(async () => null),
       delete: vi.fn(async (id) => {
         const index = analyses.findIndex((analysis) => analysis.id === id);
         if (index >= 0) {
@@ -219,6 +224,7 @@ describe("HistoryFeature", () => {
       save: vi.fn(async () => analyses[0]),
       getAll: vi.fn(async () => [...analyses]),
       getById: vi.fn(async (id) => analyses.find((analysis) => analysis.id === id) ?? null),
+      update: vi.fn(async () => null),
       delete: vi.fn(async (id) => {
         const index = analyses.findIndex((analysis) => analysis.id === id);
         if (index >= 0) {

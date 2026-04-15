@@ -7,7 +7,13 @@ interface UseAnalysisByIdOptions {
   scope?: AnalysisPersistenceScope;
 }
 
+export const ANALYSIS_BY_ID_QUERY_KEY = ["analysis-detail"] as const;
+
 const defaultRepository = createLocalAnalysisRepository();
+
+export function getAnalysisByIdQueryKey(scope: AnalysisPersistenceScope, analysisId: string) {
+  return [...ANALYSIS_BY_ID_QUERY_KEY, scope, analysisId] as const;
+}
 
 export function useAnalysisById(analysisId: string | undefined, options: UseAnalysisByIdOptions = {}) {
   const repository = options.repository ?? defaultRepository;
@@ -15,7 +21,7 @@ export function useAnalysisById(analysisId: string | undefined, options: UseAnal
 
   const query = useQuery<SavedJobAnalysis | null>({
     enabled: Boolean(analysisId),
-    queryKey: ["analysis-detail", scope, analysisId ?? "missing"],
+    queryKey: getAnalysisByIdQueryKey(scope, analysisId ?? "missing"),
     queryFn: async () => {
       if (!analysisId) {
         return null;
