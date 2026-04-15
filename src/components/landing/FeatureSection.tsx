@@ -17,7 +17,7 @@ export function FeatureSection() {
   return (
     <section id="features" className="py-24 px-8 max-w-screen-2xl mx-auto">
       <div className="flex flex-col md:flex-row gap-12 items-start">
-        <div className="md:w-1/3 sticky top-24">
+        <div className="md:w-1/3 md:sticky md:top-24">
           <h2 className="font-label text-sm text-primary mb-4" style={{}}>01 // SISTEMA CORE</h2>
           <h3 className="text-4xl font-bold tracking-tight mb-6" style={{}}>Arquitectura de Decisión.</h3>
           <p className="text-on-surface-variant leading-relaxed mb-8" style={{}}>
@@ -38,7 +38,7 @@ export function FeatureSection() {
             </li>
           </ul>
         </div>
-        <div className="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
           <FeatureCard title="Integración con IDE" copy="Extrae información directamente de tus repositorios locales. Sin copiar y pegar código sensible." icon="terminal" />
           <FeatureCard title="Refactor de CV" copy="Transformamos tu experiencia en bullets points de alto impacto orientados a logros técnicos medibles." icon="auto_awesome" />
           <FeatureCard title="Postulación en un Click" copy="Generamos el cover letter y el perfil optimizado en el formato que los ATS de las Big Tech aman." icon="data_object" />
