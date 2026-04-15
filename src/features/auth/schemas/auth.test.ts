@@ -9,7 +9,11 @@ describe("auth schemas", () => {
   });
 
   it("accepts valid signup payloads", () => {
-    const result = signupSchema.safeParse({ email: "ana@empresa.com", password: "secure-password" });
+    const result = signupSchema.safeParse({
+      email: "ana@empresa.com",
+      password: "secure-password",
+      confirmPassword: "secure-password",
+    });
 
     expect(result.success).toBe(true);
   });
