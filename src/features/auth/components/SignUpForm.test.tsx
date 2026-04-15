@@ -94,6 +94,26 @@ describe("SignUpForm", () => {
 
     await waitFor(() => expect(screen.getByText(/el email debe ser válido/i)).toBeInTheDocument());
     expect(screen.getByText(/la contraseña debe tener al menos 6 caracteres/i)).toBeInTheDocument();
+    expect(screen.getByText(/la confirmación de contraseña debe tener al menos 6 caracteres/i)).toBeInTheDocument();
+  });
+
+  it("blocks signup when the passwords do not match", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient(null);
+
+    render(
+      <AuthProvider client={client}>
+        <SignUpForm />
+      </AuthProvider>,
+    );
+
+    await user.type(screen.getByLabelText(/email/i), "ana@empresa.com");
+    await user.type(screen.getByLabelText(/^contraseña$/i), "secure-password");
+    await user.type(screen.getByLabelText(/confirmar contraseña/i), "different-password");
+    await user.click(screen.getByRole("button", { name: /crear cuenta/i }));
+
+    await waitFor(() => expect(screen.getByText(/las contraseñas deben coincidir/i)).toBeInTheDocument());
+    expect(client.auth.signUp).not.toHaveBeenCalled();
   });
 
   it("surfaces existing-email signup errors", async () => {
@@ -107,7 +127,8 @@ describe("SignUpForm", () => {
     );
 
     await user.type(screen.getByLabelText(/email/i), "ana@empresa.com");
-    await user.type(screen.getByLabelText(/contraseña/i), "secure-password");
+    await user.type(screen.getByLabelText(/^contraseña$/i), "secure-password");
+    await user.type(screen.getByLabelText(/confirmar contraseña/i), "secure-password");
     await user.click(screen.getByRole("button", { name: /crear cuenta/i }));
 
     await waitFor(() => expect(screen.getByText(/user already registered/i)).toBeInTheDocument());
@@ -156,7 +177,8 @@ describe("SignUpForm", () => {
     await screen.findByLabelText(/email/i);
 
     await user.type(screen.getByLabelText(/email/i), "ana@empresa.com");
-    await user.type(screen.getByLabelText(/contraseña/i), "secure-password");
+    await user.type(screen.getByLabelText(/^contraseña$/i), "secure-password");
+    await user.type(screen.getByLabelText(/confirmar contraseña/i), "secure-password");
     await user.click(screen.getByRole("button", { name: /crear cuenta/i }));
 
     await waitFor(() => expect(screen.getByText("Private Shell")).toBeInTheDocument());

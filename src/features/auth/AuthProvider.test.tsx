@@ -240,4 +240,5 @@ describe("AuthProvider", () => {
 
     expect(screen.getByTestId("error")).toHaveTextContent("no-error");
   });
+
 });

@@ -57,7 +57,7 @@ export function getLocation(user: User | null) {
 export function getLinkedAccounts(user: User | null): LinkedAccountSnapshot[] {
   const connectedProviders = getIdentityProviders(user);
 
-  return (["github", "google", "linkedin"] as const).map((provider) => {
+  return (["github", "google"] as const).map((provider) => {
     const config = getOAuthProviderConfig(provider);
 
     return {

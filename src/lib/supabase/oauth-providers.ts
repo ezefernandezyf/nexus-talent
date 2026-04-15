@@ -1,6 +1,6 @@
-export type OAuthProviderKey = "github" | "google" | "linkedin";
+export type OAuthProviderKey = "github" | "google";
 
-type SupabaseOAuthProvider = "github" | "google" | "linkedin_oidc";
+type SupabaseOAuthProvider = "github" | "google";
 
 export interface OAuthProviderConfig {
   enabled: boolean;
@@ -18,11 +18,6 @@ const OAUTH_PROVIDERS: Record<OAuthProviderKey, OAuthProviderConfig> = {
     enabled: true,
     label: "Google",
     provider: "google",
-  },
-  linkedin: {
-    enabled: false,
-    label: "LinkedIn",
-    provider: "linkedin_oidc",
   },
 };
 

@@ -65,9 +65,6 @@ export function AuthShell({ children, mode }: AuthShellProps) {
 
       <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 sm:px-8">
         <div className="text-xl font-bold tracking-tighter text-on-surface font-headline">Nexus Talent</div>
-        <button className="text-on-surface-variant transition-colors hover:text-primary" type="button">
-          <span aria-hidden="true">help_outline</span>
-        </button>
       </header>
 
       <div className="relative z-10 flex flex-1 items-center justify-center px-6 pb-24 pt-4 sm:px-8">
