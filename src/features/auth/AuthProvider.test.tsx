@@ -119,6 +119,9 @@ function AuthProbe() {
       <button type="button" onClick={() => signInWithOAuth("github")}>
         GitHub OAuth
       </button>
+      <button type="button" onClick={() => signInWithOAuth("linkedin") }>
+        LinkedIn OAuth
+      </button>
       <button type="button" onClick={() => signOut()}>
         Cerrar sesión
       </button>
@@ -239,5 +242,23 @@ describe("AuthProvider", () => {
     );
 
     expect(screen.getByTestId("error")).toHaveTextContent("no-error");
+  });
+
+  it("surfaces a clear error when an oauth provider is disabled", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient();
+
+    render(
+      <AuthProvider client={client}>
+        <AuthProbe />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("unauthenticated"));
+
+    await user.click(screen.getByRole("button", { name: /linkedin oauth/i }));
+
+    expect(client.auth.signInWithOAuth).not.toHaveBeenCalledWith(expect.objectContaining({ provider: "linkedin_oidc" }));
+    await waitFor(() => expect(screen.getByTestId("error")).toHaveTextContent(/linkedin no está habilitado/i));
   });
 });

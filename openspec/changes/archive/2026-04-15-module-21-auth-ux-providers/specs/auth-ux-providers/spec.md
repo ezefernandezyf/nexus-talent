@@ -1,15 +1,6 @@
-# Delta for Auth
+# Delta for Auth UX and Social Providers
 
 ## ADDED Requirements
-
-### Requirement: Admin Exposure in Auth Context
-The authentication context MUST expose the boolean `isAdmin` derived from the user session.
-
-#### Scenario: Providing admin flag
-- GIVEN a valid Supabase Auth session
-- WHEN the `AuthProvider` initializes or updates state
-- THEN it MUST evaluate `user.user_metadata.role === 'admin'` (or equivalent)
-- AND expose `isAdmin` in the `AuthContextValue`
 
 ### Requirement: Signup Must Confirm Password
 
@@ -62,3 +53,9 @@ GitHub, Google, and LinkedIn provider availability MUST be represented clearly s
 - WHEN the provider list is rendered
 - THEN LinkedIn MUST remain disabled or hidden according to the current config
 - AND the code MUST not claim social login is fully available
+
+## Acceptance Criteria
+- Signup blocks password mismatches before account creation.
+- OAuth buttons are legible in light mode.
+- The auth shell no longer shows placeholder help text.
+- Provider enablement behavior is explicit and aligned with Supabase configuration.
