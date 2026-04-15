@@ -11,8 +11,8 @@ interface HistoryListProps {
 
 export function HistoryList({ analyses, isDeletingId, onDelete, totalPages, visibleCount }: HistoryListProps) {
   return (
-    <div className="space-y-3" aria-label="Historial de análisis" role="list">
-      <div className="grid grid-cols-1 px-4 py-2 text-[10px] font-label uppercase tracking-widest text-on-surface-variant/50 lg:grid-cols-12">
+    <div className="space-y-2.5 sm:space-y-3" aria-label="Historial de análisis" role="list">
+      <div className="hidden grid-cols-1 px-4 py-2 text-[10px] font-label uppercase tracking-widest text-on-surface-variant/50 lg:grid">
         <div className="lg:col-span-4">Compañía / ID</div>
         <div className="lg:col-span-3">Rol Aplicado</div>
         <div className="lg:col-span-2">Fecha</div>
@@ -29,7 +29,7 @@ export function HistoryList({ analyses, isDeletingId, onDelete, totalPages, visi
         />
       ))}
 
-      <div className="mt-8 flex items-center justify-between border-t border-outline-variant/15 pt-4">
+      <div className="mt-6 flex flex-col gap-3 border-t border-outline-variant/15 pt-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/40">
           Mostrando {visibleCount} de {analyses.length} Ejecuciones
         </p>

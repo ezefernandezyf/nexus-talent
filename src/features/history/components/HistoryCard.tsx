@@ -40,7 +40,7 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
 
   return (
     <article
-      className="group relative grid grid-cols-1 items-center rounded-xl border border-transparent bg-surface-container-low/40 px-4 py-4 transition-all duration-200 hover:border-outline-variant/10 hover:bg-surface-container lg:grid-cols-12"
+      className="group relative grid grid-cols-1 items-center gap-4 rounded-xl border border-transparent bg-surface-container-low/40 px-4 py-4 transition-all duration-200 hover:border-outline-variant/10 hover:bg-surface-container sm:px-5 sm:py-5 lg:grid-cols-12 lg:gap-0"
       aria-labelledby={`history-title-${analysis.id}`}
       role="listitem"
       tabIndex={0}
@@ -53,7 +53,7 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
         <span className="sr-only">Abrir detalle</span>
       </Link>
 
-      <div className="lg:col-span-4 flex items-center gap-4">
+      <div className="flex items-center gap-4 lg:col-span-4">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-outline-variant/20 bg-surface-container-lowest">
           <span className="material-symbols-outlined text-primary" aria-hidden="true">
             {iconName}
@@ -65,17 +65,17 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
         </div>
       </div>
 
-      <div className="lg:col-span-3 mt-3 lg:mt-0">
+      <div className="lg:col-span-3 lg:mt-0">
         <span className="rounded-full border border-outline-variant/10 bg-surface-container-highest/50 px-3 py-1 font-label text-[11px] text-on-surface-variant">
           {roleLabel}
         </span>
       </div>
 
-      <div className="lg:col-span-2 text-xs text-on-surface-variant text-left lg:text-right mt-2 lg:mt-0">
+      <div className="text-left text-xs text-on-surface-variant lg:col-span-2 lg:text-right">
         {formatHistoryCardDate(analysis.createdAt)}
       </div>
 
-      <div className="lg:col-span-2 text-right mt-2 lg:mt-0">
+      <div className="text-right lg:col-span-2">
         <div className="flex flex-col items-end gap-1">
           <span className={`text-lg font-bold font-headline ${matchValueClassName}`}>
             {matchPercentage}
@@ -87,10 +87,10 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
         </div>
       </div>
 
-      <div className="relative z-10 lg:col-span-1 flex justify-end mt-3 lg:mt-0">
+      <div className="relative z-10 flex justify-end lg:col-span-1 lg:justify-end">
         <Button
           aria-label={`Eliminar ${companyLabel}`}
-          className="opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 focus-visible:ring-2 focus-visible:ring-primary/40"
+          className="opacity-100 transition-opacity focus:opacity-100 focus-visible:ring-2 focus-visible:ring-primary/40 lg:opacity-0 lg:group-hover:opacity-100"
           disabled={isDeleting}
           type="button"
           variant="secondary"
