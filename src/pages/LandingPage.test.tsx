@@ -25,6 +25,7 @@ describe("LandingPage", () => {
     expect(screen.getByRole("heading", { name: /menos aplicaciones, más entrevistas\./i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /empieza ahora gratis/i })).toHaveAttribute("href", "/auth/sign-up");
     expect(screen.getByRole("button", { name: /abrir menú/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /nexus talent/i })).toHaveAttribute("href", "/");
     expect(screen.getByRole("link", { name: /^ingresar$/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /crear cuenta/i })).toBeInTheDocument();
     expect(screen.getByText("© 2026 Nexus talent. Built for the machine era.")).toBeInTheDocument();
@@ -33,5 +34,8 @@ describe("LandingPage", () => {
     const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });
     expect(within(drawer).getAllByRole("link", { name: "Ingresar" }).map((element) => element.getAttribute("href"))).toContain("/auth/sign-in");
     expect(within(drawer).getAllByRole("link", { name: "Crear cuenta" }).map((element) => element.getAttribute("href"))).toContain("/auth/sign-up");
+
+    await user.click(within(drawer).getByRole("button", { name: /cerrar menú/i }));
+    expect(screen.queryByRole("dialog", { name: "Nexus Talent" })).not.toBeInTheDocument();
   });
 });
