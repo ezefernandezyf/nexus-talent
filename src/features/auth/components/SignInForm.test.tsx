@@ -133,6 +133,26 @@ describe("SignInForm", () => {
     );
   });
 
+  it("starts linkedin oauth from the sign-in entry point", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient(null);
+
+    render(
+      <AuthProvider client={client}>
+        <SignInForm />
+      </AuthProvider>,
+    );
+
+    await user.click(screen.getByRole("button", { name: /ingresar con linkedin/i }));
+
+    await waitFor(() =>
+      expect(client.auth.signInWithOAuth).toHaveBeenCalledWith({
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+        provider: "linkedin_oidc",
+      }),
+    );
+  });
+
   it("surfaces oauth errors without breaking the password form", async () => {
     const user = userEvent.setup();
     const client = createAuthClient("GitHub is temporarily unavailable");

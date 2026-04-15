@@ -244,7 +244,7 @@ describe("AuthProvider", () => {
     expect(screen.getByTestId("error")).toHaveTextContent("no-error");
   });
 
-  it("surfaces a clear error when an oauth provider is disabled", async () => {
+  it("starts the linkedin oauth flow through the shared auth entry point", async () => {
     const user = userEvent.setup();
     const client = createAuthClient();
 
@@ -258,7 +258,12 @@ describe("AuthProvider", () => {
 
     await user.click(screen.getByRole("button", { name: /linkedin oauth/i }));
 
-    expect(client.auth.signInWithOAuth).not.toHaveBeenCalledWith(expect.objectContaining({ provider: "linkedin_oidc" }));
-    await waitFor(() => expect(screen.getByTestId("error")).toHaveTextContent(/linkedin no está habilitado/i));
+    await waitFor(() =>
+      expect(client.auth.signInWithOAuth).toHaveBeenCalledWith({
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+        provider: "linkedin_oidc",
+      }),
+    );
+    expect(screen.getByTestId("error")).toHaveTextContent("no-error");
   });
 });

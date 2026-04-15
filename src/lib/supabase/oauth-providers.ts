@@ -20,7 +20,7 @@ const OAUTH_PROVIDERS: Record<OAuthProviderKey, OAuthProviderConfig> = {
     provider: "google",
   },
   linkedin: {
-    enabled: false,
+    enabled: true,
     label: "LinkedIn",
     provider: "linkedin_oidc",
   },

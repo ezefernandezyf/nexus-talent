@@ -2,13 +2,13 @@ import { describe, expect, it } from "vitest";
 import { getEnabledOAuthProviders, getOAuthProviderConfig } from "./oauth-providers";
 
 describe("oauth-providers", () => {
-  it("exposes github and google only in the enabled provider list", () => {
-    expect(getEnabledOAuthProviders().map((provider) => provider.provider)).toEqual(["github", "google"]);
+  it("exposes github, google, and linkedin in the enabled provider list", () => {
+    expect(getEnabledOAuthProviders().map((provider) => provider.provider)).toEqual(["github", "google", "linkedin_oidc"]);
   });
 
-  it("keeps linkedin disabled until its configuration is verified", () => {
+  it("keeps linkedin mapped to the oidc provider", () => {
     expect(getOAuthProviderConfig("linkedin")).toMatchObject({
-      enabled: false,
+      enabled: true,
       label: "LinkedIn",
       provider: "linkedin_oidc",
     });

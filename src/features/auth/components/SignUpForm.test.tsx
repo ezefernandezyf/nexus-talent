@@ -154,6 +154,26 @@ describe("SignUpForm", () => {
     );
   });
 
+  it("starts linkedin oauth from the sign-up entry point", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient(null);
+
+    render(
+      <AuthProvider client={client}>
+        <SignUpForm />
+      </AuthProvider>,
+    );
+
+    await user.click(screen.getByRole("button", { name: /continuar con linkedin/i }));
+
+    await waitFor(() =>
+      expect(client.auth.signInWithOAuth).toHaveBeenCalledWith({
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+        provider: "linkedin_oidc",
+      }),
+    );
+  });
+
   it("redirects into the private shell after a successful signup", async () => {
     const user = userEvent.setup();
     const client = createAuthClient(null);
