@@ -63,6 +63,22 @@ export function createAnalysisRepository(options: CreateAnalysisRepositoryOption
     })),
     getAll: vi.fn(async () => analyses),
     getById: vi.fn(async (id) => analyses.find((analysis) => analysis.id === id) ?? null),
+    update: vi.fn(async (id, patch) => {
+      const index = analyses.findIndex((analysis) => analysis.id === id);
+
+      if (index < 0) {
+        return null;
+      }
+
+      const nextAnalysis = {
+        ...analyses[index],
+        ...(patch.displayName !== undefined ? { displayName: patch.displayName } : {}),
+        ...(patch.notes !== undefined ? { notes: patch.notes } : {}),
+      };
+
+      analyses[index] = nextAnalysis;
+      return nextAnalysis;
+    }),
     delete: vi.fn(async () => undefined),
     ...options.overrides,
   };

@@ -72,4 +72,27 @@ describe("HistoryCard", () => {
 
     expect(onDelete).toHaveBeenCalledWith(analysis.id);
   });
+
+  it("prefers the persisted display name when available", () => {
+    const onDelete = vi.fn();
+
+    render(
+      <MemoryRouter>
+        <HistoryCard
+          analysis={{
+            ...analysis,
+            displayName: "Frontend Lead",
+          }}
+          iconName="apartment"
+          onDelete={onDelete}
+        />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByRole("listitem", { name: "Frontend Lead" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /abrir detalle de frontend lead/i })).toHaveAttribute(
+      "href",
+      `/app/history/${analysis.id}`,
+    );
+  });
 });

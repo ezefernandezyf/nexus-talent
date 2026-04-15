@@ -14,8 +14,10 @@ export function getHistoryCardTitle(analysis: Pick<SavedJobAnalysis, "jobDescrip
   return fallbackTitle ?? "Vacante sin título";
 }
 
-export function getHistoryCompanyLabel(analysis: Pick<SavedJobAnalysis, "jobDescription">) {
-  return getHistoryCardTitle(analysis);
+export function getHistoryCompanyLabel(analysis: Pick<SavedJobAnalysis, "displayName" | "jobDescription">) {
+  const displayName = analysis.displayName?.trim();
+
+  return displayName && displayName.length > 0 ? displayName : getHistoryCardTitle(analysis);
 }
 
 export function getHistoryRoleLabel(analysis: Pick<SavedJobAnalysis, "skillGroups" | "jobDescription">) {

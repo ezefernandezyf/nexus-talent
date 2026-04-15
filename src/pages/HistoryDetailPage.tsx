@@ -3,9 +3,11 @@ import { Link, useParams } from "react-router-dom";
 import { FeaturePageShell, PageHeader } from "../components/ui";
 import { useAnalysisRepository } from "../features/analysis/hooks/useAnalysisRepository";
 import { useAnalysisById } from "../features/analysis/hooks/useAnalysisById";
+import { HistoryDetailEditor } from "../features/history/components";
+import { useUpdateAnalysis } from "../features/history/hooks";
 import {
   formatHistoryCardDate,
-  getHistoryCardTitle,
+  getHistoryCompanyLabel,
   getHistoryRoleLabel,
   getHistoryUid,
   getTopHistorySkills,
@@ -24,6 +26,7 @@ export function HistoryDetailPage() {
   const { analysisId } = useParams<{ analysisId: string }>();
   const { repository, scope } = useAnalysisRepository();
   const historyQuery = useAnalysisById(analysisId, { repository, scope });
+  const updateMutation = useUpdateAnalysis({ repository, scope });
 
   if (historyQuery.isPending) {
     return (
@@ -49,7 +52,7 @@ export function HistoryDetailPage() {
   }
 
   const analysis = historyQuery.analysis;
-  const analysisTitle = getHistoryCardTitle(analysis);
+  const displayLabel = getHistoryCompanyLabel(analysis);
   const roleLabel = getHistoryRoleLabel(analysis);
   const uidLabel = getHistoryUid(analysis);
   const topSkills = getTopHistorySkills(analysis);
@@ -62,11 +65,28 @@ export function HistoryDetailPage() {
             Volver al historial
           </Link>
         }
-        description={`${analysisTitle} · ${roleLabel} · ${formatHistoryCardDate(analysis.createdAt)} · ${uidLabel}`}
+        description={`${displayLabel} · ${roleLabel} · ${formatHistoryCardDate(analysis.createdAt)} · ${uidLabel}`}
         title="Detalle del análisis"
       />
 
       <div className="grid gap-6">
+        <HistoryDetailEditor
+          analysis={analysis}
+          errorMessage={updateMutation.error?.message ?? null}
+          isLoading={historyQuery.isPending}
+          isPending={updateMutation.isPending}
+          successMessage={updateMutation.isSuccess ? "Cambios guardados correctamente." : null}
+          onSubmit={async (payload) => {
+            await updateMutation.updateAnalysisAsync({
+              analysisId: analysis.id,
+              patch: {
+                displayName: payload.displayName,
+                notes: payload.notes,
+              },
+            });
+          }}
+        />
+
         <DetailSection title="Resumen">
           <p className="text-base leading-8 text-on-surface-variant">{analysis.summary}</p>
         </DetailSection>
