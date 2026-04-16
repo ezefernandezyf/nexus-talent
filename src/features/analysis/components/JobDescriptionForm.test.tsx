@@ -63,9 +63,13 @@ describe("JobDescriptionForm", () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
 
+    document.documentElement.dataset.theme = "light";
     render(<JobDescriptionForm isPending={false} onSubmit={onSubmit} />);
 
     expect(screen.getByLabelText(/tono del mensaje/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/tono del mensaje/i).closest(".field-surface")).toBeInTheDocument();
+    expect(screen.getByLabelText(/url de github/i).closest(".field-surface")).toBeInTheDocument();
+    expect(screen.getByText(/ctrl\+v/i)).toBeInTheDocument();
 
     await user.type(screen.getByLabelText(/descripción del puesto/i), "Ingeniero React senior con TypeScript");
     await user.click(screen.getByRole("button", { name: /analizar con ia/i }));
@@ -75,5 +79,7 @@ describe("JobDescriptionForm", () => {
         jobDescription: "Ingeniero React senior con TypeScript",
       }),
     );
+
+    document.documentElement.dataset.theme = "dark";
   });
 });

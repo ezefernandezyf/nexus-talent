@@ -66,6 +66,72 @@ describe("useJobAnalysis", () => {
     expect(repository.save).toHaveBeenCalledTimes(1);
   });
 
+  it("discards late results from a previous vacancy and keeps the active vacancy visible", async () => {
+    const firstDeferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
+    const secondDeferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
+    const client: JobAnalysisClient = {
+      analyzeJobDescription: vi
+        .fn()
+        .mockImplementationOnce(() => firstDeferred.promise)
+        .mockImplementationOnce(() => secondDeferred.promise),
+    };
+    const repository = createAnalysisRepository();
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useJobAnalysis({ client, repository }), { wrapper });
+
+    result.current.submitAnalysis(createAnalysisRequest({ jobDescription: "Vacancy A" }));
+
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+
+    result.current.submitAnalysis(createAnalysisRequest({ jobDescription: "Vacancy B" }));
+
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+
+    firstDeferred.resolve({
+      summary: "Resultado antiguo para la vacante A.",
+      skillGroups: [
+        {
+          category: "Stack principal",
+          skills: [{ name: "React", level: "core" }],
+        },
+      ],
+      outreachMessage: {
+        subject: "Vacancy A",
+        body: "A",
+      },
+    });
+
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+    expect(result.current.data).toBeUndefined();
+    expect(repository.save).not.toHaveBeenCalledWith(
+      "Vacancy A",
+      expect.objectContaining({ summary: "Resultado antiguo para la vacante A." }),
+    );
+
+    secondDeferred.resolve({
+      summary: "Resultado vigente para la vacante B.",
+      skillGroups: [
+        {
+          category: "Stack principal",
+          skills: [{ name: "TypeScript", level: "strong" }],
+        },
+      ],
+      outreachMessage: {
+        subject: "Vacancy B",
+        body: "B",
+      },
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(result.current.data?.summary).toContain("vacante B");
+    expect(repository.save).toHaveBeenCalledTimes(1);
+    expect(repository.save).toHaveBeenCalledWith(
+      "Vacancy B",
+      expect.objectContaining({ summary: "Resultado vigente para la vacante B." }),
+    );
+  });
+
   it("surfaces network failures", async () => {
     const client: JobAnalysisClient = {
       analyzeJobDescription: vi.fn(async () => {
