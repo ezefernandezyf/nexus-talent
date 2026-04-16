@@ -75,6 +75,10 @@ describe("HistoryDetailPage", () => {
     renderHistoryDetailPage();
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /detalle del análisis/i })).toBeInTheDocument());
+    expect(screen.getByRole("link", { name: /rework desde este guardado/i })).toHaveAttribute(
+      "href",
+      "/app/analysis?sourceHistoryId=550e8400-e29b-41d4-a716-446655440000",
+    );
     await user.clear(screen.getByLabelText(/nombre visible del guardado/i));
     await user.type(screen.getByLabelText(/nombre visible del guardado/i), "Frontend Principal");
     await user.clear(screen.getByLabelText(/notas del guardado/i));
