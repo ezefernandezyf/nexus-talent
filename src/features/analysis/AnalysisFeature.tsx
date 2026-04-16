@@ -5,6 +5,9 @@ import type { AnalysisPersistenceScope } from "./hooks/useAnalysisRepository";
 import type { AnalysisRepository } from "../../lib/repositories";
 
 interface AnalysisFeatureProps {
+  initialGithubRepositoryUrl?: string | null;
+  initialJobDescription?: string | null;
+  initialPrefillKey?: string | null;
   repository?: AnalysisRepository;
   scope?: AnalysisPersistenceScope;
 }
@@ -72,13 +75,20 @@ function StatePanel({
   );
 }
 
-export function AnalysisFeature({ repository, scope }: AnalysisFeatureProps) {
+export function AnalysisFeature({ initialGithubRepositoryUrl, initialJobDescription, initialPrefillKey, repository, scope }: AnalysisFeatureProps) {
   const analysis = useJobAnalysis({ repository, scope });
   const errorMessage = analysis.error instanceof Error ? analysis.error.message : "No se pudo completar el análisis.";
 
   return (
     <section id="analysis" className="flex flex-col gap-6">
-      <JobDescriptionForm errorMessage={analysis.isError ? errorMessage : null} isPending={analysis.isPending} onSubmit={analysis.submitAnalysis} />
+      <JobDescriptionForm
+        errorMessage={analysis.isError ? errorMessage : null}
+        initialGithubRepositoryUrl={initialGithubRepositoryUrl}
+        initialJobDescription={initialJobDescription}
+        initialPrefillKey={initialPrefillKey}
+        isPending={analysis.isPending}
+        onSubmit={analysis.submitAnalysis}
+      />
 
       {analysis.isPending ? (
         <LoadingState />

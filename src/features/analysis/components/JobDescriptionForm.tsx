@@ -1,9 +1,12 @@
-import { useState, type FormEventHandler } from "react";
+import { useEffect, useRef, useState, type FormEventHandler } from "react";
 import { Button } from "../../../components/ui/Button";
 import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisMessageTone } from "../../../schemas/job-analysis";
 
 interface JobDescriptionFormProps {
   errorMessage?: string | null;
+  initialGithubRepositoryUrl?: string | null;
+  initialJobDescription?: string | null;
+  initialPrefillKey?: string | null;
   isPending: boolean;
   onSubmit: (request: {
     jobDescription: string;
@@ -12,11 +15,40 @@ interface JobDescriptionFormProps {
   }) => void;
 }
 
-export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDescriptionFormProps) {
-  const [jobDescription, setJobDescription] = useState("");
-  const [githubRepositoryUrl, setGithubRepositoryUrl] = useState("");
+export function JobDescriptionForm({
+  errorMessage,
+  initialGithubRepositoryUrl,
+  initialJobDescription,
+  initialPrefillKey,
+  isPending,
+  onSubmit,
+}: JobDescriptionFormProps) {
+  const [jobDescription, setJobDescription] = useState(initialJobDescription ?? "");
+  const [githubRepositoryUrl, setGithubRepositoryUrl] = useState(initialGithubRepositoryUrl ?? "");
   const [messageTone, setMessageTone] = useState<JobAnalysisMessageTone>(JOB_ANALYSIS_MESSAGE_TONE.FORMAL);
   const [localError, setLocalError] = useState<string | null>(null);
+  const appliedPrefillKeyRef = useRef<string | null>(null);
+  const lastSeenPrefillKeyRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (initialPrefillKey !== lastSeenPrefillKeyRef.current) {
+      lastSeenPrefillKeyRef.current = initialPrefillKey ?? null;
+      appliedPrefillKeyRef.current = null;
+    }
+
+    if (!initialPrefillKey || appliedPrefillKeyRef.current === initialPrefillKey) {
+      return;
+    }
+
+    if (initialJobDescription === undefined && initialGithubRepositoryUrl === undefined) {
+      return;
+    }
+
+    setJobDescription(initialJobDescription ?? "");
+    setGithubRepositoryUrl(initialGithubRepositoryUrl ?? "");
+    setLocalError(null);
+    appliedPrefillKeyRef.current = initialPrefillKey;
+  }, [initialGithubRepositoryUrl, initialJobDescription, initialPrefillKey]);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -51,6 +83,7 @@ export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDes
               name="job-description"
               value={jobDescription}
               onChange={(event) => {
+                appliedPrefillKeyRef.current = appliedPrefillKeyRef.current ?? initialPrefillKey ?? null;
                 setJobDescription(event.target.value);
                 setLocalError(null);
               }}
@@ -101,6 +134,7 @@ export function JobDescriptionForm({ errorMessage, isPending, onSubmit }: JobDes
                 name="github-repository-url"
                 value={githubRepositoryUrl}
                 onChange={(event) => {
+                  appliedPrefillKeyRef.current = appliedPrefillKeyRef.current ?? initialPrefillKey ?? null;
                   setGithubRepositoryUrl(event.target.value);
                   setLocalError(null);
                 }}

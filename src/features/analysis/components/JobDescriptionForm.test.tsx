@@ -82,4 +82,89 @@ describe("JobDescriptionForm", () => {
 
     document.documentElement.dataset.theme = "dark";
   });
+
+  it("hydrates a saved vacancy prefill once and keeps user edits", async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+
+    const { rerender } = render(
+      <JobDescriptionForm
+        initialGithubRepositoryUrl="https://github.com/acme/design-system"
+        initialJobDescription="Frontend Lead para producto"
+        initialPrefillKey="history-123"
+        isPending={false}
+        onSubmit={onSubmit}
+      />,
+    );
+
+    expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("Frontend Lead para producto");
+    expect(screen.getByLabelText(/url de github/i)).toHaveValue("https://github.com/acme/design-system");
+
+    await user.clear(screen.getByLabelText(/descripción del puesto/i));
+    await user.type(screen.getByLabelText(/descripción del puesto/i), "Reworked vacancy");
+
+    rerender(
+      <JobDescriptionForm
+        initialGithubRepositoryUrl="https://github.com/acme/other-repo"
+        initialJobDescription="Should not override edited draft"
+        initialPrefillKey="history-123"
+        isPending={false}
+        onSubmit={onSubmit}
+      />,
+    );
+
+    expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("Reworked vacancy");
+    expect(screen.getByLabelText(/url de github/i)).toHaveValue("https://github.com/acme/design-system");
+  });
+
+  it("ignores an empty saved vacancy prefill", () => {
+    const onSubmit = vi.fn();
+
+    render(
+      <JobDescriptionForm
+        initialGithubRepositoryUrl={undefined}
+        initialJobDescription={undefined}
+        initialPrefillKey="history-123"
+        isPending={false}
+        onSubmit={onSubmit}
+      />,
+    );
+
+    expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("");
+    expect(screen.getByLabelText(/url de github/i)).toHaveValue("");
+  });
+
+  it("hydrates a partial saved vacancy prefill", () => {
+    const onSubmit = vi.fn();
+
+    render(
+      <JobDescriptionForm
+        initialGithubRepositoryUrl={undefined}
+        initialJobDescription="Frontend Lead para producto"
+        initialPrefillKey="history-456"
+        isPending={false}
+        onSubmit={onSubmit}
+      />,
+    );
+
+    expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("Frontend Lead para producto");
+    expect(screen.getByLabelText(/url de github/i)).toHaveValue("");
+  });
+
+  it("hydrates a partial saved GitHub prefill", () => {
+    const onSubmit = vi.fn();
+
+    render(
+      <JobDescriptionForm
+        initialGithubRepositoryUrl="https://github.com/acme/design-system"
+        initialJobDescription={undefined}
+        initialPrefillKey="history-789"
+        isPending={false}
+        onSubmit={onSubmit}
+      />,
+    );
+
+    expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("");
+    expect(screen.getByLabelText(/url de github/i)).toHaveValue("https://github.com/acme/design-system");
+  });
 });

@@ -1,9 +1,26 @@
 import { AnalysisFeature } from "../features/analysis";
+import { useAnalysisById } from "../features/analysis/hooks/useAnalysisById";
 import { useAnalysisRepository } from "../features/analysis/hooks/useAnalysisRepository";
 import { FeaturePageShell, PageHeader } from "../components/ui";
+import { useLocation, useSearchParams } from "react-router-dom";
+
+type AnalysisReworkState = {
+  githubRepositoryUrl?: string;
+  jobDescription?: string;
+  sourceHistoryId?: string;
+};
 
 export function AnalysisPage() {
   const { repository, scope } = useAnalysisRepository();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const reworkState = location.state as AnalysisReworkState | null;
+  const sourceHistoryId = reworkState?.sourceHistoryId ?? searchParams.get("sourceHistoryId") ?? undefined;
+  const historyQuery = useAnalysisById(sourceHistoryId, { repository, scope });
+
+  const prefillJobDescription = reworkState?.jobDescription ?? historyQuery.analysis?.jobDescription ?? null;
+  const prefillGithubRepositoryUrl = reworkState?.githubRepositoryUrl ?? historyQuery.analysis?.githubEnrichment?.repositoryUrl ?? null;
+  const initialPrefillKey = sourceHistoryId ?? (prefillJobDescription ? prefillJobDescription : null);
 
   return (
     <FeaturePageShell>
@@ -12,7 +29,13 @@ export function AnalysisPage() {
           title="Nuevo Análisis de Reclutamiento"
         />
 
-        <AnalysisFeature repository={repository} scope={scope} />
+        <AnalysisFeature
+          initialGithubRepositoryUrl={prefillGithubRepositoryUrl}
+          initialJobDescription={prefillJobDescription}
+          initialPrefillKey={initialPrefillKey}
+          repository={repository}
+          scope={scope}
+        />
 
         <section className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
           <article className="flex items-start gap-4">

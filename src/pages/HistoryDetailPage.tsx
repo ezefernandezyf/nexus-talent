@@ -56,14 +56,29 @@ export function HistoryDetailPage() {
   const roleLabel = getHistoryRoleLabel(analysis);
   const uidLabel = getHistoryUid(analysis);
   const topSkills = getTopHistorySkills(analysis);
+  const reworkState = {
+    githubRepositoryUrl: analysis.githubEnrichment?.repositoryUrl ?? undefined,
+    jobDescription: analysis.jobDescription,
+    sourceHistoryId: analysis.id,
+  };
+  const reworkSearch = new URLSearchParams({ sourceHistoryId: analysis.id }).toString();
 
   return (
     <FeaturePageShell>
       <PageHeader
         action={
-          <Link className="secondary-button" to="/app/history">
-            Volver al historial
-          </Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              className="secondary-button"
+              state={reworkState}
+              to={{ pathname: "/app/analysis", search: `?${reworkSearch}` }}
+            >
+              Rework desde este guardado
+            </Link>
+            <Link className="secondary-button" to="/app/history">
+              Volver al historial
+            </Link>
+          </div>
         }
         description={`${displayLabel} · ${roleLabel} · ${formatHistoryCardDate(analysis.createdAt)} · ${uidLabel}`}
         title="Detalle del análisis"
