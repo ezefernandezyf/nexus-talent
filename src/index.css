@@ -98,6 +98,11 @@
     background: rgba(142, 213, 255, 0.3);
     color: #ffffff;
   }
+
+  html[data-theme="light"] ::selection {
+    background: rgba(11, 118, 197, 0.28);
+    color: #10131a;
+  }
 }
 
 @layer utilities {
@@ -298,9 +303,21 @@
       background-color 160ms ease;
   }
 
+  .field-surface select,
+  .field-surface option {
+    background-color: var(--color-surface-container-lowest);
+    color: var(--color-on-surface);
+  }
+
   html[data-theme="light"] .field-surface {
     color: #10131a;
     box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+  }
+
+  html[data-theme="light"] .field-surface select,
+  html[data-theme="light"] .field-surface option {
+    background-color: var(--color-surface-container-lowest);
+    color: #10131a;
   }
 
   .field-surface:focus {
