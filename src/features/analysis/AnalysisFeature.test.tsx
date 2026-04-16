@@ -85,4 +85,53 @@ describe("AnalysisFeature", () => {
     expect(screen.getByRole("button", { name: /descargar markdown/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /descargar json/i })).toBeInTheDocument();
   });
+
+  it("replaces stale output when a new vacancy starts loading", () => {
+    const state: any = {
+      data: createAnalysisResult(),
+      error: null,
+      isError: false,
+      isIdle: false,
+      isPending: false,
+      isSuccess: true,
+      status: "success",
+      submitAnalysis,
+      variables: undefined,
+      context: undefined,
+      failureCount: 0,
+      failureReason: null,
+      isPaused: false,
+      submittedAt: 0,
+      mutate: submitAnalysis,
+      mutateAsync: vi.fn(),
+      reset: vi.fn(),
+    };
+
+    vi.mocked(useJobAnalysis).mockImplementation(() => state as unknown as ReturnType<typeof useJobAnalysis>);
+
+    const { rerender } = render(<AnalysisFeature />);
+    expect(screen.getByText(/análisis estructurado de la vacante/i)).toBeInTheDocument();
+
+    state.data = undefined;
+    state.isSuccess = false;
+    state.isPending = true;
+    state.status = "pending";
+
+    rerender(<AnalysisFeature />);
+
+    expect(screen.queryByText(/análisis estructurado de la vacante/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/procesando/i)).toBeInTheDocument();
+  });
+
+  it("renders the invalid AI fallback error state", () => {
+    mockAnalysisState({
+      isError: true,
+      error: new Error("La respuesta de IA no es válida: bad payload"),
+    });
+
+    render(<AnalysisFeature />);
+
+    expect(screen.getByRole("heading", { name: /No se pudo completar la lectura/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/La respuesta de IA no es válida/i)).toHaveLength(2);
+  });
 });
