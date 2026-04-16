@@ -1,5 +1,6 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { createAIOrchestratorError, AI_ERROR_CODES } from "../../../lib/ai-errors";
 import { createJobAnalysisClient, type JobAnalysisClient } from "../../../lib/ai-client";
 import { type GitHubClient } from "../../../lib/github-client";
 import { createAnalysisRequest, createAnalysisRepository, createQueryClientWrapper } from "../../../test/factories/analysis";
@@ -34,6 +35,13 @@ function createGitHubClientStub(overrides: Partial<GitHubClient> = {}): GitHubCl
 }
 
 describe("useJobAnalysis", () => {
+  it("falls back to the built-in dependencies when no overrides are provided", () => {
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useJobAnalysis(), { wrapper });
+
+    expect(result.current.isIdle).toBe(true);
+  });
+
   it("exposes pending and success states", async () => {
     const deferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
     const client: JobAnalysisClient = {
@@ -149,6 +157,46 @@ describe("useJobAnalysis", () => {
     expect(repository.save).not.toHaveBeenCalled();
   });
 
+  it("surfaces AI orchestrator errors as-is", async () => {
+    const client: JobAnalysisClient = {
+      analyzeJobDescription: vi.fn(async () => {
+        throw createAIOrchestratorError(AI_ERROR_CODES.TRANSIENT_FAILURE, "Gateway throttled");
+      }),
+    };
+    const repository = createAnalysisRepository();
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useJobAnalysis({ client, repository }), { wrapper });
+
+    result.current.submitAnalysis(createAnalysisRequest());
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error).toMatchObject({ message: "Gateway throttled", name: "AIOrchestratorError" });
+    expect(repository.save).not.toHaveBeenCalled();
+  });
+
+  it("preserves the schema validation message when the client path throws it", async () => {
+    const client: JobAnalysisClient = {
+      analyzeJobDescription: vi.fn(async () => {
+        throw new Error("Pegá una descripción del puesto antes de ejecutar el análisis.");
+      }),
+    };
+    const repository = createAnalysisRepository();
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useJobAnalysis({ client, repository }), { wrapper });
+
+    result.current.submitAnalysis(createAnalysisRequest());
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(result.current.error?.message).toBe("Pegá una descripción del puesto antes de ejecutar el análisis.");
+
+    await expect(
+      result.current.mutateAsync(createAnalysisRequest({ jobDescription: "" })),
+    ).rejects.toThrow(/No se pudo completar el análisis/i);
+
+    expect(repository.save).not.toHaveBeenCalled();
+  });
+
   it("surfaces invalid ai payloads", async () => {
     const client = createJobAnalysisClient({
       transport: async () => ({
@@ -169,6 +217,52 @@ describe("useJobAnalysis", () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
     expect(result.current.error?.message).toContain("La respuesta de IA no es válida");
     expect(repository.save).not.toHaveBeenCalled();
+  });
+
+  it("ignores stale errors from a previous vacancy", async () => {
+    const firstDeferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
+    const secondDeferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
+    const client: JobAnalysisClient = {
+      analyzeJobDescription: vi
+        .fn()
+        .mockImplementationOnce(() => firstDeferred.promise)
+        .mockImplementationOnce(() => secondDeferred.promise),
+    };
+    const repository = createAnalysisRepository();
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useJobAnalysis({ client, repository }), { wrapper });
+
+    result.current.submitAnalysis(createAnalysisRequest({ jobDescription: "Vacancy A" }));
+
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+
+    result.current.submitAnalysis(createAnalysisRequest({ jobDescription: "Vacancy B" }));
+
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+
+    firstDeferred.reject(new Error("Old analysis failed"));
+
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+    expect(result.current.error).toBeNull();
+
+    secondDeferred.resolve({
+      summary: "Resultado vigente para la vacante B.",
+      skillGroups: [
+        {
+          category: "Stack principal",
+          skills: [{ name: "TypeScript", level: "strong" }],
+        },
+      ],
+      outreachMessage: {
+        subject: "Vacancy B",
+        body: "B",
+      },
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(result.current.data?.summary).toContain("vacante B");
+    expect(repository.save).toHaveBeenCalledTimes(1);
   });
 
   it("skips GitHub enrichment when no repository URL is provided", async () => {
@@ -202,6 +296,39 @@ describe("useJobAnalysis", () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(githubClient.lookupRepository).not.toHaveBeenCalled();
     expect(result.current.data?.githubEnrichment).toBeUndefined();
+  });
+
+  it("normalizes whitespace GitHub URLs before analysis", async () => {
+    const deferred = createDeferred<Awaited<ReturnType<JobAnalysisClient["analyzeJobDescription"]>>>();
+    const client: JobAnalysisClient = {
+      analyzeJobDescription: vi.fn(() => deferred.promise),
+    };
+    const repository = createAnalysisRepository();
+    const githubClient = createGitHubClientStub();
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useJobAnalysis({ client, repository, githubClient }), { wrapper });
+
+    result.current.submitAnalysis(createAnalysisRequest({ githubRepositoryUrl: "   " }));
+
+    await waitFor(() => expect(result.current.isPending).toBe(true));
+
+    deferred.resolve({
+      summary: "Un rol enfocado en construir experiencias de producto.",
+      skillGroups: [
+        {
+          category: "Stack principal",
+          skills: [{ name: "React", level: "core" }],
+        },
+      ],
+      outreachMessage: {
+        subject: "Interés en el puesto",
+        body: "Hola equipo,\n\nQuisiera conversar sobre la vacante.\n\nSaludos,\n[Your Name]",
+      },
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(githubClient.lookupRepository).not.toHaveBeenCalled();
+    expect(repository.save).toHaveBeenCalledTimes(1);
   });
 
   it("enriches the analysis when github lookup succeeds", async () => {
