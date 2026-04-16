@@ -31,13 +31,15 @@ export function AppLayout() {
 function AppLayoutContent() {
   const { status, user } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const history = useAnalysisHistory();
   const sessionLabel = status === AUTH_STATUS.AUTHENTICATED ? user?.email ?? "Sesión activa" : status === AUTH_STATUS.LOADING ? "Verificando acceso" : "Modo público";
   const recentAnalyses = history.analyses.slice(0, 3);
+  const isAuthenticated = status === AUTH_STATUS.AUTHENTICATED;
 
   const mobileDrawerActions =
-    status === AUTH_STATUS.AUTHENTICATED ? (
+    isAuthenticated ? (
       <div className="space-y-3">
         <div className="rounded-2xl bg-surface-container-lowest/50 px-4 py-3 text-sm leading-6 text-on-surface-variant">{sessionLabel}</div>
         <div onClick={() => setIsMobileMenuOpen(false)}>
@@ -71,7 +73,7 @@ function AppLayoutContent() {
       <div className="relative mx-auto flex min-h-screen w-full flex-col gap-6 px-4 py-4 sm:px-6 lg:px-8">
         <header className="fixed left-0 top-0 z-30 flex h-16 w-full items-center justify-between bg-surface-container-low px-6">
           <div className="flex items-center gap-8">
-            <Link className="text-xl font-bold tracking-tight text-on-surface transition-opacity hover:opacity-90" to="/app">
+            <Link className="text-xl font-bold tracking-tight text-on-surface transition-opacity hover:opacity-90" to="/">
               Nexus Talent
             </Link>
             <div className="hidden items-center gap-6 md:flex" aria-label="App primary navigation">
@@ -85,15 +87,56 @@ function AppLayoutContent() {
 
           <div className="flex items-center gap-3">
             <MobileMenuButton isOpen={isMobileMenuOpen} onClick={() => setIsMobileMenuOpen((current) => !current)} />
-            {status !== AUTH_STATUS.AUTHENTICATED ? (
+            {!isAuthenticated ? (
               <Link className="secondary-button hidden md:inline-flex" to="/auth/sign-in">
                 Iniciar sesión
               </Link>
-            ) : null}
+            ) : (
+              <div className="relative hidden md:block">
+                <button
+                  aria-controls="desktop-account-menu"
+                  aria-expanded={isDesktopMenuOpen}
+                  aria-haspopup="menu"
+                  aria-label={isDesktopMenuOpen ? "Cerrar acciones de cuenta" : "Abrir acciones de cuenta"}
+                  className="flex items-center gap-3 rounded-2xl bg-surface-container-high/70 px-4 py-3 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-white"
+                  type="button"
+                  onClick={() => setIsDesktopMenuOpen((current) => !current)}
+                >
+                  <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
+                    account_circle
+                  </span>
+                  <span className="max-w-40 truncate">{user?.email ?? "Cuenta"}</span>
+                  <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
+                    expand_more
+                  </span>
+                </button>
+
+                {isDesktopMenuOpen ? (
+                  <div
+                    aria-label="Acciones de cuenta"
+                    className="absolute right-0 top-full z-40 mt-3 w-72 rounded-3xl bg-surface-container-high p-3 shadow-2xl shadow-black/30 ring-1 ring-white/5"
+                    id="desktop-account-menu"
+                  >
+                    <div className="rounded-2xl bg-surface-container-lowest/70 px-4 py-3 text-sm leading-6 text-on-surface-variant">
+                      {user?.email ?? sessionLabel}
+                    </div>
+                    <div className="mt-3 space-y-2">
+                      <Link
+                        className="secondary-button w-full justify-center"
+                        to="/app/admin/settings"
+                        onClick={() => setIsDesktopMenuOpen(false)}
+                      >
+                        Settings
+                      </Link>
+                      <div onClick={() => setIsDesktopMenuOpen(false)}>
+                        <LogoutButton className="w-full justify-center" />
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            )}
             <div className="hidden items-center gap-4 md:flex">
-              {status === AUTH_STATUS.AUTHENTICATED ? (
-                <span className="text-sm font-medium text-on-surface-variant">{user?.email}</span>
-              ) : null}
               <button
                 aria-label={theme === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro"}
                 className="material-symbols-outlined rounded-full p-2 text-on-surface-variant transition-colors hover:text-primary"

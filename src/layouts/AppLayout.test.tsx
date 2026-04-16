@@ -40,10 +40,10 @@ describe("AppLayout", () => {
     );
 
     await waitFor(() => expect(screen.getByText("Analysis Content")).toBeInTheDocument());
-    expect(screen.getByRole("link", { name: "Nexus Talent" })).toHaveAttribute("href", "/app");
-    expect(screen.getAllByRole("link", { name: /análisis/i })[0]).toHaveAttribute("href", "/app/analysis");
-    expect(screen.getAllByRole("link", { name: /historial/i })[0]).toHaveAttribute("href", "/app/history");
-    expect(screen.getAllByRole("link", { name: /settings/i })[0]).toHaveAttribute("href", "/app/admin/settings");
+  expect(screen.getByRole("link", { name: "Nexus Talent" })).toHaveAttribute("href", "/");
+  expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /análisis/i })).toHaveAttribute("href", "/app/analysis");
+  expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /historial/i })).toHaveAttribute("href", "/app/history");
+  expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /settings/i })).toHaveAttribute("href", "/app/admin/settings");
     expect(screen.getByRole("link", { name: /nuevo análisis/i })).toHaveAttribute("href", "/app/analysis");
     expect(screen.queryByText("© 2026 Nexus Talent — Precision Recruiting Layer")).not.toBeInTheDocument();
 
@@ -76,6 +76,11 @@ describe("AppLayout", () => {
     await user.click(screen.getByRole("button", { name: /abrir menú/i }));
     const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });
     expect(within(drawer).getByText(/analyst@nexustalent.dev/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /abrir acciones de cuenta/i }));
+    const accountActions = screen.getByLabelText("Acciones de cuenta");
+    expect(within(accountActions).getByRole("link", { name: /settings/i })).toHaveAttribute("href", "/app/admin/settings");
+    expect(within(accountActions).getByRole("button", { name: /cerrar sesión/i })).toBeInTheDocument();
   });
 
   it("persists the theme toggle across reloads", async () => {
