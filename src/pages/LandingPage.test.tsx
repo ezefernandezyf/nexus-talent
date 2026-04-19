@@ -1,6 +1,6 @@
 import { MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitForElementToBeRemoved, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { LandingPage } from "./LandingPage";
 
@@ -17,7 +17,11 @@ describe("LandingPage", () => {
     expect(screen.getByRole("heading", { name: /de job description a postulación ganadora en segundos\./i })).toBeInTheDocument();
     expect(screen.getByText("Eficiencia Radical")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /ingresar con google/i })).toHaveAttribute("href", "/auth/sign-in");
-    expect(screen.getByRole("button", { name: /ver demo/i })).toBeInTheDocument();
+    const createAccountLinks = screen.getAllByRole("link", { name: /crear cuenta/i });
+    expect(createAccountLinks).toHaveLength(2);
+    createAccountLinks.forEach((link) => {
+      expect(link).toHaveAttribute("href", "/auth/sign-up");
+    });
     expect(screen.getByRole("heading", { name: /arquitectura de decisión\./i })).toBeInTheDocument();
     expect(screen.getByText("SKILLS_MATRIX_V4")).toBeInTheDocument();
     expect(screen.getByText("OUTREACH_GEN")).toBeInTheDocument();
@@ -27,7 +31,6 @@ describe("LandingPage", () => {
     expect(screen.getByRole("button", { name: /abrir menú/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /nexus talent/i })).toHaveAttribute("href", "/");
     expect(screen.getByRole("link", { name: /^ingresar$/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /crear cuenta/i })).toBeInTheDocument();
     expect(screen.getByText("© 2026 Nexus talent. Built for the machine era.")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /abrir menú/i }));
@@ -38,6 +41,6 @@ describe("LandingPage", () => {
     expect(within(drawer).getByRole("link", { name: /crear cuenta/i })).toHaveAttribute("href", "/auth/sign-up");
 
     await user.click(within(drawer).getByRole("button", { name: /cerrar menú/i }));
-    expect(screen.queryByRole("dialog", { name: "Nexus Talent" })).not.toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByRole("dialog", { name: "Nexus Talent" }));
   });
 });

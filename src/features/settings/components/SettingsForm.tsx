@@ -71,7 +71,7 @@ export function SettingsForm({
           <div className="space-y-2">
             <span className="label-chip">Perfil</span>
             <h3 className="text-xl font-semibold tracking-[-0.02em] text-white">Actualizá tu perfil sin salir del panel.</h3>
-            <p className="text-sm leading-6 text-on-surface-variant">Mantenemos el nombre visible editable y la ubicación como metadato de referencia.</p>
+            <p className="text-sm leading-6 text-on-surface-variant">El nombre visible sigue siendo editable y la ubicación se conserva como referencia del perfil.</p>
           </div>
         </div>
 

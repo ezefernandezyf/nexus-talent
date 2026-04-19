@@ -1,39 +1,44 @@
 import { describe, expect, it } from "vitest";
 import { createSavedAnalysis } from "../../test/factories/analysis";
 import { JOB_ANALYSIS_SKILL_LEVEL } from "../../schemas/job-analysis";
-import { getHistoryMatchPercentage, getHistoryMatchTone } from "./history-formatters";
+import {
+  formatHistoryCardDate,
+  getHistoryCardTitle,
+  getHistoryCompanyLabel,
+  getHistoryRoleLabel,
+  getHistorySummarySnippet,
+  getHistoryUid,
+  getTopHistorySkills,
+} from "./history-formatters";
 
 describe("history-formatters", () => {
-  it("applies the GitHub bonus path and all match tones", () => {
-    const baseAnalysis = createSavedAnalysis({
+  it("formats the visible history metadata helpers", () => {
+    const analysis = createSavedAnalysis({
+      displayName: "Frontend Lead",
+      jobDescription: "Frontend Engineer\nBuild resilient systems",
       skillGroups: [
         {
           category: "Core",
-          skills: [{ name: "React", level: JOB_ANALYSIS_SKILL_LEVEL.CORE }],
-        },
-        {
-          category: "Quality",
-          skills: [{ name: "Testing", level: JOB_ANALYSIS_SKILL_LEVEL.STRONG }],
+          skills: [
+            { name: "React", level: JOB_ANALYSIS_SKILL_LEVEL.CORE },
+            { name: "TypeScript", level: JOB_ANALYSIS_SKILL_LEVEL.STRONG },
+            { name: "React", level: JOB_ANALYSIS_SKILL_LEVEL.ADJACENT },
+          ],
         },
       ],
-      summary: "Short summary.",
+      summary: "A long summary that should be shortened after the requested limit is reached. It also keeps whitespace stable.",
     });
 
-    const enrichedAnalysis = createSavedAnalysis({
-      ...baseAnalysis,
-      githubEnrichment: {
-        repositoryName: "ezefernandezyf/nexus-talent",
-        repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
-        detectedStack: [{ name: "React", source: "github" }],
-      },
-    });
+    expect(getHistoryCardTitle(analysis)).toBe("Frontend Engineer");
+    expect(getHistoryCompanyLabel(analysis)).toBe("Frontend Lead");
+    expect(getHistoryRoleLabel(analysis)).toBe("Build resilient systems");
+    expect(getHistoryUid(analysis)).toMatch(/^UID: \d{5}-FE$/);
+    expect(formatHistoryCardDate("2026-04-05T12:05:00.000Z")).toMatch(/5 abr 2026/i);
+    expect(getHistorySummarySnippet("  One   two   three  ", 80)).toBe("One two three");
+    const truncatedSummary = getHistorySummarySnippet(analysis.summary, 40);
 
-    const baseScore = getHistoryMatchPercentage(baseAnalysis);
-    const enrichedScore = getHistoryMatchPercentage(enrichedAnalysis);
-
-    expect(enrichedScore).toBeGreaterThan(baseScore);
-    expect(getHistoryMatchTone(92)).toBe("primary");
-    expect(getHistoryMatchTone(81)).toBe("on-surface");
-    expect(getHistoryMatchTone(64)).toBe("muted");
+    expect(truncatedSummary).toMatch(/…$/);
+    expect(truncatedSummary).toContain("A long summary that should be");
+    expect(getTopHistorySkills(analysis)).toEqual(["React", "TypeScript"]);
   });
 });

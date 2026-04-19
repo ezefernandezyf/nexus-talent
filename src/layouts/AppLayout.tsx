@@ -5,6 +5,7 @@ import { MobileDrawer } from "../components/ui/MobileDrawer";
 import { MobileMenuButton } from "../components/ui/MobileMenuButton";
 import { LogoutButton, AUTH_STATUS, useAuth } from "../features/auth";
 import { useAnalysisHistory } from "../features/analysis";
+import { getHistoryCardTitle } from "../features/history/history-formatters";
 import { ThemeProvider, useTheme } from "../lib/theme";
 
 type AppNavItem = {
@@ -173,15 +174,20 @@ function AppLayoutContent() {
             <div className="custom-scrollbar flex flex-1 flex-col gap-2 overflow-y-auto pr-2">
               {recentAnalyses.length > 0 ? (
                 recentAnalyses.map((analysis) => (
-                  <div key={analysis.id} className="rounded-lg bg-surface-container-low/40 p-3 text-on-surface-variant transition-colors hover:bg-surface-container">
+                  <Link
+                    key={analysis.id}
+                    className="rounded-lg bg-surface-container-low/40 p-3 text-left text-on-surface-variant transition-colors hover:bg-surface-container focus-visible:bg-surface-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                    to={`/app/history/${analysis.id}`}
+                    aria-label={`Abrir detalle de ${getHistoryCardTitle(analysis)}`}
+                  >
                     <div className="flex items-center gap-3">
                       <span className="material-symbols-outlined text-sm" aria-hidden="true">
                         history
                       </span>
-                      <span className="truncate font-label text-xs">{analysis.jobDescription.split(/\r?\n/).find(Boolean) ?? "Vacante sin título"}</span>
+                      <span className="truncate font-label text-xs">{getHistoryCardTitle(analysis)}</span>
                     </div>
                     <p className="ml-7 mt-1 text-[10px] text-on-surface/40">{new Date(analysis.createdAt).toLocaleDateString("es-AR", { day: "2-digit", month: "short" })}</p>
-                  </div>
+                  </Link>
                 ))
               ) : (
                 <div className="rounded-lg bg-surface-container-low/40 p-3 text-sm leading-6 text-on-surface-variant">

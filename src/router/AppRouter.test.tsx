@@ -77,7 +77,10 @@ describe("AppRouter", () => {
 
     expect(screen.getByRole("heading", { name: /de job description a postulación ganadora en segundos\./i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /^ingresar$/i })).toHaveAttribute("href", "/auth/sign-in");
-    expect(screen.getByRole("link", { name: /crear cuenta/i })).toHaveAttribute("href", "/auth/sign-up");
+    const createAccountLinks = screen.getAllByRole("link", { name: /crear cuenta/i });
+    createAccountLinks.forEach((link) => {
+      expect(link).toHaveAttribute("href", "/auth/sign-up");
+    });
   });
 
   it("renders the app shell and analysis page for anonymous users", async () => {

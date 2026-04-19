@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import { useMemo, useState, type ReactNode } from "react";
 import { Modal } from "../../components/ui/Modal";
 import { Button } from "../../components/ui/Button";
@@ -289,46 +290,48 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
         </div>
       </Card>
 
-      {isDeletePromptOpen ? (
-        <Modal onClose={closeDeleteModal} title="Eliminar cuenta">
-          <div className="space-y-5">
-            <p className="text-sm leading-7 text-on-surface-variant">
-              Si seguís, tu cuenta y los datos vinculados se eliminarán permanentemente. Escribí <span className="font-semibold text-on-surface">eliminar cuenta</span> para confirmar.
-            </p>
+      <AnimatePresence>
+        {isDeletePromptOpen ? (
+          <Modal onClose={closeDeleteModal} title="Eliminar cuenta">
+            <div className="space-y-5">
+              <p className="text-sm leading-7 text-on-surface-variant">
+                Si seguís, tu cuenta y los datos vinculados se eliminarán permanentemente. Escribí <span className="font-semibold text-on-surface">eliminar cuenta</span> para confirmar.
+              </p>
 
-            <label className="block space-y-2">
-              <span className="text-xs font-label uppercase tracking-[0.2em] text-on-surface-variant">Confirmación</span>
-              <input
-                autoComplete="off"
-                className="field-surface w-full px-4 py-3 text-base text-on-surface placeholder:text-on-surface-variant/60"
-                placeholder="eliminar cuenta"
-                value={deleteConfirmationText}
-                onChange={(event) => setDeleteConfirmationText(event.target.value)}
-              />
-            </label>
+              <label className="block space-y-2">
+                <span className="text-xs font-label uppercase tracking-[0.2em] text-on-surface-variant">Confirmación</span>
+                <input
+                  autoComplete="off"
+                  className="field-surface w-full px-4 py-3 text-base text-on-surface placeholder:text-on-surface-variant/60"
+                  placeholder="eliminar cuenta"
+                  value={deleteConfirmationText}
+                  onChange={(event) => setDeleteConfirmationText(event.target.value)}
+                />
+              </label>
 
-            <div className="flex flex-wrap items-center justify-end gap-3">
-              <Button disabled={deleteAccountPending} variant="secondary" type="button" onClick={closeDeleteModal}>
-                Cancelar
-              </Button>
-              <Button
-                disabled={!canConfirmDelete || deleteAccountPending}
-                type="button"
-                onClick={async () => {
-                  try {
-                    await deleteAccount();
-                    closeDeleteModal();
-                  } catch {
-                    // The hook exposes the error state; keep the modal open.
-                  }
-                }}
-              >
-                {deleteAccountPending ? "Eliminando..." : "Eliminar cuenta"}
-              </Button>
+              <div className="flex flex-wrap items-center justify-end gap-3">
+                <Button disabled={deleteAccountPending} variant="secondary" type="button" onClick={closeDeleteModal}>
+                  Cancelar
+                </Button>
+                <Button
+                  disabled={!canConfirmDelete || deleteAccountPending}
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await deleteAccount();
+                      closeDeleteModal();
+                    } catch {
+                      // The hook exposes the error state; keep the modal open.
+                    }
+                  }}
+                >
+                  {deleteAccountPending ? "Eliminando..." : "Eliminar cuenta"}
+                </Button>
+              </div>
             </div>
-          </div>
-        </Modal>
-      ) : null}
+          </Modal>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }

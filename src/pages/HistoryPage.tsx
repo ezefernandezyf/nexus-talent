@@ -32,7 +32,7 @@ export function HistoryPage() {
             EXPORTAR DATOS
           </button>
         }
-        description="Registro completo de evaluaciones y métricas de compatibilidad técnica."
+        description="Registro local de vacantes analizadas para revisar el detalle, reabrir un guardado o exportar el historial completo."
         title="Historial de Análisis"
       />
 

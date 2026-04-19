@@ -8,7 +8,7 @@ import { ThemeProvider } from "../../../lib/theme";
 import { createTestQueryClient } from "../../../test/mocks/query-client";
 import { useSettings } from "./useSettings";
 
-function createUser(email: string): User {
+function createUser(email: string, identities: User["identities"] = []): User {
   const now = new Date("2026-04-05T12:00:00.000Z").toISOString();
 
   return {
@@ -24,12 +24,13 @@ function createUser(email: string): User {
     phone: "",
     role: "authenticated",
     updated_at: now,
+    identities,
     user_metadata: {},
   } as User;
 }
 
-function createSession(email: string): Session {
-  const user = createUser(email);
+function createSession(email: string, identities: User["identities"] = []): Session {
+  const user = createUser(email, identities);
 
   return {
     access_token: "session-token",
@@ -207,7 +208,10 @@ describe("useSettings", () => {
   it("links and unlinks platform identities through auth helpers", async () => {
     const queryClient = createTestQueryClient();
     const client = createAuthClient({
-      session: createSession("analyst@nexustalent.dev"),
+      session: createSession("analyst@nexustalent.dev", [
+        { id: "github-identity", identity_id: "github-identity", provider: "github", user_id: "user-1" },
+        { id: "google-identity", identity_id: "google-identity", provider: "google", user_id: "user-1" },
+      ]),
     });
     const repository = {
       delete: vi.fn(async () => undefined),
@@ -244,5 +248,43 @@ describe("useSettings", () => {
     });
     expect(result.current.accountActionError).toBeNull();
     expect(client.auth.unlinkIdentity).toHaveBeenCalledWith(expect.objectContaining({ provider: "google" }));
+  });
+
+  it("surfaces a validation error when unlinking the last remaining identity", async () => {
+    const queryClient = createTestQueryClient();
+    const client = createAuthClient({
+      session: createSession("analyst@nexustalent.dev", [
+        { id: "github-identity", identity_id: "github-identity", provider: "github", user_id: "user-1" },
+      ]),
+    });
+    const repository = {
+      delete: vi.fn(async () => undefined),
+      get: vi.fn(async () => null),
+      save: vi.fn(async () => {
+        throw new Error("not used");
+      }),
+    };
+
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <AuthProvider client={client as never}>
+            <MemoryRouter>{children}</MemoryRouter>
+          </AuthProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    );
+
+    const { result } = renderHook(() => useSettings({ repository: repository as never }), { wrapper });
+
+    await waitFor(() => expect(result.current.status).toBe("authenticated"));
+
+    await expect(result.current.disconnectAccount("github")).resolves.toMatchObject({
+      success: false,
+      message: expect.stringMatching(/al menos dos identidades vinculadas/i),
+    });
+
+    await waitFor(() => expect(String(result.current.accountActionError)).toContain("al menos dos identidades vinculadas"));
+    expect(client.auth.unlinkIdentity).not.toHaveBeenCalled();
   });
 });

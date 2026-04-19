@@ -1,26 +1,48 @@
+import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { LandingIcon } from "./LandingIcon";
+import { fadeUpVariants, scaleInVariants } from "../ui/motion";
 
 export function HeroSection() {
+  const prefersReducedMotion = useReducedMotion();
+  const heroContainer = prefersReducedMotion
+    ? undefined
+    : {
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: {
+            staggerChildren: 0.12,
+            delayChildren: 0.06,
+          },
+        },
+      };
+
   return (
-    <section id="hero" className="relative pt-24 pb-16 px-8 max-w-screen-2xl mx-auto overflow-hidden">
-      <div className="absolute top-0 right-0 w-125 h-125 bg-primary/5 rounded-full blur-[120px] -z-10"></div>
-      <div className="absolute -bottom-24 -left-24 w-100 h-100 bg-secondary-container/10 rounded-full blur-[100px] -z-10"></div>
+    <motion.section
+      animate={prefersReducedMotion ? undefined : "visible"}
+      className="relative pt-24 pb-16 px-8 max-w-screen-2xl mx-auto overflow-hidden"
+      id="hero"
+      initial={prefersReducedMotion ? false : "hidden"}
+      variants={heroContainer}
+    >
+      <motion.div className="absolute top-0 right-0 w-125 h-125 bg-primary/5 rounded-full blur-[120px] -z-10" aria-hidden="true" />
+      <motion.div className="absolute -bottom-24 -left-24 w-100 h-100 bg-secondary-container/10 rounded-full blur-[100px] -z-10" aria-hidden="true" />
       <div className="grid lg:grid-cols-2 gap-16 items-center">
         <div className="flex flex-col space-y-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-surface-container w-fit rounded-full border border-outline-variant/15">
+          <motion.div className="inline-flex items-center gap-2 px-3 py-1 bg-surface-container w-fit rounded-full border border-outline-variant/15" variants={fadeUpVariants}>
             <span className="w-2 h-2 rounded-full bg-primary glow-pulse"></span>
             <span className="font-label text-xs uppercase tracking-widest text-on-surface-variant" style={{}}>
               Eficiencia Radical
             </span>
-          </div>
-          <h1 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight text-on-surface" style={{}}>
+          </motion.div>
+          <motion.h1 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight text-on-surface" style={{}} variants={fadeUpVariants}>
             De Job Description a <span className="gradient-text" style={{}}>Postulación Ganadora</span> en Segundos.
-          </h1>
-          <p className="text-xl text-on-surface-variant max-w-xl leading-relaxed" style={{}}>
-            Optimiza tu perfil para vacantes de desarrollo con inteligencia artificial de grado técnico. Diseñado por y para desarrolladores.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
+          </motion.h1>
+          <motion.p className="text-xl text-on-surface-variant max-w-xl leading-relaxed" style={{}} variants={fadeUpVariants}>
+            Convierte una vacante en señales técnicas, un resumen usable y un mensaje de outreach listo para editar. Sin promesas infladas.
+          </motion.p>
+          <motion.div className="flex flex-col sm:flex-row items-center gap-4 pt-4" variants={fadeUpVariants}>
             <Link className="w-full sm:w-auto flex items-center justify-center gap-3 bg-linear-to-br from-primary to-primary-container text-on-primary font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-primary/20 transition-all active:scale-[0.98]" style={{}} to="/auth/sign-in">
               <svg aria-hidden="true" className="w-6 h-6" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M23 9.5c3.6 0 6.1 1.6 7.5 2.9l5.5-5.5C33.1 4 28.5 2 23 2 14.9 2 7.8 6.7 4.1 13.6l6.6 5.1C12.9 13.2 17.5 9.5 23 9.5z" fill="#EA4335" />
@@ -30,32 +52,32 @@ export function HeroSection() {
               </svg>
               Ingresar con Google
             </Link>
-            <button className="w-full sm:w-auto border border-outline-variant text-primary font-bold py-4 px-8 rounded-xl hover:bg-primary/5 transition-all" style={{}} type="button">
-              Ver Demo
-            </button>
-          </div>
+            <Link className="w-full sm:w-auto border border-outline-variant text-primary font-bold py-4 px-8 rounded-xl hover:bg-primary/5 transition-all text-center" style={{}} to="/auth/sign-up">
+              Crear cuenta
+            </Link>
+          </motion.div>
         </div>
 
-        <div className="relative group">
-          <div className="absolute inset-0 bg-primary/20 blur-[100px] group-hover:bg-primary/30 transition-all"></div>
+        <motion.div className="relative group" variants={fadeUpVariants}>
+          <motion.div className="absolute inset-0 bg-primary/20 blur-[100px] group-hover:bg-primary/30 transition-all" aria-hidden="true" />
           <div className="grid h-150 grid-cols-6 grid-rows-6 gap-4 relative">
-            <div className="col-span-4 row-span-3 glass-panel border border-outline-variant/20 rounded-xl p-6 flex flex-col justify-between">
+            <motion.div className="col-span-4 row-span-3 glass-panel border border-outline-variant/20 rounded-xl p-6 flex flex-col justify-between" variants={scaleInVariants} whileHover={prefersReducedMotion ? undefined : { y: -4 }} transition={{ duration: 0.2 }}>
               <div>
-                <h3 className="font-label text-sm text-primary mb-4 flex items-center gap-2" style={{}}>
+                <motion.h3 className="font-label text-sm text-primary mb-4 flex items-center gap-2" style={{}} variants={fadeUpVariants}>
                   <LandingIcon className="h-4.5 w-4.5 text-primary" name="analytics" />
                   SKILLS_MATRIX_V4
-                </h3>
+                </motion.h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="font-label text-xs" style={{}}>TYPESCRIPT / NEXT.JS</span>
-                    <span className="text-primary text-xs" style={{}}>98% Match</span>
+                    <span className="text-primary text-xs" style={{}}>Señal alta</span>
                   </div>
                   <div className="h-1 w-full bg-surface-container rounded-full overflow-hidden">
                     <div className="h-full bg-primary w-[98%]"></div>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-label text-xs" style={{}}>AWS LAMBDA / IAC</span>
-                    <span className="text-on-surface-variant text-xs" style={{}}>74% Match</span>
+                    <span className="text-on-surface-variant text-xs" style={{}}>Señal media</span>
                   </div>
                   <div className="h-1 w-full bg-surface-container rounded-full overflow-hidden">
                     <div className="h-full bg-on-surface-variant w-[74%]"></div>
@@ -64,12 +86,12 @@ export function HeroSection() {
               </div>
               <div className="pt-6 mt-auto border-t border-outline-variant/10">
                 <p className="text-[10px] font-label text-on-surface-variant/60 leading-tight" style={{}}>
-                  ANALYSIS_CORE_RUNNING: OPTIMIZING_KEYWORDS...
+                  ANALYSIS_CORE_RUNNING: EXTRACTING_SIGNALS...
                 </p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="col-span-2 row-span-4 bg-surface-container border border-outline-variant/15 rounded-xl p-4 overflow-hidden">
+            <motion.div className="col-span-2 row-span-4 bg-surface-container border border-outline-variant/15 rounded-xl p-4 overflow-hidden" variants={scaleInVariants} whileHover={prefersReducedMotion ? undefined : { y: -4 }} transition={{ duration: 0.2 }}>
               <h3 className="font-label text-[10px] text-on-surface-variant mb-3" style={{}}>OUTREACH_GEN</h3>
               <div className="space-y-2">
                 <div className="w-full h-2 bg-surface-container-high rounded"></div>
@@ -85,9 +107,9 @@ export function HeroSection() {
                   <span className="text-primary" style={{}}>Dev Manager:</span> "The way you handled the legacy migration..."
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="col-span-4 row-span-3 bg-surface-container-low border border-outline-variant/15 rounded-xl p-6 flex flex-col">
+            <motion.div className="col-span-4 row-span-3 bg-surface-container-low border border-outline-variant/15 rounded-xl p-6 flex flex-col" variants={scaleInVariants} whileHover={prefersReducedMotion ? undefined : { y: -4 }} transition={{ duration: 0.2 }}>
               <div className="flex justify-between items-start mb-4">
                 <div className="space-y-1">
                   <h4 className="text-2xl font-bold" style={{}}>4.2s</h4>
@@ -102,10 +124,10 @@ export function HeroSection() {
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAL8ha-PY4Sig1ZKefTBgYRmDAsvOhREFFboseKeOnBtXyNfpxzAqQtcI4hiHlCmdmILytA4aVgPIl_T_tmTJtspG4vfopDcXqqVoPk-2n2b3SOreaAown8qMxTeld5YBkQh8hhK9eonj2P-OsoTzHLkOMlCCgRnqf2GnPL8evUv13XiY17vhA8ZXiOXD9JBbSZwiyBHdyvqhA17HXieeVjXDCkS_CP8DwaMA6PheJDogPVmhlDC44YjQ0GrnaJzhwXLTI464MSsqwj"
                 style={{}}
               />
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }

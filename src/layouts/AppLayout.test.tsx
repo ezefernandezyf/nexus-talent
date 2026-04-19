@@ -3,6 +3,8 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { ANALYSIS_HISTORY_STORAGE_KEY } from "../lib/repositories";
+import { createSavedAnalysis } from "../test/factories/analysis";
 import { AppLayout } from "./AppLayout";
 import { AuthProvider } from "../features/auth";
 import { createTestQueryClient } from "../test/mocks/query-client";
@@ -24,6 +26,12 @@ describe("AppLayout", () => {
   it("renders the shared shell and outlet content for public users", async () => {
     const queryClient = createTestQueryClient();
     const user = userEvent.setup();
+    const savedAnalysis = createSavedAnalysis({
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      jobDescription: "Frontend Lead\nBuild resilient interfaces",
+    });
+
+    localStorage.setItem(ANALYSIS_HISTORY_STORAGE_KEY, JSON.stringify([savedAnalysis]));
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -40,12 +48,16 @@ describe("AppLayout", () => {
     );
 
     await waitFor(() => expect(screen.getByText("Analysis Content")).toBeInTheDocument());
-  expect(screen.getByRole("link", { name: "Nexus Talent" })).toHaveAttribute("href", "/");
-  expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /análisis/i })).toHaveAttribute("href", "/app/analysis");
-  expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /historial/i })).toHaveAttribute("href", "/app/history");
-  expect(within(screen.getByLabelText(/app primary navigation/i)).queryByRole("link", { name: /settings/i })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Nexus Talent" })).toHaveAttribute("href", "/");
+    expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /análisis/i })).toHaveAttribute("href", "/app/analysis");
+    expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /historial/i })).toHaveAttribute("href", "/app/history");
+    expect(within(screen.getByLabelText(/app primary navigation/i)).queryByRole("link", { name: /settings/i })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /nuevo análisis/i })).toHaveAttribute("href", "/app/analysis");
     expect(screen.queryByText("© 2026 Nexus Talent — Precision Recruiting Layer")).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /abrir detalle de frontend lead/i })).toHaveAttribute(
+      "href",
+      "/app/history/550e8400-e29b-41d4-a716-446655440000",
+    );
 
     await user.click(screen.getByRole("button", { name: /abrir menú/i }));
     const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });

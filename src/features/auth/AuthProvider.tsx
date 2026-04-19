@@ -16,6 +16,7 @@ const AUTH_MESSAGES = {
 } as const;
 
 type AuthActionResponse = {
+  success: boolean;
   message: string;
 };
 
@@ -156,6 +157,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     setErrorMessage(null);
 
     return {
+      success: true,
       message: "Sesión iniciada. Redirigiendo al panel privado.",
     };
   }
@@ -181,11 +183,13 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     if (data.session) {
       setErrorMessage(null);
       return {
+        success: true,
         message: "Cuenta creada y sesión iniciada.",
       };
     }
 
     return {
+      success: true,
       message: "Cuenta creada. Revisá tu correo para confirmar el acceso.",
     };
   }
@@ -217,7 +221,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     if (!providerConfig.enabled) {
       const message = `${providerConfig.label} no está habilitado en esta instancia.`;
       setErrorMessage(message);
-      return { message };
+      return { success: false, message };
     }
 
     setErrorMessage(null);
@@ -231,10 +235,11 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
 
     if (error) {
       setErrorMessage(error.message);
-      return { message: error.message };
+      return { success: false, message: error.message };
     }
 
     return {
+      success: true,
       message: `Redirigiendo a ${providerConfig.label}...`,
     };
   }
@@ -249,13 +254,13 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     if (!providerConfig.enabled) {
       const message = `${providerConfig.label} no está habilitado en esta instancia.`;
       setErrorMessage(message);
-      return { message };
+      return { success: false, message };
     }
 
     if (!clientState.client.auth.linkIdentity) {
       const message = `${providerConfig.label} no está disponible para vinculación en esta instancia.`;
       setErrorMessage(message);
-      return { message };
+      return { success: false, message };
     }
 
     setErrorMessage(null);
@@ -264,7 +269,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
 
     if (error) {
       setErrorMessage(error.message);
-      return { message: error.message };
+      return { success: false, message: error.message };
     }
 
     const sessionResult = await clientState.client.auth.getSession();
@@ -272,6 +277,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     setErrorMessage(null);
 
     return {
+      success: true,
       message: `Vinculando ${providerConfig.label}...`,
     };
   }
@@ -286,7 +292,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     if ((!clientState.client.auth.getUserIdentities && !clientState.client.auth.getUser) || !clientState.client.auth.unlinkIdentity) {
       const message = `${providerConfig.label} no está disponible para desvinculación en esta instancia.`;
       setErrorMessage(message);
-      return { message };
+      return { success: false, message };
     }
 
     setErrorMessage(null);
@@ -307,7 +313,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
 
     if (error) {
       setErrorMessage(error.message);
-      return { message: error.message };
+      return { success: false, message: error.message };
     }
 
     const targetIdentity = data.identities.find((identity) => identity.provider === providerConfig.provider);
@@ -315,14 +321,20 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     if (!targetIdentity) {
       const message = `${providerConfig.label} no está vinculada a esta cuenta.`;
       setErrorMessage(message);
-      return { message };
+      return { success: false, message };
+    }
+
+    if (data.identities.length < 2) {
+      const message = `Necesitás al menos dos identidades vinculadas para desvincular ${providerConfig.label}.`;
+      setErrorMessage(message);
+      return { success: false, message };
     }
 
     const unlinkResult = await clientState.client.auth.unlinkIdentity(targetIdentity);
 
     if (unlinkResult.error) {
       setErrorMessage(unlinkResult.error.message);
-      return { message: unlinkResult.error.message };
+      return { success: false, message: unlinkResult.error.message };
     }
 
     const refreshedUser = clientState.client.auth.getUser
@@ -343,6 +355,7 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     setErrorMessage(null);
 
     return {
+      success: true,
       message: `${providerConfig.label} desvinculada.`,
     };
   }
