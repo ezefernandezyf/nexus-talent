@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FeaturePageShell, PageHeader } from "../components/ui";
+import { AnalysisResultView } from "../features/analysis/components/AnalysisResultView";
 import { useAnalysisRepository } from "../features/analysis/hooks/useAnalysisRepository";
 import { useAnalysisById } from "../features/analysis/hooks/useAnalysisById";
 import { HistoryDetailEditor } from "../features/history/components";
@@ -10,7 +11,6 @@ import {
   getHistoryCompanyLabel,
   getHistoryRoleLabel,
   getHistoryUid,
-  getTopHistorySkills,
 } from "../features/history/history-formatters";
 
 function DetailSection({ children, title }: { children: ReactNode; title: string }) {
@@ -55,7 +55,6 @@ export function HistoryDetailPage() {
   const displayLabel = getHistoryCompanyLabel(analysis);
   const roleLabel = getHistoryRoleLabel(analysis);
   const uidLabel = getHistoryUid(analysis);
-  const topSkills = getTopHistorySkills(analysis);
   const reworkState = {
     githubRepositoryUrl: analysis.githubEnrichment?.repositoryUrl ?? undefined,
     jobDescription: analysis.jobDescription,
@@ -67,15 +66,15 @@ export function HistoryDetailPage() {
     <FeaturePageShell>
       <PageHeader
         action={
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
             <Link
-              className="secondary-button"
+              className="secondary-button w-full justify-center sm:w-auto"
               state={reworkState}
               to={{ pathname: "/app/analysis", search: `?${reworkSearch}` }}
             >
               Rework desde este guardado
             </Link>
-            <Link className="secondary-button" to="/app/history">
+            <Link className="secondary-button w-full justify-center sm:w-auto" to="/app/history">
               Volver al historial
             </Link>
           </div>
@@ -102,36 +101,7 @@ export function HistoryDetailPage() {
           }}
         />
 
-        <DetailSection title="Resumen">
-          <p className="text-base leading-8 text-on-surface-variant">{analysis.summary}</p>
-        </DetailSection>
-
-        <DetailSection title="Skills principales">
-          {topSkills.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {topSkills.map((skill) => (
-                <span key={skill} className="tech-chip">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm leading-7 text-on-surface-variant">No hay habilidades destacadas para este guardado.</p>
-          )}
-        </DetailSection>
-
-        <DetailSection title="Mensaje de outreach">
-          <div className="space-y-4 rounded-2xl bg-surface-container-lowest/70 p-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Asunto</p>
-              <p className="mt-2 text-sm leading-7 text-on-surface">{analysis.outreachMessage.subject}</p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Cuerpo</p>
-              <p className="mt-2 whitespace-pre-line text-sm leading-7 text-on-surface">{analysis.outreachMessage.body}</p>
-            </div>
-          </div>
-        </DetailSection>
+        <AnalysisResultView result={analysis} />
 
         {analysis.githubEnrichment ? (
           <DetailSection title="GitHub">

@@ -103,8 +103,31 @@ describe("AnalysisResultView", () => {
     expect(screen.getByText(/se descargó el outreach en json/i)).toBeInTheDocument();
   });
 
-  it("renders GitHub enrichment when available", () => {
+  it("renders the structured vacancy sections and copies the short DM version", async () => {
+    const user = userEvent.setup();
+    const copyToClipboard = vi.fn().mockResolvedValue(undefined);
+
     render(
+      <AnalysisResultView
+        copyToClipboard={copyToClipboard}
+        result={createAnalysisResult({})}
+      />,
+    );
+
+    expect(screen.getByText(/Resumen de la vacante/i)).toBeInTheDocument();
+    expect(screen.getByText(/Skills y términos para repetir/i)).toBeInTheDocument();
+    expect(screen.getByText(/Posibles huecos y cómo cubrirlos/i)).toBeInTheDocument();
+    expect(screen.getByText(/Versión A/i)).toBeInTheDocument();
+    expect(screen.getByText(/Versión B/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /copiar dm corto/i }));
+
+    expect(copyToClipboard).toHaveBeenCalledWith(expect.stringContaining("Hola"));
+    expect(screen.getByText(/se copió el dm corto editado/i)).toBeInTheDocument();
+  });
+
+  it("renders GitHub enrichment when available", () => {
+    const { getAllByText } = render(
       <AnalysisResultView
         result={createAnalysisResult({
           githubEnrichment: {
@@ -121,10 +144,9 @@ describe("AnalysisResultView", () => {
 
     expect(screen.getByText(/GitHub enriquecido/i)).toBeInTheDocument();
     expect(screen.getByText(/Stack observado en el repositorio/i)).toBeInTheDocument();
-    expect(screen.getByText(/TypeScript/i)).toBeInTheDocument();
+    expect(getAllByText("TypeScript").length).toBeGreaterThan(0);
     expect(screen.getByRole("link", { name: /ezefernandezyf\/nexus-talent/i })).toBeInTheDocument();
   });
-
   it("falls back to the default GitHub label for unknown enrichment sources", () => {
     render(
       <AnalysisResultView

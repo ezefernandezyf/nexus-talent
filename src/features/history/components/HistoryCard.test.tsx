@@ -51,6 +51,7 @@ describe("HistoryCard", () => {
     expect(within(row).getByText("Frontend Engineer")).toBeInTheDocument();
     expect(within(row).getByText(getHistoryUid(analysis))).toBeInTheDocument();
     expect(within(row).getByText("React, testing and TypeScript")).toBeInTheDocument();
+    expect(within(row).getByText(/lead the product frontend strategy with strong react/i)).toBeInTheDocument();
     expect(within(row).getByText(/5 abr 2026/i)).toBeInTheDocument();
     expect(within(row).getByText(String(getHistoryMatchPercentage(analysis)))).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /abrir detalle de frontend engineer/i })).toHaveAttribute(

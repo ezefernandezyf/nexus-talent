@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { PublicAuthRoute } from "../features/auth";
+import { ProtectedRoute, PublicAuthRoute } from "../features/auth";
 import { AdminRoute } from "../features/auth/components/AdminRoute";
 import { LandingPage } from "../pages/LandingPage";
 import PrivacyPage from "../pages/PrivacyPage";
@@ -28,6 +28,7 @@ export function AppRouter() {
     <Suspense fallback={<RouteLoadingFallback />}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/app/admin/settings" element={<Navigate replace to="/app/settings" />} />
         <Route element={<PublicAuthRoute />} path="/auth">
           <Route index element={<Navigate replace to="sign-in" />} />
           <Route path="callback" element={<AuthCallbackPage />} />
@@ -39,8 +40,11 @@ export function AppRouter() {
           <Route path="analysis" element={<AnalysisPage />} />
           <Route path="history" element={<HistoryPage />} />
           <Route path="history/:analysisId" element={<HistoryDetailPage />} />
+          <Route element={<ProtectedRoute />} path="settings">
+            <Route index element={<SettingsPage />} />
+          </Route>
           <Route element={<AdminRoute />} path="admin">
-            <Route path="settings" element={<SettingsPage />} />
+            <Route path="*" element={<Navigate replace to="/app" />} />
           </Route>
           <Route path="*" element={<Navigate replace to="/404" />} />
         </Route>

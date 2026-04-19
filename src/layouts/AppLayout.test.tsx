@@ -43,13 +43,14 @@ describe("AppLayout", () => {
   expect(screen.getByRole("link", { name: "Nexus Talent" })).toHaveAttribute("href", "/");
   expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /análisis/i })).toHaveAttribute("href", "/app/analysis");
   expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /historial/i })).toHaveAttribute("href", "/app/history");
-  expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /settings/i })).toHaveAttribute("href", "/app/admin/settings");
+  expect(within(screen.getByLabelText(/app primary navigation/i)).queryByRole("link", { name: /settings/i })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /nuevo análisis/i })).toHaveAttribute("href", "/app/analysis");
     expect(screen.queryByText("© 2026 Nexus Talent — Precision Recruiting Layer")).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /abrir menú/i }));
     const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });
     expect(within(drawer).getByRole("link", { name: "Análisis" })).toHaveAttribute("href", "/app/analysis");
+    expect(within(drawer).queryByRole("link", { name: "Settings" })).not.toBeInTheDocument();
 
     await user.click(within(drawer).getByRole("link", { name: "Historial" }));
     expect(screen.queryByRole("dialog", { name: "Nexus Talent" })).not.toBeInTheDocument();
@@ -79,8 +80,33 @@ describe("AppLayout", () => {
 
     await user.click(screen.getByRole("button", { name: /abrir acciones de cuenta/i }));
     const accountActions = screen.getByLabelText("Acciones de cuenta");
-    expect(within(accountActions).getByRole("link", { name: /settings/i })).toHaveAttribute("href", "/app/admin/settings");
+    expect(within(accountActions).getByRole("link", { name: /settings/i })).toHaveAttribute("href", "/app/settings");
     expect(within(accountActions).getByRole("button", { name: /cerrar sesión/i })).toBeInTheDocument();
+  });
+
+  it("shows settings only for authenticated users", async () => {
+    const queryClient = createTestQueryClient();
+    const user = userEvent.setup();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider client={createAuthClient({ user: { email: "analyst@nexustalent.dev" } })}>
+          <MemoryRouter initialEntries={["/app/analysis"]}>
+            <Routes>
+              <Route element={<AppLayout />} path="/app">
+                <Route path="analysis" element={<div>Analysis Content</div>} />
+              </Route>
+            </Routes>
+          </MemoryRouter>
+        </AuthProvider>
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => expect(screen.getByRole("button", { name: /abrir acciones de cuenta/i })).toBeInTheDocument());
+    await user.click(screen.getByRole("button", { name: /abrir acciones de cuenta/i }));
+
+    const accountActions = screen.getByLabelText("Acciones de cuenta");
+    expect(within(accountActions).getByRole("link", { name: /settings/i })).toHaveAttribute("href", "/app/settings");
   });
 
   it("persists the theme toggle across reloads", async () => {

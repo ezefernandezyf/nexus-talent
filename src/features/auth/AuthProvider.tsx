@@ -24,6 +24,8 @@ interface AuthContextValue {
   isAdmin: boolean;
   isConfigured: boolean;
   session: Session | null;
+  linkIdentity: (provider: OAuthProviderKey) => Promise<AuthActionResponse>;
+  unlinkIdentity: (provider: OAuthProviderKey) => Promise<AuthActionResponse>;
   signIn: (email: string, password: string) => Promise<AuthActionResponse>;
   signInWithOAuth: (provider: OAuthProviderKey) => Promise<AuthActionResponse>;
   signOut: () => Promise<void>;
@@ -237,11 +239,121 @@ export function AuthProvider({ children, client }: AuthProviderProps) {
     };
   }
 
+  async function linkIdentity(provider: OAuthProviderKey) {
+    if (!clientState.client) {
+      throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
+    }
+
+    const providerConfig = getOAuthProviderConfig(provider);
+
+    if (!providerConfig.enabled) {
+      const message = `${providerConfig.label} no está habilitado en esta instancia.`;
+      setErrorMessage(message);
+      return { message };
+    }
+
+    if (!clientState.client.auth.linkIdentity) {
+      const message = `${providerConfig.label} no está disponible para vinculación en esta instancia.`;
+      setErrorMessage(message);
+      return { message };
+    }
+
+    setErrorMessage(null);
+
+    const { error } = await clientState.client.auth.linkIdentity({ provider: providerConfig.provider });
+
+    if (error) {
+      setErrorMessage(error.message);
+      return { message: error.message };
+    }
+
+    const sessionResult = await clientState.client.auth.getSession();
+    syncSession(sessionResult.data.session);
+    setErrorMessage(null);
+
+    return {
+      message: `Vinculando ${providerConfig.label}...`,
+    };
+  }
+
+  async function unlinkIdentity(provider: OAuthProviderKey) {
+    if (!clientState.client) {
+      throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
+    }
+
+    const providerConfig = getOAuthProviderConfig(provider);
+
+    if ((!clientState.client.auth.getUserIdentities && !clientState.client.auth.getUser) || !clientState.client.auth.unlinkIdentity) {
+      const message = `${providerConfig.label} no está disponible para desvinculación en esta instancia.`;
+      setErrorMessage(message);
+      return { message };
+    }
+
+    setErrorMessage(null);
+
+    const identitiesResult = clientState.client.auth.getUserIdentities
+      ? await clientState.client.auth.getUserIdentities()
+      : clientState.client.auth.getUser
+        ? await clientState.client.auth.getUser().then(({ data, error }) => ({
+            data: { identities: data.user?.identities ?? [] },
+            error,
+          }))
+        : {
+            data: { identities: [] },
+            error: null,
+          };
+
+    const { data, error } = identitiesResult;
+
+    if (error) {
+      setErrorMessage(error.message);
+      return { message: error.message };
+    }
+
+    const targetIdentity = data.identities.find((identity) => identity.provider === providerConfig.provider);
+
+    if (!targetIdentity) {
+      const message = `${providerConfig.label} no está vinculada a esta cuenta.`;
+      setErrorMessage(message);
+      return { message };
+    }
+
+    const unlinkResult = await clientState.client.auth.unlinkIdentity(targetIdentity);
+
+    if (unlinkResult.error) {
+      setErrorMessage(unlinkResult.error.message);
+      return { message: unlinkResult.error.message };
+    }
+
+    const refreshedUser = clientState.client.auth.getUser
+      ? await clientState.client.auth.getUser().then(({ data: userData, error: userError }) => ({
+          user: userError ? null : userData.user,
+        }))
+      : { user: null };
+    const sessionResult = await clientState.client.auth.getSession();
+
+    if (sessionResult.data.session) {
+      syncSession({
+        ...sessionResult.data.session,
+        user: refreshedUser.user ?? sessionResult.data.session.user,
+      });
+    } else {
+      syncSession(null);
+    }
+    setErrorMessage(null);
+
+    return {
+      message: `${providerConfig.label} desvinculada.`,
+    };
+  }
+
   const value: AuthContextValue = {
     errorMessage,
     isAdmin,
     isConfigured: clientState.isConfigured,
+    linkIdentity,
     session,
+    unlinkIdentity,
     signIn,
     signInWithOAuth,
     signOut,

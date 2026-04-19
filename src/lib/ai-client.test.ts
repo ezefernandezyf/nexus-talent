@@ -42,6 +42,15 @@ describe("ai-client", () => {
         subject: "Interés en el puesto",
         body: "Hola equipo,\n\nMe interesa la oportunidad.",
       },
+      recruiterMessages: {
+        emailLinkedIn: {
+          subject: "Interés en el puesto",
+          body: "Hola equipo,\n\nMe interesa la oportunidad.",
+        },
+        dmShort: {
+          body: "Hola equipo, Me interesa la oportunidad.",
+        },
+      },
     });
   });
 
@@ -50,8 +59,15 @@ describe("ai-client", () => {
       "Senior React engineer with TypeScript, testing, and communication",
     );
 
+    expect(result.summary).toMatch(/^(Lectura rápida|Resumen ejecutivo|Panorama):/);
+    expect(result.summary).toMatch(/(Señales clave|Puntos que destacan|Indicadores):/);
+    expect(result.summary).toMatch(/(Implicación de contratación|Lectura de contratación|Lo que sugiere para hiring):/);
     expect(result.summary).toContain("Senior React engineer");
     expect(result.skillGroups.length).toBeGreaterThan(0);
+    expect(result.vacancySummary?.responsibilities.length).toBeGreaterThan(0);
+    expect(result.keywords?.hardSkills.length).toBeGreaterThan(0);
+    expect(result.gaps?.length).toBeGreaterThan(0);
+    expect(result.recruiterMessages?.emailLinkedIn.body).toContain("Hola equipo de recruiting");
     expect(result.outreachMessage.body).toContain("[Your Name]");
   });
 
@@ -61,8 +77,8 @@ describe("ai-client", () => {
       JOB_ANALYSIS_MESSAGE_TONE.CASUAL,
     );
 
-    expect(result.outreachMessage.body).toContain("Te escribo porque");
-    expect(result.outreachMessage.body).toContain("cómo puedo aportar rápido y con foco al equipo");
+    expect(result.recruiterMessages?.emailLinkedIn.body).toContain("Comparto una presentación breve porque");
+    expect(result.recruiterMessages?.emailLinkedIn.body).toContain("valor rápido y concreto");
   });
 
   it("builds a persuasive outreach message when requested", async () => {
@@ -71,8 +87,8 @@ describe("ai-client", () => {
       JOB_ANALYSIS_MESSAGE_TONE.PERSUASIVE,
     );
 
-    expect(result.outreachMessage.body).toContain("Veo una oportunidad muy fuerte para sumar valor porque");
-    expect(result.outreachMessage.body).toContain("convertir esas prioridades en resultados concretos");
+    expect(result.recruiterMessages?.emailLinkedIn.body).toContain("Quiero compartir por qué este perfil puede sumar desde el primer intercambio porque");
+    expect(result.recruiterMessages?.emailLinkedIn.body).toContain("convertir esas prioridades en resultados concretos");
   });
 
   it("parses transport responses from JSON strings", async () => {
@@ -96,6 +112,7 @@ describe("ai-client", () => {
     const result = await client.analyzeJobDescription("Senior React engineer");
 
     expect(result.skillGroups[0]?.category).toBe("Stack principal");
+    expect(result.recruiterMessages?.dmShort.body).toBeTruthy();
   });
 
   it("keeps the local fallback path on the same normalize-then-validate contract", async () => {
@@ -104,7 +121,30 @@ describe("ai-client", () => {
     );
 
     expect(result.skillGroups[0]?.category).toBe("Encaje general");
-    expect(result.outreachMessage.body).toContain("[Your Name]");
+    expect(result.recruiterMessages?.emailLinkedIn.body).toContain("[Your Name]");
+  });
+
+  it("varies the fallback output between distinct vacancies", async () => {
+    const firstResult = await jobAnalysisClient.analyzeJobDescription(
+      "Senior React engineer\n\nBuild dashboards for payments and reporting.",
+    );
+    const secondResult = await jobAnalysisClient.analyzeJobDescription(
+      "People operations lead\n\nShape onboarding, rituals, and hiring workflows.",
+    );
+
+    expect(firstResult.summary).not.toBe(secondResult.summary);
+    expect(firstResult.recruiterMessages?.emailLinkedIn.subject).not.toBe(secondResult.recruiterMessages?.emailLinkedIn.subject);
+    expect(firstResult.recruiterMessages?.emailLinkedIn.body).not.toBe(secondResult.recruiterMessages?.emailLinkedIn.body);
+    expect(firstResult.summary).toMatch(/^(Lectura rápida|Resumen ejecutivo|Panorama):/);
+    expect(secondResult.summary).toMatch(/^(Lectura rápida|Resumen ejecutivo|Panorama):/);
+    expect(firstResult.recruiterMessages?.emailLinkedIn.body).not.toContain("...");
+    expect(firstResult.recruiterMessages?.emailLinkedIn.body).not.toContain("…");
+    expect(firstResult.recruiterMessages?.emailLinkedIn.subject).not.toContain("...");
+    expect(firstResult.recruiterMessages?.emailLinkedIn.subject).not.toContain("…");
+    expect(secondResult.recruiterMessages?.emailLinkedIn.body).not.toContain("...");
+    expect(secondResult.recruiterMessages?.emailLinkedIn.body).not.toContain("…");
+    expect(secondResult.recruiterMessages?.emailLinkedIn.subject).not.toContain("...");
+    expect(secondResult.recruiterMessages?.emailLinkedIn.subject).not.toContain("…");
   });
 
   it("keeps the public client contract stable across transport implementations", async () => {
@@ -121,6 +161,13 @@ describe("ai-client", () => {
           subject: "Interés A",
           body: "Hola equipo A,\n\nSaludos,\n[Your Name]",
         },
+        recruiterMessages: {
+          emailLinkedIn: {
+            subject: "Interés A",
+            body: "Hola equipo A,\n\nSaludos,\n[Your Name]",
+          },
+          dmShort: { body: "Hola equipo A" },
+        },
       }),
     });
 
@@ -136,6 +183,13 @@ describe("ai-client", () => {
         outreachMessage: {
           subject: "Interés B",
           body: "Hola equipo B,\n\nSaludos,\n[Your Name]",
+        },
+        recruiterMessages: {
+          emailLinkedIn: {
+            subject: "Interés B",
+            body: "Hola equipo B,\n\nSaludos,\n[Your Name]",
+          },
+          dmShort: { body: "Hola equipo B" },
         },
       }),
     });
@@ -161,6 +215,13 @@ describe("ai-client", () => {
         subject: "Interés",
         body: input.messageTone,
       },
+      recruiterMessages: {
+        emailLinkedIn: {
+          subject: "Interés",
+          body: input.messageTone,
+        },
+        dmShort: { body: input.messageTone },
+      },
     }));
 
     const client = createJobAnalysisClient({ transport });
@@ -181,6 +242,27 @@ describe("ai-client", () => {
         summary: "",
         skillGroups: [],
         outreachMessage: { subject: "", body: "" },
+        recruiterMessages: {
+          emailLinkedIn: { subject: "", body: "" },
+          dmShort: { body: "" },
+        },
+        vacancySummary: {
+          role: "",
+          seniority: "",
+          modalityLocation: "",
+          responsibilities: [""],
+          mustHave: [""],
+          niceToHave: [""],
+        },
+        keywords: {
+          hardSkills: [""],
+          softSkills: [""],
+          domainKeywords: [""],
+          atsTerms: [""],
+        },
+        gaps: [
+          { gap: "", mitigation: "", framing: "" },
+        ],
       }),
     });
 
@@ -221,7 +303,8 @@ describe("ai-client", () => {
     const result = await jobAnalysisClient.analyzeJobDescription("Operations lead focused on process clarity and team coordination");
 
     expect(result.skillGroups[0]?.category).toBe("Encaje general");
-    expect(result.summary).toContain("ejecución práctica");
+    expect(result.summary).toMatch(/^(Lectura rápida|Resumen ejecutivo|Panorama):/);
+    expect(result.summary).toContain("Señales clave");
   });
 
   it("truncates very long role titles", async () => {
@@ -231,5 +314,18 @@ describe("ai-client", () => {
     const result = await jobAnalysisClient.analyzeJobDescription(`${longTitle}\n\nResponsibilities include...`);
 
     expect(result.outreachMessage.subject.length).toBeLessThanOrEqual(92);
+    expect(result.outreachMessage.subject).not.toMatch(/\.\.\.|…$/);
+    expect(result.outreachMessage.body).not.toMatch(/\.\.\.|…$/);
+  });
+
+  it("keeps sparse input coherent without repeating filler", async () => {
+    const result = await jobAnalysisClient.analyzeJobDescription("Product designer");
+
+    expect(result.summary).toContain("Product designer");
+    expect(result.summary).toMatch(/(Lectura rápida|Resumen ejecutivo|Panorama):/);
+    expect(result.summary).toContain("Síntesis de requisitos");
+    expect(result.outreachMessage.body).toContain("Hola equipo de recruiting");
+    expect(result.outreachMessage.body).not.toContain("...");
+    expect(result.outreachMessage.body).not.toContain("…");
   });
 });

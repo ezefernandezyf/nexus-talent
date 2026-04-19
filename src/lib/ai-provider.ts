@@ -74,7 +74,7 @@ function buildGroqMessages(input: JobAnalysisPromptInput): GroqChatMessage[] {
   return [
     {
       role: "system",
-      content: `Sos un analizador de vacantes. Devolvé un JSON estricto con summary, skillGroups y outreachMessage, sin texto extra. ${toneInstruction}`,
+      content: `Sos un analizador de vacantes. Devolvé un JSON estricto con summary, vacancySummary, skillGroups, keywords, gaps, outreachMessage y recruiterMessages, sin texto extra. El summary debe ser una lectura ejecutiva breve, clara y orientada a recruiting. vacancySummary debe traer bullets sobre el rol, seniority, modalidad/ubicación, top 5 responsabilidades y must-have vs nice-to-have. keywords debe separar hard skills, soft skills, dominio/negocio y términos ATS exactos de la vacante. gaps debe incluir 3 posibles faltantes con mitigación y encuadre al comunicar. outreachMessage debe funcionar como la versión A lista para email/LinkedIn: tono profesional, humano y directo, 120 a 180 palabras, con conexión al rol o empresa, match con 3 requisitos clave, 2 a 3 logros o impactos y cierre con CTA para pedir una llamada. recruiterMessages.dmShort debe ser la versión B para DM corto, con un máximo de 600 caracteres y el mismo tono. No reutilices plantillas genéricas entre vacantes; cambiá el énfasis según seniority, dominio y señales reales del puesto. Mantené el lenguaje natural y respetá un límite de longitud que evite cortes bruscos, palabras partidas o artefactos de truncación. ${toneInstruction}`,
     },
     {
       role: "user",

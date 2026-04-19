@@ -60,4 +60,13 @@ for insert
 to authenticated
 with check (auth.uid() = id);
 
+drop policy if exists "Profiles can be deleted by owner" on public.profiles;
+create policy "Profiles can be deleted by owner"
+on public.profiles
+for delete
+to authenticated
+using (auth.uid() = id);
+
+grant select, insert, update, delete on table public.profiles to authenticated;
+
 commit;

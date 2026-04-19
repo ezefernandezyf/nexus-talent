@@ -81,4 +81,42 @@ describe("createGroqProviderAdapter", () => {
 
     expect(adapter.mapErrorToUserMessage(new Error("Unexpected"))).toContain("No se pudo completar");
   });
+
+  it("guides the provider to produce structured, variable, recruiter-facing output", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify({ summary: "Ok", skillGroups: [], outreachMessage: { subject: "S", body: "B" } }),
+            },
+          },
+        ],
+      }),
+    });
+
+    const adapter = createGroqProviderAdapter({ apiKey: "test-key", fetchImpl });
+    const request = adapter.buildRequest({ jobDescription: "Senior React engineer", messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL });
+
+    await request.execute(new AbortController().signal);
+
+    const [, requestInit] = fetchImpl.mock.calls[0] ?? [];
+    const requestBody = JSON.parse((requestInit as RequestInit).body as string) as {
+      messages: Array<{ role: string; content: string }>;
+    };
+
+    expect(requestBody.messages[0]?.content).toContain("JSON estricto");
+    expect(requestBody.messages[0]?.content).toContain("vacancySummary");
+    expect(requestBody.messages[0]?.content).toContain("keywords");
+    expect(requestBody.messages[0]?.content).toContain("gaps");
+    expect(requestBody.messages[0]?.content).toContain("recruiterMessages");
+    expect(requestBody.messages[0]?.content).toContain("email/LinkedIn");
+    expect(requestBody.messages[0]?.content).toContain("No reutilices plantillas genéricas entre vacantes");
+    expect(requestBody.messages[0]?.content).toContain("seniority");
+    expect(requestBody.messages[0]?.content).toContain("dominio");
+    expect(requestBody.messages[0]?.content).toContain("120 a 180 palabras");
+    expect(requestBody.messages[0]?.content).toContain("600 caracteres");
+    expect(requestBody.messages[0]?.content).toContain("límite de longitud");
+  });
 });

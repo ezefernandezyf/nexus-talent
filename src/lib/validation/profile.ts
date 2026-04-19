@@ -1,13 +1,18 @@
 import { z } from "zod";
 
 const PROFILE_DISPLAY_NAME_INPUT_SCHEMA = z.string().trim().max(120);
+const PROFILE_ISO_DATETIME_SCHEMA = z
+  .string()
+  .trim()
+  .refine((value) => !Number.isNaN(Date.parse(value)), "Invalid ISO datetime")
+  .transform((value) => new Date(value).toISOString());
 
 export const PROFILE_RECORD_SCHEMA = z.object({
-  created_at: z.string().datetime(),
+  created_at: PROFILE_ISO_DATETIME_SCHEMA,
   display_name: z.string().nullable(),
   email: z.string().trim().email(),
   id: z.string().trim().min(1),
-  updated_at: z.string().datetime(),
+  updated_at: PROFILE_ISO_DATETIME_SCHEMA,
 });
 
 export const PROFILE_SAVE_INPUT_SCHEMA = z.object({
