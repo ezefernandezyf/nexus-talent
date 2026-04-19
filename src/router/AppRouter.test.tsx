@@ -87,6 +87,25 @@ describe("AppRouter", () => {
     expect(screen.getByRole("link", { name: /iniciar sesión/i })).toHaveAttribute("href", "/auth/sign-in");
   });
 
+  it("redirects authenticated legacy settings routes to the user settings page", async () => {
+    renderApp("/app/admin/settings", createSession("ana@empresa.com"));
+
+    await waitFor(() => expect(screen.getByRole("heading", { name: /configuración/i })).toBeInTheDocument());
+  });
+
+  it("keeps public visitors away from the user settings page", async () => {
+    renderApp("/app/settings");
+
+    await waitFor(() => expect(screen.getByRole("heading", { name: /iniciá sesión/i })).toBeInTheDocument());
+  });
+
+  it("renders the user settings page for authenticated users", async () => {
+    renderApp("/app/settings", createSession("ana@empresa.com"));
+
+    await waitFor(() => expect(screen.getByRole("heading", { name: /configuración/i })).toBeInTheDocument());
+    expect(screen.getByRole("button", { name: /exportar datos/i })).toBeInTheDocument();
+  });
+
   it("renders the public auth sign-in page", async () => {
     renderApp("/auth/sign-in");
 

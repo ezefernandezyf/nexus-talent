@@ -21,15 +21,49 @@ export function createAnalysisRequest(overrides: Partial<JobAnalysisRequest> = {
 export function createAnalysisResult(overrides: Partial<JobAnalysisResult> = {}): JobAnalysisResult {
   return {
     summary: "Un rol enfocado en construir experiencias de producto.",
+    vacancySummary: {
+      role: "Senior React engineer",
+      seniority: "senior",
+      modalityLocation: "Modalidad remota",
+      responsibilities: [
+        "Construir experiencias de producto",
+        "Colaborar con diseño y backend",
+        "Cuidar calidad y performance",
+      ],
+      mustHave: ["React", "TypeScript", "Comunicación clara"],
+      niceToHave: ["Testing", "Sistemas de diseño", "Autonomía"],
+    },
     skillGroups: [
       {
         category: "Stack principal",
         skills: [{ name: "React", level: JOB_ANALYSIS_SKILL_LEVEL.CORE }],
       },
     ],
+    keywords: {
+      hardSkills: ["React", "TypeScript"],
+      softSkills: ["Comunicación clara", "Colaboración transversal"],
+      domainKeywords: ["producto", "remoto"],
+      atsTerms: ["React", "TypeScript", "comunicación"],
+    },
+    gaps: [
+      {
+        gap: "Faltan métricas explícitas para cerrar el mensaje",
+        mitigation: "Sumá un estimado o rango aproximado cuando no exista una métrica dura.",
+        framing: "Enmarcalo como impacto observable en velocidad, calidad o coordinación.",
+      },
+    ],
     outreachMessage: {
       subject: "Interés en el puesto",
       body: "Hola equipo,\n\nRevisé la vacante.\n\nSaludos,\n[Your Name]",
+    },
+    recruiterMessages: {
+      emailLinkedIn: {
+        subject: "Interés en el puesto",
+        body: "Hola equipo de recruiting,\n\nLes comparto una lectura breve del perfil porque combina ejecución, criterio de producto y foco en entrega.\nVeo un match fuerte en React, TypeScript y Comunicación clara y en el contexto de modalidad remota.\nAdemás, la vacante deja ver foco en un rol enfocado en construir experiencias de producto y en keywords como React, TypeScript, producto.\nEn una presentación breve, pondría en primer plano mejoras estimadas en performance y experiencia de uso, más claridad visual y menos fricción en flujos críticos y más consistencia entre diseño y entrega técnica.\nMe gustaría conversar sobre cómo puedo convertir esas prioridades en una entrega concreta y sostenida.\n\nSaludos,\n[Your Name]",
+      },
+      dmShort: {
+        body: "Hola, me interesó Senior React engineer por el encaje con React, TypeScript y Comunicación clara. Veo match en Modalidad remota y en señales como React, TypeScript, producto. Si te sirve, puedo contarte cómo abordaría el rol y coordinar una llamada corta.",
+      },
     },
     ...overrides,
   };

@@ -51,6 +51,15 @@ describe("normalizeJobAnalysisResponse", () => {
         subject: "Interés en el puesto",
         body: "Hola equipo",
       },
+      recruiterMessages: {
+        emailLinkedIn: {
+          subject: "Interés en el puesto",
+          body: "Hola equipo",
+        },
+        dmShort: {
+          body: "Hola equipo",
+        },
+      },
     });
 
     expect(normalized).not.toHaveProperty("extraTopLevel");
@@ -84,6 +93,15 @@ describe("normalizeJobAnalysisResponse", () => {
       outreachMessage: {
         subject: "Interés",
         body: "Hola equipo",
+      },
+      recruiterMessages: {
+        emailLinkedIn: {
+          subject: "Interés",
+          body: "Hola equipo",
+        },
+        dmShort: {
+          body: "Hola equipo",
+        },
       },
     });
   });

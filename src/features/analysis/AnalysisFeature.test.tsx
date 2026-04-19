@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { AnalysisFeature } from "./AnalysisFeature";
+import { AnalysisFeature, StatePanel } from "./AnalysisFeature";
 import { createAnalysisResult } from "../../test/factories/analysis";
 
 const submitAnalysis = vi.fn();
@@ -133,5 +133,17 @@ describe("AnalysisFeature", () => {
 
     expect(screen.getByRole("heading", { name: /No se pudo completar la lectura/i })).toBeInTheDocument();
     expect(screen.getAllByText(/La respuesta de IA no es válida/i)).toHaveLength(2);
+  });
+
+  it("renders compact state panels for empty tone", () => {
+    const { container } = render(
+      <StatePanel label="Sin datos" title="Sin resultados" tone="empty" compact>
+        <p>Contenido mínimo</p>
+      </StatePanel>,
+    );
+
+    expect(screen.getByRole("heading", { name: "Sin resultados" })).toBeInTheDocument();
+    expect(screen.getByText("Vacío")).toBeInTheDocument();
+    expect(container.firstElementChild).toHaveClass("surface-panel", "flex", "flex-col", "gap-5");
   });
 });

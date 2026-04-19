@@ -62,8 +62,8 @@ describe("SettingsPage", () => {
     await waitFor(() => expect(screen.getByRole("heading", { name: "Configuración" })).toBeInTheDocument());
     expect(screen.getByRole("button", { name: /tema claro/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /exportar datos/i })).toBeInTheDocument();
-    expect(screen.getByText(/account information/i)).toBeInTheDocument();
-    expect(screen.getByText(/linked accounts/i)).toBeInTheDocument();
-    expect(screen.getByText(/danger zone/i)).toBeInTheDocument();
+    expect(screen.getByText(/información de la cuenta/i)).toBeInTheDocument();
+    expect(screen.getByText(/cuentas vinculadas/i)).toBeInTheDocument();
+    expect(screen.getByText(/zona de peligro/i)).toBeInTheDocument();
   });
 });

@@ -107,9 +107,9 @@ export function HistoryDetailEditor({ analysis, errorMessage, isLoading = false,
         />
       </label>
 
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm leading-6 text-on-surface-variant">El score visible sigue siendo derivado. Solo se guardan los metadatos editables.</p>
-        <Button disabled={isFormDisabled} type="submit">
+        <Button className="w-full sm:w-auto" disabled={isFormDisabled} type="submit">
           {isPending ? "Guardando..." : "Guardar cambios"}
         </Button>
       </div>

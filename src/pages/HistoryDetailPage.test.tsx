@@ -11,6 +11,11 @@ function createRepository({ shouldFailUpdate = false } = {}) {
   const analyses = [
     createSavedAnalysis({
       displayName: "Frontend Lead",
+      githubEnrichment: {
+        detectedStack: [{ name: "TypeScript", source: "languages" }],
+        repositoryName: "nexus-talent",
+        repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
+      },
       id: "550e8400-e29b-41d4-a716-446655440000",
       notes: "Prioritize product polish",
     }),
@@ -79,6 +84,15 @@ describe("HistoryDetailPage", () => {
       "href",
       "/app/analysis?sourceHistoryId=550e8400-e29b-41d4-a716-446655440000",
     );
+    expect(screen.getByText(/resumen de la vacante/i)).toBeInTheDocument();
+    expect(screen.getByText(/skills y términos para repetir/i)).toBeInTheDocument();
+    expect(screen.getByText(/posibles huecos y cómo cubrirlos/i)).toBeInTheDocument();
+    expect(screen.getByText(/editá las dos versiones antes de copiar/i)).toBeInTheDocument();
+    expect(
+      screen.getAllByRole("link", { name: "nexus-talent" }).some((link) =>
+        link.getAttribute("href") === "https://github.com/ezefernandezyf/nexus-talent",
+      ),
+    ).toBe(true);
     await user.clear(screen.getByLabelText(/nombre visible del guardado/i));
     await user.type(screen.getByLabelText(/nombre visible del guardado/i), "Frontend Principal");
     await user.clear(screen.getByLabelText(/notas del guardado/i));

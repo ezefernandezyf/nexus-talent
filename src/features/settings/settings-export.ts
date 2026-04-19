@@ -5,7 +5,7 @@ import type { ThemeMode } from "../../lib/theme";
 export interface LinkedAccountSnapshot {
   connected: boolean;
   label: string;
-  provider: OAuthProviderKey;
+  provider: Extract<OAuthProviderKey, "google">;
 }
 
 export interface SettingsExportPayloadInput {
@@ -57,7 +57,7 @@ export function getLocation(user: User | null) {
 export function getLinkedAccounts(user: User | null): LinkedAccountSnapshot[] {
   const connectedProviders = getIdentityProviders(user);
 
-  return (["github", "google"] as const).map((provider) => {
+  return (["google"] as const).map((provider) => {
     const config = getOAuthProviderConfig(provider);
 
     return {

@@ -113,7 +113,7 @@ describe("SignInForm", () => {
     await waitFor(() => expect(screen.getByText(/invalid login credentials/i)).toBeInTheDocument());
   });
 
-  it("starts github oauth from the sign-in entry point", async () => {
+  it("starts google oauth from the sign-in entry point", async () => {
     const user = userEvent.setup();
     const client = createAuthClient(null);
 
@@ -123,19 +123,19 @@ describe("SignInForm", () => {
       </AuthProvider>,
     );
 
-    await user.click(screen.getByRole("button", { name: /ingresar con github/i }));
+    await user.click(screen.getByRole("button", { name: /ingresar con google/i }));
 
     await waitFor(() =>
       expect(client.auth.signInWithOAuth).toHaveBeenCalledWith({
         options: { redirectTo: `${window.location.origin}/auth/callback` },
-        provider: "github",
+        provider: "google",
       }),
     );
   });
 
   it("surfaces oauth errors without breaking the password form", async () => {
     const user = userEvent.setup();
-    const client = createAuthClient("GitHub is temporarily unavailable");
+    const client = createAuthClient("Google is temporarily unavailable");
 
     render(
       <AuthProvider client={client}>
@@ -143,9 +143,9 @@ describe("SignInForm", () => {
       </AuthProvider>,
     );
 
-    await user.click(screen.getByRole("button", { name: /ingresar con github/i }));
+    await user.click(screen.getByRole("button", { name: /ingresar con google/i }));
 
-    await waitFor(() => expect(screen.getByText(/github is temporarily unavailable/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/google is temporarily unavailable/i)).toBeInTheDocument());
     expect(screen.getByRole("button", { name: /iniciar sesión/i })).toBeEnabled();
   });
 

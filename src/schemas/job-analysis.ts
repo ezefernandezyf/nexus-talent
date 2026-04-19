@@ -62,6 +62,59 @@ export const JOB_ANALYSIS_OUTREACH_SCHEMA = z.object({
     .min(1, { error: "El cuerpo del mensaje es obligatorio." }),
 }).strict();
 
+export const JOB_ANALYSIS_VACANCY_SUMMARY_SCHEMA = z.object({
+  role: z
+    .string({ error: "El rol de la vacante es obligatorio." })
+    .trim()
+    .min(1, { error: "El rol de la vacante es obligatorio." }),
+  seniority: z
+    .string({ error: "El seniority de la vacante es obligatorio." })
+    .trim()
+    .min(1, { error: "El seniority de la vacante es obligatorio." }),
+  modalityLocation: z
+    .string({ error: "La modalidad o ubicación de la vacante es obligatoria." })
+    .trim()
+    .min(1, { error: "La modalidad o ubicación de la vacante es obligatoria." }),
+  responsibilities: z.array(z.string().trim().min(1, { error: "Cada responsabilidad debe ser texto válido." })).min(1).max(5),
+  mustHave: z.array(z.string().trim().min(1, { error: "Cada requisito must-have debe ser texto válido." })).min(1),
+  niceToHave: z.array(z.string().trim().min(1, { error: "Cada requisito nice-to-have debe ser texto válido." })).min(1),
+}).strict();
+
+export const JOB_ANALYSIS_KEYWORDS_SCHEMA = z.object({
+  hardSkills: z.array(z.string().trim().min(1, { error: "Cada hard skill debe ser texto válido." })).min(1),
+  softSkills: z.array(z.string().trim().min(1, { error: "Cada soft skill debe ser texto válido." })).min(1),
+  domainKeywords: z.array(z.string().trim().min(1, { error: "Cada keyword de dominio debe ser texto válido." })).min(1),
+  atsTerms: z.array(z.string().trim().min(1, { error: "Cada término ATS debe ser texto válido." })).min(1),
+}).strict();
+
+export const JOB_ANALYSIS_GAP_SCHEMA = z.object({
+  gap: z
+    .string({ error: "El gap es obligatorio." })
+    .trim()
+    .min(1, { error: "El gap es obligatorio." }),
+  mitigation: z
+    .string({ error: "La mitigación es obligatoria." })
+    .trim()
+    .min(1, { error: "La mitigación es obligatoria." }),
+  framing: z
+    .string({ error: "El encuadre es obligatorio." })
+    .trim()
+    .min(1, { error: "El encuadre es obligatorio." }),
+}).strict();
+
+export const JOB_ANALYSIS_RECRUITER_MESSAGE_VARIANT_SCHEMA = JOB_ANALYSIS_OUTREACH_SCHEMA;
+
+export const JOB_ANALYSIS_RECRUITER_MESSAGES_SCHEMA = z.object({
+  emailLinkedIn: JOB_ANALYSIS_RECRUITER_MESSAGE_VARIANT_SCHEMA,
+  dmShort: z.object({
+    body: z
+      .string({ error: "El DM corto es obligatorio." })
+      .trim()
+      .min(1, { error: "El DM corto es obligatorio." })
+      .max(600, { error: "El DM corto no debería superar los 600 caracteres." }),
+  }).strict(),
+}).strict();
+
 export const JOB_ANALYSIS_GITHUB_STACK_SIGNAL_SCHEMA = z.object({
   name: z
     .string({ error: "El nombre de la señal de GitHub es obligatorio." })
@@ -96,8 +149,12 @@ export const JOB_ANALYSIS_EDITABLE_OUTREACH_SCHEMA = JOB_ANALYSIS_OUTREACH_SCHEM
 
 export const JOB_ANALYSIS_RESULT_SCHEMA = z.object({
   summary: JOB_ANALYSIS_SUMMARY_SCHEMA,
+  vacancySummary: JOB_ANALYSIS_VACANCY_SUMMARY_SCHEMA.optional(),
   skillGroups: z.array(JOB_ANALYSIS_SKILL_GROUP_SCHEMA).min(1, { error: "Se requiere al menos un grupo de habilidades." }),
+  keywords: JOB_ANALYSIS_KEYWORDS_SCHEMA.optional(),
+  gaps: z.array(JOB_ANALYSIS_GAP_SCHEMA).min(1, { error: "Se requiere al menos un gap." }).optional(),
   outreachMessage: JOB_ANALYSIS_OUTREACH_SCHEMA,
+  recruiterMessages: JOB_ANALYSIS_RECRUITER_MESSAGES_SCHEMA.optional(),
   githubEnrichment: JOB_ANALYSIS_GITHUB_ENRICHMENT_SCHEMA.optional(),
 }).strict();
 
@@ -131,6 +188,10 @@ export const SAVED_JOB_ANALYSIS_SCHEMA = JOB_ANALYSIS_RESULT_SCHEMA.extend({
 export type JobAnalysisSkill = z.infer<typeof JOB_ANALYSIS_SKILL_SCHEMA>;
 export type JobAnalysisSkillGroup = z.infer<typeof JOB_ANALYSIS_SKILL_GROUP_SCHEMA>;
 export type JobAnalysisOutreach = z.infer<typeof JOB_ANALYSIS_OUTREACH_SCHEMA>;
+export type JobAnalysisVacancySummary = z.infer<typeof JOB_ANALYSIS_VACANCY_SUMMARY_SCHEMA>;
+export type JobAnalysisKeywords = z.infer<typeof JOB_ANALYSIS_KEYWORDS_SCHEMA>;
+export type JobAnalysisGap = z.infer<typeof JOB_ANALYSIS_GAP_SCHEMA>;
+export type JobAnalysisRecruiterMessages = z.infer<typeof JOB_ANALYSIS_RECRUITER_MESSAGES_SCHEMA>;
 export type JobAnalysisGitHubStackSignal = z.infer<typeof JOB_ANALYSIS_GITHUB_STACK_SIGNAL_SCHEMA>;
 export type JobAnalysisGitHubEnrichment = z.infer<typeof JOB_ANALYSIS_GITHUB_ENRICHMENT_SCHEMA>;
 export type JobAnalysisRequest = z.infer<typeof JOB_ANALYSIS_REQUEST_SCHEMA>;

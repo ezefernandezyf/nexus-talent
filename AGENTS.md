@@ -124,6 +124,14 @@ Regla operativa: antes de implementar un módulo, hacer una exploración corta d
 
 La UI base ya está migrada en varias áreas. La fase activa ahora es cerrar huecos de producto, corregir navegación, resolver dependencias de autenticación y Supabase, y terminar el hardening responsive sin abrir frentes mezclados.
 
+### Prioridad Actual
+
+- **Settings pixel perfect**: ajustar la pantalla de settings lo más cerca posible de `docs/assets/referenciaSetting.html`, sin introducir cambios funcionales fuera del diseño.
+- **Settings funcional**: asegurar que vincular, desvincular, guardar cambios de perfil y eliminar cuenta funcionen de punta a punta para usuario final.
+- **Permisos de perfil**: resolver el error `permission denied for table profiles` cuando el usuario actualiza el nombre visible.
+- **IA de análisis**: mejorar el resumen estructurado y reescribir el message generator para que el mensaje sirva como carta de presentación o texto para reclutamiento, sin salidas recortadas ni plantillas repetidas entre vacantes.
+- **Ejecución por módulos**: mantener settings y análisis de IA como frentes separados, cada uno con su exploración, propuesta, spec, diseño, tareas, implementación y verificación.
+
 ### Principios de Ejecución
 
 - Los assets de `docs/assets/` siguen siendo la referencia visual cuando exista una pantalla nueva o una reescritura.

@@ -7,6 +7,7 @@ import {
   getHistoryMatchPercentage,
   getHistoryMatchTone,
   getHistoryRoleLabel,
+  getHistorySummarySnippet,
   getHistoryUid,
 } from "../history-formatters";
 
@@ -20,6 +21,7 @@ interface HistoryCardProps {
 export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }: HistoryCardProps) {
   const companyLabel = getHistoryCompanyLabel(analysis);
   const roleLabel = getHistoryRoleLabel(analysis);
+  const summarySnippet = getHistorySummarySnippet(analysis.summary, 120);
   const uidLabel = getHistoryUid(analysis);
   const matchPercentage = getHistoryMatchPercentage(analysis);
   const matchTone = getHistoryMatchTone(matchPercentage);
@@ -53,7 +55,7 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
         <span className="sr-only">Abrir detalle</span>
       </Link>
 
-      <div className="flex items-center gap-4 lg:col-span-4">
+      <div className="flex items-start gap-4 lg:col-span-4 lg:items-center">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-outline-variant/20 bg-surface-container-lowest">
           <span className="material-symbols-outlined text-primary" aria-hidden="true">
             {iconName}
@@ -66,17 +68,22 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
       </div>
 
       <div className="lg:col-span-3 lg:mt-0">
-        <span className="rounded-full border border-outline-variant/10 bg-surface-container-highest/50 px-3 py-1 font-label text-[11px] text-on-surface-variant">
-          {roleLabel}
-        </span>
+        <div className="space-y-2">
+          <span className="rounded-full border border-outline-variant/10 bg-surface-container-highest/50 px-3 py-1 font-label text-[11px] text-on-surface-variant">
+            {roleLabel}
+          </span>
+          <p className="max-w-xl text-sm leading-6 text-on-surface-variant">
+            {summarySnippet}
+          </p>
+        </div>
       </div>
 
       <div className="text-left text-xs text-on-surface-variant lg:col-span-2 lg:text-right">
         {formatHistoryCardDate(analysis.createdAt)}
       </div>
 
-      <div className="text-right lg:col-span-2">
-        <div className="flex flex-col items-end gap-1">
+      <div className="text-left lg:col-span-2 lg:text-right">
+        <div className="flex flex-col items-start gap-1 lg:items-end">
           <span className={`text-lg font-bold font-headline ${matchValueClassName}`}>
             {matchPercentage}
             <span className="ml-0.5 text-[10px] font-label opacity-60">%</span>
@@ -87,10 +94,10 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
         </div>
       </div>
 
-      <div className="relative z-10 flex justify-end lg:col-span-1 lg:justify-end">
+      <div className="relative z-10 flex justify-start lg:col-span-1 lg:justify-end">
         <Button
           aria-label={`Eliminar ${companyLabel}`}
-          className="opacity-100 transition-opacity focus:opacity-100 focus-visible:ring-2 focus-visible:ring-primary/40 lg:opacity-0 lg:group-hover:opacity-100"
+          className="w-full opacity-100 transition-opacity focus:opacity-100 focus-visible:ring-2 focus-visible:ring-primary/40 sm:w-auto lg:opacity-0 lg:group-hover:opacity-100"
           disabled={isDeleting}
           type="button"
           variant="secondary"

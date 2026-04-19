@@ -7,11 +7,17 @@ import { LogoutButton, AUTH_STATUS, useAuth } from "../features/auth";
 import { useAnalysisHistory } from "../features/analysis";
 import { ThemeProvider, useTheme } from "../lib/theme";
 
-const appNavItems = [
+type AppNavItem = {
+  label: string;
+  requiresAuth?: boolean;
+  to: string;
+};
+
+const appNavItems: AppNavItem[] = [
   { label: "Análisis", to: "/app/analysis" },
   { label: "Historial", to: "/app/history" },
-  { label: "Settings", to: "/app/admin/settings" },
-] as const;
+  { label: "Settings", to: "/app/settings", requiresAuth: true },
+];
 
 function getNavLinkClassName({ isActive }: { isActive: boolean }) {
   return [
@@ -37,6 +43,7 @@ function AppLayoutContent() {
   const sessionLabel = status === AUTH_STATUS.AUTHENTICATED ? user?.email ?? "Sesión activa" : status === AUTH_STATUS.LOADING ? "Verificando acceso" : "Modo público";
   const recentAnalyses = history.analyses.slice(0, 3);
   const isAuthenticated = status === AUTH_STATUS.AUTHENTICATED;
+  const visibleNavItems = appNavItems.filter((item) => !item.requiresAuth || isAuthenticated);
 
   const mobileDrawerActions =
     isAuthenticated ? (
@@ -77,7 +84,7 @@ function AppLayoutContent() {
               Nexus Talent
             </Link>
             <div className="hidden items-center gap-6 md:flex" aria-label="App primary navigation">
-              {appNavItems.map((item) => (
+              {visibleNavItems.map((item) => (
                 <NavLink key={item.to} className={getNavLinkClassName} to={item.to}>
                   {item.label}
                 </NavLink>
@@ -123,7 +130,7 @@ function AppLayoutContent() {
                     <div className="mt-3 space-y-2">
                       <Link
                         className="secondary-button w-full justify-center"
-                        to="/app/admin/settings"
+                        to="/app/settings"
                         onClick={() => setIsDesktopMenuOpen(false)}
                       >
                         Settings
@@ -184,7 +191,7 @@ function AppLayoutContent() {
             </div>
 
             <div className="mt-auto space-y-1 border-t border-outline-variant/15 pt-4">
-              {appNavItems.map((item) => (
+              {visibleNavItems.map((item) => (
                 <NavLink key={item.to} className={getNavLinkClassName} to={item.to}>
                   {item.label}
                 </NavLink>
@@ -200,7 +207,7 @@ function AppLayoutContent() {
         <Footer />
       </div>
 
-      <MobileDrawer actions={mobileDrawerActions} heading="Nexus Talent" isOpen={isMobileMenuOpen} items={appNavItems} onClose={() => setIsMobileMenuOpen(false)} />
+      <MobileDrawer actions={mobileDrawerActions} heading="Nexus Talent" isOpen={isMobileMenuOpen} items={visibleNavItems} onClose={() => setIsMobileMenuOpen(false)} />
     </main>
   );
 }

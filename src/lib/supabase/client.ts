@@ -1,5 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
-import type { Session, SupabaseClient } from "@supabase/supabase-js";
+import type { Session, SupabaseClient, UserIdentity } from "@supabase/supabase-js";
+
+export type UserIdentityLike = UserIdentity;
 
 const SUPABASE_ENV = {
   ANON_KEY: "VITE_SUPABASE_ANON_KEY",
@@ -35,6 +37,29 @@ export interface AuthClientLike {
         provider: string;
         url: string | null;
       };
+      error: { message: string } | null;
+    }>;
+    getUserIdentities?: () => Promise<{
+      data: {
+        identities: UserIdentityLike[];
+      };
+      error: { message: string } | null;
+    }>;
+    getUser?: () => Promise<{
+      data: {
+        user: Session["user"] | null;
+      };
+      error: { message: string } | null;
+    }>;
+    linkIdentity?: (credentials: { provider: string }) => Promise<{
+      data: {
+        provider: string;
+        url: string | null;
+      };
+      error: { message: string } | null;
+    }>;
+    unlinkIdentity?: (identity: UserIdentityLike) => Promise<{
+      data: unknown;
       error: { message: string } | null;
     }>;
     signOut: () => Promise<{
