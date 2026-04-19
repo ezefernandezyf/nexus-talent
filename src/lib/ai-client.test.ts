@@ -328,4 +328,22 @@ describe("ai-client", () => {
     expect(result.outreachMessage.body).not.toContain("...");
     expect(result.outreachMessage.body).not.toContain("…");
   });
+
+  it("derives modality and seniority variants from the job description", async () => {
+    const hybridResult = await jobAnalysisClient.analyzeJobDescription(
+      "Semi-senior backend engineer\nModalidad híbrido con foco en APIs",
+    );
+    const onsiteResult = await jobAnalysisClient.analyzeJobDescription(
+      "Junior QA engineer presencial\nTesting manual y automatizado",
+    );
+    const geoResult = await jobAnalysisClient.analyzeJobDescription(
+      "People operations lead\nTrabajo en Buenos Aires con equipo regional",
+    );
+
+    expect(hybridResult.vacancySummary?.modalityLocation).toBe("Modalidad híbrida");
+    expect(hybridResult.vacancySummary?.seniority).toBe("mid");
+    expect(onsiteResult.vacancySummary?.modalityLocation).toBe("Modalidad presencial");
+    expect(onsiteResult.vacancySummary?.seniority).toBe("junior");
+    expect(geoResult.vacancySummary?.modalityLocation).toBe("Ubicación / cobertura geográfica mencionada");
+  });
 });

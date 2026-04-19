@@ -37,7 +37,7 @@ function ErrorState({ message }: { message: string }) {
   );
 }
 
-function StatePanel({
+export function StatePanel({
   children,
   label,
   title,
