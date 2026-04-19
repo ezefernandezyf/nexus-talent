@@ -8,6 +8,10 @@ La primera capacidad del producto convierte una descripción de puesto en tres s
 - una matriz de habilidades agrupada por señales relevantes,
 - y un borrador de outreach editable antes de copiar.
 
+## Estado del proyecto
+
+El proyecto está en fase final de producto. La base funcional, la navegación pública, el historial, settings, autenticación social y la capa de análisis están implementadas y verificadas. El foco actual queda en mantenimiento, pulido visual y despliegue.
+
 ## Stack
 
 - React 19
@@ -20,6 +24,15 @@ La primera capacidad del producto convierte una descripción de puesto en tres s
 - Vitest
 - React Testing Library
 - Vite
+
+## Deployment
+
+El despliegue objetivo es Vercel con la URL final `https://nexustalent.vercel.app`.
+
+- `vercel.json` ya apunta al build de Vite y a `dist`.
+- `robots.txt` y `sitemap.xml` viven en `public/` para que Vite los copie al build.
+- La variable `VITE_APP_URL` debe quedar en `http://localhost:5173` en desarrollo y configurarse como `https://yourdomain.com` para producción.
+- Si agregás nuevas páginas públicas, actualizá el sitemap junto con la ruta real.
 
 ## Flujo de datos
 
@@ -93,10 +106,18 @@ La autenticación del módulo 07 usa Supabase como origen de verdad para la sesi
 
 - `VITE_SUPABASE_URL`: URL del proyecto de Supabase.
 - `VITE_SUPABASE_ANON_KEY`: clave pública anon del proyecto.
+- `VITE_APP_URL`: URL base de la app para redirects y configuración local o de producción.
 
 Si estas variables faltan, la app se mantiene en el shell público de autenticación y no expone las rutas privadas.
 
 La base mínima de esquema vive en `supabase/migrations/20260405_module_07_auth_users.sql`.
+
+## SEO
+
+- La landing pública y la página de privacidad son indexables.
+- Las rutas privadas y de autenticación no forman parte del sitemap.
+- `robots.txt` referencia el sitemap y limita el rastreo a las superficies públicas.
+- Mantener el copy público honesto y actualizado ayuda más que agregar texto genérico extra.
 
 ## CI/CD
 
@@ -104,6 +125,13 @@ La base mínima de esquema vive en `supabase/migrations/20260405_module_07_auth_
 - El workflow corre `npm ci`, `npm run test`, `npm run typecheck` y `npm run build`.
 - Node queda fijado con `.nvmrc` y `package.json` para evitar drift entre local y CI.
 - El despliegue queda listo para Vercel mediante el build de Vite y `vercel.json`.
+
+## Rutas públicas
+
+- `/` landing principal.
+- `/privacy` política de privacidad.
+- `/404` página de error.
+- `/auth/sign-in` y `/auth/sign-up` existen como entrada pública de autenticación, pero no se incluyen en el sitemap.
 
 ## Convenciones
 
@@ -114,4 +142,4 @@ La base mínima de esquema vive en `supabase/migrations/20260405_module_07_auth_
 
 ## Estado actual
 
-El módulo `Job Analysis` ya está implementado, verificado y archivado como primer cambio SDD del proyecto.
+El proyecto quedó cerrado con la base funcional completa, módulos de polish aplicados y preparación de despliegue y SEO lista para Vercel.

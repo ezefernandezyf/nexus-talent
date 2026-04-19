@@ -1,8 +1,10 @@
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { createPortal } from "react-dom";
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import type { ReactNode } from "react";
 import { cn } from "../../lib/cn";
+import { panelSlideVariants } from "./motion";
 
 export interface MobileDrawerItem {
   label: string;
@@ -25,6 +27,8 @@ function getDrawerLinkClassName({ isActive }: { isActive: boolean }) {
 }
 
 export function MobileDrawer({ actions, heading, isOpen, items, onClose }: MobileDrawerProps) {
+  const prefersReducedMotion = useReducedMotion();
+
   useEffect(() => {
     if (!isOpen || typeof document === "undefined") {
       return;
@@ -47,50 +51,61 @@ export function MobileDrawer({ actions, heading, isOpen, items, onClose }: Mobil
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen || typeof document === "undefined") {
+  if (typeof document === "undefined") {
     return null;
   }
 
   return createPortal(
-    <div className="fixed inset-0 z-40 lg:hidden">
-      <button
-        aria-label="Cerrar menú"
-        className="absolute inset-0 z-0 cursor-default bg-surface-container-lowest/75 backdrop-blur-sm"
-        type="button"
-        onClick={onClose}
-      />
-      <aside
-        aria-label={heading}
-        aria-modal="true"
-        className="absolute right-0 top-0 z-10 flex h-full w-[min(86vw,22rem)] flex-col gap-5 overflow-y-auto bg-surface-container-low px-5 py-5 shadow-[0_32px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/8 sm:px-6"
-        id="mobile-navigation-drawer"
-        role="dialog"
-      >
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-1">
-            <p className="text-xl font-semibold tracking-[-0.03em] text-white">{heading}</p>
-          </div>
-          <button
+    <AnimatePresence>
+      {isOpen ? (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <motion.button
             aria-label="Cerrar menú"
-            className="rounded-full bg-surface-container-high/70 px-3 py-2 text-sm font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-white"
+            className="absolute inset-0 z-0 cursor-default bg-surface-container-lowest/75 backdrop-blur-sm"
+            initial={prefersReducedMotion ? false : { opacity: 0 }}
+            animate={prefersReducedMotion ? undefined : { opacity: 1 }}
+            exit={prefersReducedMotion ? undefined : { opacity: 0 }}
             type="button"
             onClick={onClose}
+          />
+          <motion.aside
+            aria-label={heading}
+            aria-modal="true"
+            className="absolute right-0 top-0 z-10 flex h-full w-[min(86vw,22rem)] flex-col gap-5 overflow-y-auto bg-surface-container-low px-5 py-5 shadow-[0_32px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/8 sm:px-6"
+            id="mobile-navigation-drawer"
+            initial={prefersReducedMotion ? false : "hidden"}
+            animate={prefersReducedMotion ? undefined : "visible"}
+            exit={prefersReducedMotion ? undefined : "exit"}
+            role="dialog"
+            variants={panelSlideVariants}
           >
-            Cerrar
-          </button>
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-1">
+                <p className="text-xl font-semibold tracking-[-0.03em] text-white">{heading}</p>
+              </div>
+              <button
+                aria-label="Cerrar menú"
+                className="rounded-full bg-surface-container-high/70 px-3 py-2 text-sm font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-white"
+                type="button"
+                onClick={onClose}
+              >
+                Cerrar
+              </button>
+            </div>
+
+            <nav className="flex flex-col gap-2" aria-label="Mobile navigation">
+              {items.map((item) => (
+                <NavLink key={item.to} className={getDrawerLinkClassName} to={item.to} onClick={onClose}>
+                  {item.label}
+                </NavLink>
+              ))}
+            </nav>
+
+            {actions ? <div className="mt-auto space-y-3 pt-5">{actions}</div> : null}
+          </motion.aside>
         </div>
-
-        <nav className="flex flex-col gap-2" aria-label="Mobile navigation">
-          {items.map((item) => (
-            <NavLink key={item.to} className={getDrawerLinkClassName} to={item.to} onClick={onClose}>
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
-
-        {actions ? <div className="mt-auto space-y-3 pt-5">{actions}</div> : null}
-      </aside>
-    </div>,
+      ) : null}
+    </AnimatePresence>,
     document.body,
   );
 }

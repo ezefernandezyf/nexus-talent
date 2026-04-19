@@ -2,7 +2,7 @@ import { MemoryRouter } from "react-router-dom";
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import type { SavedJobAnalysis } from "../../../schemas/job-analysis";
-import { getHistoryMatchPercentage, getHistoryUid } from "../history-formatters";
+import { getHistoryUid } from "../history-formatters";
 import { HistoryCard } from "./HistoryCard";
 
 const analysis: SavedJobAnalysis = {
@@ -37,27 +37,35 @@ const analysis: SavedJobAnalysis = {
 };
 
 describe("HistoryCard", () => {
-  it("renders the title fallback, summary snippet and up to five unique skills", () => {
+  it("renders the title fallback, summary snippet and keeps the title bounded", () => {
     const onDelete = vi.fn();
+    const longDisplayName = "Frontend Engineer Principal con responsabilidad de plataforma y observabilidad";
 
     render(
       <MemoryRouter>
-        <HistoryCard analysis={analysis} iconName="apartment" onDelete={onDelete} />
+        <HistoryCard
+          analysis={{
+            ...analysis,
+            displayName: longDisplayName,
+          }}
+          iconName="apartment"
+          onDelete={onDelete}
+        />
       </MemoryRouter>,
     );
 
-    const row = screen.getByRole("listitem", { name: "Frontend Engineer" });
+    const row = screen.getByRole("listitem", { name: longDisplayName });
 
-    expect(within(row).getByText("Frontend Engineer")).toBeInTheDocument();
+    expect(within(row).getByText(longDisplayName)).toHaveClass("truncate");
     expect(within(row).getByText(getHistoryUid(analysis))).toBeInTheDocument();
     expect(within(row).getByText("React, testing and TypeScript")).toBeInTheDocument();
     expect(within(row).getByText(/lead the product frontend strategy with strong react/i)).toBeInTheDocument();
     expect(within(row).getByText(/5 abr 2026/i)).toBeInTheDocument();
-    expect(within(row).getByText(String(getHistoryMatchPercentage(analysis)))).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /abrir detalle de frontend engineer/i })).toHaveAttribute(
       "href",
       `/app/history/${analysis.id}`,
     );
+    expect(screen.queryByText(/%/)).not.toBeInTheDocument();
   });
 
   it("delegates delete actions to the provided callback", async () => {

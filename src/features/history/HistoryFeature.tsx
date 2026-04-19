@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { AnalysisRepository } from "../../lib/repositories";
 import { useAnalysisHistory } from "../analysis";
 import { HistoryEmptyState, HistoryList, HistoryLoadingState } from "./components";
@@ -22,8 +23,26 @@ export function HistoryFeature({ analysisHref = "/app/analysis", repository, sco
   const history = useAnalysisHistory({ repository, scope });
   const deleteMutation = useDeleteAnalysis({ repository, scope });
   const errorMessage = getHistoryErrorMessage(history.error);
-  const visibleCount = Math.min(4, history.analyses.length);
-  const totalPages = Math.max(1, Math.ceil(history.analyses.length / 4));
+  const pageSize = 10;
+  const totalPages = Math.max(1, Math.ceil(history.analyses.length / pageSize));
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCurrentPage((current) => Math.min(Math.max(current, 1), totalPages));
+  }, [totalPages]);
+
+  const visibleAnalyses = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+
+    return history.analyses.slice(startIndex, startIndex + pageSize);
+  }, [currentPage, history.analyses]);
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setCurrentPage(Math.min(Math.max(page, 1), totalPages));
+    },
+    [totalPages],
+  );
 
   function handleDelete(analysisId: string) {
     deleteMutation.deleteAnalysis(analysisId);
@@ -50,11 +69,12 @@ export function HistoryFeature({ analysisHref = "/app/analysis", repository, sco
         <HistoryEmptyState analysisHref={analysisHref} />
       ) : (
         <HistoryList
-          analyses={history.analyses}
+          analyses={visibleAnalyses}
+          currentPage={currentPage}
           isDeletingId={deleteMutation.isPending ? deleteMutation.variables ?? null : null}
           onDelete={handleDelete}
+          onPageChange={handlePageChange}
           totalPages={totalPages}
-          visibleCount={visibleCount}
         />
       )}
     </section>

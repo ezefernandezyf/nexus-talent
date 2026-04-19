@@ -6,7 +6,11 @@ import { AuthProvider } from "./AuthProvider";
 import { useAuth } from "./hooks/useAuth";
 import type { AuthClientLike } from "../../lib/supabase";
 
-function createUser(email: string, role: "admin" | "authenticated" = "authenticated"): User {
+function createUser(
+  email: string,
+  role: "admin" | "authenticated" = "authenticated",
+  identities: User["identities"] = [],
+): User {
   const now = new Date("2026-04-05T12:00:00.000Z").toISOString();
 
   return {
@@ -16,19 +20,23 @@ function createUser(email: string, role: "admin" | "authenticated" = "authentica
     email,
     email_confirmed_at: now,
     id: "550e8400-e29b-41d4-a716-446655440000",
-    identities: [],
     is_anonymous: false,
     last_sign_in_at: now,
     phone: "",
     role: "authenticated",
     updated_at: now,
+    identities,
     user_metadata: { role },
   } as User;
 }
 
-function createSession(email: string, role: "admin" | "authenticated" = "authenticated"): Session {
+function createSession(
+  email: string,
+  role: "admin" | "authenticated" = "authenticated",
+  identities: User["identities"] = [],
+): Session {
   const now = new Date("2026-04-05T12:00:00.000Z").toISOString();
-  const user = createUser(email, role);
+  const user = createUser(email, role, identities);
 
   return {
     access_token: "session-token",
@@ -55,6 +63,14 @@ function createAuthClient(options: {
     auth: {
       getSession: vi.fn(async () => ({
         data: { session: currentSession },
+        error: null,
+      })),
+      getUserIdentities: vi.fn(async () => ({
+        data: { identities: currentSession?.user.identities ?? [] },
+        error: null,
+      })),
+      unlinkIdentity: vi.fn(async () => ({
+        data: {},
         error: null,
       })),
       onAuthStateChange: vi.fn((callback) => {
@@ -122,6 +138,17 @@ function AuthProbe() {
       <button type="button" onClick={() => signOut()}>
         Cerrar sesión
       </button>
+    </div>
+  );
+}
+
+function AuthLinkProbe() {
+  const { errorMessage, unlinkIdentity } = useAuth();
+
+  return (
+    <div>
+      <p data-testid="unlink-error">{errorMessage ?? "no-error"}</p>
+      <button type="button" onClick={() => unlinkIdentity("github")}>Desvincular GitHub</button>
     </div>
   );
 }
@@ -239,6 +266,28 @@ describe("AuthProvider", () => {
     );
 
     expect(screen.getByTestId("error")).toHaveTextContent("no-error");
+  });
+
+  it("blocks unlinking the last remaining identity and surfaces a readable error", async () => {
+    const user = userEvent.setup();
+    const client = createAuthClient({
+      session: createSession("analyst@nexustalent.dev", "authenticated", [
+        { id: "github-identity", identity_id: "github-identity", provider: "github", user_id: "550e8400-e29b-41d4-a716-446655440000" } as never,
+      ]),
+    });
+
+    render(
+      <AuthProvider client={client}>
+        <AuthLinkProbe />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => expect(screen.getByTestId("unlink-error")).toHaveTextContent("no-error"));
+
+    await user.click(screen.getByRole("button", { name: /desvincular github/i }));
+
+    await waitFor(() => expect(screen.getByTestId("unlink-error")).toHaveTextContent(/al menos dos identidades/i));
+    expect(client.auth.unlinkIdentity).not.toHaveBeenCalled();
   });
 
 });

@@ -57,7 +57,13 @@ export function useSettings(options: UseSettingsOptions = {}) {
     setAccountActionError(null);
 
     try {
-      return await linkIdentity(provider);
+      const result = await linkIdentity(provider);
+
+      if (!result.success) {
+        setAccountActionError(result.message);
+      }
+
+      return result;
     } catch (error) {
       const message = error instanceof Error && error.message.trim().length > 0 ? error.message : `No se pudo vincular ${provider}.`;
       setAccountActionError(message);
@@ -72,7 +78,13 @@ export function useSettings(options: UseSettingsOptions = {}) {
     setAccountActionError(null);
 
     try {
-      return await unlinkIdentity(provider);
+      const result = await unlinkIdentity(provider);
+
+      if (!result.success) {
+        setAccountActionError(result.message);
+      }
+
+      return result;
     } catch (error) {
       const message = error instanceof Error && error.message.trim().length > 0 ? error.message : `No se pudo desvincular ${provider}.`;
       setAccountActionError(message);

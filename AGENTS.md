@@ -86,6 +86,14 @@ El roadmap activo se organiza por módulos pequeños y secuenciales. Cada módul
 - **24 Historial avanzado**: Permitir reanálisis, edición de resumen/nota de la vacante y generación de un nuevo mensaje para la misma vacante.
 - **25 Settings y cuenta**: Asegurar que settings sea accesible desde todos los puntos esperados y completar los controles de cuenta/persistencia que falten.
 
+### Bloque Final: Polish, UX y Cierre de Producto
+
+- **26 History & Sidebar Polish**: Truncar títulos largos de vacantes, hacer clickeables los items del sidebar izquierdo, e implementar la paginación real del historial (10 items por página).
+- **27 Analysis Alignment**: Eliminar la barra y porcentaje de compatibilidad (cálculo sin base real actual).
+- **28 Copy, Landing & Branding**: Ajustar claims de la landing a la realidad (arquitectura, IDE, CV "próximamente", ajustar número de devs), integrar el nuevo `faviconreference`, y purgar textos de desarrollo/instrucciones de la interfaz (ej. Settings). Definir flujo del botón "Demo".
+- **29 Settings Hardening**: Solucionar el error 404 al desvincular identidades sociales en Supabase (`DELETE /auth/v1/user/identities/...`).
+- **30 UX Motion & Micro-interactions**: Implementar animaciones y transiciones (ej. Framer Motion) para feedback visual, menús (hamburger), modales y hovers, mejorando la visibilidad del estado del sistema.
+
 Regla operativa: antes de implementar un módulo, hacer una exploración corta del área afectada y confirmar qué ya existe, qué falta, qué depende de Supabase y qué puede reutilizarse.
 
 ## 7. Flujo de Git y Organización

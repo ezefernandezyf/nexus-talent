@@ -4,6 +4,7 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import type { AnalysisRepository } from "../../lib/repositories";
+import type { SavedJobAnalysis } from "../../schemas/job-analysis";
 import { HistoryFeature } from "./HistoryFeature";
 
 function createWrapper(queryClient: QueryClient) {
@@ -22,7 +23,7 @@ function createDeferred<T>() {
   return { promise, resolve };
 }
 
-function createAnalysis() {
+function createAnalysis(overrides: Partial<SavedJobAnalysis> = {}): SavedJobAnalysis {
   return {
     id: "550e8400-e29b-41d4-a716-446655440000",
     createdAt: "2026-04-05T12:05:00.000Z",
@@ -38,6 +39,7 @@ function createAnalysis() {
       subject: "Interés",
       body: "Hola equipo",
     },
+    ...overrides,
   };
 }
 
@@ -140,6 +142,59 @@ describe("HistoryFeature", () => {
 
     const companies = Array.from(container.querySelectorAll("[role='listitem'] p.text-sm.font-semibold")).map((node) => node.textContent);
     expect(companies).toEqual(["Frontend Engineer", "Platform Engineer"]);
+  });
+
+  it("shows only the current page of analyses and moves back when the last item on a page is deleted", async () => {
+    const analyses = Array.from({ length: 11 }, (_, index) =>
+      createAnalysis({
+        id: `550e8400-e29b-41d4-a716-44665544${String(index).padStart(4, "0")}`,
+        createdAt: `2026-04-05T12:${String(index).padStart(2, "0")}:00.000Z`,
+        jobDescription: `Analysis ${index + 1}\nBuild item ${index + 1}`,
+        summary: `Summary ${index + 1}`,
+      }),
+    );
+    const repository: AnalysisRepository = {
+      save: vi.fn(async () => analyses[0]),
+      getAll: vi.fn(async () => [...analyses]),
+      getById: vi.fn(async (id) => analyses.find((analysis) => analysis.id === id) ?? null),
+      update: vi.fn(async () => null),
+      delete: vi.fn(async (id) => {
+        const index = analyses.findIndex((analysis) => analysis.id === id);
+        if (index >= 0) {
+          analyses.splice(index, 1);
+        }
+      }),
+    };
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        mutations: { retry: false },
+        queries: { retry: false },
+      },
+    });
+    const Wrapper = createWrapper(queryClient);
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter>
+        <Wrapper>
+          <HistoryFeature repository={repository} />
+        </Wrapper>
+      </MemoryRouter>,
+    );
+
+    await waitFor(() => expect(screen.getByText("Analysis 11")).toBeInTheDocument());
+    expect(screen.getAllByRole("listitem")).toHaveLength(10);
+    expect(screen.getByText(/página 1 de 2/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /página siguiente/i }));
+
+    await waitFor(() => expect(screen.getByText("Analysis 1")).toBeInTheDocument());
+    expect(screen.getAllByRole("listitem")).toHaveLength(1);
+
+    await user.click(screen.getByRole("button", { name: /eliminar analysis 1/i }));
+
+    await waitFor(() => expect(screen.getByText(/página 1 de 1/i)).toBeInTheDocument());
+    expect(screen.getAllByRole("listitem")).toHaveLength(10);
   });
 
   it("renders an error state when the history query fails", async () => {
