@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute, PublicAuthRoute } from "../features/auth";
 import { AdminRoute } from "../features/auth/components/AdminRoute";
-import { LandingPage } from "../pages/LandingPage";
+import { LandingPage } from "../features/landing/pages/LandingPage";
 import PrivacyPage from "../pages/PrivacyPage";
 import NotFoundPage from "../pages/NotFoundPage";
 

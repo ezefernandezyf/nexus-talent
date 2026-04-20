@@ -2,7 +2,7 @@ import { MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { render, screen, waitForElementToBeRemoved, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { LandingPage } from "./LandingPage";
+import { LandingPage } from "../features/landing/pages/LandingPage";
 
 describe("LandingPage", () => {
   it("renders the stitched landing composition and mobile navigation", async () => {
@@ -18,7 +18,7 @@ describe("LandingPage", () => {
     expect(screen.getByText("Eficiencia Radical")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /ingresar con google/i })).toHaveAttribute("href", "/auth/sign-in");
     const createAccountLinks = screen.getAllByRole("link", { name: /crear cuenta/i });
-    expect(createAccountLinks).toHaveLength(2);
+    expect(createAccountLinks).toHaveLength(3);
     createAccountLinks.forEach((link) => {
       expect(link).toHaveAttribute("href", "/auth/sign-up");
     });
@@ -30,7 +30,11 @@ describe("LandingPage", () => {
     expect(screen.getByRole("link", { name: /empieza ahora gratis/i })).toHaveAttribute("href", "/auth/sign-up");
     expect(screen.getByRole("button", { name: /abrir menú/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /nexus talent/i })).toHaveAttribute("href", "/");
-    expect(screen.getByRole("link", { name: /^ingresar$/i })).toBeInTheDocument();
+    const signInLinks = screen.getAllByRole("link", { name: /^ingresar$/i });
+    expect(signInLinks).toHaveLength(2);
+    signInLinks.forEach((link) => {
+      expect(link).toHaveAttribute("href", "/auth/sign-in");
+    });
     expect(screen.getByText("© 2026 Nexus talent. Built for the machine era.")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /abrir menú/i }));

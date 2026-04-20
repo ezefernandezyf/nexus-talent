@@ -76,8 +76,13 @@ describe("AppRouter", () => {
     renderApp("/");
 
     expect(screen.getByRole("heading", { name: /de job description a postulación ganadora en segundos\./i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /^ingresar$/i })).toHaveAttribute("href", "/auth/sign-in");
+    const signInLinks = screen.getAllByRole("link", { name: /^ingresar$/i });
+    expect(signInLinks).toHaveLength(2);
+    signInLinks.forEach((link) => {
+      expect(link).toHaveAttribute("href", "/auth/sign-in");
+    });
     const createAccountLinks = screen.getAllByRole("link", { name: /crear cuenta/i });
+    expect(createAccountLinks).toHaveLength(3);
     createAccountLinks.forEach((link) => {
       expect(link).toHaveAttribute("href", "/auth/sign-up");
     });
