@@ -21,14 +21,14 @@ export function HeroSection() {
   return (
     <motion.section
       animate={prefersReducedMotion ? undefined : "visible"}
-      className="relative pt-24 pb-16 px-8 max-w-screen-2xl mx-auto overflow-hidden"
+      className="relative mx-auto max-w-screen-2xl overflow-hidden px-4 pb-14 pt-16 sm:px-6 sm:pb-16 sm:pt-20 lg:px-8 lg:pt-24"
       id="hero"
       initial={prefersReducedMotion ? false : "hidden"}
       variants={heroContainer}
     >
       <motion.div className="absolute top-0 right-0 w-125 h-125 bg-primary/5 rounded-full blur-[120px] -z-10" aria-hidden="true" />
       <motion.div className="absolute -bottom-24 -left-24 w-100 h-100 bg-secondary-container/10 rounded-full blur-[100px] -z-10" aria-hidden="true" />
-      <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <div className="flex flex-col space-y-8">
           <motion.div className="inline-flex items-center gap-2 px-3 py-1 bg-surface-container w-fit rounded-full border border-outline-variant/15" variants={fadeUpVariants}>
             <span className="w-2 h-2 rounded-full bg-primary glow-pulse"></span>
@@ -36,10 +36,10 @@ export function HeroSection() {
               Eficiencia Radical
             </span>
           </motion.div>
-          <motion.h1 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight text-on-surface" style={{}} variants={fadeUpVariants}>
+          <motion.h1 className="text-4xl font-bold leading-[1.08] tracking-tight text-on-surface sm:text-5xl md:text-6xl lg:text-7xl" style={{}} variants={fadeUpVariants}>
             De Job Description a <span className="gradient-text" style={{}}>Postulación Ganadora</span> en Segundos.
           </motion.h1>
-          <motion.p className="text-xl text-on-surface-variant max-w-xl leading-relaxed" style={{}} variants={fadeUpVariants}>
+          <motion.p className="max-w-xl text-base leading-relaxed text-on-surface-variant sm:text-lg lg:text-xl" style={{}} variants={fadeUpVariants}>
             Convierte una vacante en señales técnicas, un resumen usable y un mensaje de outreach listo para editar. Sin promesas infladas.
           </motion.p>
           <motion.div className="flex flex-col sm:flex-row items-center gap-4 pt-4" variants={fadeUpVariants}>
@@ -58,10 +58,10 @@ export function HeroSection() {
           </motion.div>
         </div>
 
-        <motion.div className="relative group" variants={fadeUpVariants}>
+        <motion.div className="group relative" variants={fadeUpVariants}>
           <motion.div className="absolute inset-0 bg-primary/20 blur-[100px] group-hover:bg-primary/30 transition-all" aria-hidden="true" />
-          <div className="grid h-150 grid-cols-6 grid-rows-6 gap-4 relative">
-            <motion.div className="col-span-4 row-span-3 glass-panel border border-outline-variant/20 rounded-xl p-6 flex flex-col justify-between" variants={scaleInVariants} whileHover={prefersReducedMotion ? undefined : { y: -4 }} transition={{ duration: 0.2 }}>
+          <div className="relative grid gap-4 sm:grid-cols-6 sm:grid-rows-6 lg:h-150">
+            <motion.div className="glass-panel flex flex-col justify-between rounded-xl border border-outline-variant/20 p-5 sm:col-span-4 sm:row-span-3 sm:p-6" variants={scaleInVariants} whileHover={prefersReducedMotion ? undefined : { y: -4 }} transition={{ duration: 0.2 }}>
               <div>
                 <motion.h3 className="font-label text-sm text-primary mb-4 flex items-center gap-2" style={{}} variants={fadeUpVariants}>
                   <LandingIcon className="h-4.5 w-4.5 text-primary" name="analytics" />
@@ -91,7 +91,7 @@ export function HeroSection() {
               </div>
             </motion.div>
 
-            <motion.div className="col-span-2 row-span-4 bg-surface-container border border-outline-variant/15 rounded-xl p-4 overflow-hidden" variants={scaleInVariants} whileHover={prefersReducedMotion ? undefined : { y: -4 }} transition={{ duration: 0.2 }}>
+            <motion.div className="overflow-hidden rounded-xl border border-outline-variant/15 bg-surface-container p-4 sm:col-span-2 sm:row-span-4" variants={scaleInVariants} whileHover={prefersReducedMotion ? undefined : { y: -4 }} transition={{ duration: 0.2 }}>
               <h3 className="font-label text-[10px] text-on-surface-variant mb-3" style={{}}>OUTREACH_GEN</h3>
               <div className="space-y-2">
                 <div className="w-full h-2 bg-surface-container-high rounded"></div>
@@ -109,7 +109,7 @@ export function HeroSection() {
               </div>
             </motion.div>
 
-            <motion.div className="col-span-4 row-span-3 bg-surface-container-low border border-outline-variant/15 rounded-xl p-6 flex flex-col" variants={scaleInVariants} whileHover={prefersReducedMotion ? undefined : { y: -4 }} transition={{ duration: 0.2 }}>
+            <motion.div className="flex flex-col rounded-xl border border-outline-variant/15 bg-surface-container-low p-5 sm:col-span-4 sm:row-span-3 sm:p-6" variants={scaleInVariants} whileHover={prefersReducedMotion ? undefined : { y: -4 }} transition={{ duration: 0.2 }}>
               <div className="flex justify-between items-start mb-4">
                 <div className="space-y-1">
                   <h4 className="text-2xl font-bold" style={{}}>4.2s</h4>

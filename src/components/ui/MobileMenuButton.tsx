@@ -12,7 +12,7 @@ export function MobileMenuButton({ className, isOpen, ...props }: MobileMenuButt
       aria-expanded={isOpen}
       aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
       className={cn(
-        "inline-flex items-center justify-center rounded-2xl bg-surface-container-high/70 px-4 py-3 text-sm font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-white focus-visible:outline-none focus-visible:ring-0 lg:hidden",
+        "inline-flex items-center justify-center rounded-2xl bg-surface-container-high/70 px-4 py-3 text-sm font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-white focus-visible:outline-none focus-visible:ring-0 md:hidden",
         className,
       )}
       type="button"

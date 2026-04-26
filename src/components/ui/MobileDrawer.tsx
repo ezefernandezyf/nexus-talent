@@ -58,7 +58,7 @@ export function MobileDrawer({ actions, heading, isOpen, items, onClose }: Mobil
   return createPortal(
     <AnimatePresence>
       {isOpen ? (
-        <div className="fixed inset-0 z-40 lg:hidden">
+        <div className="fixed inset-0 z-40 md:hidden">
           <motion.button
             aria-label="Cerrar menú"
             className="absolute inset-0 z-0 cursor-default bg-surface-container-lowest/75 backdrop-blur-sm"

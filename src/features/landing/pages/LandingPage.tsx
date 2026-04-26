@@ -24,10 +24,10 @@ export function LandingPage() {
         actions={
           <div className="flex items-center gap-4">
             <MobileMenuButton isOpen={isMobileMenuOpen} onClick={() => setIsMobileMenuOpen((current) => !current)} />
-            <Link className="secondary-button" to="/auth/sign-in">
+            <Link className="secondary-button hidden md:inline-flex" to="/auth/sign-in">
               Ingresar
             </Link>
-            <Link className="primary-button" to="/auth/sign-up">
+            <Link className="primary-button hidden md:inline-flex" to="/auth/sign-up">
               Crear cuenta
             </Link>
           </div>
