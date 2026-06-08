@@ -33,6 +33,15 @@ The system MUST expose an optional GitHub repository URL input in the analysis f
 - THEN the system MUST still accept the submission
 - AND the base analysis result MUST remain available.
 
+### Requirement: Keep LinkedIn manual-only
+The system MUST NOT attempt to automate LinkedIn scraping or LinkedIn-based enrichment.
+
+#### Scenario: User wants to use LinkedIn as a reference
+- GIVEN a recruiter or role is easier to find through LinkedIn
+- WHEN the user works in the analysis flow
+- THEN the UI MUST make it clear that LinkedIn is a manual reference only
+- AND the system MUST direct the user to paste the relevant context into the job description or outreach draft instead of scraping LinkedIn.
+
 ### Requirement: Produce structured analysis output
 The system MUST return a structured result containing a job summary, a list of key skills, and a suggested outreach message that the user can edit before copying.
 

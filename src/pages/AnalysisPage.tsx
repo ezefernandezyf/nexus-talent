@@ -25,7 +25,7 @@ export function AnalysisPage() {
   return (
     <FeaturePageShell>
         <PageHeader
-          description="Optimiza tu perfil para la vacante deseada utilizando nuestro motor de inteligencia artificial."
+          description="Optimiza tu perfil para la vacante deseada utilizando nuestro motor de inteligencia artificial. GitHub es el único enriquecimiento automatizado; LinkedIn queda como referencia manual por restricciones de la plataforma."
           title="Nuevo Análisis de Reclutamiento"
         />
 
@@ -57,7 +57,7 @@ export function AnalysisPage() {
             </div>
             <div>
               <h3 className="mb-1 text-xs font-bold uppercase tracking-widest text-on-surface">Drafting</h3>
-              <p className="text-[11px] leading-relaxed text-on-surface-variant">Generación de cartas de presentación adaptadas al rol.</p>
+              <p className="text-[11px] leading-relaxed text-on-surface-variant">Generación de cartas de presentación adaptadas al rol. LinkedIn solo se usa como referencia manual, no como fuente automatizada.</p>
             </div>
           </article>
           <article className="flex items-start gap-4">
