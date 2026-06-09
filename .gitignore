@@ -16,6 +16,9 @@ dist/
 *.o
 *.out
 
+# Logs
+*.log
+
 # IDEs
 .vscode/
 .idea/
