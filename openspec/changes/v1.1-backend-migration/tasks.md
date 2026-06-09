@@ -40,21 +40,21 @@ Chain strategy: pending
 - **Dependencies**: 1.1
 - **Estimated effort**: M
 
-### Task 1.3: Create Express 5 server skeleton + Dockerfile
+### Task 1.3: Create Express 5 server skeleton + Dockerfile  ✅
 - **Files**: `server/package.json`, `server/tsconfig.json`, `server/src/index.ts`, `server/src/infra/app.ts`, `server/src/infra/prisma.ts`, `server/src/infra/error-handler.ts`, `server/src/infra/logger.ts`, `server/src/infra/validate.ts`, `server/Dockerfile`, `server/.dockerignore`
 - **Description**: Create `@nexus-talent/server` with Express 5 app wired up. Infra modules: Prisma singleton, pino logger, Zod validation middleware, global error handler (Zod→400, Prisma→404/409, fallback→500). Mount health check at `GET /api/health`. Create screaming-architecture directories (`auth/`, `analysis/`, `profile/`, `history/`) with empty routers. Add Dockerfile for Render (Node 22 + pnpm + dist).
 - **Acceptance**: `pnpm run dev:server` starts on :3001 with pino logs. `GET /api/health` returns `{ status: "ok" }`.
 - **Dependencies**: 1.1, 1.2
 - **Estimated effort**: M
 
-### Task 1.4: Create Prisma schema
+### Task 1.4: Create Prisma schema  ✅
 - **Files**: `server/prisma/schema.prisma`
 - **Description**: Define models: `Profile` (id uuid, email unique, displayName?, googleId?, role enum USER/ADMIN, timestamps), `Analysis` (id uuid, userId FK→Profile, description text, result Json, summary?, notes?, timestamps), `Setting` (id uuid, userId FK unique, data Json, timestamps). Use PostgreSQL provider, UUID IDs, `@map` for table names.
 - **Acceptance**: `prisma:generate` produces client. `prisma:migrate dev --name init` creates tables in Supabase. Generated types are compatible with shared Zod schemas.
 - **Dependencies**: 1.1, 1.3
 - **Estimated effort**: M
 
-### Task 1.5: Migrate SPA to web/ package
+### Task 1.5: Migrate SPA to web/ package  ✅
 - **Files**: `web/package.json`, `web/tsconfig.json`, `web/vite.config.ts`, `web/src/*` (moved from `src/`)
 - **Description**: Create `@nexus-talent/web` with React 19 deps. Move `src/` → `web/src/` preserving internal structure. Configure Vite with proxy `:5173/api/*` → `:3001/api/*`, Tailwind plugin, React plugin. Update TypeScript paths. Update import paths that referenced root-level files.
 - **Acceptance**: `pnpm run dev:web` starts Vite on :5173. App renders without import errors. `fetch("/api/health")` from browser proxies to :3001.

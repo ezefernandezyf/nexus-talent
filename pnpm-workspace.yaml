@@ -3,3 +3,7 @@ packages:
   - 'web'
   - 'shared'
   - 'e2e'
+allowBuilds:
+  '@prisma/engines': true
+  esbuild: true
+  prisma: true
