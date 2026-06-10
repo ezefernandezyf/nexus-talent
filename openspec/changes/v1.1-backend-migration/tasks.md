@@ -82,3 +82,96 @@ Chain strategy: pending
 - **Estimated total changed lines**: ~350–420 (P1). New files: server skeleton (~180), shared contracts (~90), web migration (~50 net after move), configs (~50). Well within the 400-line budget but close due to schema + contracts size.
 - **Risk assessment**: Medium — Prisma schema + Zod contracts are dense but formulaic. Web migration is a `git mv` with import path updates. If git doesn't detect renames cleanly, the diff could exceed 400 lines. Recommended: single PR to `develop` with squash-merge.
 - **Testing approach**: No integration tests in P1 (server has no business logic yet). Verify with: `pnpm install` (resolution), `pnpm run dev:server` (starts, health check OK), `pnpm run dev:web` (Vite proxying), `pnpm run typecheck` (both packages compile), `pnpm run prisma:generate` (client generated).
+
+---
+
+## Phase 2: Auth Backend
+
+### Review Workload Forecast
+
+| Field | Value |
+|-------|-------|
+| Estimated changed lines | ~700–850 |
+| 400-line budget risk | High |
+| Chained PRs recommended | Yes |
+| Suggested split | PR 1: Foundation → PR 2: Core Endpoints → PR 3: OAuth + Tests |
+| Delivery strategy | ask-on-risk |
+| Chain strategy | pending |
+
+Decision needed before apply: Yes
+Chained PRs recommended: Yes
+Chain strategy: pending
+400-line budget risk: High
+
+### Suggested Work Units
+
+| Unit | Goal | Likely PR | Notes |
+|------|------|-----------|-------|
+| 1 | Shared auth schemas + JWT util + rate limiter + parseCookies | PR 1 | Base: develop or tracker. ~200 lines. Foundation. |
+| 2 | Auth middleware + service + controller + router + wiring | PR 2 | Depends on PR 1. ~350 lines. Core endpoints. |
+| 3 | Google OAuth + auth tests | PR 3 | Depends on PR 2. ~250 lines. OAuth + verification. |
+
+---
+
+### Task 2.1: Create shared auth Zod schemas
+- **Files**: `shared/contracts/auth.ts`, `shared/src/index.ts`
+- **Description**: Define `LoginSchema` (z.email + password z.string().min(8)), `RegisterSchema` (extends Login + optional displayName), `SessionSchema` (user with id, email, displayName, role). Zod 4 syntax. Barrel export from shared/index.ts.
+- **Acceptance**: `pnpm --filter @nexus-talent/shared typecheck` passes. Schemas validate correctly. Web + server can import `@nexus-talent/shared/contracts/auth`.
+- **Dependencies**: 1.2
+- **Estimated effort**: XS
+
+### Task 2.2: Implement JWT utility with crypto.createHmac
+- **Files**: `server/src/infra/http.ts`
+- **Description**: `sign(payload, secret, expiresIn)` → HS256 JWT string. `verify(token, secret)` → decoded payload or null. `parseCookies(req)` → `Record<string, string>`. Base64url encoding. 7-day expiry. No jsonwebtoken dependency. Extend Express Request with `userId?: string`.
+- **Acceptance**: sign/verify roundtrip works. Expired token returns null. Bad signature returns null. `parseCookies` correctly parses `Cookie` header with multiple values.
+- **Dependencies**: 2.1
+- **Estimated effort**: M
+
+### Task 2.3: Implement in-memory rate limiter
+- **Files**: `server/src/infra/rate-limiter.ts`
+- **Description**: Factory `rateLimiter({ windowMs, max })` returning Express middleware. `Map<string, { count, resetAt }>` keyed by IP. Auth config: 5 requests / 15min. Returns 429 with `Retry-After` header when exceeded. Cleanup expired entries on access.
+- **Acceptance**: 6th request from same IP within window returns 429. Clean IP passes. Memory clears after window expiry.
+- **Dependencies**: 1.3
+- **Estimated effort**: S
+
+### Task 2.4: Create auth middleware (requireAuth + optionalAuth)
+- **Files**: `server/src/auth/auth.middleware.ts`
+- **Description**: `requireAuth` — read `nexus-talent-session` cookie via parseCookies, verify JWT, attach decoded user to `req`. Return 401 if missing/expired/invalid. `optionalAuth` — same but continues silently; `req.userId` stays undefined if no valid JWT.
+- **Acceptance**: Protected route returns 401 without cookie, 200 with valid cookie, 401 with expired cookie. OptionalAuth allows access regardless.
+- **Dependencies**: 2.2
+- **Estimated effort**: S
+
+### Task 2.5: Implement auth service
+- **Files**: `server/src/auth/auth.service.ts`
+- **Description**: `register(email, password, displayName?)` — bcrypt hash (10 rounds), create Profile via Prisma, sign JWT. `login(email, password)` — find Profile by email, bcrypt verify, sign JWT. Throw typed errors: `ConflictError` for duplicate email, `UnauthorizedError` for bad credentials. `getUserById(id)` for me endpoint.
+- **Acceptance**: register creates Profile + returns JWT. register with existing email throws ConflictError. login with correct credentials returns JWT. login with wrong password throws UnauthorizedError.
+- **Dependencies**: 2.1, 2.2, 1.4
+- **Estimated effort**: M
+
+### Task 2.6: Implement auth controller
+- **Files**: `server/src/auth/auth.controller.ts`
+- **Description**: `register` — validate body with RegisterSchema, call service.register, Set-Cookie (`httpOnly`, `sameSite=lax`, `path=/`, `maxAge=7d`), return 201 `{ user }`. `login` — same flow, return 200. `me` — fetch user via req.userId, return 200 with session. `logout` — Set-Cookie with `maxAge=0`. Error handling maps service errors to HTTP codes.
+- **Acceptance**: All 4 endpoints return correct status, cookie headers, and body per spec scenarios. Duplicate email → 409. Bad password → 401. Valid me → 200 with user object. Logout clears cookie.
+- **Dependencies**: 2.5, 2.4
+- **Estimated effort**: M
+
+### Task 2.7: Create auth router and wire into app
+- **Files**: `server/src/auth/auth.router.ts`, `server/src/infra/app.ts`
+- **Description**: Router with `POST /register`, `POST /login`, `GET /me`, `POST /logout`. Apply rate limiter to POST routes (5/15min). Mount at `/api/auth` in app.ts.
+- **Acceptance**: `GET /api/auth/me` returns 401 without cookie. All routes respond at correct paths. Rate limiter active on auth POST routes. `pnpm run dev:server` starts without errors.
+- **Dependencies**: 2.3, 2.6, 2.4
+- **Estimated effort**: S
+
+### Task 2.8: Implement Google OAuth
+- **Files**: `server/src/auth/auth.controller.ts`, `server/src/auth/auth.service.ts`, `server/src/auth/auth.router.ts`
+- **Description**: `GET /api/auth/google` — validate `GOOGLE_OAUTH_CLIENT_ID` env var, redirect to Google consent URL with PKCE (generate+store code_verifier in session cookie). `GET /api/auth/google/callback` — exchange code via Google token endpoint, find or create Profile by `googleId`, sign JWT, set cookie, redirect to frontend (`/app`). Handle error callback gracefully.
+- **Acceptance**: Without `GOOGLE_OAUTH_CLIENT_ID`, Google OAuth route returns 400. Redirect to Google consent has correct params. Callback creates Profile, sets JWT, redirects to frontend. Error callback redirects with `?error=`.
+- **Dependencies**: 2.2, 2.5, 2.7
+- **Estimated effort**: M
+
+### Task 2.9: Write auth tests
+- **Files**: `server/src/__tests__/auth.test.ts`
+- **Description**: JWT unit: sign/verify roundtrip, expiry, bad signature, parseCookies. Service unit: register, login, duplicate, bad credentials (mocked Prisma). Integration (supertest): register → 201+cookie, duplicate → 409, login → 200+cookie, bad password → 401, GET /me with/without cookie → 200/401, logout → cookie cleared, rate limiter → 429 after 5 attempts.
+- **Acceptance**: `pnpm --filter @nexus-talent/server test` passes all auth tests. Coverage >80% on auth domain.
+- **Dependencies**: 2.7, 2.8
+- **Estimated effort**: M
