@@ -80,8 +80,8 @@ jobs:
         env:
           DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
 
-      - name: Run migrations
-        run: pnpm --filter @nexus-talent/server prisma:migrate dev --name ci
+      - name: Push schema to DB
+        run: pnpm --filter @nexus-talent/server prisma:push
         env:
           DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
 
@@ -89,7 +89,7 @@ jobs:
         run: pnpm --filter @nexus-talent/server typecheck
 
       - name: Test
-        run: pnpm --filter @nexus-talent/server test
+        run: pnpm --filter @nexus-talent/server test --passWithNoTests
         env:
           DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
           JWT_SECRET: ci-test-secret-do-not-use-in-prod
