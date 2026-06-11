@@ -11,7 +11,8 @@ permissions:
   contents: read
 
 jobs:
-  validate:
+  validate-web:
+    name: Web (frontend)
     runs-on: ubuntu-latest
 
     steps:
@@ -30,11 +31,65 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run typecheck
-        run: pnpm -r typecheck
+      - name: Typecheck
+        run: pnpm --filter @nexus-talent/web typecheck
 
-      - name: Run tests
-        run: pnpm -r test
+      - name: Test
+        run: pnpm --filter @nexus-talent/web test
 
-      - name: Build packages
-        run: pnpm -r build
+      - name: Build
+        run: pnpm --filter @nexus-talent/web build
+
+  validate-server:
+    name: Server (backend)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: nexus
+          POSTGRES_PASSWORD: nexus
+          POSTGRES_DB: nexus-test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --filter @nexus-talent/server prisma:generate
+        env:
+          DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
+
+      - name: Run migrations
+        run: pnpm --filter @nexus-talent/server prisma:migrate dev --name ci
+        env:
+          DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
+
+      - name: Typecheck
+        run: pnpm --filter @nexus-talent/server typecheck
+
+      - name: Test
+        run: pnpm --filter @nexus-talent/server test
+        env:
+          DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
+          JWT_SECRET: ci-test-secret-do-not-use-in-prod
