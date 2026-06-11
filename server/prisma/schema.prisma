@@ -7,13 +7,14 @@ datasource db {
 }
 
 model Profile {
-  id          String   @id
-  email       String   @unique
-  displayName String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id
+  email        String   @unique
+  displayName  String?
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  analyses    Analysis[]
+  analyses     Analysis[]
 }
 
 model Analysis {
