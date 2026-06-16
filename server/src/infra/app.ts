@@ -46,7 +46,7 @@ export function createApp() {
 
   // ── Routers ───────────────────────────────────────────────
   app.use("/api/auth", authRouter);
-  app.use("/api/analysis", analysisRouter);
+  app.use("/api/ai", analysisRouter);
   app.use("/api/profile", profileRouter);
   app.use("/api/history", historyRouter);
 

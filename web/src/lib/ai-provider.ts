@@ -7,6 +7,8 @@ import {
 import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisInput, type JobAnalysisMessageTone } from "../schemas/job-analysis";
 import { GROQ_JOB_ANALYSIS_JSON_SCHEMA } from "./validation";
 
+const BACKEND_PROXY_URL = "/api/ai/analyze";
+
 const GROQ_CHAT_COMPLETIONS_URL = "https://api.groq.com/openai/v1/chat/completions";
 const DEFAULT_GROQ_MODEL = "openai/gpt-oss-20b";
 
@@ -35,6 +37,11 @@ interface GroqProviderAdapterOptions {
 export interface JobAnalysisPromptInput {
   jobDescription: string;
   messageTone: JobAnalysisMessageTone;
+}
+
+interface BackendProxyAdapterOptions {
+  fallbackTransport?: ProviderFallbackTransport<JobAnalysisPromptInput>;
+  fetchImpl?: typeof fetch;
 }
 
 interface GroqChatMessage {
@@ -122,7 +129,7 @@ function parseGroqEnvelope(response: GroqChatCompletionEnvelope) {
 }
 
 export function createGroqProviderAdapter(options: GroqProviderAdapterOptions = {}): ProviderAdapter<JobAnalysisPromptInput> {
-  const apiKey = options.apiKey ?? import.meta.env.VITE_GROQ_API_KEY;
+  const apiKey = options.apiKey;
   const model = options.model ?? import.meta.env.VITE_GROQ_MODEL ?? DEFAULT_GROQ_MODEL;
   const fetchImpl = options.fetchImpl ?? globalThis.fetch?.bind(globalThis);
   const fallbackTransport = options.fallbackTransport;
@@ -234,6 +241,146 @@ export function createGroqProviderAdapter(options: GroqProviderAdapterOptions = 
       const envelope = response as GroqChatCompletionEnvelope;
       if (envelope?.choices?.length) {
         return parseGroqEnvelope(envelope);
+      }
+
+      return response;
+    },
+  };
+}
+
+/**
+ * Maps HTTP status codes from the backend proxy to AIOrchestratorError codes.
+ * - 400 → PermanentFailure (bad input)
+ * - 429 → RateLimit
+ * - 502 → TransientFailure (Groq upstream failure)
+ */
+function mapBackendStatusToCode(status: number): AIErrorCode {
+  if (status === 429) {
+    return AI_ERROR_CODES.RATE_LIMIT_EXCEEDED;
+  }
+
+  if (status >= 500) {
+    return AI_ERROR_CODES.TRANSIENT_FAILURE;
+  }
+
+  return AI_ERROR_CODES.PERMANENT_FAILURE;
+}
+
+function mapBackendStatusToMessage(status: number): string {
+  if (status === 429) {
+    return "Demasiadas solicitudes. Intentá más tarde.";
+  }
+
+  if (status >= 500) {
+    return "El servicio de análisis no está disponible temporalmente.";
+  }
+
+  return "La solicitud fue rechazada por el servidor.";
+}
+
+/**
+ * Creates a `ProviderAdapter` that proxies analysis requests through the
+ * backend POST /api/ai/analyze endpoint instead of calling Groq directly.
+ *
+ * On network errors (fetch throws), falls back to `fallbackTransport`.
+ * On HTTP errors, maps the status code to `AIOrchestratorError`.
+ * On success, passes through the server-validated response.
+ */
+export function createBackendProxyAdapter(options: BackendProxyAdapterOptions = {}): ProviderAdapter<JobAnalysisPromptInput> {
+  const fetchImpl = options.fetchImpl ?? globalThis.fetch?.bind(globalThis);
+  const fallbackTransport = options.fallbackTransport;
+
+  return {
+    id: "backend-proxy",
+    providerName: "Backend AI Proxy",
+
+    isTransientError(error: unknown) {
+      if (isAIOrchestratorError(error)) {
+        return error.retryable && error.code !== AI_ERROR_CODES.RATE_LIMIT_EXCEEDED;
+      }
+
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return true;
+      }
+
+      return error instanceof Error && /timeout|network|fetch/i.test(error.message);
+    },
+
+    mapErrorToUserMessage(error: unknown) {
+      if (isAIOrchestratorError(error)) {
+        return error.message;
+      }
+
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return "La solicitud tardó demasiado en responder.";
+      }
+
+      if (error instanceof Error && /timeout|network|fetch/i.test(error.message)) {
+        return "No se pudo conectar con el servidor de análisis.";
+      }
+
+      return "No se pudo completar la solicitud de análisis.";
+    },
+
+    buildRequest(input: JobAnalysisPromptInput) {
+      return {
+        async execute(signal: AbortSignal) {
+          if (!fetchImpl) {
+            if (fallbackTransport) {
+              return Promise.resolve(fallbackTransport(input));
+            }
+
+            throw createAIOrchestratorError(
+              AI_ERROR_CODES.UNKNOWN_ERROR,
+              "No hay conexión con el servidor ni transporte de respaldo.",
+              { retryable: false },
+            );
+          }
+
+          let response: Response;
+
+          try {
+            response = await fetchImpl(BACKEND_PROXY_URL, {
+              method: "POST",
+              signal,
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                jobDescription: input.jobDescription,
+                messageTone: input.messageTone,
+              }),
+            });
+          } catch {
+            // Network error — trigger fallback
+            if (fallbackTransport) {
+              return Promise.resolve(fallbackTransport(input));
+            }
+
+            throw createAIOrchestratorError(
+              AI_ERROR_CODES.TRANSIENT_FAILURE,
+              "No se pudo conectar con el servidor de análisis.",
+              { retryable: true },
+            );
+          }
+
+          if (!response.ok) {
+            const status = response.status;
+            throw createAIOrchestratorError(
+              mapBackendStatusToCode(status),
+              mapBackendStatusToMessage(status),
+              { status, retryable: status >= 500 },
+            );
+          }
+
+          return response.json();
+        },
+      };
+    },
+
+    parseResponse(response: unknown) {
+      // Server already returns a validated AnalysisResponseDTO-shaped JSON.
+      // No envelope parsing needed — pass through directly.
+      if (typeof response === "string") {
+        return JSON.parse(response) as unknown;
       }
 
       return response;

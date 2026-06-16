@@ -291,7 +291,7 @@ describe("ai-client", () => {
     });
 
     await expect(client.analyzeJobDescription("Senior React engineer")).rejects.toThrow(
-      /No se pudo completar la solicitud contra Groq/i,
+      /No se pudo completar la solicitud de análisis/i,
     );
   });
 
