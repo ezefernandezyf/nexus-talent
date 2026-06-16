@@ -107,12 +107,12 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [x] parseCookies utility (sin cookie-parser)
 - [x] Rate limiting (auth: 5/15min)
 
-### P3: AI Proxy
+### P3: AI Proxy ✅
 > Server-side Groq API, Zod validation
-- [ ] POST /api/ai/analyze (receive JD → Groq → validated response)
-- [ ] Groq SDK server-side (no más VITE_GROQ_API_KEY en bundle)
-- [ ] Zod validation on response
-- [ ] Error handling + fallback (local analysis engine server-side)
+- [x] POST /api/ai/analyze (receive JD → Groq → validated response)
+- [x] Groq SDK server-side (no más VITE_GROQ_API_KEY en bundle)
+- [x] Zod validation on response
+- [x] Error handling + fallback (local analysis engine server-side)
 
 ### P4: History API
 > CRUD de analyses con Prisma
