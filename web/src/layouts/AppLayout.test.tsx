@@ -19,7 +19,7 @@ function createAuthClient(session: { user: { email?: string } } | null = null) {
       signOut: vi.fn(async () => ({ error: null })),
       signUp: vi.fn(async () => ({ data: { session: null, user: null }, error: null })),
     },
-  };
+  } as never;
 }
 
 describe("AppLayout", () => {
