@@ -65,15 +65,22 @@ pnpm run dev:web                # terminal 2: frontend on :5173
 
 ## Key Files
 - `server/prisma/schema.prisma` — data model
+- `server/prisma.config.ts` — Prisma 7 datasource config (env DATABASE_URL)
 - `server/src/infra/app.ts` — Express app + route wiring
 - `server/src/infra/prisma.ts` — Prisma singleton
+- `server/src/infra/http.ts` — Custom JWT sign/verify (HS256)
+- `server/src/infra/rate-limiter.ts` — In-memory rate limiter
 - `server/src/auth/auth.middleware.ts` — JWT cookie → req.userId
+- `server/src/auth/auth.service.ts` — register, login, getUserById
+- `server/src/auth/auth.controller.ts` — HTTP handlers for auth routes
+- `server/src/auth/auth.router.ts` — Auth route wiring
 - `shared/contracts/` — Zod schemas + DTOs shared front/back
 - `web/src/core/api-client.ts` — Axios instance + API functions
 - `web/src/core/router.tsx` — React Router config
 - `web/vite.config.ts` — Vite + Tailwind plugin + API proxy to :3001
 - `web/src/auth/auth-store.ts` — Zustand store (session + status)
 - `web/src/auth/auth-guard.tsx` — ProtectedRoute + PublicRoute
+- `vercel.json` — Vercel deploy config (monorepo pnpm workspace filter)
 
 ## Roadmap — V1.1 Backend Migration
 
@@ -81,24 +88,24 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 
 ### P1: Infrastructure ✅
 > pnpm monorepo, Prisma schema + Supabase PostgreSQL, Express 5 skeleton, Render deploy config
-- [ ] pnpm-workspace.yaml con server/web/shared/e2e
-- [ ] Migrar `src/` → `apps/web/src/`
-- [ ] Prisma schema: profiles, analyses, settings
-- [ ] Express app skeleton con screaming architecture (auth/, analysis/, profile/, history/)
-- [ ] Render health check + Dockerfile
-- [ ] Vite proxy a :3001
+- [x] pnpm-workspace.yaml con server/web/shared/e2e
+- [x] Migrar `src/` → `web/src/`
+- [x] Prisma schema: profiles, analyses, settings
+- [x] Express app skeleton con screaming architecture (auth/, analysis/, profile/, history/)
+- [x] Render health check + Dockerfile
+- [x] Vite proxy a :3001
 
-### P2: Auth Backend
+### P2: Auth Backend ✅
 > Custom JWT (HS256), email/password + Google OAuth, middleware, migration script
-- [ ] JWT custom (crypto.createHmac — sin jsonwebtoken)
-- [ ] POST /api/auth/register (bcrypt + Prisma)
-- [ ] POST /api/auth/login (bcrypt + JWT → httpOnly cookie)
-- [ ] GET /api/auth/me (requireAuth → session)
-- [ ] POST /api/auth/logout (clear cookie)
+- [x] JWT custom (crypto.createHmac — sin jsonwebtoken)
+- [x] POST /api/auth/register (bcrypt + Prisma)
+- [x] POST /api/auth/login (bcrypt + JWT → httpOnly cookie)
+- [x] GET /api/auth/me (requireAuth → session)
+- [x] POST /api/auth/logout (clear cookie)
 - [ ] Google OAuth (arctic o similar, callback → JWT cookie)
-- [ ] requireAuth + optionalAuth middleware
-- [ ] parseCookies utility (sin cookie-parser)
-- [ ] Rate limiting (auth: 5/15min)
+- [x] requireAuth + optionalAuth middleware
+- [x] parseCookies utility (sin cookie-parser)
+- [x] Rate limiting (auth: 5/15min)
 
 ### P3: AI Proxy
 > Server-side Groq API, Zod validation
@@ -156,8 +163,8 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [ ] Empty states (no history, no analysis yet)
 - [ ] Vercel rewrites for SPA + API proxy
 - [ ] Render health check + deploy config
-- [ ] CI/CD: GitHub Actions (lint, type, test on PR + push)
-- [ ] README update
+- [x] CI/CD: GitHub Actions (lint, type, test on PR + push)
+- [x] Vercel deploy config (vercel.json en raíz, pnpm workspace filter)
 - [ ] V1.1 release PR: develop → main
 
 ## Skills del Proyecto
