@@ -4,7 +4,7 @@ import {
   isAIOrchestratorError,
   type AIErrorCode,
 } from "./ai-errors";
-import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisMessageTone } from "../schemas/job-analysis";
+import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisInput, type JobAnalysisMessageTone } from "../schemas/job-analysis";
 import { GROQ_JOB_ANALYSIS_JSON_SCHEMA } from "./validation";
 
 const GROQ_CHAT_COMPLETIONS_URL = "https://api.groq.com/openai/v1/chat/completions";

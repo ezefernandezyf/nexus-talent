@@ -8,6 +8,7 @@
     "composite": true,
     "moduleDetection": "force",
     "noEmit": true,
+    "skipLibCheck": true,
     "strict": true,
     "types": ["node"]
   },

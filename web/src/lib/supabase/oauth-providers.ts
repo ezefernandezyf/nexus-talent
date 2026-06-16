@@ -28,7 +28,7 @@ export function getOAuthProviderConfig(provider: OAuthProviderKey) {
 export function getEnabledOAuthProviders() {
   return (Object.entries(OAUTH_PROVIDERS) as Array<[OAuthProviderKey, OAuthProviderConfig]>)
     .filter(([, config]) => config.enabled)
-    .map(([provider, config]) => ({ provider, ...config }));
+    .map(([, config]) => config);
 }
 
 export function getOAuthRedirectTo() {

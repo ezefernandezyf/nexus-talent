@@ -10,31 +10,87 @@ on:
 permissions:
   contents: read
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
-  validate:
+  validate-web:
+    name: Web (frontend)
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies (web + shared only)
+        run: pnpm install --frozen-lockfile --filter @nexus-talent/web...
+
+      - name: Typecheck
+        run: pnpm --filter @nexus-talent/web typecheck
+
+      - name: Test
+        run: pnpm --filter @nexus-talent/web test
+
+      - name: Build
+        run: pnpm --filter @nexus-talent/web build
+
+  validate-server:
+    name: Server (backend)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: nexus
+          POSTGRES_PASSWORD: nexus
+          POSTGRES_DB: nexus-test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-          cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Enable corepack
+        run: corepack enable
 
-      - name: Run typecheck
-        run: pnpm -r typecheck
+      - name: Install dependencies (server + shared only)
+        run: pnpm install --frozen-lockfile --filter @nexus-talent/server --filter @nexus-talent/shared...
 
-      - name: Run tests
-        run: pnpm -r test
+      - name: Generate Prisma client
+        run: pnpm --filter @nexus-talent/server prisma:generate
+        env:
+          DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
 
-      - name: Build packages
-        run: pnpm -r build
+      - name: Push schema to DB
+        run: pnpm --filter @nexus-talent/server prisma:push
+        env:
+          DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
+
+      - name: Typecheck
+        run: pnpm --filter @nexus-talent/server typecheck
+
+      - name: Test
+        run: pnpm --filter @nexus-talent/server test --passWithNoTests
+        env:
+          DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
+          JWT_SECRET: ci-test-secret-do-not-use-in-prod

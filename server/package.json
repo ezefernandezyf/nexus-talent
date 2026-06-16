@@ -7,30 +7,36 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
     "format": "prettier --check src/",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "tsx prisma/seed.ts"
+    "prisma:push": "prisma db push",
+    "prisma:seed": "tsx prisma/seed.ts",
+    "test": "vitest run"
   },
   "dependencies": {
-    "express": "^5.1.0",
     "@prisma/client": "^7.0.0",
-    "zod": "^4.0.0",
-    "helmet": "^8.0.0",
+    "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.0",
+    "express": "^5.1.0",
+    "helmet": "^8.0.0",
     "pino": "^9.0.0",
     "pino-pretty": "^13.0.0",
-    "dotenv": "^16.4.0"
+    "zod": "^4.0.0"
   },
   "devDependencies": {
-    "@types/express": "^5.0.0",
+    "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/express-serve-static-core": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "prettier": "^3.0.0",
+    "prisma": "^7.0.0",
     "tsx": "^4.19.0",
     "typescript": "^5.8.0",
-    "prisma": "^7.0.0",
-    "prettier": "^3.0.0",
-    "@types/node": "^22.0.0",
-    "@types/express-serve-static-core": "^5.0.0"
+    "vitest": "^3.2.6"
   }
 }
