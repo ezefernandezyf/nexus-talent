@@ -66,7 +66,7 @@ export async function register(
  */
 export async function login(email: string, password: string): Promise<AuthResult> {
   const profile = await prisma.profile.findUnique({ where: { email } });
-  if (!profile) {
+  if (!profile || !profile.passwordHash) {
     throw new AppError(401, "Invalid email or password");
   }
 

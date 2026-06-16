@@ -16,3 +16,7 @@ authRouter.post("/register", validate(authRegisterSchema), authRateLimit, contro
 authRouter.post("/login", validate(authLoginSchema), authRateLimit, controller.login);
 authRouter.get("/me", requireAuth, controller.me);
 authRouter.post("/logout", requireAuth, controller.logout);
+
+// OAuth
+authRouter.get("/oauth/google", controller.googleLogin);
+authRouter.get("/oauth/google/callback", controller.googleCallback);
