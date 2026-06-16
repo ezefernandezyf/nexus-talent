@@ -77,9 +77,10 @@ export const analysisResponseSchema = z.object({
   ),
   keywords: z
     .object({
-      technical: z.array(z.string()),
-      soft: z.array(z.string()),
-      tools: z.array(z.string()),
+      hardSkills: z.array(z.string()),
+      softSkills: z.array(z.string()),
+      domainKeywords: z.array(z.string()),
+      atsTerms: z.array(z.string()),
     })
     .optional(),
   gaps: z
@@ -93,9 +94,13 @@ export const analysisResponseSchema = z.object({
     .optional(),
   recruiterMessages: z
     .object({
-      linkedIn: z.string(),
-      email: z.string(),
-      dmShort: z.string(),
+      emailLinkedIn: z.object({
+        subject: z.string(),
+        body: z.string(),
+      }),
+      dmShort: z.object({
+        body: z.string(),
+      }),
     })
     .optional(),
   outreachMessage: z
