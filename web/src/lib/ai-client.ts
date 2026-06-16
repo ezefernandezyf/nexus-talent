@@ -13,7 +13,7 @@ import {
 } from "../schemas/job-analysis";
 import { normalizeJobAnalysisResponse } from "./mappers";
 import { createAIOrchestrator } from "./ai-orchestrator";
-import { createGroqProviderAdapter, type JobAnalysisPromptInput } from "./ai-provider";
+import { createBackendProxyAdapter, type JobAnalysisPromptInput } from "./ai-provider";
 import { isAIOrchestratorError } from "./ai-errors";
 import { validateJobAnalysisResult } from "./validation";
 
@@ -618,7 +618,7 @@ function buildLocalJobAnalysis(jobDescription: string, messageTone: JobAnalysisM
 export function createJobAnalysisClient(options: CreateJobAnalysisClientOptions = {}): JobAnalysisClient {
   const transport = options.transport ?? ((input: JobAnalysisPromptInput) => buildLocalJobAnalysis(input.jobDescription, input.messageTone));
   const orchestrator = createAIOrchestrator(
-    createGroqProviderAdapter({
+    createBackendProxyAdapter({
       fallbackTransport: transport,
     }),
   );

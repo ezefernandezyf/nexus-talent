@@ -6,6 +6,7 @@ export {
   // Analysis
   analysisRequestSchema,
   analysisResponseSchema,
+  GROQ_JOB_ANALYSIS_JSON_SCHEMA,
   // Profile
   profileSchema,
   // History / List
