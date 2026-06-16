@@ -1,122 +1,107 @@
 import { describe, expect, it, vi } from "vitest";
-import { createGroqProviderAdapter } from "./ai-provider";
-import { GROQ_JOB_ANALYSIS_JSON_SCHEMA } from "./validation/job-analysis";
+import { createBackendProxyAdapter } from "./ai-provider";
+import { AI_ERROR_CODES } from "./ai-errors";
 import { JOB_ANALYSIS_MESSAGE_TONE } from "../schemas/job-analysis";
 
-describe("createGroqProviderAdapter", () => {
-  it("exposes Groq as the concrete provider identity", () => {
-    const adapter = createGroqProviderAdapter();
+describe("createBackendProxyAdapter", () => {
+  it("exposes the backend proxy as the concrete provider identity", () => {
+    const adapter = createBackendProxyAdapter();
 
-    expect(adapter.id).toBe("groq");
-    expect(adapter.providerName).toBe("Groq");
+    expect(adapter.id).toBe("backend-proxy");
+    expect(adapter.providerName).toBe("Backend AI Proxy");
   });
 
-  it("falls back to the provided transport when no api key is available", async () => {
-    const fallbackTransport = vi.fn().mockResolvedValue({ summary: "Fallback summary", skillGroups: [], outreachMessage: { subject: "S", body: "B" } });
-    const adapter = createGroqProviderAdapter({ fallbackTransport });
+  it("passes through server-validated JSON responses", () => {
+    const adapter = createBackendProxyAdapter();
+    const payload = {
+      summary: "Análisis",
+      skillGroups: [],
+      outreachMessage: { subject: "S", body: "B" },
+    };
 
-    const request = adapter.buildRequest({ jobDescription: "Senior React engineer", messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL });
+    const parsed = adapter.parseResponse(payload);
+
+    expect(parsed).toEqual(payload);
+  });
+
+  it("parses string responses as JSON", () => {
+    const adapter = createBackendProxyAdapter();
+    const payload = { summary: "Ok", skillGroups: [], outreachMessage: { subject: "S", body: "B" } };
+
+    const parsed = adapter.parseResponse(JSON.stringify(payload));
+
+    expect(parsed).toEqual(payload);
+  });
+
+  it("maps 400 responses to PermanentFailure", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue({ ok: false, status: 400 });
+    const adapter = createBackendProxyAdapter({ fetchImpl });
+    const request = adapter.buildRequest({
+      jobDescription: "Test JD",
+      messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL,
+    });
+
+    await expect(request.execute(new AbortController().signal)).rejects.toMatchObject({
+      code: AI_ERROR_CODES.PERMANENT_FAILURE,
+      status: 400,
+      retryable: false,
+    });
+  });
+
+  it("maps 429 responses to RateLimit", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue({ ok: false, status: 429 });
+    const adapter = createBackendProxyAdapter({ fetchImpl });
+    const request = adapter.buildRequest({
+      jobDescription: "Test JD",
+      messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL,
+    });
+
+    await expect(request.execute(new AbortController().signal)).rejects.toMatchObject({
+      code: AI_ERROR_CODES.RATE_LIMIT_EXCEEDED,
+      status: 429,
+      retryable: false,
+    });
+  });
+
+  it("maps 502 responses to TransientFailure", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue({ ok: false, status: 502 });
+    const adapter = createBackendProxyAdapter({ fetchImpl });
+    const request = adapter.buildRequest({
+      jobDescription: "Test JD",
+      messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL,
+    });
+
+    await expect(request.execute(new AbortController().signal)).rejects.toMatchObject({
+      code: AI_ERROR_CODES.TRANSIENT_FAILURE,
+      status: 502,
+      retryable: true,
+    });
+  });
+
+  it("falls back to local transport on network error", async () => {
+    const fallbackTransport = vi.fn().mockResolvedValue({ summary: "Local fallback", skillGroups: [], outreachMessage: { subject: "S", body: "B" } });
+    const fetchImpl = vi.fn().mockRejectedValue(new Error("Network error"));
+    const adapter = createBackendProxyAdapter({ fetchImpl, fallbackTransport });
+    const request = adapter.buildRequest({
+      jobDescription: "Test JD",
+      messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL,
+    });
+
     const result = await request.execute(new AbortController().signal);
 
     expect(fallbackTransport).toHaveBeenCalledTimes(1);
-    expect(result).toMatchObject({ summary: "Fallback summary" });
+    expect(result).toMatchObject({ summary: "Local fallback" });
   });
 
-  it("parses Groq envelopes into JSON payloads", () => {
-    const adapter = createGroqProviderAdapter();
-    const parsed = adapter.parseResponse({
-      choices: [
-        {
-          message: {
-            content: JSON.stringify({ summary: "Ok", skillGroups: [], outreachMessage: { subject: "S", body: "B" } }),
-          },
-        },
-      ],
-    });
-
-    expect(parsed).toMatchObject({ summary: "Ok" });
-  });
-
-  it("reuses the shared Groq response schema from validation", async () => {
-    const fetchImpl = vi.fn().mockResolvedValue({
-      ok: true,
-      json: vi.fn().mockResolvedValue({
-        choices: [
-          {
-            message: {
-              content: JSON.stringify({
-                summary: "Ok",
-                skillGroups: [
-                  {
-                    category: "Stack principal",
-                    skills: [{ name: "React", level: "core" }],
-                  },
-                ],
-                outreachMessage: {
-                  subject: "S",
-                  body: "B",
-                },
-              }),
-            },
-          },
-        ],
-      }),
-    });
-
-    const adapter = createGroqProviderAdapter({ apiKey: "test-key", fetchImpl });
-    const request = adapter.buildRequest({ jobDescription: "Senior React engineer", messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL });
-
-    await request.execute(new AbortController().signal);
-
-    const [, requestInit] = fetchImpl.mock.calls[0] ?? [];
-    const requestBody = JSON.parse((requestInit as RequestInit).body as string) as {
-      response_format: { json_schema: { schema: unknown } };
-    };
-
-    expect(requestBody.response_format.json_schema.schema).toEqual(GROQ_JOB_ANALYSIS_JSON_SCHEMA);
-  });
-
-  it("returns a safe fallback message for unknown errors", () => {
-    const adapter = createGroqProviderAdapter();
+  it("returns a user-facing error message for unknown errors", () => {
+    const adapter = createBackendProxyAdapter();
 
     expect(adapter.mapErrorToUserMessage(new Error("Unexpected"))).toContain("No se pudo completar");
   });
 
-  it("guides the provider to produce structured, variable, recruiter-facing output", async () => {
-    const fetchImpl = vi.fn().mockResolvedValue({
-      ok: true,
-      json: vi.fn().mockResolvedValue({
-        choices: [
-          {
-            message: {
-              content: JSON.stringify({ summary: "Ok", skillGroups: [], outreachMessage: { subject: "S", body: "B" } }),
-            },
-          },
-        ],
-      }),
-    });
+  it("returns a connection error message for network failures", () => {
+    const adapter = createBackendProxyAdapter();
 
-    const adapter = createGroqProviderAdapter({ apiKey: "test-key", fetchImpl });
-    const request = adapter.buildRequest({ jobDescription: "Senior React engineer", messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL });
-
-    await request.execute(new AbortController().signal);
-
-    const [, requestInit] = fetchImpl.mock.calls[0] ?? [];
-    const requestBody = JSON.parse((requestInit as RequestInit).body as string) as {
-      messages: Array<{ role: string; content: string }>;
-    };
-
-    expect(requestBody.messages[0]?.content).toContain("JSON estricto");
-    expect(requestBody.messages[0]?.content).toContain("vacancySummary");
-    expect(requestBody.messages[0]?.content).toContain("keywords");
-    expect(requestBody.messages[0]?.content).toContain("gaps");
-    expect(requestBody.messages[0]?.content).toContain("recruiterMessages");
-    expect(requestBody.messages[0]?.content).toContain("email/LinkedIn");
-    expect(requestBody.messages[0]?.content).toContain("No reutilices plantillas genéricas entre vacantes");
-    expect(requestBody.messages[0]?.content).toContain("seniority");
-    expect(requestBody.messages[0]?.content).toContain("dominio");
-    expect(requestBody.messages[0]?.content).toContain("120 a 180 palabras");
-    expect(requestBody.messages[0]?.content).toContain("600 caracteres");
-    expect(requestBody.messages[0]?.content).toContain("límite de longitud");
+    expect(adapter.mapErrorToUserMessage(new Error("fetch timeout"))).toContain("No se pudo conectar");
   });
 });
