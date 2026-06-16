@@ -102,7 +102,7 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [x] POST /api/auth/login (bcrypt + JWT → httpOnly cookie)
 - [x] GET /api/auth/me (requireAuth → session)
 - [x] POST /api/auth/logout (clear cookie)
-- [ ] Google OAuth (arctic o similar, callback → JWT cookie)
+- [x] Google OAuth (zero-dependency: crypto + fetch, anti-CSRF state)
 - [x] requireAuth + optionalAuth middleware
 - [x] parseCookies utility (sin cookie-parser)
 - [x] Rate limiting (auth: 5/15min)
