@@ -18,13 +18,5 @@
   "engines": {
     "node": ">=22"
   },
-  "packageManager": "pnpm@11.5.3",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "bcrypt",
-      "@prisma/engines",
-      "esbuild",
-      "prisma"
-    ]
-  }
+  "packageManager": "pnpm@11.5.3"
 }
