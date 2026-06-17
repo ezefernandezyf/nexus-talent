@@ -2,8 +2,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import type { Session, User } from "@supabase/supabase-js";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ANALYSIS_HISTORY_STORAGE_KEY } from "../lib/repositories";
+import { useAuthStore } from "../auth/auth-store";
 import { AuthProvider } from "../features/auth";
 import { createTestQueryClient } from "../test/mocks/query-client";
 import { AppRouter } from "./AppRouter";
@@ -72,6 +73,10 @@ function renderApp(initialEntry: string, session: Session | null = null) {
 }
 
 describe("AppRouter", () => {
+  beforeEach(() => {
+    useAuthStore.setState({ user: null, status: "unknown", isAdmin: false });
+  });
+
   it("renders the public landing page at the root path", () => {
     renderApp("/");
 

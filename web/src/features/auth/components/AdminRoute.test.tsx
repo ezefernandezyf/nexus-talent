@@ -1,9 +1,10 @@
 import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import type { Session, User } from "@supabase/supabase-js";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthProvider } from "../AuthProvider";
 import { AdminRoute } from "./AdminRoute";
+import { useAuthStore } from "../../../auth/auth-store";
 import type { AuthClientLike } from "../../../lib/supabase";
 
 function createUser(email: string, role: "admin" | "authenticated"): User {
@@ -70,6 +71,10 @@ function createAuthClient(session: Session | null): AuthClientLike {
 }
 
 describe("AdminRoute", () => {
+  beforeEach(() => {
+    useAuthStore.setState({ user: null, status: "unknown", isAdmin: false });
+  });
+
   it("redirects standard users to the private app shell", async () => {
     const client = createAuthClient(createSession("ana@empresa.com", "authenticated"));
 

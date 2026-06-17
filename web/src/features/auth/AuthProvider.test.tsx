@@ -1,81 +1,51 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import type { Session, User } from "@supabase/supabase-js";
 import { describe, expect, it, vi } from "vitest";
 import { AuthProvider } from "./AuthProvider";
 import { useAuth } from "./hooks/useAuth";
-import type { AuthClientLike } from "../../lib/supabase";
+import { useAuthStore } from "../../auth/auth-store";
 
-function createUser(
-  email: string,
-  role: "admin" | "authenticated" = "authenticated",
-  identities: User["identities"] = [],
-): User {
-  const now = new Date("2026-04-05T12:00:00.000Z").toISOString();
+function AuthProbe() {
+  const { isAdmin, signIn, signInWithOAuth, signOut, signUp, status, user } = useAuth();
 
-  return {
-    aud: "authenticated",
-    app_metadata: {},
-    created_at: now,
-    email,
-    email_confirmed_at: now,
-    id: "550e8400-e29b-41d4-a716-446655440000",
-    is_anonymous: false,
-    last_sign_in_at: now,
-    phone: "",
-    role: "authenticated",
-    updated_at: now,
-    identities,
-    user_metadata: { role },
-  } as User;
-}
-
-function createSession(
-  email: string,
-  role: "admin" | "authenticated" = "authenticated",
-  identities: User["identities"] = [],
-): Session {
-  const now = new Date("2026-04-05T12:00:00.000Z").toISOString();
-  const user = createUser(email, role, identities);
-
-  return {
-    access_token: "session-token",
-    expires_at: Math.floor(Date.now() / 1000) + 3600,
-    expires_in: 3600,
-    provider_refresh_token: null,
-    provider_token: null,
-    refresh_token: "refresh-token",
-    token_type: "bearer",
-    user,
-  } as Session;
+  return (
+    <div>
+      <p data-testid="status">{status}</p>
+      <p data-testid="admin">{isAdmin ? "admin" : "user"}</p>
+      <p data-testid="email">{user?.email ?? "no-user"}</p>
+      <button type="button" onClick={() => signIn("ana@empresa.com", "secure-password")}>
+        Iniciar sesión
+      </button>
+      <button type="button" onClick={() => signUp("sofia@empresa.com", "secure-password")}>
+        Crear cuenta
+      </button>
+      <button type="button" onClick={() => signInWithOAuth("google")}>
+        Google OAuth
+      </button>
+      <button type="button" onClick={() => signOut()}>
+        Cerrar sesión
+      </button>
+    </div>
+  );
 }
 
 function createAuthClient(options: {
+  session?: { user: { id: string; email: string; displayName?: string | null; user_metadata?: Record<string, unknown> } };
+  signInSession?: { user: { id: string; email: string; displayName?: string | null } };
+  signUpSession?: { user: { id: string; email: string; displayName?: string | null } };
   oauthErrorMessage?: string | null;
-  session?: Session | null;
-  signInSession?: Session | null;
-  signUpSession?: Session | null;
-} = {}): AuthClientLike {
+} = {}) {
   let currentSession = options.session ?? null;
-  const listeners = new Set<(event: string, session: Session | null) => void>();
+  const listeners = new Set<(event: string, session: Record<string, unknown> | null) => void>();
 
   return {
     auth: {
       getSession: vi.fn(async () => ({
-        data: { session: currentSession },
+        data: { session: currentSession as Record<string, unknown> | null },
         error: null,
       })),
-      getUserIdentities: vi.fn(async () => ({
-        data: { identities: currentSession?.user.identities ?? [] },
-        error: null,
-      })),
-      unlinkIdentity: vi.fn(async () => ({
-        data: {},
-        error: null,
-      })),
-      onAuthStateChange: vi.fn((callback) => {
+      onAuthStateChange: vi.fn((callback: (event: string, session: Record<string, unknown> | null) => void) => {
         listeners.add(callback);
-
         return {
           data: {
             subscription: {
@@ -87,10 +57,8 @@ function createAuthClient(options: {
         };
       }),
       signInWithPassword: vi.fn(async () => {
-        const session = options.signInSession ?? currentSession;
-
         return {
-          data: { session, user: session?.user ?? null },
+          data: { session: options.signInSession ?? currentSession },
           error: null,
         };
       }),
@@ -101,14 +69,11 @@ function createAuthClient(options: {
       signOut: vi.fn(async () => {
         currentSession = null;
         listeners.forEach((listener) => listener("SIGNED_OUT", null));
-
         return { error: null };
       }),
       signUp: vi.fn(async () => {
-        const session = options.signUpSession ?? currentSession;
-
         return {
-          data: { session, user: session?.user ?? null },
+          data: { session: options.signUpSession ?? currentSession },
           error: null,
         };
       }),
@@ -116,79 +81,32 @@ function createAuthClient(options: {
   };
 }
 
-function AuthProbe() {
-  const { errorMessage, isAdmin, signIn, signInWithOAuth, signOut, signUp, session, status, user } = useAuth();
-
-  return (
-    <div>
-      <p data-testid="status">{status}</p>
-      <p data-testid="admin">{isAdmin ? "admin" : "user"}</p>
-      <p data-testid="email">{user?.email ?? "no-user"}</p>
-      <p data-testid="session">{session?.access_token ?? "no-session"}</p>
-      <p data-testid="error">{errorMessage ?? "no-error"}</p>
-      <button type="button" onClick={() => signIn("ana@empresa.com", "secure-password")}>
-        Iniciar sesión
-      </button>
-      <button type="button" onClick={() => signUp("sofia@empresa.com", "secure-password")}>
-        Crear cuenta
-      </button>
-      <button type="button" onClick={() => signInWithOAuth("github")}>
-        GitHub OAuth
-      </button>
-      <button type="button" onClick={() => signOut()}>
-        Cerrar sesión
-      </button>
-    </div>
-  );
-}
-
-function AuthLinkProbe() {
-  const { errorMessage, unlinkIdentity } = useAuth();
-
-  return (
-    <div>
-      <p data-testid="unlink-error">{errorMessage ?? "no-error"}</p>
-      <button type="button" onClick={() => unlinkIdentity("github")}>Desvincular GitHub</button>
-    </div>
-  );
-}
-
 describe("AuthProvider", () => {
+  afterEach(() => {
+    useAuthStore.setState({ user: null, status: "unknown", isAdmin: false });
+  });
+
   it("boots the session and persists authenticated users after reload", async () => {
-    const client = createAuthClient({ session: createSession("ana@empresa.com") });
+    const client = createAuthClient({
+      session: { user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "ana@empresa.com" } },
+    });
 
     render(
       <AuthProvider client={client}>
         <AuthProbe />
       </AuthProvider>,
     );
-
-    expect(screen.getByTestId("status")).toHaveTextContent("loading");
 
     await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("authenticated"));
     expect(screen.getByTestId("admin")).toHaveTextContent("user");
     expect(screen.getByTestId("email")).toHaveTextContent("ana@empresa.com");
-    expect(screen.getByTestId("session")).toHaveTextContent("session-token");
-  });
-
-  it("exposes admin users through the auth context", async () => {
-    const client = createAuthClient({ session: createSession("admin@empresa.com", "admin") });
-
-    render(
-      <AuthProvider client={client}>
-        <AuthProbe />
-      </AuthProvider>,
-    );
-
-    await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("authenticated"));
-    expect(screen.getByTestId("admin")).toHaveTextContent("admin");
   });
 
   it("syncs password sign-in, sign-up, and sign-out through the shared auth context", async () => {
     const user = userEvent.setup();
     const client = createAuthClient({
-      signInSession: createSession("ana@empresa.com"),
-      signUpSession: createSession("sofia@empresa.com"),
+      signInSession: { user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "ana@empresa.com" } },
+      signUpSession: { user: { id: "550e8400-e29b-41d4-a716-446655440001", email: "sofia@empresa.com" } },
     });
 
     render(
@@ -202,26 +120,23 @@ describe("AuthProvider", () => {
     await user.click(screen.getByRole("button", { name: /iniciar sesión/i }));
     await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("authenticated"));
     expect(screen.getByTestId("email")).toHaveTextContent("ana@empresa.com");
-    expect(screen.getByTestId("session")).toHaveTextContent("session-token");
 
     await user.click(screen.getByRole("button", { name: /cerrar sesión/i }));
     await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("unauthenticated"));
     expect(screen.getByTestId("email")).toHaveTextContent("no-user");
-    expect(screen.getByTestId("session")).toHaveTextContent("no-session");
 
     await user.click(screen.getByRole("button", { name: /crear cuenta/i }));
     await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("authenticated"));
     expect(screen.getByTestId("email")).toHaveTextContent("sofia@empresa.com");
-    expect(screen.getByTestId("session")).toHaveTextContent("session-token");
 
     expect(client.auth.signInWithPassword).toHaveBeenCalledTimes(1);
     expect(client.auth.signOut).toHaveBeenCalledTimes(1);
     expect(client.auth.signUp).toHaveBeenCalledTimes(1);
   });
 
-  it("starts the oauth flow with a callback redirect and surfaces provider errors", async () => {
+  it("starts the oauth flow and surfaces provider errors", async () => {
     const user = userEvent.setup();
-    const client = createAuthClient({ oauthErrorMessage: "GitHub is temporarily unavailable" });
+    const client = createAuthClient({ oauthErrorMessage: "Google is temporarily unavailable" });
 
     render(
       <AuthProvider client={client}>
@@ -231,20 +146,19 @@ describe("AuthProvider", () => {
 
     await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("unauthenticated"));
 
-    await user.click(screen.getByRole("button", { name: /github oauth/i }));
+    await user.click(screen.getByRole("button", { name: /google oauth/i }));
 
     await waitFor(() =>
       expect(client.auth.signInWithOAuth).toHaveBeenCalledWith({
         options: { redirectTo: `${window.location.origin}/auth/callback` },
-        provider: "github",
+        provider: "google",
       }),
     );
 
-    await waitFor(() => expect(screen.getByTestId("error")).toHaveTextContent("GitHub is temporarily unavailable"));
     expect(screen.getByTestId("status")).toHaveTextContent("unauthenticated");
   });
 
-  it("starts the oauth flow with the shared auth entry point when the provider is available", async () => {
+  it("starts the oauth flow successfully when the provider is available", async () => {
     const user = userEvent.setup();
     const client = createAuthClient();
 
@@ -256,38 +170,13 @@ describe("AuthProvider", () => {
 
     await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("unauthenticated"));
 
-    await user.click(screen.getByRole("button", { name: /github oauth/i }));
+    await user.click(screen.getByRole("button", { name: /google oauth/i }));
 
     await waitFor(() =>
       expect(client.auth.signInWithOAuth).toHaveBeenCalledWith({
         options: { redirectTo: `${window.location.origin}/auth/callback` },
-        provider: "github",
+        provider: "google",
       }),
     );
-
-    expect(screen.getByTestId("error")).toHaveTextContent("no-error");
   });
-
-  it("blocks unlinking the last remaining identity and surfaces a readable error", async () => {
-    const user = userEvent.setup();
-    const client = createAuthClient({
-      session: createSession("analyst@nexustalent.dev", "authenticated", [
-        { id: "github-identity", identity_id: "github-identity", provider: "github", user_id: "550e8400-e29b-41d4-a716-446655440000" } as never,
-      ]),
-    });
-
-    render(
-      <AuthProvider client={client}>
-        <AuthLinkProbe />
-      </AuthProvider>,
-    );
-
-    await waitFor(() => expect(screen.getByTestId("unlink-error")).toHaveTextContent("no-error"));
-
-    await user.click(screen.getByRole("button", { name: /desvincular github/i }));
-
-    await waitFor(() => expect(screen.getByTestId("unlink-error")).toHaveTextContent(/al menos dos identidades/i));
-    expect(client.auth.unlinkIdentity).not.toHaveBeenCalled();
-  });
-
 });

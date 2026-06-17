@@ -6,7 +6,7 @@ export function AdminRoute() {
   const location = useLocation();
   const { isAdmin, status } = useAuth();
 
-  if (status === AUTH_STATUS.LOADING) {
+  if (status === AUTH_STATUS.LOADING || status === "unknown") {
     return <AuthStatusScreen message="Estamos confirmando tus permisos de administración antes de abrir el panel." title="Verificando permisos" />;
   }
 

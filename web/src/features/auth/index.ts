@@ -4,3 +4,4 @@ export { ProtectedRoute } from "./ProtectedRoute";
 export { PublicAuthRoute } from "./PublicAuthRoute";
 export { LogoutButton, SignInForm, SignUpForm, AuthShell, AuthStatusScreen } from "./components";
 export { useAuth } from "./hooks/useAuth";
+export { useAuthStore } from "../../auth/auth-store";

@@ -5,7 +5,7 @@ import { AUTH_STATUS, useAuth } from "./hooks/useAuth";
 export function PublicAuthRoute() {
   const { status } = useAuth();
 
-  if (status === AUTH_STATUS.LOADING) {
+  if (status === AUTH_STATUS.LOADING || status === "unknown") {
     return <AuthStatusScreen message="Estamos preparando el acceso seguro y validando la sesión existente." title="Preparando acceso" />;
   }
 
