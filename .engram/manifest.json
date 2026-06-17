@@ -24,6 +24,14 @@
       "sessions": 0,
       "memories": 1,
       "prompts": 0
+    },
+    {
+      "id": "e85ac93e",
+      "created_by": "ezeyf",
+      "created_at": "2026-06-17T21:06:30Z",
+      "sessions": 1,
+      "memories": 26,
+      "prompts": 0
     }
   ]
 }
