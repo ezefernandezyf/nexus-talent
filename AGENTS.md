@@ -114,13 +114,13 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [x] Zod validation on response
 - [x] Error handling + fallback (local analysis engine server-side)
 
-### P4: History API
+### P4: History API ✅
 > CRUD de analyses con Prisma
-- [ ] GET /api/analyses (list, paginated)
-- [ ] GET /api/analyses/:id (detail)
-- [ ] DELETE /api/analyses/:id
-- [ ] PATCH /api/analyses/:id (edit summary/notes)
-- [ ] Repository pattern preserved (HTTP client in web)
+- [x] GET /api/analyses (list, scoped by userId)
+- [x] GET /api/analyses/:id (detail)
+- [x] DELETE /api/analyses/:id
+- [x] PATCH /api/analyses/:id (edit displayName/notes)
+- [x] Repository pattern preserved (HTTP client in web, localStorage fallback)
 
 ### P5: Frontend Refactor
 > Swap AuthProvider, API client, remove localStorage
@@ -165,6 +165,20 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [ ] Render health check + deploy config
 - [x] CI/CD: GitHub Actions (lint, type, test on PR + push)
 - [x] Vercel deploy config (vercel.json en raíz, pnpm workspace filter)
+
+## Roadmap — V1.2 (tentative)
+
+### V1.2.1: User Profiles
+> Información persistente del usuario para personalizar análisis
+- [ ] PUT /api/profile — skills, experiencia, rol, resume
+- [ ] Profile UI — formulario de datos del candidato
+- [ ] Prompt enrichment — Groq usa datos del perfil en outreach messages
+
+### V1.2.2: CV Generator
+> Armado automático de CV tailor-made basado en análisis
+- [ ] POST /api/cv/generate — JD + perfil → CV (reusa lógica de cv-hub)
+- [ ] CV preview + export (PDF/HTML)
+- [ ] Templates por seniority/industria
 - [ ] V1.1 release PR: develop → main
 
 ## Skills del Proyecto
