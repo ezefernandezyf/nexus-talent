@@ -24,11 +24,15 @@ model Analysis {
   id               String   @id @default(uuid())
   userId           String
   jobDescription   String
+  summary          String?
   vacancySummary   String   @default("")
+  skillGroups      Json?
   keywords         Json     @default("{}")
   gaps             Json     @default("[]")
   recruiterMessages Json?
   outreachMessage  String   @default("")
+  displayName      String?
+  notes            String?
   tone             String   @default("professional")
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
