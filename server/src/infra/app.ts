@@ -48,7 +48,7 @@ export function createApp() {
   app.use("/api/auth", authRouter);
   app.use("/api/ai", analysisRouter);
   app.use("/api/profile", profileRouter);
-  app.use("/api/history", historyRouter);
+  app.use("/api/analyses", historyRouter);
 
   // ── Error handler (must be last) ─────────────────────────
   app.use(errorHandler);

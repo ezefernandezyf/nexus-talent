@@ -143,6 +143,17 @@ export const analysisListSchema = z.object({
   pageSize: z.number(),
 });
 
+/**
+ * Update schema for PATCH /api/analyses/:id.
+ * Only `displayName` and `notes` are mutable.
+ */
+export const analysisUpdateSchema = z.object({
+  displayName: z.string().trim().min(1).optional(),
+  notes: z.string().trim().min(1).optional(),
+}).strict();
+
+export type AnalysisUpdateDTO = z.infer<typeof analysisUpdateSchema>;
+
 // ============================================================================
 // Common
 // ============================================================================
