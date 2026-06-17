@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { createLocalAnalysisRepository, type AnalysisRepository, type SavedJobAnalysis } from "../../../lib/repositories";
+import { createHttpAnalysisRepository, type AnalysisRepository, type SavedJobAnalysis } from "../../../lib/repositories";
 import type { AnalysisPersistenceScope } from "./useAnalysisRepository";
 
 interface UseAnalysisHistoryOptions {
@@ -9,7 +9,7 @@ interface UseAnalysisHistoryOptions {
 
 export const ANALYSIS_HISTORY_QUERY_KEY = ["analysis-history"] as const;
 
-const defaultRepository = createLocalAnalysisRepository();
+const defaultRepository = createHttpAnalysisRepository();
 
 export function getAnalysisHistoryQueryKey(scope: AnalysisPersistenceScope = "anonymous") {
   return [...ANALYSIS_HISTORY_QUERY_KEY, scope] as const;

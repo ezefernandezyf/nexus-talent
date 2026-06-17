@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createLocalAnalysisRepository, type AnalysisRepository } from "../../../lib/repositories";
+import { createHttpAnalysisRepository, type AnalysisRepository } from "../../../lib/repositories";
 import { getAnalysisHistoryQueryKey } from "../../analysis/hooks/useAnalysisHistory";
 import type { AnalysisPersistenceScope } from "../../analysis/hooks/useAnalysisRepository";
 
@@ -8,7 +8,7 @@ interface UseDeleteAnalysisOptions {
   scope?: AnalysisPersistenceScope;
 }
 
-const defaultRepository = createLocalAnalysisRepository();
+const defaultRepository = createHttpAnalysisRepository();
 
 export function useDeleteAnalysis(options: UseDeleteAnalysisOptions = {}) {
   const repository = options.repository ?? defaultRepository;

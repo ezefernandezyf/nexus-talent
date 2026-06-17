@@ -40,13 +40,13 @@ Chain strategy: feature-branch-chain
 
 ## PR #2 — Slice B: API Client + Repo Swap (targets PR #1 branch)
 
-- [ ] 2.1 **Create `web/src/core/api-client.ts`** — Axios instance: `baseURL: "/api"`, `withCredentials: true`, 401 intercept → `authStore.clearSession()` + redirect `/auth/sign-in`. ~35 LOC. Deps: PR #1. Verify: `pnpm lint`
-- [ ] 2.2 **Modify `http-analysis-repository.ts`** — replace `fetch()` with `apiClient`. Prep pagination sig. ~70 LOC. Deps: 2.1. Verify: HTTP repo tests pass.
-- [ ] 2.3 **Delete `local-analysis-repository.ts`** — remove file. Deps: 2.2. Verify: no remaining imports exist.
-- [ ] 2.4 **Delete `local-analysis-repository.test.ts`** — remove test. Deps: 2.3. Verify: `pnpm test`
-- [ ] 2.5 **Modify `lib/repositories/index.ts`** — remove `createLocalAnalysisRepository` export. ~3 LOC. Deps: 2.3. Verify: build succeeds.
-- [ ] 2.6 **Modify `useAnalysisRepository.ts`** — always return `createHttpAnalysisRepository()`, drop scope logic. ~20 LOC. Deps: 2.2. Verify: analysis hooks test passes.
-- [ ] 2.7 **Update test mocks** — Supabase → Axios in affected test files. ~50 LOC. Deps: 2.1. Verify: `pnpm -F web test`
+- [x] 2.1 **Create `web/src/core/api-client.ts`** — Axios instance: `baseURL: "/api"`, `withCredentials: true`, 401 intercept → `authStore.clearSession()` + redirect `/auth/sign-in`. ~35 LOC. Deps: PR #1. Verify: `pnpm lint`
+- [x] 2.2 **Modify `http-analysis-repository.ts`** — replace `fetch()` with `apiClient`. Prep pagination sig. ~70 LOC. Deps: 2.1. Verify: HTTP repo tests pass.
+- [x] 2.3 **Delete `local-analysis-repository.ts`** — remove file. Deps: 2.2. Verify: no remaining imports exist.
+- [x] 2.4 **Delete `local-analysis-repository.test.ts`** — remove test. Deps: 2.3. Verify: `pnpm test`
+- [x] 2.5 **Modify `lib/repositories/index.ts`** — remove `createLocalAnalysisRepository` export. ~3 LOC. Deps: 2.3. Verify: build succeeds.
+- [x] 2.6 **Modify `useAnalysisRepository.ts`** — always return `createHttpAnalysisRepository()`, drop scope logic. ~20 LOC. Deps: 2.2. Verify: analysis hooks test passes.
+- [x] 2.7 **Update test mocks** — Supabase → Axios in affected test files. ~50 LOC. Deps: 2.1. Verify: `pnpm -F web test`
 
 ## PR #3 — Slice C: Admin Cleanup (targets PR #2 branch)
 

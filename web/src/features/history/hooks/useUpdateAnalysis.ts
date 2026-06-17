@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createLocalAnalysisRepository, type AnalysisRepository, type AnalysisUpdatePatch } from "../../../lib/repositories";
+import { createHttpAnalysisRepository, type AnalysisRepository, type AnalysisUpdatePatch } from "../../../lib/repositories";
 import { getAnalysisHistoryQueryKey } from "../../analysis/hooks/useAnalysisHistory";
 import { getAnalysisByIdQueryKey } from "../../analysis/hooks/useAnalysisById";
 import type { AnalysisPersistenceScope } from "../../analysis/hooks/useAnalysisRepository";
@@ -14,7 +14,7 @@ interface UpdateAnalysisInput {
   patch: AnalysisUpdatePatch;
 }
 
-const defaultRepository = createLocalAnalysisRepository();
+const defaultRepository = createHttpAnalysisRepository();
 
 export function useUpdateAnalysis(options: UseUpdateAnalysisOptions = {}) {
   const repository = options.repository ?? defaultRepository;

@@ -3,12 +3,36 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import axios from "axios";
 import { ANALYSIS_HISTORY_STORAGE_KEY } from "../lib/repositories";
 import { useAuthStore } from "../auth/auth-store";
 import { createSavedAnalysis } from "../test/factories/analysis";
 import { AppLayout } from "./AppLayout";
 import { AuthProvider } from "../features/auth";
 import { createTestQueryClient } from "../test/mocks/query-client";
+
+// ---------------------------------------------------------------------------
+// Axios mock — hooks now use HTTP repo instead of localStorage
+// ---------------------------------------------------------------------------
+
+vi.mock("axios", () => {
+  const instance = {
+    get: vi.fn(),
+    patch: vi.fn(),
+    delete: vi.fn(),
+    interceptors: {
+      request: { use: vi.fn(), eject: vi.fn() },
+      response: { use: vi.fn(), eject: vi.fn() },
+    },
+  };
+
+  return {
+    default: {
+      create: vi.fn(() => instance),
+      isAxiosError: vi.fn(() => false),
+    },
+  };
+});
 
 function createAuthClient(session: { user: { email?: string } } | null = null) {
   return {
@@ -26,6 +50,12 @@ function createAuthClient(session: { user: { email?: string } } | null = null) {
 describe("AppLayout", () => {
   beforeEach(() => {
     useAuthStore.setState({ user: null, status: "unknown", isAdmin: false });
+
+    // Default axios mock: empty analysis list for sidebar
+    const api = vi.mocked(axios.create)();
+    api.get.mockReset().mockResolvedValue({ data: { items: [], total: 0 } });
+    api.patch.mockReset().mockResolvedValue({ data: {} });
+    api.delete.mockReset().mockResolvedValue({ data: undefined });
   });
 
   it("renders the shared shell and outlet content for public users", async () => {
@@ -37,6 +67,10 @@ describe("AppLayout", () => {
     });
 
     localStorage.setItem(ANALYSIS_HISTORY_STORAGE_KEY, JSON.stringify([savedAnalysis]));
+
+    // Configure axios to return the saved analysis in the sidebar
+    const api = vi.mocked(axios.create)();
+    api.get.mockResolvedValue({ data: { items: [savedAnalysis], total: 1 } });
 
     render(
       <QueryClientProvider client={queryClient}>

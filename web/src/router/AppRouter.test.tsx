@@ -3,11 +3,38 @@ import { MemoryRouter } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import type { Session, User } from "@supabase/supabase-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import axios from "axios";
 import { ANALYSIS_HISTORY_STORAGE_KEY } from "../lib/repositories";
 import { useAuthStore } from "../auth/auth-store";
 import { AuthProvider } from "../features/auth";
 import { createTestQueryClient } from "../test/mocks/query-client";
 import { AppRouter } from "./AppRouter";
+
+// ---------------------------------------------------------------------------
+// Axios mock — hooks now use HTTP repo instead of localStorage
+// The mock is hoisted to module level so api-client.ts gets it on import.
+// Each call to axios.create() returns the SAME instance that tests can
+// configure via import axios in beforeEach.
+// ---------------------------------------------------------------------------
+
+vi.mock("axios", () => {
+  const instance = {
+    get: vi.fn(),
+    patch: vi.fn(),
+    delete: vi.fn(),
+    interceptors: {
+      request: { use: vi.fn(), eject: vi.fn() },
+      response: { use: vi.fn(), eject: vi.fn() },
+    },
+  };
+
+  return {
+    default: {
+      create: vi.fn(() => instance),
+      isAxiosError: vi.fn(() => false),
+    },
+  };
+});
 
 function createUser(email: string): User {
   const now = new Date("2026-04-05T12:00:00.000Z").toISOString();
@@ -75,6 +102,14 @@ function renderApp(initialEntry: string, session: Session | null = null) {
 describe("AppRouter", () => {
   beforeEach(() => {
     useAuthStore.setState({ user: null, status: "unknown", isAdmin: false });
+
+    // The mocked axios.create() returns the same singleton instance shared
+    // with api-client.ts. Configure default empty responses so sidebar hooks
+    // don't crash. Individual tests override as needed.
+    const api = vi.mocked(axios.create)();
+    api.get.mockReset().mockResolvedValue({ data: { items: [], total: 0 } });
+    api.patch.mockReset().mockResolvedValue({ data: {} });
+    api.delete.mockReset().mockResolvedValue({ data: undefined });
   });
 
   it("renders the public landing page at the root path", () => {
@@ -166,6 +201,15 @@ describe("AppRouter", () => {
 
     localStorage.setItem(ANALYSIS_HISTORY_STORAGE_KEY, JSON.stringify([savedAnalysis]));
 
+    // Configure axios mock by URL to handle StrictMode double-mounting
+    const api = vi.mocked(axios.create)();
+    api.get.mockImplementation((url: string) => {
+      if (url === "/analyses") {
+        return Promise.resolve({ data: { items: [savedAnalysis], total: 1 } });
+      }
+      return Promise.resolve({ data: savedAnalysis });
+    });
+
     renderApp(`/app/history/${savedAnalysis.id}`);
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /detalle del análisis/i })).toBeInTheDocument());
@@ -175,6 +219,15 @@ describe("AppRouter", () => {
 
   it("shows the history not-found fallback when the requested analysis is missing", async () => {
     localStorage.removeItem(ANALYSIS_HISTORY_STORAGE_KEY);
+
+    // Configure axios mock by URL to handle StrictMode double-mounting
+    const api = vi.mocked(axios.create)();
+    api.get.mockImplementation((url: string) => {
+      if (url === "/analyses") {
+        return Promise.resolve({ data: { items: [], total: 0 } });
+      }
+      return Promise.reject(new Error("Not found"));
+    });
 
     renderApp("/app/history/missing-analysis-id");
 
