@@ -6,24 +6,14 @@ Define the requirements for the History feature shell, allowing users to view, m
 
 ## Requirements
 
-### Requirement: History List Display
+### Requirement: History List Display (REQ-HIST-001)
 
-The system MUST display a list of all previously saved job analyses. For authenticated users, data MUST be fetched from `/api/analyses` via `HttpAnalysisRepository`. For anonymous users, data MUST come from `localStorage` via `LocalAnalysisRepository`.
-
-#### Scenario: Populated history (authenticated)
-- GIVEN the user is authenticated and has saved analyses on the server
-- WHEN the user navigates to the history view
-- THEN the system MUST fetch from GET `/api/analyses` and display cards sorted by most recent first
-
-#### Scenario: Populated history (anonymous)
-- GIVEN the user is not authenticated and has localStorage analyses
-- WHEN the user navigates to the history view
-- THEN the system MUST read from `LocalAnalysisRepository` and display cards sorted by most recent first
+The system MUST display a list of all previously saved job analyses. Data MUST be fetched from `/api/analyses` via `HttpAnalysisRepository` with pagination params. The localStorage branch is removed.
 
 #### Scenario: Populated history
-- GIVEN the user has previously saved analyses
+- GIVEN the user has saved analyses on the server
 - WHEN the user navigates to the history view
-- THEN the system MUST display a list of analysis cards sorted by most recent first
+- THEN the system MUST fetch from GET `/api/analyses?page=1&limit=20` and display cards sorted by most recent first
 - AND each card MUST be styled using the `surface-container` background without heavy borders or dividers, separating items via white space or hover states.
 
 ### Requirement: History Card Data
@@ -38,12 +28,12 @@ The system MUST display key summary data on each history card.
 - AND it MUST display a short text snippet of the executive summary
 - AND it MUST display up to 5 top skills using "Tech Chip" styling (`surface_container_high` background, `label-sm` Space Grotesk typography).
 
-### Requirement: Empty History State
+### Requirement: Empty History State (REQ-HIST-002)
 
-The system MUST provide clear feedback when no history exists.
+The system MUST provide clear feedback when no history exists. Emptiness is determined by the API response (`items.length === 0`), not by a localStorage check.
 
 #### Scenario: No saved analyses
-- GIVEN the user has no saved analyses
+- GIVEN the API returns `{ items: [], total: 0 }`
 - WHEN the user navigates to the history view
 - THEN the system MUST display an empty state message formatted with ample negative space (1.5x padding)
 - AND the system SHOULD provide a primary CTA with a linear gradient to navigate to the new analysis flow.
@@ -57,12 +47,12 @@ The system MUST indicate when history data is being fetched.
 - WHEN the view mounts
 - THEN the system MUST display a loading state (e.g., skeletons) adhering to the `surface_variant` layer without rigid structural box components.
 
-### Requirement: Delete Analysis
+### Requirement: Delete Analysis (REQ-HIST-003)
 
-The system MUST allow users to delete a saved analysis from their history. For authenticated users, deletion MUST use `HttpAnalysisRepository.delete()`. For anonymous users, deletion MUST use `LocalAnalysisRepository.delete()`.
+The system MUST allow users to delete a saved analysis from their history. Deletion MUST always use `HttpAnalysisRepository.delete()` (DELETE /api/analyses/:id). The localStorage fallback is removed.
 
-#### Scenario: Deleting an analysis (authenticated)
-- GIVEN an authenticated user viewing the history list
+#### Scenario: Deleting an analysis
+- GIVEN any user viewing the history list
 - WHEN the user triggers delete for a specific analysis
 - THEN the system MUST call DELETE `/api/analyses/:id` and remove the card from UI
 
@@ -86,6 +76,32 @@ Existing UI components (HistoryFeature, HistoryCard) MUST work without code chan
 - GIVEN the repository is `HttpAnalysisRepository`
 - WHEN HistoryFeature mounts
 - THEN it MUST render the same UI as with `LocalAnalysisRepository`
+
+### Requirement: Server-Side Pagination (REQ-HIST-009)
+
+History list MUST GET /api/analyses with `page` (1-indexed) and `limit` (default 20) query parameters.
+
+#### Scenario: Paginated fetch
+- GIVEN the user navigates to the history view
+- WHEN the view mounts
+- THEN GET /api/analyses?page=1&limit=20 is called
+- AND the response contains `{ items, total, page, pageSize }`
+
+#### Scenario: Next page
+- GIVEN the user is on page 1 and there are more items
+- WHEN the user clicks "Next"
+- THEN GET /api/analyses?page=2&limit=20 is called
+- AND the UI renders the next page of results
+
+### Requirement: Backend-Handled Sorting/Filtering (REQ-HIST-010)
+
+Sorting and filtering MUST be handled by the backend. The frontend MUST NOT sort or filter data client-side (defensive sorts that do not alter the rendered output are acceptable but not required).
+
+#### Scenario: Server-driven sort
+- GIVEN the API returns items sorted by `createdAt DESC`
+- WHEN the history view renders
+- THEN items appear in the order returned by the server
+- AND no client-side sort function reorders the list
 
 ### Requirement: Existing history tests pass (REQ-HIST-012)
 

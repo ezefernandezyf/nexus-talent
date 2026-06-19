@@ -1,37 +1,11 @@
 # Admin & Settings Specification
 
 ## Purpose
-Defines the behavior for the application settings management and the administrator role requirements.
+Defines the behavior for the application settings management.
+
+> **Note**: Admin Role Identification (REQ-ADM-001) and Admin Route Protection (REQ-ADM-002) were removed in P5 Frontend Refactor. The backend no longer returns a `role` field in GET /api/auth/me. The `/app/admin` route and AdminRoute component were deleted. See `P5 Frontend Refactor` archive for details.
 
 ## Requirements
-
-### Requirement: Admin Role Identification
-The system MUST identify whether an authenticated user holds the `admin` role.
-
-#### Scenario: User is an administrator
-- GIVEN an authenticated user session
-- AND the user metadata or roles data indicates `role: 'admin'`
-- WHEN the user role is evaluated
-- THEN the system MUST return `isAdmin: true`
-
-#### Scenario: User is a standard user
-- GIVEN an authenticated user session
-- AND the user metadata or roles data indicates a standard role or is empty
-- WHEN the user role is evaluated
-- THEN the system MUST return `isAdmin: false`
-
-### Requirement: Admin Route Protection
-The system MUST restrict access to `/app/admin/*` routes to administrators only.
-
-#### Scenario: Allowed admin access
-- GIVEN a user with `isAdmin: true`
-- WHEN the user navigates to `/app/admin/settings`
-- THEN the system MUST allow rendering of the settings view
-
-#### Scenario: Denied standard access
-- GIVEN a user with `isAdmin: false`
-- WHEN the user navigates to `/app/admin/settings`
-- THEN the system MUST redirect the user to `/app` (or explicitly deny access with a message)
 
 ### Requirement: Settings Persistence
 The system MUST allow retrieving and updating application-wide settings from a Supabase `settings` table.
