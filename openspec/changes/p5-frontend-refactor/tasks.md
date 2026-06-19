@@ -57,7 +57,7 @@ Chain strategy: feature-branch-chain
 
 ## PR #4 — Slice D: History Pagination (targets PR #3 branch)
 
-- [ ] 4.1 **Modify `http-analysis-repository.ts`** — `getAll(page?, limit?)` appends params to URL. ~20 LOC. Deps: PR #3. Verify: repo tests pass.
-- [ ] 4.2 **Modify `HistoryFeature.tsx`** — remove client-side `visibleAnalyses` slice, pass `page`/`limit` to hooks, render server `total` page count. ~60 LOC. Deps: 4.1. Verify: history feature tests pass.
-- [ ] 4.3 **Update `useAnalysisHistory`** — pass pagination params through to `getAll()`. ~15 LOC. Deps: 4.2. Verify: hook tests pass.
-- [ ] 4.4 **Update history test files** — mock paginated response `{ items, total }`. ~30 LOC. Deps: 4.2-4.3. Verify: `pnpm -F web test`
+- [x] 4.1 **Modify `http-analysis-repository.ts`** — `getAll(page?, limit?)` appends params to URL. ~20 LOC. Deps: PR #3. Verify: repo tests pass.
+- [x] 4.2 **Modify `HistoryFeature.tsx`** — remove client-side `visibleAnalyses` slice, pass `page`/`limit` to hooks, render server `total` page count. ~60 LOC. Deps: 4.1. Verify: history feature tests pass.
+- [x] 4.3 **Update `useAnalysisHistory`** — pass pagination params through to `getAll()`. ~15 LOC. Deps: 4.2. Verify: hook tests pass.
+- [x] 4.4 **Update history test files** — mock paginated response `{ items, total }`. ~30 LOC. Deps: 4.2-4.3. Verify: `pnpm -F web test`

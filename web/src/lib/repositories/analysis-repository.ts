@@ -7,9 +7,19 @@ export interface AnalysisUpdatePatch {
   notes?: string;
 }
 
+export interface AnalysisPage {
+  page?: number;
+  limit?: number;
+}
+
+export interface AnalysisPageResult {
+  items: SavedJobAnalysis[];
+  total: number;
+}
+
 export interface AnalysisRepository {
   save(jobDescription: string, result: JobAnalysisResult): Promise<SavedJobAnalysis>;
-  getAll(): Promise<SavedJobAnalysis[]>;
+  getAll(params?: AnalysisPage): Promise<AnalysisPageResult>;
   getById(id: string): Promise<SavedJobAnalysis | null>;
   update(id: string, patch: AnalysisUpdatePatch): Promise<SavedJobAnalysis | null>;
   delete(id: string): Promise<void>;

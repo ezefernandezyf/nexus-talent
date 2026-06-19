@@ -95,7 +95,7 @@ export function createAnalysisRepository(options: CreateAnalysisRepositoryOption
       jobDescription,
       ...result,
     })),
-    getAll: vi.fn(async () => analyses),
+    getAll: vi.fn(async () => ({ items: analyses, total: analyses.length })),
     getById: vi.fn(async (id) => analyses.find((analysis) => analysis.id === id) ?? null),
     update: vi.fn(async (id, patch) => {
       const index = analyses.findIndex((analysis) => analysis.id === id);

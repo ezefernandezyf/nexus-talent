@@ -1,5 +1,11 @@
 import { apiClient } from "../../core/api-client";
-import type { AnalysisRepository, AnalysisUpdatePatch, SavedJobAnalysis } from "./analysis-repository";
+import type {
+  AnalysisPage,
+  AnalysisPageResult,
+  AnalysisRepository,
+  AnalysisUpdatePatch,
+  SavedJobAnalysis,
+} from "./analysis-repository";
 import type { JobAnalysisResult } from "../../schemas/job-analysis";
 
 const BASE_URL = "/analyses";
@@ -22,19 +28,19 @@ export function createHttpAnalysisRepository(): AnalysisRepository {
       } as SavedJobAnalysis;
     },
 
-    async getAll(page?: number, limit?: number): Promise<SavedJobAnalysis[]> {
-      const params: Record<string, string> = {};
+    async getAll(params?: AnalysisPage): Promise<AnalysisPageResult> {
+      const query: Record<string, string> = {};
 
-      if (page !== undefined) {
-        params.page = String(page);
+      if (params?.page !== undefined) {
+        query.page = String(params.page);
       }
 
-      if (limit !== undefined) {
-        params.limit = String(limit);
+      if (params?.limit !== undefined) {
+        query.limit = String(params.limit);
       }
 
-      const { data } = await apiClient.get<{ items: SavedJobAnalysis[]; total: number }>(BASE_URL, { params });
-      return data.items;
+      const { data } = await apiClient.get<AnalysisPageResult>(BASE_URL, { params: query });
+      return data;
     },
 
     async getById(id: string): Promise<SavedJobAnalysis | null> {

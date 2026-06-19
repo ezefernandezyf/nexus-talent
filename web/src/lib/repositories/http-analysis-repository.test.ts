@@ -83,20 +83,20 @@ describe("createHttpAnalysisRepository", () => {
   // =========================================================================
 
   describe("getAll", () => {
-    it("calls GET /analyses and returns items", async () => {
+    it("calls GET /analyses and returns items with total", async () => {
       const items = [{ id: "1", summary: "A" }];
       (mockAxiosInstance.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: { items, total: 1 } });
 
       const result = await createHttpAnalysisRepository().getAll();
 
-      expect(result).toEqual(items);
+      expect(result).toEqual({ items, total: 1 });
       expect(mockAxiosInstance.get).toHaveBeenCalledWith("/analyses", { params: {} });
     });
 
     it("passes page and limit when provided", async () => {
       (mockAxiosInstance.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: { items: [], total: 0 } });
 
-      await createHttpAnalysisRepository().getAll(2, 10);
+      await createHttpAnalysisRepository().getAll({ page: 2, limit: 10 });
 
       expect(mockAxiosInstance.get).toHaveBeenCalledWith("/analyses", { params: { page: "2", limit: "10" } });
     });
