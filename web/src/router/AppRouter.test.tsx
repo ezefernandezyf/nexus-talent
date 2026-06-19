@@ -135,10 +135,10 @@ describe("AppRouter", () => {
     expect(screen.getByRole("link", { name: /iniciar sesión/i })).toHaveAttribute("href", "/auth/sign-in");
   });
 
-  it("redirects authenticated legacy settings routes to the user settings page", async () => {
+  it("returns 404 for removed admin routes", async () => {
     renderApp("/app/admin/settings", createSession("ana@empresa.com"));
 
-    await waitFor(() => expect(screen.getByRole("heading", { name: /configuración/i })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("heading", { name: /404/i })).toBeInTheDocument());
   });
 
   it("keeps public visitors away from the user settings page", async () => {
