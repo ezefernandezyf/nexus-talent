@@ -7,7 +7,7 @@ import { loginSchema, type LoginFormValues } from "../schemas/auth";
 import { useState } from "react";
 
 export function SignInForm() {
-  const { errorMessage, isConfigured, signIn, signInWithOAuth } = useAuth();
+  const { errorMessage, signIn, signInWithOAuth } = useAuth();
   const {
     register,
     handleSubmit,
@@ -47,7 +47,7 @@ export function SignInForm() {
         <button
           type="button"
           className="w-full flex items-center justify-center gap-3 rounded-xl border border-surface-container bg-white p-0.5 text-[#0B0E14] transition-opacity duration-200 hover:opacity-90"
-          disabled={isOAuthSubmitting || !isConfigured}
+          disabled={isOAuthSubmitting}
           onClick={handleOAuthSignIn}
         >
           <span className="flex items-center gap-3 px-4 py-3 text-[#0B0E14]">
@@ -81,9 +81,9 @@ export function SignInForm() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p id="sign-in-status" className="min-h-6 text-sm leading-6 text-on-surface-variant" aria-live="polite">
-          {serverError ?? errorMessage ?? (isConfigured ? " " : "Configurá Supabase para habilitar el acceso.")}
+          {serverError ?? errorMessage ?? " "}
         </p>
-        <Button className="sm:min-w-44" type="submit" disabled={isSubmitting || isOAuthSubmitting || !isConfigured}>
+        <Button className="sm:min-w-44" type="submit" disabled={isSubmitting || isOAuthSubmitting}>
           {isSubmitting ? "Ingresando..." : "Iniciar sesión"}
         </Button>
       </div>

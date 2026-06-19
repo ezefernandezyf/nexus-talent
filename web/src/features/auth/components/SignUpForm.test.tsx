@@ -1,50 +1,14 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import type { Session, User } from "@supabase/supabase-js";
 import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { AuthProvider } from "../AuthProvider";
 import { ProtectedRoute } from "../ProtectedRoute";
 import { PublicAuthRoute } from "../PublicAuthRoute";
 import { SignUpForm } from "./SignUpForm";
-import type { AuthClientLike } from "../../../lib/supabase";
+import { useAuthStore } from "../../../auth/auth-store";
 
-function createUser(email: string): User {
-  const now = new Date("2026-04-05T12:00:00.000Z").toISOString();
-
-  return {
-    aud: "authenticated",
-    app_metadata: {},
-    created_at: now,
-    email,
-    email_confirmed_at: now,
-    id: "550e8400-e29b-41d4-a716-446655440000",
-    identities: [],
-    is_anonymous: false,
-    last_sign_in_at: now,
-    phone: "",
-    role: "authenticated",
-    updated_at: now,
-    user_metadata: {},
-  } as User;
-}
-
-function createSession(email: string): Session {
-  const user = createUser(email);
-
-  return {
-    access_token: "session-token",
-    expires_at: Math.floor(Date.now() / 1000) + 3600,
-    expires_in: 3600,
-    provider_refresh_token: null,
-    provider_token: null,
-    refresh_token: "refresh-token",
-    token_type: "bearer",
-    user,
-  } as Session;
-}
-
-function createAuthClient(signUpErrorMessage: string | null): AuthClientLike {
+function createAuthClient(signUpErrorMessage: string | null) {
   return {
     auth: {
       getSession: vi.fn(async () => ({ data: { session: null }, error: null })),
@@ -69,9 +33,12 @@ function createAuthClient(signUpErrorMessage: string | null): AuthClientLike {
           };
         }
 
-        const session = createSession("ana@empresa.com");
         return {
-          data: { session, user: session.user },
+          data: {
+            session: {
+              user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "ana@empresa.com" },
+            },
+          },
           error: null,
         };
       }),
@@ -80,6 +47,10 @@ function createAuthClient(signUpErrorMessage: string | null): AuthClientLike {
 }
 
 describe("SignUpForm", () => {
+  afterEach(() => {
+    useAuthStore.setState({ user: null, status: "unknown", isAdmin: false });
+  });
+
   it("shows validation errors for empty submit", async () => {
     const user = userEvent.setup();
     const client = createAuthClient(null);

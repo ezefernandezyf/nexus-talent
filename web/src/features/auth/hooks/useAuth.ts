@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthContext, AUTH_MESSAGES, AUTH_STATUS } from "../AuthProvider";
+import { AuthContext, AUTH_STATUS } from "../AuthProvider";
 
 export function useAuth() {
   const context = useContext(AuthContext);
@@ -11,4 +11,4 @@ export function useAuth() {
   return context;
 }
 
-export { AUTH_MESSAGES, AUTH_STATUS };
+export { AUTH_STATUS };

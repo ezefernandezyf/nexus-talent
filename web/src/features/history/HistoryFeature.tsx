@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import type { AnalysisRepository } from "../../lib/repositories";
 import { useAnalysisHistory } from "../analysis";
 import { HistoryEmptyState, HistoryList, HistoryLoadingState } from "./components";
@@ -19,29 +19,24 @@ function getHistoryErrorMessage(error: unknown) {
   return "No se pudo cargar el historial.";
 }
 
+const PAGE_SIZE = 10;
+
 export function HistoryFeature({ analysisHref = "/app/analysis", repository, scope }: HistoryFeatureProps) {
-  const history = useAnalysisHistory({ repository, scope });
+  const [currentPage, setCurrentPage] = useState(1);
+  const history = useAnalysisHistory({
+    repository,
+    scope,
+    page: { page: currentPage, limit: PAGE_SIZE },
+  });
   const deleteMutation = useDeleteAnalysis({ repository, scope });
   const errorMessage = getHistoryErrorMessage(history.error);
-  const pageSize = 10;
-  const totalPages = Math.max(1, Math.ceil(history.analyses.length / pageSize));
-  const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    setCurrentPage((current) => Math.min(Math.max(current, 1), totalPages));
-  }, [totalPages]);
-
-  const visibleAnalyses = useMemo(() => {
-    const startIndex = (currentPage - 1) * pageSize;
-
-    return history.analyses.slice(startIndex, startIndex + pageSize);
-  }, [currentPage, history.analyses]);
+  const totalPages = Math.max(1, Math.ceil(history.total / PAGE_SIZE));
 
   const handlePageChange = useCallback(
     (page: number) => {
-      setCurrentPage(Math.min(Math.max(page, 1), totalPages));
+      setCurrentPage(page);
     },
-    [totalPages],
+    [],
   );
 
   function handleDelete(analysisId: string) {
@@ -69,7 +64,7 @@ export function HistoryFeature({ analysisHref = "/app/analysis", repository, sco
         <HistoryEmptyState analysisHref={analysisHref} />
       ) : (
         <HistoryList
-          analyses={visibleAnalyses}
+          analyses={history.analyses}
           currentPage={currentPage}
           isDeletingId={deleteMutation.isPending ? deleteMutation.variables ?? null : null}
           onDelete={handleDelete}

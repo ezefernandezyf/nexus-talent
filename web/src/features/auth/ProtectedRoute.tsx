@@ -7,7 +7,7 @@ export function ProtectedRoute() {
   const location = useLocation();
   const { status } = useAuth();
 
-  if (status === AUTH_STATUS.LOADING) {
+  if (status === AUTH_STATUS.LOADING || status === "unknown") {
     return <AuthStatusScreen message="Estamos validando tu sesión segura antes de abrir el panel privado." title="Verificando acceso" />;
   }
 

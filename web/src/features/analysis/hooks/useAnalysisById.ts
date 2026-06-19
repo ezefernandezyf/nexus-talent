@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { createLocalAnalysisRepository, type AnalysisRepository, type SavedJobAnalysis } from "../../../lib/repositories";
+import { createHttpAnalysisRepository, type AnalysisRepository, type SavedJobAnalysis } from "../../../lib/repositories";
 import type { AnalysisPersistenceScope } from "./useAnalysisRepository";
 
 interface UseAnalysisByIdOptions {
@@ -9,7 +9,7 @@ interface UseAnalysisByIdOptions {
 
 export const ANALYSIS_BY_ID_QUERY_KEY = ["analysis-detail"] as const;
 
-const defaultRepository = createLocalAnalysisRepository();
+const defaultRepository = createHttpAnalysisRepository();
 
 export function getAnalysisByIdQueryKey(scope: AnalysisPersistenceScope, analysisId: string) {
   return [...ANALYSIS_BY_ID_QUERY_KEY, scope, analysisId] as const;

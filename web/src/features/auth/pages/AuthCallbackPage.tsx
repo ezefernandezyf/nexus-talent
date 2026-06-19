@@ -1,23 +1,34 @@
+import { useEffect } from "react";
 import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { Card } from "../../../components/ui/Card";
-import { AUTH_STATUS } from "../AuthProvider";
+import { useAuthStore, AUTH_STATUS } from "../../../auth/auth-store";
 import { useAuth } from "../hooks/useAuth";
 
-function getCallbackErrorMessage(searchParams: URLSearchParams, authErrorMessage: string | null) {
+function getCallbackErrorMessage(searchParams: URLSearchParams) {
   const queryError = searchParams.get("error_description") ?? searchParams.get("error");
 
-  return queryError?.trim() || authErrorMessage || "No pudimos completar el acceso social.";
+  return queryError?.trim() || "No pudimos completar el acceso social.";
 }
 
 export default function AuthCallbackPage() {
   const [searchParams] = useSearchParams();
-  const { errorMessage, status } = useAuth();
+  const { status } = useAuth();
+  const restoreSession = useAuthStore((s) => s.restoreSession);
+
+  useEffect(() => {
+    const hasError = searchParams.get("error_description") ?? searchParams.get("error");
+
+    // Only try to restore session when there's no OAuth error
+    if (!hasError) {
+      restoreSession();
+    }
+  }, [restoreSession, searchParams]);
 
   if (status === AUTH_STATUS.AUTHENTICATED) {
-    return <Navigate replace to="/app" />;
+    return <Navigate replace to="/app/analysis" />;
   }
 
-  const callbackErrorMessage = getCallbackErrorMessage(searchParams, errorMessage);
+  const callbackErrorMessage = getCallbackErrorMessage(searchParams);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-surface-container-lowest px-5 py-8 text-on-surface">

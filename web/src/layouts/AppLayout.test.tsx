@@ -2,12 +2,37 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import axios from "axios";
 import { ANALYSIS_HISTORY_STORAGE_KEY } from "../lib/repositories";
+import { useAuthStore } from "../auth/auth-store";
 import { createSavedAnalysis } from "../test/factories/analysis";
 import { AppLayout } from "./AppLayout";
 import { AuthProvider } from "../features/auth";
 import { createTestQueryClient } from "../test/mocks/query-client";
+
+// ---------------------------------------------------------------------------
+// Axios mock — hooks now use HTTP repo instead of localStorage
+// ---------------------------------------------------------------------------
+
+vi.mock("axios", () => {
+  const instance = {
+    get: vi.fn(),
+    patch: vi.fn(),
+    delete: vi.fn(),
+    interceptors: {
+      request: { use: vi.fn(), eject: vi.fn() },
+      response: { use: vi.fn(), eject: vi.fn() },
+    },
+  };
+
+  return {
+    default: {
+      create: vi.fn(() => instance),
+      isAxiosError: vi.fn(() => false),
+    },
+  };
+});
 
 function createAuthClient(session: { user: { email?: string } } | null = null) {
   return {
@@ -23,6 +48,16 @@ function createAuthClient(session: { user: { email?: string } } | null = null) {
 }
 
 describe("AppLayout", () => {
+  beforeEach(() => {
+    useAuthStore.setState({ user: null, status: "unknown", isAdmin: false });
+
+    // Default axios mock: empty analysis list for sidebar
+    const api = vi.mocked(axios.create)();
+    api.get.mockReset().mockResolvedValue({ data: { items: [], total: 0 } });
+    api.patch.mockReset().mockResolvedValue({ data: {} });
+    api.delete.mockReset().mockResolvedValue({ data: undefined });
+  });
+
   it("renders the shared shell and outlet content for public users", async () => {
     const queryClient = createTestQueryClient();
     const user = userEvent.setup();
@@ -32,6 +67,10 @@ describe("AppLayout", () => {
     });
 
     localStorage.setItem(ANALYSIS_HISTORY_STORAGE_KEY, JSON.stringify([savedAnalysis]));
+
+    // Configure axios to return the saved analysis in the sidebar
+    const api = vi.mocked(axios.create)();
+    api.get.mockResolvedValue({ data: { items: [savedAnalysis], total: 1 } });
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -54,9 +93,11 @@ describe("AppLayout", () => {
     expect(within(screen.getByLabelText(/app primary navigation/i)).queryByRole("link", { name: /settings/i })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /nuevo análisis/i })).toHaveAttribute("href", "/app/analysis");
     expect(screen.queryByText("© 2026 Nexus Talent — Precision Recruiting Layer")).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /abrir detalle de frontend lead/i })).toHaveAttribute(
-      "href",
-      "/app/history/550e8400-e29b-41d4-a716-446655440000",
+    await waitFor(() =>
+      expect(screen.getByRole("link", { name: /abrir detalle de frontend lead/i })).toHaveAttribute(
+        "href",
+        "/app/history/550e8400-e29b-41d4-a716-446655440000",
+      ),
     );
 
     await user.click(screen.getByRole("button", { name: /abrir menú/i }));

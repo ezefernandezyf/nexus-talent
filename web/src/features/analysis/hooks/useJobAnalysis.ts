@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { createJobAnalysisClient, type JobAnalysisClient } from "../../../lib/ai-client";
 import { isAIOrchestratorError } from "../../../lib/ai-errors";
 import { createGitHubClient, type GitHubClient } from "../../../lib/github-client";
-import { createLocalAnalysisRepository, type AnalysisRepository } from "../../../lib/repositories";
+import { createHttpAnalysisRepository, type AnalysisRepository } from "../../../lib/repositories";
 import {
   JOB_ANALYSIS_REQUEST_SCHEMA,
   type JobAnalysisRequest,
@@ -22,7 +22,7 @@ interface UseJobAnalysisOptions {
 
 const defaultClient = createJobAnalysisClient();
 const defaultGitHubClient = createGitHubClient();
-const defaultRepository = createLocalAnalysisRepository();
+const defaultRepository = createHttpAnalysisRepository();
 
 type AnalysisViewState = {
   data: JobAnalysisResult | undefined;

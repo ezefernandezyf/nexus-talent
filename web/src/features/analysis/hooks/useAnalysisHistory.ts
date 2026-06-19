@@ -1,17 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
-import { createLocalAnalysisRepository, type AnalysisRepository, type SavedJobAnalysis } from "../../../lib/repositories";
+import {
+  createHttpAnalysisRepository,
+  type AnalysisPage,
+  type AnalysisRepository,
+  type SavedJobAnalysis,
+} from "../../../lib/repositories";
 import type { AnalysisPersistenceScope } from "./useAnalysisRepository";
 
 interface UseAnalysisHistoryOptions {
   repository?: AnalysisRepository;
   scope?: AnalysisPersistenceScope;
+  /** Server-side pagination params passed to the repository */
+  page?: AnalysisPage;
 }
 
 export const ANALYSIS_HISTORY_QUERY_KEY = ["analysis-history"] as const;
 
-const defaultRepository = createLocalAnalysisRepository();
+const defaultRepository = createHttpAnalysisRepository();
 
-export function getAnalysisHistoryQueryKey(scope: AnalysisPersistenceScope = "anonymous") {
+export function getAnalysisHistoryQueryKey(scope: AnalysisPersistenceScope = "anonymous", page?: AnalysisPage) {
+  if (page) {
+    return [...ANALYSIS_HISTORY_QUERY_KEY, scope, page] as const;
+  }
   return [...ANALYSIS_HISTORY_QUERY_KEY, scope] as const;
 }
 
@@ -24,13 +34,17 @@ export function useAnalysisHistory(options: UseAnalysisHistoryOptions = {}) {
   const scope = options.scope ?? "anonymous";
 
   const query = useQuery({
-    queryKey: getAnalysisHistoryQueryKey(scope),
-    queryFn: async () => repository.getAll(),
-    select: (analyses) => [...analyses].sort(sortByCreatedAtDesc),
+    queryKey: getAnalysisHistoryQueryKey(scope, options.page),
+    queryFn: async () => repository.getAll(options.page),
+    select: (result) => ({
+      items: [...result.items].sort(sortByCreatedAtDesc),
+      total: result.total,
+    }),
   });
 
   return {
     ...query,
-    analyses: query.data ?? [],
+    analyses: query.data?.items ?? [],
+    total: query.data?.total ?? 0,
   };
 }

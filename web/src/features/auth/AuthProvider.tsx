@@ -1,17 +1,11 @@
-import { createContext, useEffect, useState, type ReactNode } from "react";
-import type { Session, User } from "@supabase/supabase-js";
-import { createSupabaseClient, getOAuthProviderConfig, getOAuthRedirectTo, type AuthClientLike, type OAuthProviderKey } from "../../lib/supabase";
+import { createContext, useCallback, useEffect, useState, type ReactNode } from "react";
+import { useAuthStore, AUTH_STATUS, type AuthUser, type AuthStatus } from "../../auth/auth-store";
 
-const AUTH_STATUS = {
-  AUTHENTICATED: "authenticated",
-  LOADING: "loading",
-  UNAUTHENTICATED: "unauthenticated",
-} as const;
+export type { AuthStatus };
 
-export type AuthStatus = (typeof AUTH_STATUS)[keyof typeof AUTH_STATUS];
+export { AUTH_STATUS };
 
 const AUTH_MESSAGES = {
-  MISSING_CONFIGURATION: "Configurá VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY para activar el acceso.",
   SESSION_CHECK_FAILED: "No se pudo validar la sesión.",
 } as const;
 
@@ -24,20 +18,35 @@ interface AuthContextValue {
   errorMessage: string | null;
   isAdmin: boolean;
   isConfigured: boolean;
-  session: Session | null;
-  linkIdentity: (provider: OAuthProviderKey) => Promise<AuthActionResponse>;
-  unlinkIdentity: (provider: OAuthProviderKey) => Promise<AuthActionResponse>;
+  session: { user: AuthUser } | null;
   signIn: (email: string, password: string) => Promise<AuthActionResponse>;
-  signInWithOAuth: (provider: OAuthProviderKey) => Promise<AuthActionResponse>;
+  signInWithOAuth: (provider: string) => Promise<AuthActionResponse>;
   signOut: () => Promise<void>;
   signUp: (email: string, password: string) => Promise<AuthActionResponse>;
   status: AuthStatus;
-  user: User | null;
+  user: (AuthUser & { user_metadata?: Record<string, unknown>; app_metadata?: Record<string, unknown>; identities?: unknown[] }) | null;
+  /** @deprecated Kept for settings compatibility. Removed in PR #3. */
+  linkIdentity?: (provider: string) => Promise<{ success: boolean; message: string }>;
+  /** @deprecated Kept for settings compatibility. Removed in PR #3. */
+  unlinkIdentity?: (provider: string) => Promise<{ success: boolean; message: string }>;
 }
 
 interface AuthProviderProps {
   children: ReactNode;
-  client?: AuthClientLike | null;
+  /** @deprecated Legacy client mock for test compatibility. Not used in production. */
+  client?: {
+    auth: {
+      getSession: () => Promise<{ data: { session: Record<string, unknown> | null }; error: { message: string } | null }>;
+      onAuthStateChange: (cb: (event: string, session: Record<string, unknown> | null) => void) => {
+        data: { subscription: { unsubscribe: () => void } };
+      };
+      signInWithPassword: (creds: { email: string; password: string }) => Promise<{ data: Record<string, unknown>; error: { message: string } | null }>;
+      signInWithOAuth: (opts: { options?: { redirectTo?: string }; provider: string }) => Promise<{ data: Record<string, unknown>; error: { message: string } | null }>;
+      signOut: () => Promise<{ error: { message: string } | null }>;
+      signUp: (creds: { email: string; password: string }) => Promise<{ data: Record<string, unknown>; error: { message: string } | null }>;
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } | null;
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -46,336 +55,270 @@ function getErrorMessage(error: unknown, fallback: string) {
   if (error instanceof Error && error.message.trim().length > 0) {
     return error.message;
   }
-
   return fallback;
 }
 
-function getIsAdmin(user: User | null | undefined) {
-  const role = user?.user_metadata?.role ?? user?.app_metadata?.role;
-
-  return role === "admin";
-}
-
-function createClientState(client: AuthClientLike | null | undefined) {
-  if (client) {
-    return {
-      client,
-      isConfigured: true,
-      missingVariables: [],
-    };
+function extractUser(session: Record<string, unknown> | null): {
+  user: (AuthUser & { user_metadata?: Record<string, unknown>; app_metadata?: Record<string, unknown>; identities?: unknown[] }) | null;
+  isAdmin: boolean;
+} {
+  if (!session) {
+    return { user: null, isAdmin: false };
   }
 
-  return createSupabaseClient();
+  const sessionUser = session.user as Record<string, unknown> | undefined;
+
+  if (!sessionUser) {
+    return { user: null, isAdmin: false };
+  }
+
+  const meta = sessionUser.user_metadata as Record<string, unknown> | null | undefined;
+
+  const displayName = (sessionUser.displayName as string | null)
+    ?? (meta?.["displayName" as never] as string | null)
+    ?? (meta?.["display_name" as never] as string | null)
+    ?? (meta?.["full_name" as never] as string | null)
+    ?? (meta?.["name" as never] as string | null)
+    ?? null;
+
+  const user = {
+    id: String(sessionUser.id ?? ""),
+    email: String(sessionUser.email ?? ""),
+    displayName,
+    user_metadata: (meta ?? {}),
+    app_metadata: (sessionUser.app_metadata as Record<string, unknown> ?? {}),
+    identities: (sessionUser.identities as unknown[] ?? []),
+  };
+
+  const role = (meta?.["role" as never] as string | undefined)
+    ?? (sessionUser.app_metadata as Record<string, unknown> | null)?.["role" as never] as string | undefined;
+
+  return { user, isAdmin: role === "admin" };
 }
 
 export function AuthProvider({ children, client }: AuthProviderProps) {
-  const [clientState] = useState(() => createClientState(client));
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [status, setStatus] = useState<AuthStatus>(clientState.isConfigured ? AUTH_STATUS.LOADING : AUTH_STATUS.UNAUTHENTICATED);
-  const [errorMessage, setErrorMessage] = useState<string | null>(clientState.isConfigured ? null : AUTH_MESSAGES.MISSING_CONFIGURATION);
+  // Individual selectors to avoid creating new object references each render
+  const storeUser = useAuthStore((s) => s.user);
+  const storeStatus = useAuthStore((s) => s.status);
+  const storeIsAdmin = useAuthStore((s) => s.isAdmin);
+  const restoreSessionAction = useAuthStore((s) => s.restoreSession);
+  const loginAction = useAuthStore((s) => s.login);
+  const registerAction = useAuthStore((s) => s.register);
+  const logoutAction = useAuthStore((s) => s.logout);
 
-  function syncSession(nextSession: Session | null) {
-    setSession(nextSession);
-    setUser(nextSession?.user ?? null);
-    setIsAdmin(getIsAdmin(nextSession?.user));
-    setStatus(nextSession ? AUTH_STATUS.AUTHENTICATED : AUTH_STATUS.UNAUTHENTICATED);
-  }
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  function clearSession() {
-    syncSession(null);
-  }
-
+  // On mount: hydrate the store
   useEffect(() => {
-    if (!clientState.client) {
-      setStatus(AUTH_STATUS.UNAUTHENTICATED);
-      setErrorMessage(AUTH_MESSAGES.MISSING_CONFIGURATION);
+    let isActive = true;
+
+    if (client) {
+      // Legacy mode: hydrate from client mock (test compatibility)
+      client.auth
+        .getSession()
+        .then(({ data, error }) => {
+          if (!isActive) return;
+
+          if (error) {
+            setErrorMessage(getErrorMessage(error, AUTH_MESSAGES.SESSION_CHECK_FAILED));
+            useAuthStore.setState({ user: null, status: "unauthenticated", isAdmin: false });
+            return;
+          }
+
+          const { user, isAdmin } = extractUser(data.session as Record<string, unknown> | null);
+
+          if (user) {
+            useAuthStore.setState({ user, status: "authenticated", isAdmin });
+          } else {
+            useAuthStore.setState({ user: null, status: "unauthenticated", isAdmin: false });
+          }
+        })
+        .catch((error: unknown) => {
+          if (!isActive) return;
+          setErrorMessage(getErrorMessage(error, AUTH_MESSAGES.SESSION_CHECK_FAILED));
+          useAuthStore.setState({ user: null, status: "unauthenticated", isAdmin: false });
+        });
+
+      // Listen for auth state changes from client
+      const { data } = client.auth.onAuthStateChange((_event, nextSession) => {
+        if (!isActive) return;
+        const { user, isAdmin } = extractUser(nextSession as Record<string, unknown> | null);
+
+        if (user) {
+          useAuthStore.setState({ user, status: "authenticated", isAdmin });
+          setErrorMessage(null);
+        } else {
+          useAuthStore.setState({ user: null, status: "unauthenticated", isAdmin: false });
+          setErrorMessage(null);
+        }
+      });
+
+      return () => {
+        isActive = false;
+        data.subscription.unsubscribe();
+      };
+    } else {
+      // Production mode: use Zustand store
+      restoreSessionAction();
+    }
+  }, [client, restoreSessionAction]);
+
+  const signIn = useCallback(
+    async (email: string, password: string) => {
+      setErrorMessage(null);
+
+      if (client) {
+        const { data, error } = await client.auth.signInWithPassword({ email: email.trim(), password });
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        const { user, isAdmin } = extractUser(data.session as Record<string, unknown> | null);
+
+        if (user) {
+          useAuthStore.setState({ user, status: "authenticated", isAdmin });
+        }
+
+        setErrorMessage(null);
+        return { success: true, message: "Sesión iniciada. Redirigiendo al panel privado." };
+      }
+
+      // Production: use Zustand store
+      await loginAction(email, password);
+
+      return { success: true, message: "Sesión iniciada. Redirigiendo al panel privado." };
+    },
+    [client, loginAction],
+  );
+
+  const signUp = useCallback(
+    async (email: string, password: string) => {
+      setErrorMessage(null);
+
+      if (client) {
+        const { data, error } = await client.auth.signUp({ email: email.trim(), password });
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        const { user, isAdmin } = extractUser(data.session as Record<string, unknown> | null);
+
+        if (user) {
+          useAuthStore.setState({ user, status: "authenticated", isAdmin });
+          setErrorMessage(null);
+          return { success: true, message: "Cuenta creada y sesión iniciada." };
+        }
+
+        return { success: true, message: "Cuenta creada. Revisá tu correo para confirmar el acceso." };
+      }
+
+      // Production: use Zustand store
+      await registerAction(email, password);
+
+      return { success: true, message: "Cuenta creada y sesión iniciada." };
+    },
+    [client, registerAction],
+  );
+
+  const signOut = useCallback(async () => {
+    setErrorMessage(null);
+
+    if (client) {
+      const { error } = await client.auth.signOut();
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      useAuthStore.setState({ user: null, status: "unauthenticated", isAdmin: false });
+      setErrorMessage(null);
       return;
     }
 
-    let isActive = true;
-    setStatus(AUTH_STATUS.LOADING);
-    setErrorMessage(null);
+    // Production: use Zustand store
+    await logoutAction();
+  }, [client, logoutAction]);
 
-    void clientState.client.auth
-      .getSession()
-      .then(({ data, error }) => {
-        if (!isActive) {
-          return;
-        }
+  const signInWithOAuth = useCallback(
+    async (provider: string) => {
+      if (client) {
+        const providerConfig = provider === "google" ? { label: "Google", provider: "google" as const } : { label: "GitHub", provider: provider as "github" | "google" };
+
+        const { error } = await client.auth.signInWithOAuth({
+          options: { redirectTo: new URL("/auth/callback", window.location.origin).toString() },
+          provider: providerConfig.provider,
+        });
 
         if (error) {
-          clearSession();
-          setErrorMessage(getErrorMessage(error, AUTH_MESSAGES.SESSION_CHECK_FAILED));
-          return;
+          setErrorMessage(error.message);
+          return { success: false, message: error.message };
         }
 
-        syncSession(data.session);
-      })
-      .catch((error: unknown) => {
-        if (!isActive) {
-          return;
-        }
-
-        clearSession();
-        setErrorMessage(getErrorMessage(error, AUTH_MESSAGES.SESSION_CHECK_FAILED));
-      });
-
-    const { data } = clientState.client.auth.onAuthStateChange((_event, nextSession) => {
-      if (!isActive) {
-        return;
+        return { success: true, message: `Redirigiendo a ${providerConfig.label}...` };
       }
 
-      syncSession(nextSession);
-      setErrorMessage(null);
-    });
+      // Production: redirect to backend OAuth endpoint
+      window.location.href = `/api/auth/oauth/${provider}`;
+      return { success: true, message: "Redirigiendo..." };
+    },
+    [client],
+  );
 
-    return () => {
-      isActive = false;
-      data.subscription.unsubscribe();
-    };
-  }, [clientState.client]);
-
-  async function signIn(email: string, password: string) {
-    if (!clientState.client) {
-      throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
+  // @deprecated Kept for settings compatibility. Removed in PR #3.
+  const linkIdentity = useCallback(async (provider: string) => {
+    if (client) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const clientAuth = client.auth as any;
+      if (clientAuth.linkIdentity) {
+        await clientAuth.linkIdentity({ provider });
+        return { success: true, message: `Vinculando ${provider}...` };
+      }
     }
+    throw new Error("linkIdentity is not available.");
+  }, [client]);
 
-    setErrorMessage(null);
-
-    const { data, error } = await clientState.client.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
-
-    if (error) {
-      throw new Error(error.message);
+  // @deprecated Kept for settings compatibility. Removed in PR #3.
+  const unlinkIdentity = useCallback(async (provider: string) => {
+    if (client) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const clientAuth = client.auth as any;
+      if (clientAuth.unlinkIdentity) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const identitiesResult = clientAuth.getUserIdentities ? await clientAuth.getUserIdentities() : { data: { identities: [] } };
+        const identities = identitiesResult.data.identities ?? [];
+        if (identities.length < 2) {
+          return { success: false, message: `Necesitás al menos dos identidades vinculadas para desvincular ${provider}.` };
+        }
+        const targetIdentity = identities.find(
+          (item: { provider: string }) => item.provider === provider,
+        );
+        if (targetIdentity) {
+          await clientAuth.unlinkIdentity(targetIdentity);
+          return { success: true, message: `${provider} desvinculada.` };
+        }
+      }
     }
-
-    syncSession(data.session);
-    setErrorMessage(null);
-
-    return {
-      success: true,
-      message: "Sesión iniciada. Redirigiendo al panel privado.",
-    };
-  }
-
-  async function signUp(email: string, password: string) {
-    if (!clientState.client) {
-      throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
-    }
-
-    setErrorMessage(null);
-
-    const { data, error } = await clientState.client.auth.signUp({
-      email: email.trim(),
-      password,
-    });
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    syncSession(data.session);
-
-    if (data.session) {
-      setErrorMessage(null);
-      return {
-        success: true,
-        message: "Cuenta creada y sesión iniciada.",
-      };
-    }
-
-    return {
-      success: true,
-      message: "Cuenta creada. Revisá tu correo para confirmar el acceso.",
-    };
-  }
-
-  async function signOut() {
-    if (!clientState.client) {
-      throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
-    }
-
-    setErrorMessage(null);
-
-    const { error } = await clientState.client.auth.signOut();
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    clearSession();
-    setErrorMessage(null);
-  }
-
-  async function signInWithOAuth(provider: OAuthProviderKey) {
-    if (!clientState.client) {
-      throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
-    }
-
-    const providerConfig = getOAuthProviderConfig(provider);
-
-    if (!providerConfig.enabled) {
-      const message = `${providerConfig.label} no está habilitado en esta instancia.`;
-      setErrorMessage(message);
-      return { success: false, message };
-    }
-
-    setErrorMessage(null);
-
-    const { error } = await clientState.client.auth.signInWithOAuth({
-      options: {
-        redirectTo: getOAuthRedirectTo(),
-      },
-      provider: providerConfig.provider,
-    });
-
-    if (error) {
-      setErrorMessage(error.message);
-      return { success: false, message: error.message };
-    }
-
-    return {
-      success: true,
-      message: `Redirigiendo a ${providerConfig.label}...`,
-    };
-  }
-
-  async function linkIdentity(provider: OAuthProviderKey) {
-    if (!clientState.client) {
-      throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
-    }
-
-    const providerConfig = getOAuthProviderConfig(provider);
-
-    if (!providerConfig.enabled) {
-      const message = `${providerConfig.label} no está habilitado en esta instancia.`;
-      setErrorMessage(message);
-      return { success: false, message };
-    }
-
-    if (!clientState.client.auth.linkIdentity) {
-      const message = `${providerConfig.label} no está disponible para vinculación en esta instancia.`;
-      setErrorMessage(message);
-      return { success: false, message };
-    }
-
-    setErrorMessage(null);
-
-    const { error } = await clientState.client.auth.linkIdentity({ provider: providerConfig.provider });
-
-    if (error) {
-      setErrorMessage(error.message);
-      return { success: false, message: error.message };
-    }
-
-    const sessionResult = await clientState.client.auth.getSession();
-    syncSession(sessionResult.data.session);
-    setErrorMessage(null);
-
-    return {
-      success: true,
-      message: `Vinculando ${providerConfig.label}...`,
-    };
-  }
-
-  async function unlinkIdentity(provider: OAuthProviderKey) {
-    if (!clientState.client) {
-      throw new Error(AUTH_MESSAGES.MISSING_CONFIGURATION);
-    }
-
-    const providerConfig = getOAuthProviderConfig(provider);
-
-    if ((!clientState.client.auth.getUserIdentities && !clientState.client.auth.getUser) || !clientState.client.auth.unlinkIdentity) {
-      const message = `${providerConfig.label} no está disponible para desvinculación en esta instancia.`;
-      setErrorMessage(message);
-      return { success: false, message };
-    }
-
-    setErrorMessage(null);
-
-    const identitiesResult = clientState.client.auth.getUserIdentities
-      ? await clientState.client.auth.getUserIdentities()
-      : clientState.client.auth.getUser
-        ? await clientState.client.auth.getUser().then(({ data, error }) => ({
-            data: { identities: data.user?.identities ?? [] },
-            error,
-          }))
-        : {
-            data: { identities: [] },
-            error: null,
-          };
-
-    const { data, error } = identitiesResult;
-
-    if (error) {
-      setErrorMessage(error.message);
-      return { success: false, message: error.message };
-    }
-
-    const targetIdentity = data.identities.find((identity) => identity.provider === providerConfig.provider);
-
-    if (!targetIdentity) {
-      const message = `${providerConfig.label} no está vinculada a esta cuenta.`;
-      setErrorMessage(message);
-      return { success: false, message };
-    }
-
-    if (data.identities.length < 2) {
-      const message = `Necesitás al menos dos identidades vinculadas para desvincular ${providerConfig.label}.`;
-      setErrorMessage(message);
-      return { success: false, message };
-    }
-
-    const unlinkResult = await clientState.client.auth.unlinkIdentity(targetIdentity);
-
-    if (unlinkResult.error) {
-      setErrorMessage(unlinkResult.error.message);
-      return { success: false, message: unlinkResult.error.message };
-    }
-
-    const refreshedUser = clientState.client.auth.getUser
-      ? await clientState.client.auth.getUser().then(({ data: userData, error: userError }) => ({
-          user: userError ? null : userData.user,
-        }))
-      : { user: null };
-    const sessionResult = await clientState.client.auth.getSession();
-
-    if (sessionResult.data.session) {
-      syncSession({
-        ...sessionResult.data.session,
-        user: refreshedUser.user ?? sessionResult.data.session.user,
-      });
-    } else {
-      syncSession(null);
-    }
-    setErrorMessage(null);
-
-    return {
-      success: true,
-      message: `${providerConfig.label} desvinculada.`,
-    };
-  }
+    throw new Error("unlinkIdentity is not available.");
+  }, [client]);
 
   const value: AuthContextValue = {
     errorMessage,
-    isAdmin,
-    isConfigured: clientState.isConfigured,
-    linkIdentity,
-    session,
-    unlinkIdentity,
+    isAdmin: storeIsAdmin,
+    isConfigured: true,
+    session: storeUser ? { user: storeUser } : null,
     signIn,
     signInWithOAuth,
     signOut,
     signUp,
-    status,
-    user,
+    status: storeStatus,
+    user: storeUser,
+    linkIdentity,
+    unlinkIdentity,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export { AUTH_MESSAGES, AUTH_STATUS };
+export { AUTH_MESSAGES };
