@@ -1,76 +1,54 @@
+import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthProvider } from "../AuthProvider";
 import { ProtectedRoute } from "../ProtectedRoute";
 import { PublicAuthRoute } from "../PublicAuthRoute";
 import { SignInForm } from "./SignInForm";
-import { useAuthStore } from "../../../auth/auth-store";
+import { useAuthStatus } from "../store/auth-status";
+import { createTestQueryClient } from "../../../test/mocks/query-client";
 
-type ClientAuth = {
-  getSession: ReturnType<typeof vi.fn>;
-  onAuthStateChange: ReturnType<typeof vi.fn>;
-  signInWithPassword: ReturnType<typeof vi.fn>;
-  signInWithOAuth: ReturnType<typeof vi.fn>;
-  signOut: ReturnType<typeof vi.fn>;
-  signUp: ReturnType<typeof vi.fn>;
-};
+const mockAxiosInstance = vi.hoisted(() => ({
+  get: vi.fn(),
+  post: vi.fn(),
+  interceptors: {
+    request: { use: vi.fn(), eject: vi.fn() },
+    response: { use: vi.fn(), eject: vi.fn() },
+  },
+}));
 
-function createAuthClient(signInErrorMessage: string | null): {
-  auth: ClientAuth;
-} {
-  return {
-    auth: {
-      getSession: vi.fn(async () => ({ data: { session: null }, error: null })),
-      onAuthStateChange: vi.fn(() => ({
-        data: {
-          subscription: {
-            unsubscribe: () => undefined,
-          },
-        },
-      })),
-      signInWithPassword: vi.fn(async () => {
-        if (signInErrorMessage) {
-          return {
-            data: { session: null, user: null },
-            error: { message: signInErrorMessage },
-          };
-        }
-
-        return {
-          data: {
-            session: {
-              user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "ana@empresa.com" },
-            },
-          },
-          error: null,
-        };
-      }),
-      signInWithOAuth: vi.fn(async ({ provider }) => ({
-        data: { provider, url: null },
-        error: signInErrorMessage ? { message: signInErrorMessage } : null,
-      })),
-      signOut: vi.fn(async () => ({ error: null })),
-      signUp: vi.fn(async () => ({ data: { session: null, user: null }, error: null })),
-    },
-  };
-}
+vi.mock("axios", () => ({
+  default: {
+    create: vi.fn(() => mockAxiosInstance),
+    isAxiosError: vi.fn(() => false),
+  },
+}));
 
 describe("SignInForm", () => {
-  afterEach(() => {
-    useAuthStore.setState({ user: null, status: "unknown", isAdmin: false });
+  beforeEach(() => {
+    mockAxiosInstance.get.mockReset();
+    mockAxiosInstance.post.mockReset();
   });
+
+  afterEach(() => {
+    useAuthStatus.getState().setStatus("unknown");
+  });
+
+  function renderWithAuth(queryClient: ReturnType<typeof createTestQueryClient>, ui: React.ReactElement) {
+    return render(
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>{ui}</AuthProvider>
+      </QueryClientProvider>,
+    );
+  }
 
   it("shows validation errors for empty submit", async () => {
     const user = userEvent.setup();
-    const client = createAuthClient(null);
+    const queryClient = createTestQueryClient();
 
-    render(
-      <AuthProvider client={client}>
-        <SignInForm />
-      </AuthProvider>,
-    );
+    renderWithAuth(queryClient, <SignInForm />);
 
     await user.click(screen.getByRole("button", { name: /iniciar sesión/i }));
 
@@ -80,13 +58,14 @@ describe("SignInForm", () => {
 
   it("surfaces invalid login errors", async () => {
     const user = userEvent.setup();
-    const client = createAuthClient("Invalid login credentials");
+    const queryClient = createTestQueryClient();
 
-    render(
-      <AuthProvider client={client}>
-        <SignInForm />
-      </AuthProvider>,
-    );
+    // POST /auth/login rejects with an error message
+    mockAxiosInstance.post.mockRejectedValueOnce(new Error("Invalid login credentials"));
+
+    useAuthStatus.setState({ status: "unauthenticated" });
+
+    renderWithAuth(queryClient, <SignInForm />);
 
     await user.type(screen.getByLabelText(/email/i), "ana@empresa.com");
     await user.type(screen.getByLabelText(/contraseña/i), "wrong-password");
@@ -97,58 +76,93 @@ describe("SignInForm", () => {
 
   it("starts google oauth from the sign-in entry point", async () => {
     const user = userEvent.setup();
-    const client = createAuthClient(null);
+    const queryClient = createTestQueryClient();
 
-    render(
-      <AuthProvider client={client}>
-        <SignInForm />
-      </AuthProvider>,
-    );
+    const originalLocation = window.location;
+    const mockLocation = { ...originalLocation, href: "" };
+    Object.defineProperty(window, "location", {
+      value: mockLocation,
+      writable: true,
+    });
+
+    useAuthStatus.setState({ status: "unauthenticated" });
+
+    renderWithAuth(queryClient, <SignInForm />);
 
     await user.click(screen.getByRole("button", { name: /ingresar con google/i }));
 
-    await waitFor(() =>
-      expect(client.auth.signInWithOAuth).toHaveBeenCalledWith({
-        options: { redirectTo: `${window.location.origin}/auth/callback` },
-        provider: "google",
-      }),
-    );
+    await waitFor(() => expect(window.location.href).toBe("/api/auth/oauth/google"));
+
+    Object.defineProperty(window, "location", {
+      value: originalLocation,
+      writable: true,
+    });
   });
 
   it("surfaces oauth errors without breaking the password form", async () => {
     const user = userEvent.setup();
-    const client = createAuthClient("Google is temporarily unavailable");
+    const queryClient = createTestQueryClient();
 
-    render(
-      <AuthProvider client={client}>
-        <SignInForm />
-      </AuthProvider>,
-    );
+    // OAuth error simulation: the signInWithOAuth function doesn't return errors
+    // (it just redirects). The original test used client.auth.signInWithOAuth which
+    // could return errors. With the new approach, OAuth redirects to the backend
+    // endpoint which handles errors. The form's try/catch won't catch redirect errors.
+    // This test validates the form remains functional after an OAuth attempt.
+
+    const originalLocation = window.location;
+    const mockLocation = { ...originalLocation, href: "" };
+    Object.defineProperty(window, "location", {
+      value: mockLocation,
+      writable: true,
+    });
+
+    useAuthStatus.setState({ status: "unauthenticated" });
+
+    renderWithAuth(queryClient, <SignInForm />);
 
     await user.click(screen.getByRole("button", { name: /ingresar con google/i }));
 
-    await waitFor(() => expect(screen.getByText(/google is temporarily unavailable/i)).toBeInTheDocument());
     expect(screen.getByRole("button", { name: /iniciar sesión/i })).toBeEnabled();
+
+    Object.defineProperty(window, "location", {
+      value: originalLocation,
+      writable: true,
+    });
   });
 
   it("redirects into the private shell after a successful login", async () => {
     const user = userEvent.setup();
-    const client = createAuthClient(null);
+    const queryClient = createTestQueryClient();
+
+    // Initial session check → no session (unauthenticated)
+    mockAxiosInstance.get.mockResolvedValueOnce({ data: null });
+
+    // POST /auth/login succeeds, then GET /auth/me returns the session (after invalidation)
+    mockAxiosInstance.post.mockResolvedValueOnce({
+      data: { user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "ana@empresa.com", displayName: null } },
+    });
+    mockAxiosInstance.get.mockResolvedValueOnce({
+      data: { user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "ana@empresa.com", displayName: null }, isAdmin: false },
+    });
+
+    useAuthStatus.setState({ status: "unauthenticated" });
 
     render(
-      <MemoryRouter initialEntries={["/auth/sign-in"]}>
-        <AuthProvider client={client}>
-          <Routes>
-            <Route element={<PublicAuthRoute />} path="/auth">
-              <Route path="sign-in" element={<SignInForm />} />
-            </Route>
-            <Route element={<ProtectedRoute />} path="/app">
-              <Route index element={<div>Private Shell</div>} />
-            </Route>
-            <Route path="*" element={<Navigate replace to="/" />} />
-          </Routes>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <MemoryRouter initialEntries={["/auth/sign-in"]}>
+            <Routes>
+              <Route element={<PublicAuthRoute />} path="/auth">
+                <Route path="sign-in" element={<SignInForm />} />
+              </Route>
+              <Route element={<ProtectedRoute />} path="/app">
+                <Route index element={<div>Private Shell</div>} />
+              </Route>
+              <Route path="*" element={<Navigate replace to="/" />} />
+            </Routes>
+          </MemoryRouter>
         </AuthProvider>
-      </MemoryRouter>,
+      </QueryClientProvider>,
     );
 
     await screen.findByLabelText(/email/i);

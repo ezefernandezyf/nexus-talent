@@ -5,7 +5,7 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import axios from "axios";
 import { ANALYSIS_HISTORY_STORAGE_KEY } from "../lib/repositories";
-import { useAuthStore } from "../auth/auth-store";
+import { useAuthStatus } from "../features/auth/store/auth-status";
 import { createSavedAnalysis } from "../test/factories/analysis";
 import { AppLayout } from "./AppLayout";
 import { AuthProvider } from "../features/auth";
@@ -15,51 +15,63 @@ import { createTestQueryClient } from "../test/mocks/query-client";
 // Axios mock — hooks now use HTTP repo instead of localStorage
 // ---------------------------------------------------------------------------
 
-vi.mock("axios", () => {
-  const instance = {
-    get: vi.fn(),
-    patch: vi.fn(),
-    delete: vi.fn(),
-    interceptors: {
-      request: { use: vi.fn(), eject: vi.fn() },
-      response: { use: vi.fn(), eject: vi.fn() },
-    },
-  };
+const mockAxiosInstance = vi.hoisted(() => ({
+  get: vi.fn(),
+  post: vi.fn(),
+  patch: vi.fn(),
+  delete: vi.fn(),
+  interceptors: {
+    request: { use: vi.fn(), eject: vi.fn() },
+    response: { use: vi.fn(), eject: vi.fn() },
+  },
+}));
 
-  return {
-    default: {
-      create: vi.fn(() => instance),
-      isAxiosError: vi.fn(() => false),
-    },
-  };
-});
+vi.mock("axios", () => ({
+  default: {
+    create: vi.fn(() => mockAxiosInstance),
+    isAxiosError: vi.fn(() => false),
+  },
+}));
 
-function createAuthClient(session: { user: { email?: string } } | null = null) {
-  return {
-    auth: {
-      getSession: vi.fn(async () => ({ data: { session }, error: null })),
-      onAuthStateChange: vi.fn(() => ({ data: { subscription: { unsubscribe: vi.fn() } } })),
-      signInWithPassword: vi.fn(async () => ({ data: { session: null, user: null }, error: null })),
-      signInWithOAuth: vi.fn(async () => ({ data: { provider: "github", url: null }, error: null })),
-      signOut: vi.fn(async () => ({ error: null })),
-      signUp: vi.fn(async () => ({ data: { session: null, user: null }, error: null })),
-    },
-  } as never;
+function renderAppLayout(
+  queryClient: ReturnType<typeof createTestQueryClient>,
+  options: { initialEntry?: string } = {},
+) {
+  const { initialEntry = "/app/analysis" } = options;
+
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <MemoryRouter initialEntries={[initialEntry]}>
+          <Routes>
+            <Route element={<AppLayout />} path="/app">
+              <Route path="analysis" element={<div>Analysis Content</div>} />
+            </Route>
+          </Routes>
+        </MemoryRouter>
+      </AuthProvider>
+    </QueryClientProvider>,
+  );
 }
 
 describe("AppLayout", () => {
   beforeEach(() => {
-    useAuthStore.setState({ user: null, status: "unknown", isAdmin: false });
+    mockAxiosInstance.get.mockReset();
+    mockAxiosInstance.post.mockReset();
+    mockAxiosInstance.patch.mockReset();
+    mockAxiosInstance.delete.mockReset();
 
     // Default axios mock: empty analysis list for sidebar
-    const api = vi.mocked(axios.create)();
-    api.get.mockReset().mockResolvedValue({ data: { items: [], total: 0 } });
-    api.patch.mockReset().mockResolvedValue({ data: {} });
-    api.delete.mockReset().mockResolvedValue({ data: undefined });
+    mockAxiosInstance.get.mockResolvedValue({ data: { items: [], total: 0 } });
   });
 
   it("renders the shared shell and outlet content for public users", async () => {
     const queryClient = createTestQueryClient();
+
+    // Pre-seed: no session, unauthenticated
+    queryClient.setQueryData(["auth", "session"], null);
+    useAuthStatus.setState({ status: "unauthenticated" });
+
     const user = userEvent.setup();
     const savedAnalysis = createSavedAnalysis({
       id: "550e8400-e29b-41d4-a716-446655440000",
@@ -69,22 +81,9 @@ describe("AppLayout", () => {
     localStorage.setItem(ANALYSIS_HISTORY_STORAGE_KEY, JSON.stringify([savedAnalysis]));
 
     // Configure axios to return the saved analysis in the sidebar
-    const api = vi.mocked(axios.create)();
-    api.get.mockResolvedValue({ data: { items: [savedAnalysis], total: 1 } });
+    mockAxiosInstance.get.mockResolvedValue({ data: { items: [savedAnalysis], total: 1 } });
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider client={createAuthClient()}>
-          <MemoryRouter initialEntries={["/app/analysis"]}>
-            <Routes>
-              <Route element={<AppLayout />} path="/app">
-                <Route path="analysis" element={<div>Analysis Content</div>} />
-              </Route>
-            </Routes>
-          </MemoryRouter>
-        </AuthProvider>
-      </QueryClientProvider>,
-    );
+    renderAppLayout(queryClient);
 
     await waitFor(() => expect(screen.getByText("Analysis Content")).toBeInTheDocument());
     expect(screen.getByRole("link", { name: "Nexus Talent" })).toHaveAttribute("href", "/");
@@ -113,19 +112,14 @@ describe("AppLayout", () => {
     const queryClient = createTestQueryClient();
     const user = userEvent.setup();
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider client={createAuthClient({ user: { email: "analyst@nexustalent.dev" } })}>
-          <MemoryRouter initialEntries={["/app/analysis"]}>
-            <Routes>
-              <Route element={<AppLayout />} path="/app">
-                <Route path="analysis" element={<div>Analysis Content</div>} />
-              </Route>
-            </Routes>
-          </MemoryRouter>
-        </AuthProvider>
-      </QueryClientProvider>,
-    );
+    // Pre-seed: authenticated session
+    queryClient.setQueryData(["auth", "session"], {
+      user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "analyst@nexustalent.dev", displayName: null },
+      isAdmin: false,
+    });
+    useAuthStatus.setState({ status: "authenticated" });
+
+    renderAppLayout(queryClient);
 
     await user.click(screen.getByRole("button", { name: /abrir menú/i }));
     const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });
@@ -141,19 +135,14 @@ describe("AppLayout", () => {
     const queryClient = createTestQueryClient();
     const user = userEvent.setup();
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider client={createAuthClient({ user: { email: "analyst@nexustalent.dev" } })}>
-          <MemoryRouter initialEntries={["/app/analysis"]}>
-            <Routes>
-              <Route element={<AppLayout />} path="/app">
-                <Route path="analysis" element={<div>Analysis Content</div>} />
-              </Route>
-            </Routes>
-          </MemoryRouter>
-        </AuthProvider>
-      </QueryClientProvider>,
-    );
+    // Pre-seed: authenticated session
+    queryClient.setQueryData(["auth", "session"], {
+      user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "analyst@nexustalent.dev", displayName: null },
+      isAdmin: false,
+    });
+    useAuthStatus.setState({ status: "authenticated" });
+
+    renderAppLayout(queryClient);
 
     await waitFor(() => expect(screen.getByRole("button", { name: /abrir acciones de cuenta/i })).toBeInTheDocument());
     await user.click(screen.getByRole("button", { name: /abrir acciones de cuenta/i }));
@@ -168,19 +157,11 @@ describe("AppLayout", () => {
 
     localStorage.clear();
 
-    const firstRender = render(
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider client={createAuthClient()}>
-          <MemoryRouter initialEntries={["/app/analysis"]}>
-            <Routes>
-              <Route element={<AppLayout />} path="/app">
-                <Route path="analysis" element={<div>Analysis Content</div>} />
-              </Route>
-            </Routes>
-          </MemoryRouter>
-        </AuthProvider>
-      </QueryClientProvider>,
-    );
+    // Pre-seed: no session
+    queryClient.setQueryData(["auth", "session"], null);
+    useAuthStatus.setState({ status: "unauthenticated" });
+
+    const firstRender = renderAppLayout(queryClient);
 
     await waitFor(() => expect(screen.getByRole("button", { name: /cambiar a tema claro/i })).toBeInTheDocument());
     await user.click(screen.getByRole("button", { name: /cambiar a tema claro/i }));
@@ -190,19 +171,11 @@ describe("AppLayout", () => {
 
     firstRender.unmount();
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider client={createAuthClient()}>
-          <MemoryRouter initialEntries={["/app/analysis"]}>
-            <Routes>
-              <Route element={<AppLayout />} path="/app">
-                <Route path="analysis" element={<div>Analysis Content</div>} />
-              </Route>
-            </Routes>
-          </MemoryRouter>
-        </AuthProvider>
-      </QueryClientProvider>,
-    );
+    const queryClient2 = createTestQueryClient();
+    queryClient2.setQueryData(["auth", "session"], null);
+    useAuthStatus.setState({ status: "unauthenticated" });
+
+    renderAppLayout(queryClient2);
 
     await waitFor(() => expect(document.documentElement.getAttribute("data-theme")).toBe("light"));
     expect(screen.getByRole("button", { name: /cambiar a tema oscuro/i })).toBeInTheDocument();
