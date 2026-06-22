@@ -84,7 +84,7 @@ export function LandingPage() {
             variants={fadeUpVariants}
           >
             Paste any job description and get a structured analysis: role summary, skills matrix, keyword extraction,
-            gap detection, and outreach messages. No fluff — just the signals that matter.
+            gap detection, and outreach messages. No fluff, just the signals that matter.
           </motion.p>
 
           <motion.div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center" variants={fadeUpVariants}>
@@ -100,25 +100,32 @@ export function LandingPage() {
       </section>
 
       {/* ── What Is ── */}
-      <section className="mx-auto max-w-screen-2xl px-4 py-24 sm:px-6 lg:px-8" id="what-is">
+      <section className="relative mx-auto max-w-screen-2xl overflow-hidden px-4 py-24 sm:px-6 lg:px-8 lg:py-32" id="what-is">
+        {/* Background glow */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute left-1/4 top-1/2 -z-10 h-[28rem] w-[28rem] -translate-y-1/2 rounded-full bg-primary/5 blur-[140px]" />
+        </div>
         <motion.div
           animate={prefersReducedMotion ? undefined : "visible"}
-          className="mx-auto max-w-3xl"
+          className="mx-auto max-w-4xl lg:border-l-2 lg:border-primary/15 lg:pl-10"
           initial={prefersReducedMotion ? false : "hidden"}
           variants={fadeUpContainer}
         >
-          <motion.h2
-            className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary"
+          <motion.div
+            className="mb-6 inline-flex items-center gap-3 rounded-full border border-primary/15 bg-primary/5 px-4 py-1.5"
             variants={fadeUpVariants}
           >
-            What Is Nexus Talent
-          </motion.h2>
+            <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_10px_var(--color-primary)]" />
+            <span className="font-label text-xs font-bold uppercase tracking-widest text-primary">
+              What Is Nexus Talent
+            </span>
+          </motion.div>
           <motion.p
-            className="mt-6 text-lg leading-relaxed text-on-surface-variant"
+            className="text-lg leading-relaxed text-on-surface-variant sm:text-xl sm:leading-[1.75]"
             variants={fadeUpVariants}
           >
             Paste any job description and Nexus Talent returns a structured analysis: role summary, skills matrix,
-            keyword extraction, gap detection, and outreach messages. The AI runs server-side through Groq — your data
+            keyword extraction, gap detection, and outreach messages. The AI runs server-side through Groq. Your data
             is sent securely and never exposed to the browser. No PDFs, no team features, no paid tiers. Just a
             straightforward tool that helps you understand what a job posting actually asks for.
           </motion.p>
@@ -155,7 +162,7 @@ export function LandingPage() {
                 step: "01",
                 title: "Paste the Job Description",
                 description:
-                  "Copy and paste any job description from LinkedIn, Indeed, or anywhere else. Nexus Talent accepts plain text — no PDF upload needed.",
+                  "Copy and paste any job description from LinkedIn, Indeed, or anywhere else. Nexus Talent accepts plain text, no PDF upload needed.",
               },
               {
                 icon: "psychology" as const,

@@ -106,7 +106,7 @@
   --color-outline-variant: oklch(0.34 0.02 250);
 
   /* Brand palette — Indigo + Chartreuse */
-  --color-primary: oklch(0.45 0.22 270);
+  --color-primary: oklch(0.55 0.22 270);
   --color-primary-container: oklch(0.53 0.18 270);
   --color-accent: oklch(0.92 0.19 130);
   --color-accent-container: oklch(0.82 0.15 130);
@@ -123,7 +123,7 @@
   --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.1), 0 4px 6px -4px oklch(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px oklch(0 0 0 / 0.1), 0 8px 10px -6px oklch(0 0 0 / 0.1);
-  --shadow-glow: 0 0 20px oklch(0.45 0.22 270 / 0.3);
+  --shadow-glow: 0 0 20px oklch(0.55 0.22 270 / 0.3);
 
   /* Radius tokens */
   --radius-sm: 0.5rem;
@@ -218,7 +218,7 @@
   }
 
   ::selection {
-    background: oklch(0.45 0.22 270 / 0.3);
+    background: oklch(0.55 0.22 270 / 0.3);
     color: #ffffff;
   }
 

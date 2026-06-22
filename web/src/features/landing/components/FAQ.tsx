@@ -15,7 +15,7 @@ const faqItems: FAQItem[] = [
   {
     question: "What AI model powers the analysis?",
     answer:
-      "Analysis runs through Groq's API on our server — your job description text is sent securely, processed, and the structured result comes back. We never expose API keys to the browser.",
+      "Analysis runs through Groq's API on our server. Your job description text is sent securely, processed, and the structured result comes back. We never expose API keys to the browser.",
   },
   {
     question: "What happens to my data?",
