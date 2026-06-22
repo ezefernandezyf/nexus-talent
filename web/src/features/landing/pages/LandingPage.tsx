@@ -25,7 +25,8 @@ const fadeUpContainer = {
 
 export function LandingPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  // SSR-safe: gate framer-motion hook behind typeof window check
+  const prefersReducedMotion = typeof window !== "undefined" ? useReducedMotion() : true;
 
   return (
     <main className="relative bg-surface-container-lowest text-on-surface">

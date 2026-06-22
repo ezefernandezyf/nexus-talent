@@ -65,19 +65,19 @@ Chain strategy: pending
 
 ## Phase 4: SSR — Vike or Edge Fallback (Week 2)
 
-- [ ] 4.1 Compatibility spike: add `vike` dependency, attempt build with Vite 6
-- [ ] 4.2 If Vike green: create `web/renderer/+config.ts`, `+onRenderHtml.tsx`, `+onRenderClient.tsx`
-- [ ] 4.3 Create Vike pages: `web/pages/index/+Page.tsx`, `web/pages/privacy/+Page.tsx`
-- [ ] 4.4 Update `vercel.json` — SSR routes (`/`, `/privacy`) before SPA catch-all
-- [ ] 4.5 Gate framer-motion animations behind `typeof window !== "undefined"` for hydration
-- [ ] 4.6 If Vike fails: create Vercel Edge middleware for prerendering `/` + `/privacy`
-- [ ] 4.7 Verify SSR: `curl / | grep "<h1>"` returns rendered content
+- [x] 4.1 Compatibility spike: add `vike` dependency, attempt build with Vite 6 — **FAILED: Vike 0.4.259 requires Vite >=7.1, we're on Vite 6.4.3**
+- [ ] 4.2 If Vike green: create `web/renderer/+config.ts`, `+onRenderHtml.tsx`, `+onRenderClient.tsx` — **SKIPPED (Vike incompatible)**
+- [ ] 4.3 Create Vike pages: `web/pages/index/+Page.tsx`, `web/pages/privacy/+Page.tsx` — **SKIPPED (Vike incompatible)**
+- [x] 4.4 Update `vercel.json` — SSR routes (`/`, `/privacy`) before SPA catch-all
+- [x] 4.5 Gate framer-motion animations behind `typeof window !== "undefined"` for hydration
+- [x] 4.6 Vike failed → created build-time prerenderer: `web/ssr/renderer.tsx` + `web/scripts/prerender.mjs` + dev SSR middleware in `vite.config.ts`
+- [x] 4.7 Verify SSR: `curl / | grep "<h1>"` returns rendered content — **PASS: landing.html has "Transform Job Descriptions", privacy.html has "Privacidad"**
 
 ## Phase 5: Testing & Verification
 
 - [ ] 5.1 Unit: Badge variant rendering — Vitest + RTL
 - [ ] 5.2 Visual: Token migration parity — screenshot diff HEX vs OKLCH
-- [ ] 5.3 Integration: `curl /` — verify H1, H2 blocks, FAQ in HTML source
+- [x] 5.3 Integration: `curl /` — verify H1, H2 blocks, FAQ in HTML source
 - [ ] 5.4 GEO: Validate JSON-LD against schema.org/Google Rich Results
 - [ ] 5.5 E2E: Landing renders with JS disabled — Playwright `javaScriptEnabled: false`
 - [ ] 5.6 WCAG: Keyboard focus indicators, color contrast ≥ 4.5:1, `prefers-reduced-motion`
