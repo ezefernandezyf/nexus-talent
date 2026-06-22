@@ -118,13 +118,13 @@ describe("AppRouter", () => {
     expect(screen.getByRole("heading", { name: /transform job descriptions into actionable insights/i })).toBeInTheDocument();
 
     const signInLinks = screen.getAllByRole("link", { name: /^sign in$/i });
-    expect(signInLinks.length).toBeGreaterThanOrEqual(2);
+    expect(signInLinks.length).toBeGreaterThanOrEqual(1);
     signInLinks.forEach((link) => {
       expect(link).toHaveAttribute("href", "/auth/sign-in");
     });
 
     const ctaLinks = screen.getAllByRole("link", { name: /start analyzing now/i });
-    expect(ctaLinks.length).toBeGreaterThanOrEqual(2);
+    expect(ctaLinks.length).toBeGreaterThanOrEqual(1);
     ctaLinks.forEach((link) => {
       expect(link).toHaveAttribute("href", "/auth/sign-up");
     });

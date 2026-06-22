@@ -7,7 +7,7 @@ import { LandingIcon } from "../components/LandingIcon";
 import { FAQ } from "../components/FAQ";
 import { MobileDrawer } from "../../../components/ui/MobileDrawer";
 import { MobileMenuButton } from "../../../components/ui/MobileMenuButton";
-import { fadeUpVariants, scaleInVariants } from "../../../components/ui/motion";
+import { fadeUpVariants } from "../../../components/ui/motion";
 
 const publicDrawerItems = [
   { label: "Home", to: "/" },
@@ -20,14 +20,6 @@ const fadeUpContainer = {
   visible: {
     opacity: 1,
     transition: { staggerChildren: 0.12, delayChildren: 0.06 },
-  },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.04 },
   },
 };
 
@@ -53,9 +45,9 @@ export function LandingPage() {
         }
       />
 
-      {/* Hero Section */}
+      {/* ── Hero ── */}
       <section
-        className="relative mx-auto max-w-screen-2xl overflow-hidden px-4 pb-14 pt-16 sm:px-6 sm:pb-16 sm:pt-20 lg:px-8 lg:pt-24"
+        className="relative mx-auto max-w-screen-2xl overflow-hidden px-4 pb-20 pt-16 sm:px-6 sm:pb-24 sm:pt-20 lg:px-8 lg:pt-28"
         id="hero"
       >
         <motion.div
@@ -78,7 +70,7 @@ export function LandingPage() {
           </motion.div>
 
           <motion.h1
-            className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-on-surface sm:text-5xl md:text-6xl lg:text-7xl"
+            className="mt-6 max-w-4xl text-4xl font-bold leading-[1.08] tracking-tight text-on-surface sm:text-5xl md:text-6xl lg:text-7xl"
             variants={fadeUpVariants}
           >
             Transform Job Descriptions into{" "}
@@ -91,8 +83,8 @@ export function LandingPage() {
             className="mt-6 max-w-2xl text-base leading-relaxed text-on-surface-variant sm:text-lg lg:text-xl"
             variants={fadeUpVariants}
           >
-            Paste any job description and get a structured skills matrix, role analysis, and personalized
-            outreach copy in seconds. Nexus Talent turns raw job postings into your competitive edge.
+            Paste any job description and get a structured analysis: role summary, skills matrix, keyword extraction,
+            gap detection, and outreach messages. No fluff — just the signals that matter.
           </motion.p>
 
           <motion.div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center" variants={fadeUpVariants}>
@@ -103,21 +95,12 @@ export function LandingPage() {
               Start Analyzing Now
               <LandingIcon className="h-5 w-5" name="trending_flat" />
             </Link>
-            <Link
-              className="secondary-button inline-flex items-center justify-center gap-2 px-8 py-4 text-base"
-              to="/auth/sign-in"
-            >
-              Sign In
-            </Link>
           </motion.div>
         </motion.div>
       </section>
 
-      {/* What Is Section */}
-      <section
-        className="mx-auto max-w-screen-2xl px-4 py-20 sm:px-6 lg:px-8"
-        id="what-is"
-      >
+      {/* ── What Is ── */}
+      <section className="mx-auto max-w-screen-2xl px-4 py-24 sm:px-6 lg:px-8" id="what-is">
         <motion.div
           animate={prefersReducedMotion ? undefined : "visible"}
           className="mx-auto max-w-3xl"
@@ -134,20 +117,16 @@ export function LandingPage() {
             className="mt-6 text-lg leading-relaxed text-on-surface-variant"
             variants={fadeUpVariants}
           >
-            Nexus Talent is an AI-powered job intelligence platform designed for job seekers who want to
-            apply smarter, not harder. Instead of manually parsing job descriptions to figure out what
-            recruiters actually want, you paste the JD and our AI extracts the key signals: required
-            skills, seniority level, experience duration, role responsibilities, and cultural fit
-            indicators. The result is a structured breakdown you can act on — complete with a skills
-            matrix and personalized outreach copy tailored to both recruiters and hiring managers.
-            Built for developers, engineers, and technical professionals who value precision over
-            guesswork.
+            Paste any job description and Nexus Talent returns a structured analysis: role summary, skills matrix,
+            keyword extraction, gap detection, and outreach messages. The AI runs server-side through Groq — your data
+            is sent securely and never exposed to the browser. No PDFs, no team features, no paid tiers. Just a
+            straightforward tool that helps you understand what a job posting actually asks for.
           </motion.p>
         </motion.div>
       </section>
 
-      {/* How It Works Section */}
-      <section className="bg-surface-container-low/50 py-20" id="how-it-works">
+      {/* ── How It Works ── */}
+      <section className="bg-surface-container-low/50 py-24" id="how-it-works">
         <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <motion.div
             animate={prefersReducedMotion ? undefined : "visible"}
@@ -169,46 +148,43 @@ export function LandingPage() {
             </motion.p>
           </motion.div>
 
-          <motion.div
-            animate={prefersReducedMotion ? undefined : "visible"}
-            className="mt-16 grid gap-8 md:grid-cols-3"
-            initial={prefersReducedMotion ? false : "hidden"}
-            variants={staggerContainer}
-          >
+          <div className="mx-auto mt-16 grid max-w-4xl gap-12 md:grid-cols-3 md:gap-8">
             {[
               {
                 icon: "description" as const,
                 step: "01",
                 title: "Paste the Job Description",
                 description:
-                  "Copy and paste any job description from LinkedIn, Indeed, or any other source. Nexus Talent accepts plain text, HTML, and PDF formats.",
+                  "Copy and paste any job description from LinkedIn, Indeed, or anywhere else. Nexus Talent accepts plain text — no PDF upload needed.",
               },
               {
                 icon: "psychology" as const,
                 step: "02",
                 title: "AI Analyzes the Signals",
                 description:
-                  "Our AI extracts skills, seniority, experience requirements, and key responsibilities. Each signal comes with a confidence score so you know what to prioritize.",
+                  "Server-side Groq AI extracts required skills, seniority, responsibilities, and key requirements from the job description.",
               },
               {
                 icon: "auto_awesome" as const,
                 step: "03",
                 title: "Get Structured Output",
                 description:
-                  "Receive a complete skills matrix, role summary, and ready-to-edit outreach messages for recruiters and hiring managers — all in seconds.",
+                  "Receive a complete analysis: summary, skills matrix, keywords, gap detection, and outreach messages ready to edit.",
               },
             ].map((step) => (
               <motion.div
                 key={step.step}
-                className="surface-panel flex flex-col gap-5 p-8"
-                variants={scaleInVariants}
+                animate={prefersReducedMotion ? undefined : "visible"}
+                className="flex flex-col gap-4"
+                initial={prefersReducedMotion ? false : "hidden"}
+                variants={fadeUpVariants}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <LandingIcon className="h-6 w-6" name={step.icon} />
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <LandingIcon className="h-5 w-5" name={step.icon} />
+                  </div>
+                  <span className="font-label text-xs tracking-widest text-primary">Step {step.step}</span>
                 </div>
-                <span className="font-label text-xs tracking-widest text-on-surface-variant">
-                  {step.step}
-                </span>
                 <h3 className="text-xl font-semibold tracking-[-0.03em] text-on-surface">
                   {step.title}
                 </h3>
@@ -217,12 +193,12 @@ export function LandingPage() {
                 </p>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20" id="features">
+      {/* ── What You Get ── */}
+      <section className="py-24" id="what-you-get">
         <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <motion.div
             animate={prefersReducedMotion ? undefined : "visible"}
@@ -234,85 +210,84 @@ export function LandingPage() {
               className="text-sm font-semibold uppercase tracking-widest text-primary"
               variants={fadeUpVariants}
             >
-              Features
+              What You Get
             </motion.h2>
             <motion.p
               className="mt-4 text-3xl font-bold tracking-tight text-on-surface sm:text-4xl"
               variants={fadeUpVariants}
             >
-              Everything you need to land the role
+              Every analysis, broken down
             </motion.p>
           </motion.div>
 
-          <motion.div
-            animate={prefersReducedMotion ? undefined : "visible"}
-            className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-4"
-            initial={prefersReducedMotion ? false : "hidden"}
-            variants={staggerContainer}
-          >
+          <div className="mx-auto mt-16 grid max-w-4xl gap-x-12 gap-y-10 md:grid-cols-2">
             {[
               {
-                icon: "search" as const,
-                title: "Smart Signal Extraction",
+                icon: "description" as const,
+                title: "Summary & Role Breakdown",
                 description:
-                  "Our AI identifies technical skills, soft skills, experience levels, and role-specific requirements from any job description.",
+                  "Role, seniority, modality, and key responsibilities extracted and structured at a glance.",
               },
               {
                 icon: "analytics" as const,
-                title: "Structured Skills Matrix",
+                title: "Skills Matrix",
                 description:
-                  "Get a clear visual breakdown of required vs. preferred skills, ranked by relevance and organized by category.",
+                  "Skills categorized as core, strong, or adjacent across technical and soft categories.",
               },
               {
-                icon: "bolt" as const,
-                title: "Instant Outreach Copy",
+                icon: "search" as const,
+                title: "Keywords & ATS Terms",
                 description:
-                  "Generate personalized messages for recruiters and hiring managers that reference specific JD signals and your strengths.",
+                  "Hard skills, soft skills, and domain keywords extracted for resume and cover letter optimization.",
               },
               {
-                icon: "security" as const,
-                title: "Private & Secure",
+                icon: "tune" as const,
+                title: "Gap Analysis",
                 description:
-                  "Your data is encrypted in transit and at rest. We never share or train on your job descriptions or analysis history.",
+                  "Missing skills identified with mitigation advice and framing tips for interviews.",
               },
-            ].map((feature) => (
+            ].map((item) => (
               <motion.div
-                key={feature.title}
-                className="surface-panel flex flex-col gap-5 p-6"
-                variants={scaleInVariants}
+                key={item.title}
+                animate={prefersReducedMotion ? undefined : "visible"}
+                className="flex gap-4"
+                initial={prefersReducedMotion ? false : "hidden"}
+                variants={fadeUpVariants}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <LandingIcon className="h-6 w-6" name={feature.icon} />
+                <div className="mt-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <LandingIcon className="h-5 w-5" name={item.icon} />
                 </div>
-                <h3 className="text-lg font-semibold tracking-[-0.03em] text-on-surface">
-                  {feature.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-on-surface-variant">
-                  {feature.description}
-                </p>
+                <div>
+                  <h3 className="font-semibold text-on-surface">{item.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-on-surface-variant">{item.description}</p>
+                </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
 
           <motion.div
             animate={prefersReducedMotion ? undefined : "visible"}
-            className="mt-12 text-center"
+            className="mx-auto mt-8 flex max-w-lg gap-4"
             initial={prefersReducedMotion ? false : "hidden"}
             variants={fadeUpVariants}
           >
-            <Link
-              className="primary-button inline-flex items-center justify-center gap-2 px-8 py-4 text-base"
-              to="/auth/sign-up"
-            >
-              Try Nexus Talent Free
-              <LandingIcon className="h-5 w-5" name="trending_flat" />
-            </Link>
+            <div className="flex gap-4">
+              <div className="mt-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <LandingIcon className="h-5 w-5" name="bolt" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-on-surface">Outreach Messages</h3>
+                <p className="mt-1 text-sm leading-relaxed text-on-surface-variant">
+                  Email and LinkedIn versions ready to edit and send to recruiters and hiring managers.
+                </p>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="bg-surface-container-low/50 py-20" id="faq-section">
+      {/* ── FAQ ── */}
+      <section className="bg-surface-container-low/50 py-24" id="faq-section">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <motion.div
             animate={prefersReducedMotion ? undefined : "visible"}
@@ -321,25 +296,10 @@ export function LandingPage() {
           >
             <FAQ />
           </motion.div>
-
-          <motion.div
-            animate={prefersReducedMotion ? undefined : "visible"}
-            className="mt-12 text-center"
-            initial={prefersReducedMotion ? false : "hidden"}
-            variants={fadeUpVariants}
-          >
-            <Link
-              className="primary-button inline-flex items-center justify-center gap-2 px-8 py-4 text-base"
-              to="/auth/sign-up"
-            >
-              Start Your First Analysis
-              <LandingIcon className="h-5 w-5" name="trending_flat" />
-            </Link>
-          </motion.div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* ── Bottom CTA ── */}
       <section className="py-24" id="cta">
         <div className="mx-auto max-w-4xl px-8 text-center">
           <motion.div
@@ -357,8 +317,8 @@ export function LandingPage() {
               className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-on-surface-variant"
               variants={fadeUpVariants}
             >
-              Join thousands of developers who use Nexus Talent to decode job descriptions, highlight
-              their strengths, and write outreach that gets replies.
+              Paste a job description, get the structured breakdown, and walk into every interview knowing exactly
+              what they're looking for.
             </motion.p>
             <motion.div className="mt-10" variants={fadeUpVariants}>
               <Link

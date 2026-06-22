@@ -8,44 +8,29 @@ interface FAQItem {
 
 const faqItems: FAQItem[] = [
   {
-    question: "How does AI job analysis work?",
+    question: "What does Nexus Talent actually do?",
     answer:
-      "Nexus Talent uses a specialized AI model trained on recruitment patterns and technical skill taxonomies. You paste a job description, and our system extracts structured signals: required skills, experience levels, role seniority, key responsibilities, and cultural indicators. The analysis runs server-side — your JD text is sent securely, processed by the AI, and returned as a structured breakdown you can act on immediately.",
+      "Paste any job description and get a structured analysis back: a role summary, a skills matrix showing what's core vs. nice-to-have, keyword extraction for ATS optimization, gaps you might have with advice on how to frame them, and ready-to-edit outreach messages for recruiters and hiring managers.",
   },
   {
-    question: "What formats are supported?",
+    question: "What AI model powers the analysis?",
     answer:
-      "Paste plain text, structured HTML from any job board (LinkedIn, Indeed, Glassdoor), or upload a PDF. Our parser normalizes the input before analysis, so you get consistent results regardless of source format. Markdown-formatted descriptions also work. There is no file size limit for text-based descriptions.",
+      "Analysis runs through Groq's API on our server — your job description text is sent securely, processed, and the structured result comes back. We never expose API keys to the browser.",
   },
   {
-    question: "Is my data secure?",
+    question: "What happens to my data?",
     answer:
-      "Yes. Job descriptions are sent over HTTPS to our server-side proxy, processed by the AI, and never stored in plain text. Analysis results are saved in your private account under encrypted PostgreSQL storage. We do not share, sell, or train on your data. Your session is authenticated via httpOnly cookies — immune to XSS attacks.",
+      "Your job descriptions and analysis results are saved to your account on a PostgreSQL database. We don't share, sell, or train on your data. Session auth uses httpOnly cookies, immune to XSS.",
   },
   {
-    question: "How does outreach generation work?",
+    question: "Can I save my analyses?",
     answer:
-      "Based on the extracted skills and requirements, the AI generates personalized outreach messages tailored to different audiences: a version for recruiters highlighting relevant experience, and another for hiring managers emphasizing technical depth and architecture fit. Each message cites specific signals from the JD so it reads as a genuine, researched approach — not a template.",
+      "Yes. Every analysis saves automatically to your history. You can revisit, rename, add notes, or delete any analysis. Your history is stored server-side, so it survives browser clears and device switches.",
   },
   {
-    question: "Can I save and review past analyses?",
+    question: "Is Nexus Talent free?",
     answer:
-      "Absolutely. Every analysis is saved to your history with the original JD, the structured breakdown, and the generated outreach copy. You can revisit, rename, add notes, or delete any analysis at any time. The history is paginated and searchable, making it easy to track applications over time.",
-  },
-  {
-    question: "Is there a free tier?",
-    answer:
-      "Yes. Start with a free account and get a limited number of analyses per month — enough to evaluate the platform and run your first few job applications. Paid plans unlock unlimited analyses, advanced export options, and priority AI processing. No credit card is required to start.",
-  },
-  {
-    question: "How accurate is the AI analysis?",
-    answer:
-      "The AI achieves high accuracy on technical skill extraction, role seniority classification, and experience duration parsing. Accuracy varies for non-technical roles, creative positions, and descriptions with ambiguous requirements. We surface a confidence score per signal so you can prioritize which extracted data to trust. Our analysis engine improves over time as we refine the prompt architecture.",
-  },
-  {
-    question: "Can I use Nexus Talent for team hiring?",
-    answer:
-      "Yes. Nexus Talent supports team workflows where multiple members can review and annotate analyses. Contact us for team pricing and collaboration features, including shared workspaces, role-based access, and consolidated reporting.",
+      "Yes, it's free to use. No credit card required. Create an account and start analyzing job descriptions immediately.",
   },
 ];
 

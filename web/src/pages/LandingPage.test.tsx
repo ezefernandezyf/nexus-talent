@@ -18,7 +18,7 @@ describe("LandingPage", () => {
     expect(screen.getByRole("heading", { name: /transform job descriptions into actionable insights/i })).toBeInTheDocument();
     expect(screen.getByText("AI-Powered Job Intelligence")).toBeInTheDocument();
     const signInLinks = screen.getAllByRole("link", { name: /^sign in$/i });
-    expect(signInLinks.length).toBeGreaterThanOrEqual(2);
+    expect(signInLinks.length).toBeGreaterThanOrEqual(1);
     const startAnalyzingLinks = screen.getAllByRole("link", { name: /start analyzing now/i });
     expect(startAnalyzingLinks.length).toBeGreaterThanOrEqual(1);
     startAnalyzingLinks.forEach((link) => {
@@ -35,18 +35,20 @@ describe("LandingPage", () => {
     expect(screen.getByText("AI Analyzes the Signals")).toBeInTheDocument();
     expect(screen.getByText("Get Structured Output")).toBeInTheDocument();
 
-    // Features section
-    expect(screen.getByText("Features")).toBeInTheDocument();
-    expect(screen.getByText("Smart Signal Extraction")).toBeInTheDocument();
-    expect(screen.getByText("Structured Skills Matrix")).toBeInTheDocument();
-    expect(screen.getByText("Instant Outreach Copy")).toBeInTheDocument();
-    expect(screen.getByText("Private & Secure")).toBeInTheDocument();
+    // What You Get section (replaces Features)
+    expect(screen.getByText("What You Get")).toBeInTheDocument();
+    expect(screen.getByText("Every analysis, broken down")).toBeInTheDocument();
+    expect(screen.getByText("Summary & Role Breakdown")).toBeInTheDocument();
+    expect(screen.getByText("Skills Matrix")).toBeInTheDocument();
+    expect(screen.getByText("Keywords & ATS Terms")).toBeInTheDocument();
+    expect(screen.getByText("Gap Analysis")).toBeInTheDocument();
+    expect(screen.getByText("Outreach Messages")).toBeInTheDocument();
 
     // FAQ section
     expect(screen.getByText("Frequently Asked Questions")).toBeInTheDocument();
-    expect(screen.getByText("How does AI job analysis work?")).toBeInTheDocument();
+    expect(screen.getByText("What does Nexus Talent actually do?")).toBeInTheDocument();
 
-    // CTA section
+    // Bottom CTA section
     expect(screen.getByText(/stop guessing\. start applying with precision\./i)).toBeInTheDocument();
 
     // Brand link — find the nav root link
