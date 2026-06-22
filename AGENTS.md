@@ -24,7 +24,7 @@
 - **Database**: Prisma with Supabase PostgreSQL
 - **Auth**: Custom HS256 JWT in httpOnly cookies (inmune a XSS), email/password + Google OAuth
 - **AI Proxy**: Server-side Groq calls — client sends only the JD, API key stays on the server
-- **Design System**: "The Signal" — Indigo / Chartreuse palette, Clash Display + Satoshi typography
+- **Design System**: "The Signal" — Indigo / Chartreuse palette, Cabinet Grotesk (display) + Satoshi (body), dark-first, basado en portfolio-personality (anti-convergencia)
 
 ### Flujo de Datos Obligatorio
 ```
@@ -134,8 +134,8 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [ ] History list → backend-backed pagination
 
 ### P6: Design Identity — "The Signal" + GEO Foundation
-> Paleta Indigo + Chartreuse, Clash Display + Satoshi. La landing debe ser visible para Google y AI crawlers (GEO Score 7 → 35).
-- [ ] **SSR para landing page + privacy page** — requisito base: sin SSR, Google/AI ven `<div id="root">` vacío (GEO CRITICAL #CSR-1)
+> Basado en portfolio-personality (Estilo B: Minimal/Elegant). Dark-first. Paleta Indigo + Chartreuse. Cabinet Grotesk (display) + Satoshi (body). SSR con Vike (fallback: Vercel Edge). GEO Score 7 → 35.
+- [ ] **SSR con Vike** para landing `/` y privacy `/privacy`. Verificación de compatibilidad Vite 6 primero; si falla → Vercel Edge prerendering (GEO CRITICAL #CSR-1)
 - [ ] Design tokens: OKLCH colors, shadows, radii, typography scale
 - [ ] Global styles + CSS variables
 - [ ] Component refresh: buttons, cards, inputs, modals, badges
