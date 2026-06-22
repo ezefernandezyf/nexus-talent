@@ -1,7 +1,25 @@
+# Nexus Talent robots.txt
+# All crawlers can access public pages
 User-agent: *
 Allow: /
 Disallow: /app/
 Disallow: /auth/
 Disallow: /404
+
+# Explicit AI crawler permissions (signals AI-awareness)
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Crawl delay for polite crawling
+Crawl-Delay: 1
 
 Sitemap: https://nexustalent.vercel.app/sitemap.xml
