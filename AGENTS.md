@@ -133,17 +133,29 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [ ] Remove VITE_GROQ_API_KEY from env
 - [ ] History list → backend-backed pagination
 
-### P6: Design Identity — "The Signal"
-> Paleta Indigo + Chartreuse, Clash Display + Satoshi
+### P6: Design Identity — "The Signal" + GEO Foundation
+> Paleta Indigo + Chartreuse, Clash Display + Satoshi. La landing debe ser visible para Google y AI crawlers (GEO Score 7 → 35).
+- [ ] **SSR para landing page + privacy page** — requisito base: sin SSR, Google/AI ven `<div id="root">` vacío (GEO CRITICAL #CSR-1)
 - [ ] Design tokens: OKLCH colors, shadows, radii, typography scale
 - [ ] Global styles + CSS variables
 - [ ] Component refresh: buttons, cards, inputs, modals, badges
 - [ ] Layout & navigation redesign
-- [ ] Landing page redesign
+- [ ] Landing page redesign **con contenido estructurado**: H1, H2 sections, FAQ (5-8 Q&A), 300+ palabras, answer blocks para AI citability (GEO HIGH #CTB-1)
 - [ ] Auth pages redesign
 - [ ] Analysis/history/settings pages alignment
 - [ ] Responsive + dark mode parity
 - [ ] DESIGN.md update
+- [ ] **GEO/SEO Quick Wins** (Week 1-2 del audit):
+  - [ ] Schema JSON-LD: Organization + SoftwareApplication + WebSite (GEO CRITICAL #SCH-1)
+  - [ ] Open Graph + Twitter Card meta tags (GEO HIGH #TEC-2)
+  - [ ] Title tag optimizado: "Nexus Talent — AI Recruiting Assistant | Transform Job Descriptions into Insights" (SEO)
+  - [ ] Keywords target: "AI job description analyzer", "AI recruiting assistant", "JD to skills", "outreach generator" (SEO)
+  - [ ] Canonical URL tag (GEO HIGH #CTB-2)
+  - [ ] llms.txt estático en `/public/` (GEO HIGH #TEC-1)
+  - [ ] robots.txt con AI crawlers explícitos: GPTBot, Claude-Web, PerplexityBot (GEO)
+  - [ ] `<noscript>` fallback con contenido clave (GEO Quick Win #5)
+  - [ ] Google Search Console: submit sitemap (SEO)
+  - [ ] Favicon estable sin hash (GEO LOW #CON-3)
 
 ### P7: E2E + Security
 > Playwright flows, hardening
@@ -151,7 +163,7 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [ ] Auth smoke: login + register + logout
 - [ ] Analysis smoke: run analysis, view result
 - [ ] History smoke: view history, delete item
-- [ ] CSP headers with helmet
+- [ ] **Security headers**: CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy (GEO MEDIUM #TEC-3)
 - [ ] Rate limiting (auth, analysis)
 - [ ] Structured logging (pino)
 - [ ] Input sanitization
@@ -165,14 +177,33 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [ ] Render health check + deploy config
 - [x] CI/CD: GitHub Actions (lint, type, test on PR + push)
 - [x] Vercel deploy config (vercel.json en raíz, pnpm workspace filter)
+- [ ] **Lighthouse 90+** en mobile (SEO — Core Web Vitals)
 
-## Roadmap — V1.2 (tentative)
+## Roadmap — V1.2
 
-### V1.2.1: User Profiles
-> Información persistente del usuario para personalizar análisis
+### V1.2.1: User Profiles + Brand Authority
+> Información persistente del usuario + presencia en plataformas (GEO Week 3-4)
 - [ ] PUT /api/profile — skills, experiencia, rol, resume
 - [ ] Profile UI — formulario de datos del candidato
 - [ ] Prompt enrichment — Groq usa datos del perfil en outreach messages
+- [ ] **Backend: settings endpoints** — CRUD para settings (pendiente de P5)
+- [ ] **GEO/SEO Brand Building** (Week 3-4 del audit):
+  - [ ] `sameAs` links en Organization schema (GEO)
+  - [ ] Crear/claim LinkedIn company page (GEO CRITICAL #BRA-1)
+  - [ ] Product Hunt launch (GEO CRITICAL #BRA-1)
+  - [ ] Crunchbase company profile (GEO)
+  - [ ] Poblar GitHub org con README/documentación (GEO)
+  - [ ] Registrar en G2 y Capterra (GEO)
+  - [ ] Blog content: 2-3 artículos SSR-rendered (GEO Week 4)
+  - [ ] YouTube demo video (GEO Week 4)
+  - [ ] **Re-run GEO audit** — target: 50-60/100 (GEO Week 4)
+- [ ] **GEO/SEO Long-term** (Post-30d):
+  - [ ] Evaluar viabilidad del nombre "Nexus Talent" (colisión con 4+ entidades) (GEO CRITICAL #BRA-1)
+  - [ ] Wikidata Q-ID para entity disambiguation (GEO)
+  - [ ] Dominio `nexustalent.com` para producción (GEO — vercel.app es señal débil)
+  - [ ] Backlinks: guest posts, directorios, publicaciones de industria (SEO)
+  - [ ] Participación en r/recruiting, r/humanresources (GEO)
+  - [ ] **Audit GEO Score target**: 65-75/100
 
 ### V1.2.2: CV Generator
 > Armado automático de CV tailor-made basado en análisis
