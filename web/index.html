@@ -3,15 +3,106 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nexus Talent</title>
-    <link rel="icon" type="image/png" href="./docs/assets/faviconreference.png" />
+    <title>Nexus Talent — AI Recruiting Assistant | Transform Job Descriptions into Insights</title>
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="canonical" href="https://nexustalent.vercel.app/" />
+
+    <!-- Primary Meta Tags -->
     <meta
       name="description"
-      content="Turn raw job descriptions into structured analysis, skills, and outreach copy."
+      content="Turn raw job descriptions into structured analysis, skills, and outreach copy — powered by AI."
     />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://nexustalent.vercel.app/" />
+    <meta property="og:title" content="Nexus Talent — AI Recruiting Assistant" />
+    <meta
+      property="og:description"
+      content="Turn raw job descriptions into structured analysis, skills matrix, and personalized outreach copy — powered by AI."
+    />
+    <meta property="og:image" content="https://nexustalent.vercel.app/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://nexustalent.vercel.app/" />
+    <meta property="twitter:title" content="Nexus Talent — AI Recruiting Assistant" />
+    <meta
+      property="twitter:description"
+      content="Turn raw job descriptions into structured analysis, skills matrix, and personalized outreach copy — powered by AI."
+    />
+    <meta property="twitter:image" content="https://nexustalent.vercel.app/og-image.png" />
+
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://nexustalent.vercel.app/#organization",
+      "name": "Nexus Talent",
+      "url": "https://nexustalent.vercel.app",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://nexustalent.vercel.app/favicon.ico",
+        "width": 512,
+        "height": 512
+      },
+      "description": "AI-powered recruiting assistant that turns raw job descriptions into structured analysis, skills, and outreach copy.",
+      "sameAs": [
+        "https://github.com/nexustalent",
+        "https://www.linkedin.com/company/nexus-talent"
+      ]
+    }
+    </script>
+
+    <!-- SoftwareApplication Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "@id": "https://nexustalent.vercel.app/#software",
+      "name": "Nexus Talent",
+      "url": "https://nexustalent.vercel.app",
+      "description": "Turn raw job descriptions into structured analysis, skills, and outreach copy.",
+      "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": "RecruitingSoftware",
+      "operatingSystem": "Web",
+      "author": {
+        "@type": "Organization",
+        "@id": "https://nexustalent.vercel.app/#organization"
+      },
+      "featureList": [
+        "AI job description analysis",
+        "Skill requirement extraction",
+        "Candidate outreach copy generation",
+        "Structured job intake"
+      ]
+    }
+    </script>
+
+    <!-- WebSite Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://nexustalent.vercel.app/#website",
+      "url": "https://nexustalent.vercel.app",
+      "name": "Nexus Talent",
+      "description": "AI-powered recruiting assistant for job description analysis and outreach.",
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://nexustalent.vercel.app/#organization"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <h1>Nexus Talent — AI Recruiting Assistant</h1>
+      <p>Turn raw job descriptions into structured analysis, skills, and outreach copy.</p>
+      <p>This application requires JavaScript. Enable JavaScript or view our <a href="/privacy">Privacy Policy</a>.</p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

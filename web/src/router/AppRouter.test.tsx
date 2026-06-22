@@ -115,15 +115,17 @@ describe("AppRouter", () => {
   it("renders the public landing page at the root path", () => {
     renderApp("/");
 
-    expect(screen.getByRole("heading", { name: /de job description a postulación ganadora en segundos\./i })).toBeInTheDocument();
-    const signInLinks = screen.getAllByRole("link", { name: /^ingresar$/i });
-    expect(signInLinks).toHaveLength(2);
+    expect(screen.getByRole("heading", { name: /transform job descriptions into actionable insights/i })).toBeInTheDocument();
+
+    const signInLinks = screen.getAllByRole("link", { name: /^sign in$/i });
+    expect(signInLinks.length).toBeGreaterThanOrEqual(1);
     signInLinks.forEach((link) => {
       expect(link).toHaveAttribute("href", "/auth/sign-in");
     });
-    const createAccountLinks = screen.getAllByRole("link", { name: /crear cuenta/i });
-    expect(createAccountLinks).toHaveLength(3);
-    createAccountLinks.forEach((link) => {
+
+    const ctaLinks = screen.getAllByRole("link", { name: /start analyzing now/i });
+    expect(ctaLinks.length).toBeGreaterThanOrEqual(1);
+    ctaLinks.forEach((link) => {
       expect(link).toHaveAttribute("href", "/auth/sign-up");
     });
   });

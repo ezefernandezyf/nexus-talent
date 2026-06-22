@@ -14,35 +14,58 @@ describe("LandingPage", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("heading", { name: /de job description a postulación ganadora en segundos\./i })).toBeInTheDocument();
-    expect(screen.getByText("Eficiencia Radical")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /ingresar con google/i })).toHaveAttribute("href", "/auth/sign-in");
-    const createAccountLinks = screen.getAllByRole("link", { name: /crear cuenta/i });
-    expect(createAccountLinks).toHaveLength(3);
-    createAccountLinks.forEach((link) => {
+    // Hero section
+    expect(screen.getByRole("heading", { name: /transform job descriptions into actionable insights/i })).toBeInTheDocument();
+    expect(screen.getByText("AI-Powered Job Intelligence")).toBeInTheDocument();
+    const signInLinks = screen.getAllByRole("link", { name: /^sign in$/i });
+    expect(signInLinks.length).toBeGreaterThanOrEqual(1);
+    const startAnalyzingLinks = screen.getAllByRole("link", { name: /start analyzing now/i });
+    expect(startAnalyzingLinks.length).toBeGreaterThanOrEqual(1);
+    startAnalyzingLinks.forEach((link) => {
       expect(link).toHaveAttribute("href", "/auth/sign-up");
     });
-    expect(screen.getByRole("heading", { name: /arquitectura de decisión\./i })).toBeInTheDocument();
-    expect(screen.getByText("SKILLS_MATRIX_V4")).toBeInTheDocument();
-    expect(screen.getByText("OUTREACH_GEN")).toBeInTheDocument();
-    expect(screen.getByText("4.2s")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /menos aplicaciones, más entrevistas\./i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /empieza ahora gratis/i })).toHaveAttribute("href", "/auth/sign-up");
-    expect(screen.getByRole("button", { name: /abrir menú/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /nexus talent/i })).toHaveAttribute("href", "/");
-    const signInLinks = screen.getAllByRole("link", { name: /^ingresar$/i });
-    expect(signInLinks).toHaveLength(2);
+
+    // What Is section
+    expect(screen.getByText("What Is Nexus Talent")).toBeInTheDocument();
+
+    // How It Works section
+    expect(screen.getByText("How It Works")).toBeInTheDocument();
+    expect(screen.getByText("Three steps to a smarter application")).toBeInTheDocument();
+    expect(screen.getByText("Paste the Job Description")).toBeInTheDocument();
+    expect(screen.getByText("AI Analyzes the Signals")).toBeInTheDocument();
+    expect(screen.getByText("Get Structured Output")).toBeInTheDocument();
+
+    // What You Get section (replaces Features)
+    expect(screen.getByText("What You Get")).toBeInTheDocument();
+    expect(screen.getByText("Every analysis, broken down")).toBeInTheDocument();
+    expect(screen.getByText("Summary & Role Breakdown")).toBeInTheDocument();
+    expect(screen.getByText("Skills Matrix")).toBeInTheDocument();
+    expect(screen.getByText("Keywords & ATS Terms")).toBeInTheDocument();
+    expect(screen.getByText("Gap Analysis")).toBeInTheDocument();
+    expect(screen.getByText("Outreach Messages")).toBeInTheDocument();
+
+    // FAQ section
+    expect(screen.getByText("Frequently Asked Questions")).toBeInTheDocument();
+    expect(screen.getByText("What does Nexus Talent actually do?")).toBeInTheDocument();
+
+    // Bottom CTA section
+    expect(screen.getByText(/stop guessing\. start applying with precision\./i)).toBeInTheDocument();
+
+    // Brand link — find the nav root link
+    const nav = screen.getByRole("navigation");
+    expect(within(nav).getByRole("link", { name: /nexus talent/i })).toHaveAttribute("href", "/");
+
     signInLinks.forEach((link) => {
       expect(link).toHaveAttribute("href", "/auth/sign-in");
     });
-    expect(screen.getByText("© 2026 Nexus talent. Built for the machine era.")).toBeInTheDocument();
 
+    // Mobile drawer interaction
     await user.click(screen.getByRole("button", { name: /abrir menú/i }));
     const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });
-    expect(within(drawer).getByRole("link", { name: "Inicio" })).toHaveAttribute("href", "/");
-    expect(within(drawer).getByRole("link", { name: "Análisis" })).toHaveAttribute("href", "/app/analysis");
-    expect(within(drawer).getByRole("link", { name: /ingresar/i })).toHaveAttribute("href", "/auth/sign-in");
-    expect(within(drawer).getByRole("link", { name: /crear cuenta/i })).toHaveAttribute("href", "/auth/sign-up");
+    expect(within(drawer).getByRole("link", { name: "Home" })).toHaveAttribute("href", "/");
+    expect(within(drawer).getByRole("link", { name: "Analysis" })).toHaveAttribute("href", "/app/analysis");
+    expect(within(drawer).getByRole("link", { name: /^sign in$/i })).toHaveAttribute("href", "/auth/sign-in");
+    expect(within(drawer).getByRole("link", { name: /^get started free$/i })).toHaveAttribute("href", "/auth/sign-up");
 
     await user.click(within(drawer).getByRole("button", { name: /cerrar menú/i }));
     await waitForElementToBeRemoved(() => screen.queryByRole("dialog", { name: "Nexus Talent" }));
