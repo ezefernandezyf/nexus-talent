@@ -110,6 +110,8 @@
   --color-primary-container: oklch(0.53 0.18 270);
   --color-accent: oklch(0.92 0.19 130);
   --color-accent-container: oklch(0.82 0.15 130);
+  --color-on-primary: oklch(0.96 0.01 270);
+  --color-on-accent: oklch(0.15 0.01 130);
 
   /* Semantic tokens */
   --color-success: oklch(0.72 0.14 150);
@@ -319,13 +321,13 @@
     border: 0;
     border-radius: 0.9rem;
     padding: 0.8rem 1.05rem;
-    background: linear-gradient(135deg, oklch(0.5 0.22 270) 0%, oklch(0.45 0.22 270) 100%);
-    color: oklch(0.95 0.01 270);
+    background: linear-gradient(135deg, var(--color-primary-container) 0%, var(--color-primary) 100%);
+    color: var(--color-on-primary);
     font-size: 0.95rem;
     font-weight: 700;
     box-shadow:
-      0 14px 36px oklch(0.45 0.22 270 / 0.24),
-      inset 0 1px 0 oklch(1 0 0 / 0.32);
+      0 14px 36px color-mix(in oklch, var(--color-primary) 24%, transparent),
+      inset 0 1px 0 color-mix(in oklch, white 32%, transparent);
     transition:
       transform 160ms ease,
       filter 160ms ease,

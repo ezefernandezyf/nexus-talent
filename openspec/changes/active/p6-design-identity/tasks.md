@@ -51,17 +51,17 @@ Chain strategy: pending
 
 ## Phase 3: Core — Components & Landing
 
-- [ ] 3.1 Create `web/src/components/ui/Badge.tsx` with variants (info/success/warning/error) + sizes (sm/md)
-- [ ] 3.2 Refresh `Button.tsx` — replace HEX with OKLCH token refs
-- [ ] 3.3 Refresh `Card.tsx` — replace HEX with OKLCH token refs
-- [ ] 3.4 Refresh `Input.tsx` — replace HEX with OKLCH token refs
-- [ ] 3.5 Refresh `Modal.tsx` — OKLCH tokens + SSR-safe framer-motion gate
-- [ ] 3.6 Rewrite `LandingPage.tsx` with H1 + H2 answer blocks + FAQ + CTAs, 300+ words
-- [ ] 3.7 Create `FAQ.tsx` accordion component with 5–8 Q&A pairs
-- [ ] 3.8 Update `AppLayout.tsx` — OKLCH tokens for header, sidebar, content
-- [ ] 3.9 Update MobileDrawer — new nav copy, OKLCH tokens
-- [ ] 3.10 Update Footer — OKLCH tokens, typography scale match
-- [ ] 3.11 Update navigation — token refs, active states, design identity
+- [x] 3.1 Create `web/src/components/ui/Badge.tsx` with variants (info/success/warning/error) + sizes (sm/md)
+- [x] 3.2 Refresh `Button.tsx` — replace HEX with OKLCH token refs
+- [x] 3.3 Refresh `Card.tsx` — replace HEX with OKLCH token refs
+- [x] 3.4 Refresh `Input.tsx` — replace HEX with OKLCH token refs
+- [x] 3.5 Refresh `Modal.tsx` — OKLCH tokens + SSR-safe framer-motion gate
+- [x] 3.6 Rewrite `LandingPage.tsx` with H1 + H2 answer blocks + FAQ + CTAs, 300+ words
+- [x] 3.7 Create `FAQ.tsx` accordion component with 5–8 Q&A pairs
+- [x] 3.8 Update `AppLayout.tsx` — OKLCH tokens for header, sidebar, content
+- [x] 3.9 Update MobileDrawer — new nav copy, OKLCH tokens
+- [x] 3.10 Update Footer — OKLCH tokens, typography scale match
+- [x] 3.11 Update navigation — token refs, active states, design identity
 
 ## Phase 4: SSR — Vike or Edge Fallback (Week 2)
 

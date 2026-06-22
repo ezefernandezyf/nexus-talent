@@ -1,21 +1,25 @@
+import { Link } from "react-router-dom";
 import { LayoutContainer } from "./LayoutContainer";
 
 export function Footer() {
   return (
-    <footer className="w-full py-12 px-8 border-t border-outline-variant/15 bg-[#0B0E14] dark:bg-[#0B0E14]">
-      <LayoutContainer className="flex flex-col md:flex-row justify-between items-center gap-6 font-['Space_Grotesk'] text-xs uppercase tracking-widest">
-        <div className="text-lg font-black text-on-surface" style={{}}>
-          Nexus talent
-        </div>
+    <footer className="w-full border-t border-outline-variant/15 bg-surface-container-lowest px-8 py-12 text-xs uppercase tracking-widest text-on-surface-variant">
+      <LayoutContainer className="flex flex-col items-center justify-between gap-6 font-label md:flex-row">
+        <div className="text-lg font-black text-on-surface">Nexus Talent</div>
         <div className="flex items-center gap-8">
-          <a className="text-on-surface/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="#features" style={{}}>Features</a>
-          <a className="text-on-surface/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="#security" style={{}}>Security</a>
-          <a className="text-on-surface/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="/auth/sign-in" style={{}}>Ingresar</a>
-          <a className="text-on-surface/50 hover:text-[#38BDF8] transition-colors opacity-80 hover:opacity-100" href="/auth/sign-up" style={{}}>Crear cuenta</a>
+          <Link className="text-on-surface-variant/60 transition-colors hover:text-primary" to="/privacy">
+            Privacy
+          </Link>
+          <a
+            className="text-on-surface-variant/60 transition-colors hover:text-primary"
+            href="https://github.com/nexustalent"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            GitHub
+          </a>
         </div>
-        <div className="text-on-surface/50" style={{}}>
-          © 2026&nbsp; Nexus talent. Built for the machine era.
-        </div>
+        <div className="text-on-surface-variant/60">© 2026 Nexus Talent. Built for the machine era.</div>
       </LayoutContainer>
     </footer>
   );

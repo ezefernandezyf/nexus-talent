@@ -3,6 +3,8 @@ type LandingIconName =
   | "auto_awesome"
   | "bolt"
   | "data_object"
+  | "description"
+  | "psychology"
   | "search"
   | "security"
   | "terminal"
@@ -46,6 +48,23 @@ export function LandingIcon({ className, name }: LandingIconProps) {
           <path d="M7 8l-3 4 3 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           <path d="M17 8l3 4-3 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           <path d="M10 16l4-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      );
+    case "description":
+      return (
+        <svg aria-hidden="true" className={baseClassName} viewBox="0 0 24 24" fill="none">
+          <path d="M6 4h8l4 4v12H6V4Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+          <path d="M14 4v4h4" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+          <path d="M9 14h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M9 10h2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M9 18h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      );
+    case "psychology":
+      return (
+        <svg aria-hidden="true" className={baseClassName} viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
+          <path d="M12 8v4l2.5 2.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
         </svg>
       );
     case "search":

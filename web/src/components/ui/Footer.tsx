@@ -14,7 +14,7 @@ export function Footer({ className, ...props }: FooterProps) {
       {...props}
     >
       <div className="mx-auto flex max-w-screen-2xl flex-col items-center justify-between gap-6 font-label sm:flex-row">
-        <div className="text-lg font-black text-on-surface">Nexus talent</div>
+        <div className="font-display text-lg font-black text-on-surface">Nexus Talent</div>
         <div className="flex items-center gap-8">
           <Link className="text-on-surface/50 transition-colors hover:text-primary" to="/privacy">
             Privacy

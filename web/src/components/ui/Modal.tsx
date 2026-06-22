@@ -15,7 +15,7 @@ export function Modal({ children, onClose, title }: ModalProps) {
   return (
     <motion.div aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8" role="dialog">
       <motion.button
-        aria-label="Cerrar modal"
+        aria-label="Close modal"
         className="absolute inset-0 cursor-default bg-surface-container-lowest/70 backdrop-blur-sm"
         initial={prefersReducedMotion ? false : { opacity: 0 }}
         animate={prefersReducedMotion ? undefined : { opacity: 1 }}
