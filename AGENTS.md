@@ -135,27 +135,27 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 
 ### P6: Design Identity — "The Signal" + GEO Foundation
 > Basado en portfolio-personality (Estilo B: Minimal/Elegant). Dark-first. Paleta Indigo + Chartreuse. Cabinet Grotesk (display) + Satoshi (body). SSR con Vike (fallback: Vercel Edge). GEO Score 7 → 35.
-- [ ] **SSR con Vike** para landing `/` y privacy `/privacy`. Verificación de compatibilidad Vite 6 primero; si falla → Vercel Edge prerendering (GEO CRITICAL #CSR-1)
-- [ ] Design tokens: OKLCH colors, shadows, radii, typography scale
-- [ ] Global styles + CSS variables
-- [ ] Component refresh: buttons, cards, inputs, modals, badges
-- [ ] Layout & navigation redesign
-- [ ] Landing page redesign **con contenido estructurado**: H1, H2 sections, FAQ (5-8 Q&A), 300+ palabras, answer blocks para AI citability (GEO HIGH #CTB-1)
-- [ ] Auth pages redesign
-- [ ] Analysis/history/settings pages alignment
-- [ ] Responsive + dark mode parity
-- [ ] DESIGN.md update
-- [ ] **GEO/SEO Quick Wins** (Week 1-2 del audit):
-  - [ ] Schema JSON-LD: Organization + SoftwareApplication + WebSite (GEO CRITICAL #SCH-1)
-  - [ ] Open Graph + Twitter Card meta tags (GEO HIGH #TEC-2)
-  - [ ] Title tag optimizado: "Nexus Talent — AI Recruiting Assistant | Transform Job Descriptions into Insights" (SEO)
-  - [ ] Keywords target: "AI job description analyzer", "AI recruiting assistant", "JD to skills", "outreach generator" (SEO)
-  - [ ] Canonical URL tag (GEO HIGH #CTB-2)
-  - [ ] llms.txt estático en `/public/` (GEO HIGH #TEC-1)
-  - [ ] robots.txt con AI crawlers explícitos: GPTBot, Claude-Web, PerplexityBot (GEO)
-  - [ ] `<noscript>` fallback con contenido clave (GEO Quick Win #5)
-  - [ ] Google Search Console: submit sitemap (SEO)
-  - [ ] Favicon estable sin hash (GEO LOW #CON-3)
+- [x] **SSR con Vike** para landing `/` y privacy `/privacy`. Vike falló (requiere Vite ≥7.1, tenemos 6.4.3). Fallback: build-time prerender con Vite SSR. ✅
+- [x] Design tokens: OKLCH colors, shadows, radii, typography scale
+- [x] Global styles + CSS variables
+- [x] Component refresh: buttons, cards, inputs, modals, badges
+- [x] Layout & navigation redesign
+- [x] Landing page redesign **con contenido estructurado**: H1, H2 sections, FAQ (5 Q&A), 300+ palabras, answer blocks para AI citability (GEO HIGH #CTB-1)
+- [ ] Auth pages redesign → P8 (Polish)
+- [ ] Analysis/history/settings pages alignment → P8 (Polish)
+- [x] Responsive + dark mode parity
+- [ ] DESIGN.md → crear nuevo basado en portfolio-personality
+- [x] **GEO/SEO Quick Wins** (Week 1-2 del audit):
+  - [x] Schema JSON-LD: Organization + SoftwareApplication + WebSite (GEO CRITICAL #SCH-1)
+  - [x] Open Graph + Twitter Card meta tags (GEO HIGH #TEC-2)
+  - [x] Title tag optimizado: "Nexus Talent — AI Recruiting Assistant | Transform Job Descriptions into Insights" (SEO)
+  - [x] Keywords target: "AI job description analyzer", "AI recruiting assistant", "JD to skills", "outreach generator" (SEO)
+  - [x] Canonical URL tag (GEO HIGH #CTB-2)
+  - [x] llms.txt estático en `/public/` (GEO HIGH #TEC-1)
+  - [x] robots.txt con AI crawlers explícitos: GPTBot, Claude-Web, PerplexityBot (GEO)
+  - [x] `<noscript>` fallback con contenido clave (GEO Quick Win #5)
+  - [ ] Google Search Console: submit sitemap (SEO) → manual, requiere acceso a GSC
+  - [x] Favicon estable sin hash (GEO LOW #CON-3)
 
 ### P7: E2E + Security
 > Playwright flows, hardening
