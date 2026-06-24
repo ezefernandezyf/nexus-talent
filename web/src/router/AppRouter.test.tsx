@@ -1,96 +1,48 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
-import type { Session, User } from "@supabase/supabase-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import axios from "axios";
 import { ANALYSIS_HISTORY_STORAGE_KEY } from "../lib/repositories";
-import { useAuthStore } from "../auth/auth-store";
+import { useAuthStatus } from "../features/auth/store/auth-status";
 import { AuthProvider } from "../features/auth";
 import { createTestQueryClient } from "../test/mocks/query-client";
 import { AppRouter } from "./AppRouter";
 
 // ---------------------------------------------------------------------------
 // Axios mock — hooks now use HTTP repo instead of localStorage
-// The mock is hoisted to module level so api-client.ts gets it on import.
-// Each call to axios.create() returns the SAME instance that tests can
-// configure via import axios in beforeEach.
 // ---------------------------------------------------------------------------
 
-vi.mock("axios", () => {
-  const instance = {
-    get: vi.fn(),
-    patch: vi.fn(),
-    delete: vi.fn(),
-    interceptors: {
-      request: { use: vi.fn(), eject: vi.fn() },
-      response: { use: vi.fn(), eject: vi.fn() },
-    },
-  };
+const mockAxiosInstance = vi.hoisted(() => ({
+  get: vi.fn(),
+  post: vi.fn(),
+  patch: vi.fn(),
+  delete: vi.fn(),
+  interceptors: {
+    request: { use: vi.fn(), eject: vi.fn() },
+    response: { use: vi.fn(), eject: vi.fn() },
+  },
+}));
 
-  return {
-    default: {
-      create: vi.fn(() => instance),
-      isAxiosError: vi.fn(() => false),
-    },
-  };
-});
+vi.mock("axios", () => ({
+  default: {
+    create: vi.fn(() => mockAxiosInstance),
+    isAxiosError: vi.fn(() => false),
+  },
+}));
 
-function createUser(email: string): User {
-  const now = new Date("2026-04-05T12:00:00.000Z").toISOString();
-
-  return {
-    aud: "authenticated",
-    app_metadata: {},
-    created_at: now,
-    email,
-    email_confirmed_at: now,
-    id: "550e8400-e29b-41d4-a716-446655440000",
-    identities: [],
-    is_anonymous: false,
-    last_sign_in_at: now,
-    phone: "",
-    role: "authenticated",
-    updated_at: now,
-    user_metadata: {},
-  } as User;
-}
-
-function createSession(email: string): Session {
-  const user = createUser(email);
-
-  return {
-    access_token: "session-token",
-    expires_at: Math.floor(Date.now() / 1000) + 3600,
-    expires_in: 3600,
-    provider_refresh_token: null,
-    provider_token: null,
-    refresh_token: "refresh-token",
-    token_type: "bearer",
-    user,
-  } as Session;
-}
-
-function createAuthClient(session: Session | null) {
-  return {
-    auth: {
-      getSession: vi.fn(async () => ({ data: { session }, error: null })),
-      onAuthStateChange: vi.fn(() => ({ data: { subscription: { unsubscribe: vi.fn() } } })),
-      signInWithPassword: vi.fn(async () => ({ data: { session, user: session?.user ?? null }, error: null })),
-      signInWithOAuth: vi.fn(async () => ({ data: { provider: "github", url: null }, error: null })),
-      signOut: vi.fn(async () => ({ error: null })),
-      signUp: vi.fn(async () => ({ data: { session, user: session?.user ?? null }, error: null })),
-    },
-  };
-}
-
-function renderApp(initialEntry: string, session: Session | null = null) {
+function renderApp(initialEntry: string, session: { user: { id: string; email: string; displayName: string | null }; isAdmin: boolean } | null = null) {
   const queryClient = createTestQueryClient();
-  const client = createAuthClient(session);
+
+  // Pre-seed the session cache
+  queryClient.setQueryData(["auth", "session"], session);
+  useAuthStatus.setState({
+    status: session ? "authenticated" : "unauthenticated",
+  });
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <AuthProvider client={client}>
+      <AuthProvider>
         <MemoryRouter initialEntries={[initialEntry]}>
           <AppRouter />
         </MemoryRouter>
@@ -101,15 +53,13 @@ function renderApp(initialEntry: string, session: Session | null = null) {
 
 describe("AppRouter", () => {
   beforeEach(() => {
-    useAuthStore.setState({ user: null, status: "unknown", isAdmin: false });
+    mockAxiosInstance.get.mockReset();
+    mockAxiosInstance.post.mockReset();
+    mockAxiosInstance.patch.mockReset();
+    mockAxiosInstance.delete.mockReset();
 
-    // The mocked axios.create() returns the same singleton instance shared
-    // with api-client.ts. Configure default empty responses so sidebar hooks
-    // don't crash. Individual tests override as needed.
-    const api = vi.mocked(axios.create)();
-    api.get.mockReset().mockResolvedValue({ data: { items: [], total: 0 } });
-    api.patch.mockReset().mockResolvedValue({ data: {} });
-    api.delete.mockReset().mockResolvedValue({ data: undefined });
+    // Default axios mock: empty analysis list for sidebar
+    mockAxiosInstance.get.mockResolvedValue({ data: { items: [], total: 0 } });
   });
 
   it("renders the public landing page at the root path", () => {
@@ -138,7 +88,10 @@ describe("AppRouter", () => {
   });
 
   it("returns 404 for removed admin routes", async () => {
-    renderApp("/app/admin/settings", createSession("ana@empresa.com"));
+    renderApp("/app/admin/settings", {
+      user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "ana@empresa.com", displayName: null },
+      isAdmin: false,
+    });
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /404/i })).toBeInTheDocument());
   });
@@ -150,7 +103,10 @@ describe("AppRouter", () => {
   });
 
   it("renders the user settings page for authenticated users", async () => {
-    renderApp("/app/settings", createSession("ana@empresa.com"));
+    renderApp("/app/settings", {
+      user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "ana@empresa.com", displayName: null },
+      isAdmin: false,
+    });
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /configuración/i })).toBeInTheDocument());
     expect(screen.getByRole("button", { name: /exportar datos/i })).toBeInTheDocument();
@@ -171,7 +127,10 @@ describe("AppRouter", () => {
   });
 
   it("redirects authenticated users away from public auth pages", async () => {
-    renderApp("/auth/sign-in", createSession("ana@empresa.com"));
+    renderApp("/auth/sign-in", {
+      user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "ana@empresa.com", displayName: null },
+      isAdmin: false,
+    });
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /nuevo análisis de reclutamiento/i })).toBeInTheDocument());
   });
@@ -204,8 +163,7 @@ describe("AppRouter", () => {
     localStorage.setItem(ANALYSIS_HISTORY_STORAGE_KEY, JSON.stringify([savedAnalysis]));
 
     // Configure axios mock by URL to handle StrictMode double-mounting
-    const api = vi.mocked(axios.create)();
-    api.get.mockImplementation((url: string) => {
+    mockAxiosInstance.get.mockImplementation((url: string) => {
       if (url === "/analyses") {
         return Promise.resolve({ data: { items: [savedAnalysis], total: 1 } });
       }
@@ -223,8 +181,7 @@ describe("AppRouter", () => {
     localStorage.removeItem(ANALYSIS_HISTORY_STORAGE_KEY);
 
     // Configure axios mock by URL to handle StrictMode double-mounting
-    const api = vi.mocked(axios.create)();
-    api.get.mockImplementation((url: string) => {
+    mockAxiosInstance.get.mockImplementation((url: string) => {
       if (url === "/analyses") {
         return Promise.resolve({ data: { items: [], total: 0 } });
       }
@@ -245,7 +202,10 @@ describe("AppRouter", () => {
   });
 
   it("keeps the same app shell for authenticated users", async () => {
-    renderApp("/app/analysis", createSession("ana@empresa.com"));
+    renderApp("/app/analysis", {
+      user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "ana@empresa.com", displayName: null },
+      isAdmin: false,
+    });
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /nuevo análisis de reclutamiento/i })).toBeInTheDocument());
     expect(screen.getByText("ana@empresa.com")).toBeInTheDocument();

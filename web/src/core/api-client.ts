@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useAuthStore } from "../auth/auth-store";
+import { queryClient } from "../lib/query-client";
+import { useAuthStatus } from "../features/auth/store/auth-status";
 
 export const apiClient = axios.create({
   baseURL: "/api",
@@ -10,7 +11,8 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      useAuthStore.getState().clearSession();
+      queryClient.setQueryData(["auth", "session"], null);
+      useAuthStatus.getState().setStatus("unauthenticated");
 
       if (typeof window !== "undefined") {
         window.location.href = "/auth/sign-in";
