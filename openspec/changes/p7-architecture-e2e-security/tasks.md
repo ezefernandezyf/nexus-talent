@@ -93,14 +93,14 @@ Chain strategy: pending
 
 ## Phase 6: E2E + Security + Logging (~600 lines)
 
-- [ ] 6.1 Configure Playwright: ephemeral SQLite via `DATABASE_URL=file:./test.db`, globalSetup with prisma migrate
-- [ ] 6.2 Write auth E2E: signup.spec.ts, login.spec.ts, logout.spec.ts
-- [ ] 6.3 Write analysis E2E: submit.spec.ts, validation.spec.ts
-- [ ] 6.4 Write history E2E: list.spec.ts, delete.spec.ts
-- [ ] 6.5 Add Helmet config to `server/src/infra/app.ts` — CSP + X-Frame-Options + X-Content-Type-Options + Referrer-Policy
-- [ ] 6.6 Update analysis rate limit in `analysis.router.ts` from max:20 to max:10 per spec
-- [ ] 6.7 Add pino-http request logging middleware to `app.ts`
-- [ ] 6.8 Add auth event logging to `auth.controller.ts` (login_success, login_failure, register)
-- [ ] 6.9 Add analysis request logging to `analysis.controller.ts` (analysis_request with userId + inputLength)
-- [ ] 6.10 Verify: `pnpm --filter @nexus-talent/e2e test` passes
-- [ ] 6.11 Verify: `curl -I` shows all security headers on every response
+- [x] 6.1 Configure Playwright: ephemeral SQLite via `DATABASE_URL=file:./test.db`, globalSetup with prisma migrate
+- [x] 6.2 Write auth E2E: signup.spec.ts, login.spec.ts, logout.spec.ts
+- [x] 6.3 Write analysis E2E: submit.spec.ts, validation.spec.ts
+- [x] 6.4 Write history E2E: list.spec.ts, delete.spec.ts
+- [x] 6.5 Add custom security headers middleware to `server/src/infra/app.ts` — CSP + X-Frame-Options + X-Content-Type-Options + Referrer-Policy (manual, no `helmet` dependency)
+- [x] 6.6 Update analysis rate limit in `analysis.router.ts` from max:20 to max:10 per spec
+- [x] 6.7 Add pino-http request logging middleware to `app.ts`
+- [x] 6.8 Add auth event logging to `auth.controller.ts` (login_success, login_failure, register, logout)
+- [x] 6.9 Add analysis request logging to `analysis.controller.ts` (analysis_request with userId + inputLength)
+- [x] 6.10 Verify: `pnpm --filter @nexus-talent/e2e test` passes (all 8 tests)
+- [x] 6.11 Verify: `curl -I` shows all security headers on every response

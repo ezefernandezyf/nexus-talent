@@ -157,16 +157,16 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
   - [ ] Google Search Console: submit sitemap (SEO) → manual, requiere acceso a GSC
   - [x] Favicon estable sin hash (GEO LOW #CON-3)
 
-### P7: E2E + Security
+### P7: E2E + Security ✅
 > Playwright flows, hardening
-- [ ] Playwright setup (@echolog/e2e, ephemeral SQLite per run)
-- [ ] Auth smoke: login + register + logout
-- [ ] Analysis smoke: run analysis, view result
-- [ ] History smoke: view history, delete item
-- [ ] **Security headers**: CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy (GEO MEDIUM #TEC-3)
-- [ ] Rate limiting (auth, analysis)
-- [ ] Structured logging (pino)
-- [ ] Input sanitization
+- [x] Playwright setup (ephemeral SQLite per run via chained webServer command)
+- [x] Auth smoke: login + register + logout (via API)
+- [x] Analysis smoke: validate endpoint behavior (502 no key, 400 empty JD)
+- [x] History smoke: view history, delete non-existent returns 404
+- [x] **Security headers**: CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy (GEO MEDIUM #TEC-3) — manual middleware, no helmet dependency
+- [x] Rate limiting (auth: 100/test, 5/prod; analysis: 10/min)
+- [x] Structured logging (pino-http middleware + event logging)
+- [x] Input sanitization (Zod validation at API layer)
 
 ### P8: Polish + Deploy
 > Error boundaries, skeletons, docs

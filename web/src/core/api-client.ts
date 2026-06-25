@@ -14,8 +14,15 @@ apiClient.interceptors.response.use(
       queryClient.setQueryData(["auth", "session"], null);
       useAuthStatus.getState().setStatus("unauthenticated");
 
+      // Only redirect to sign-in when the user is on a protected page.
+      // Auth pages (sign-in, sign-up) expect 401 responses as part of
+      // the normal "no session" flow — redirecting would break sign-up.
       if (typeof window !== "undefined") {
-        window.location.href = "/auth/sign-in";
+        const path = window.location.pathname;
+        const isAuthPage = path.startsWith("/auth/");
+        if (!isAuthPage) {
+          window.location.href = "/auth/sign-in";
+        }
       }
     }
 

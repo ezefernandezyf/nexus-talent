@@ -1,29 +1,20 @@
 import express from "express";
-import helmet from "helmet";
 import cors from "cors";
+import pinoHttp from "pino-http";
 import { authRouter } from "../auth/auth.router.js";
 import { analysisRouter } from "../analysis/analysis.router.js";
 import { profileRouter } from "../profile/profile.router.js";
 import { historyRouter } from "../history/history.router.js";
 import { errorHandler } from "./error-handler.js";
 import { requestId } from "./request.js";
+import { securityHeaders } from "./security-headers.js";
+import { logger } from "./logger.js";
 
 export function createApp() {
   const app = express();
 
-  // ── Security ──────────────────────────────────────────────
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["'self'"],
-          scriptSrc: ["'self'"],
-          styleSrc: ["'self'", "'unsafe-inline'"],
-          imgSrc: ["'self'", "data:", "https:"],
-        },
-      },
-    }),
-  );
+  // ── Security headers ──────────────────────────────────────
+  app.use(securityHeaders);
 
   // ── CORS ──────────────────────────────────────────────────
   app.use(
@@ -35,6 +26,9 @@ export function createApp() {
 
   // ── Body parsing ──────────────────────────────────────────
   app.use(express.json());
+
+  // ── Request logging ───────────────────────────────────────
+  app.use(pinoHttp({ logger }));
 
   // ── Request ID ────────────────────────────────────────────
   app.use(requestId);

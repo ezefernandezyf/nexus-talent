@@ -16,6 +16,13 @@ import { logger } from "../infra/logger.js";
 export async function analyze(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const input = req.body as AnalysisRequestDTO;
+
+    req.log.info({
+      event: "analysis_request",
+      userId: req.userId,
+      inputLength: input.jobDescription?.length ?? 0,
+    }, "Analysis requested");
+
     const result = await analysisService.analyze(input);
 
     // Best-effort persistence: save to DB if the user is authenticated
