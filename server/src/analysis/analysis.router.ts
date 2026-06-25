@@ -14,7 +14,7 @@ analysisRouter.get("/test", (_req, res) => {
 analysisRouter.post(
   "/analyze",
   requireAuth,
-  rateLimiter({ windowMs: 60_000, max: 20 }),
+  rateLimiter({ windowMs: 60_000, max: 10 }),
   validate(analysisRequestSchema),
   controller.analyze,
 );

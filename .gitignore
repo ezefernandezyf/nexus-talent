@@ -25,3 +25,10 @@ dist/
 
 coverage
 web/*.tsbuildinfo
+
+# SDD artifacts (auto-generated)
+.atl/
+
+# E2E test artifacts
+e2e/playwright-report/
+e2e/test-results/

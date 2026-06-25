@@ -1,5 +1,5 @@
 import React from "react";
-import { AuthShell, SignInForm } from "../components";
+import { AuthShell, SignInForm } from "@/features/auth/components";
 
 export default function LoginPage() {
   return (

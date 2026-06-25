@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { type AnalysisRepository } from "../../../lib/repositories";
-import { getAnalysisByIdQueryKey } from "../../analysis/hooks/useAnalysisById";
-import { getAnalysisHistoryQueryKey } from "../../analysis/hooks/useAnalysisHistory";
+import type { AnalysisRepository } from "@/features/analysis/api/repository";
+import { getAnalysisByIdQueryKey } from "@/features/analysis/hooks/useAnalysisById";
+import { getAnalysisHistoryQueryKey } from "@/features/analysis/hooks/useAnalysisHistory";
 import { useUpdateAnalysis } from "./useUpdateAnalysis";
 
 function createWrapper(queryClient: QueryClient) {

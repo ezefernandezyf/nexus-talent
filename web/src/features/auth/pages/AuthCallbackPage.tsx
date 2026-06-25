@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { Link, Navigate, useSearchParams } from "react-router-dom";
-import { Card } from "../../../components/ui/Card";
-import { useAuthStore, AUTH_STATUS } from "../../../auth/auth-store";
-import { useAuth } from "../hooks/useAuth";
+import { Card } from "@/shared/components/Card";
+import { AUTH_STATUS } from "@/features/auth/store/auth-status";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useSession } from "@/features/auth/api/useSession";
 
 function getCallbackErrorMessage(searchParams: URLSearchParams) {
   const queryError = searchParams.get("error_description") ?? searchParams.get("error");
@@ -13,16 +14,16 @@ function getCallbackErrorMessage(searchParams: URLSearchParams) {
 export default function AuthCallbackPage() {
   const [searchParams] = useSearchParams();
   const { status } = useAuth();
-  const restoreSession = useAuthStore((s) => s.restoreSession);
+  const { refetch } = useSession();
 
   useEffect(() => {
     const hasError = searchParams.get("error_description") ?? searchParams.get("error");
 
     // Only try to restore session when there's no OAuth error
     if (!hasError) {
-      restoreSession();
+      refetch();
     }
-  }, [restoreSession, searchParams]);
+  }, [refetch, searchParams]);
 
   if (status === AUTH_STATUS.AUTHENTICATED) {
     return <Navigate replace to="/app/analysis" />;

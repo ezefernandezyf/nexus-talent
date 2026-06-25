@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
-import { Navbar } from "../components/Navbar";
-import { Footer } from "../components/Footer";
-import { LandingIcon } from "../components/LandingIcon";
-import { FAQ } from "../components/FAQ";
-import { MobileDrawer } from "../../../components/ui/MobileDrawer";
-import { MobileMenuButton } from "../../../components/ui/MobileMenuButton";
-import { fadeUpVariants } from "../../../components/ui/motion";
+import { Navbar } from "@/features/landing/components/Navbar";
+import { Footer } from "@/features/landing/components/Footer";
+import { LandingIcon } from "@/features/landing/components/LandingIcon";
+import { FAQ } from "@/features/landing/components/FAQ";
+import { MobileDrawer } from "@/shared/components/MobileDrawer";
+import { MobileMenuButton } from "@/shared/components/MobileMenuButton";
+import { fadeUpVariants } from "@/shared/components/motion";
 
 const publicDrawerItems = [
   { label: "Home", to: "/" },

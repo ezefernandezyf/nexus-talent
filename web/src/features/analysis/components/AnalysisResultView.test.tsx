@@ -2,8 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { AnalysisResultView } from "./AnalysisResultView";
-import { createAnalysisResult } from "../../../test/factories/analysis";
-import { mockClipboard, mockDownloadApis, mockWindowOpen } from "../../../test/mocks/browser";
+import { createAnalysisResult } from "@/test/factories/analysis";
+import { mockClipboard, mockDownloadApis, mockWindowOpen } from "@/test/mocks/browser";
 
 describe("AnalysisResultView", () => {
   beforeEach(() => {

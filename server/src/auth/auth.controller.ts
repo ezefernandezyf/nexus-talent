@@ -20,6 +20,8 @@ export async function register(req: Request, res: Response, next: NextFunction):
     const { email, password, displayName } = req.body;
     const result = await authService.register(email, password, displayName);
 
+    req.log.info({ event: "register", userId: result.user.id }, "User registered");
+
     res.cookie("nexus-talent-session", result.token, COOKIE_OPTIONS);
     res.status(201).json({ user: result.user });
   } catch (err) {
@@ -35,9 +37,13 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     const { email, password } = req.body;
     const result = await authService.login(email, password);
 
+    req.log.info({ event: "login_success", userId: result.user.id }, "User logged in");
+
     res.cookie("nexus-talent-session", result.token, COOKIE_OPTIONS);
     res.status(200).json({ user: result.user });
   } catch (err) {
+    // Log failure before forwarding — email is the attempted login
+    req.log.warn({ event: "login_failure", email: req.body?.email }, "Failed login attempt");
     next(err);
   }
 }
@@ -57,7 +63,9 @@ export async function me(req: Request, res: Response, next: NextFunction): Promi
 /**
  * POST /api/auth/logout
  */
-export async function logout(_req: Request, res: Response): Promise<void> {
+export async function logout(req: Request, res: Response): Promise<void> {
+  req.log.info({ event: "logout", userId: req.userId }, "User logged out");
+
   res.cookie("nexus-talent-session", "", {
     ...COOKIE_OPTIONS,
     maxAge: 0,

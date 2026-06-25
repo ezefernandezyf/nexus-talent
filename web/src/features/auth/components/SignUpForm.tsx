@@ -1,9 +1,9 @@
-import { Button } from "../../../components/ui/Button";
-import { Input } from "../../../components/ui/Input";
-import { useAuth } from "../hooks/useAuth";
+import { Button } from "@/shared/components/Button";
+import { Input } from "@/shared/components/Input";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signupSchema, type SignupFormValues } from "../schemas/auth";
+import { signupSchema, type SignupFormValues } from "@/features/auth/schemas/auth";
 import { useState } from "react";
 
 export function SignUpForm() {
@@ -67,7 +67,7 @@ export function SignUpForm() {
         <label className="label-chip" htmlFor="sign-up-email">
           Email
         </label>
-        <Input id="sign-up-email" {...register("email")} type="email" autoComplete="email" placeholder="vos@empresa.com" aria-describedby="sign-up-status" />
+        <Input id="sign-up-email" {...register("email")} type="email" autoComplete="email" placeholder="vos@empresa.com" aria-describedby="sign-up-status" data-testid="email-input" />
         {errors.email && <p className="text-sm text-red-400">{errors.email.message}</p>}
       </div>
 
@@ -75,7 +75,7 @@ export function SignUpForm() {
         <label className="label-chip" htmlFor="sign-up-password">
           Contraseña
         </label>
-        <Input id="sign-up-password" {...register("password")} type="password" autoComplete="new-password" placeholder="Elegí una contraseña robusta" aria-describedby="sign-up-status" />
+        <Input id="sign-up-password" {...register("password")} type="password" autoComplete="new-password" placeholder="Elegí una contraseña robusta" aria-describedby="sign-up-status" data-testid="password-input" />
         {errors.password && <p className="text-sm text-red-400">{errors.password.message}</p>}
       </div>
 
@@ -90,6 +90,7 @@ export function SignUpForm() {
           autoComplete="new-password"
           placeholder="Repetí la contraseña"
           aria-describedby="sign-up-status"
+          data-testid="confirm-password-input"
         />
         {errors.confirmPassword && <p className="text-sm text-red-400">{errors.confirmPassword.message}</p>}
       </div>
@@ -98,7 +99,7 @@ export function SignUpForm() {
         <p id="sign-up-status" className="min-h-6 text-sm leading-6 text-on-surface-variant" aria-live="polite">
           {serverError ?? " "}
         </p>
-        <Button className="sm:min-w-44" type="submit" disabled={isSubmitting || isOAuthSubmitting}>
+        <Button className="sm:min-w-44" type="submit" data-testid="sign-up-submit" disabled={isSubmitting || isOAuthSubmitting}>
           {isSubmitting ? "Creando..." : "Crear cuenta"}
         </Button>
       </div>

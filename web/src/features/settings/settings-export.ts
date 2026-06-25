@@ -1,6 +1,9 @@
-import type { Session, User } from "@supabase/supabase-js";
-import { getOAuthProviderConfig, type OAuthProviderKey } from "../../lib/supabase";
-import type { ThemeMode } from "../../lib/theme";
+import type { AuthUser } from "@/features/auth/api/useSession";
+import { getOAuthProviderConfig, type OAuthProviderKey } from "./api/oauth-config";
+import type { ThemeMode } from "@/core/theme";
+
+export type { OAuthProviderKey };
+export { getOAuthProviderConfig };
 
 export interface LinkedAccountSnapshot {
   connected: boolean;
@@ -9,35 +12,20 @@ export interface LinkedAccountSnapshot {
 }
 
 export interface SettingsExportPayloadInput {
-  session: Session | null;
+  session: AuthUser | null;
   theme: ThemeMode;
-  user: User | null;
+  user: AuthUser | null;
 }
 
-function getIdentityProviders(user: User | null) {
-  const providers = new Set<string>();
-
-  user?.identities?.forEach((identity) => {
-    if (identity?.provider) {
-      providers.add(identity.provider);
-    }
-  });
-
-  const metadataProvider = user?.app_metadata?.provider;
-
-  if (typeof metadataProvider === "string" && metadataProvider.length > 0) {
-    providers.add(metadataProvider);
-  }
-
-  return providers;
+function getIdentityProviders(_user: AuthUser | null): Set<string> {
+  // Identity providers are not available in the current auth system.
+  // Revisit when social login linking is implemented.
+  return new Set<string>();
 }
 
-export function getDisplayName(user: User | null) {
-  const metadata = user?.user_metadata ?? {};
-  const displayName = metadata.display_name ?? metadata.full_name ?? metadata.name;
-
-  if (typeof displayName === "string" && displayName.trim().length > 0) {
-    return displayName.trim();
+export function getDisplayName(user: AuthUser | null) {
+  if (user?.displayName && user.displayName.trim().length > 0) {
+    return user.displayName.trim();
   }
 
   if (user?.email) {
@@ -47,14 +35,11 @@ export function getDisplayName(user: User | null) {
   return "Sin nombre";
 }
 
-export function getLocation(user: User | null) {
-  const metadata = user?.user_metadata ?? {};
-  const location = metadata.location ?? metadata.locale ?? metadata.region;
-
-  return typeof location === "string" && location.trim().length > 0 ? location.trim() : null;
+export function getLocation(_user: AuthUser | null) {
+  return null;
 }
 
-export function getLinkedAccounts(user: User | null): LinkedAccountSnapshot[] {
+export function getLinkedAccounts(user: AuthUser | null): LinkedAccountSnapshot[] {
   const connectedProviders = getIdentityProviders(user);
 
   return (["google"] as const).map((provider) => {
@@ -84,9 +69,9 @@ export function buildSettingsExportPayload({ session, theme, user }: SettingsExp
     linkedAccounts,
     session: session
       ? {
-          expiresAt: session.expires_at ?? null,
-          provider: user?.app_metadata?.provider ?? null,
-          userId: session.user.id,
+          expiresAt: null,
+          provider: null,
+          userId: session.id,
         }
       : null,
     theme,

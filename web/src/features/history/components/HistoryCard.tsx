@@ -1,13 +1,13 @@
-import type { SavedJobAnalysis } from "../../../schemas/job-analysis";
+import type { SavedJobAnalysis } from "@/features/analysis/schemas/job-analysis";
 import { Link } from "react-router-dom";
-import { Button } from "../../../components/ui/Button";
+import { Button } from "@/shared/components/Button";
 import {
   formatHistoryCardDate,
   getHistoryCompanyLabel,
   getHistoryRoleLabel,
   getHistorySummarySnippet,
   getHistoryUid,
-} from "../history-formatters";
+} from "@/features/history/history-formatters";
 
 interface HistoryCardProps {
   analysis: SavedJobAnalysis;

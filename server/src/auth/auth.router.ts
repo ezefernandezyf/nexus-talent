@@ -7,7 +7,7 @@ import * as controller from "./auth.controller.js";
 
 const authRateLimit = rateLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5,
+  max: process.env.NODE_ENV === "test" ? 100 : 5,
 });
 
 export const authRouter = Router();

@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import type { GitHubRepositoryMetadata } from "../../lib/github-client";
+import type { GitHubRepositoryMetadata } from "@/features/analysis/api/github-client";
 
 interface GitHubRepositoryApiPayload {
   description?: string;

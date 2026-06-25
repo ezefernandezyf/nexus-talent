@@ -1,5 +1,9 @@
-import { createContext, useCallback, useEffect, useState, type ReactNode } from "react";
-import { useAuthStore, AUTH_STATUS, type AuthUser, type AuthStatus } from "../../auth/auth-store";
+import { createContext, useEffect, type ReactNode } from "react";
+import { useSession, type AuthUser } from "./api/useSession";
+import { useLogin } from "./api/useLogin";
+import { useRegister } from "./api/useRegister";
+import { useLogout } from "./api/useLogout";
+import { useAuthStatus, AUTH_STATUS, type AuthStatus } from "./store/auth-status";
 
 export type { AuthStatus };
 
@@ -24,7 +28,7 @@ interface AuthContextValue {
   signOut: () => Promise<void>;
   signUp: (email: string, password: string) => Promise<AuthActionResponse>;
   status: AuthStatus;
-  user: (AuthUser & { user_metadata?: Record<string, unknown>; app_metadata?: Record<string, unknown>; identities?: unknown[] }) | null;
+  user: AuthUser | null;
   /** @deprecated Kept for settings compatibility. Removed in PR #3. */
   linkIdentity?: (provider: string) => Promise<{ success: boolean; message: string }>;
   /** @deprecated Kept for settings compatibility. Removed in PR #3. */
@@ -33,289 +37,93 @@ interface AuthContextValue {
 
 interface AuthProviderProps {
   children: ReactNode;
-  /** @deprecated Legacy client mock for test compatibility. Not used in production. */
-  client?: {
-    auth: {
-      getSession: () => Promise<{ data: { session: Record<string, unknown> | null }; error: { message: string } | null }>;
-      onAuthStateChange: (cb: (event: string, session: Record<string, unknown> | null) => void) => {
-        data: { subscription: { unsubscribe: () => void } };
-      };
-      signInWithPassword: (creds: { email: string; password: string }) => Promise<{ data: Record<string, unknown>; error: { message: string } | null }>;
-      signInWithOAuth: (opts: { options?: { redirectTo?: string }; provider: string }) => Promise<{ data: Record<string, unknown>; error: { message: string } | null }>;
-      signOut: () => Promise<{ error: { message: string } | null }>;
-      signUp: (creds: { email: string; password: string }) => Promise<{ data: Record<string, unknown>; error: { message: string } | null }>;
-    };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } | null;
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-function getErrorMessage(error: unknown, fallback: string) {
-  if (error instanceof Error && error.message.trim().length > 0) {
-    return error.message;
-  }
-  return fallback;
-}
+export function AuthProvider({ children }: AuthProviderProps) {
+  const { data: sessionData, isLoading } = useSession();
+  const { status, setStatus } = useAuthStatus();
+  const loginMutation = useLogin();
+  const registerMutation = useRegister();
+  const logoutMutation = useLogout();
 
-function extractUser(session: Record<string, unknown> | null): {
-  user: (AuthUser & { user_metadata?: Record<string, unknown>; app_metadata?: Record<string, unknown>; identities?: unknown[] }) | null;
-  isAdmin: boolean;
-} {
-  if (!session) {
-    return { user: null, isAdmin: false };
-  }
-
-  const sessionUser = session.user as Record<string, unknown> | undefined;
-
-  if (!sessionUser) {
-    return { user: null, isAdmin: false };
-  }
-
-  const meta = sessionUser.user_metadata as Record<string, unknown> | null | undefined;
-
-  const displayName = (sessionUser.displayName as string | null)
-    ?? (meta?.["displayName" as never] as string | null)
-    ?? (meta?.["display_name" as never] as string | null)
-    ?? (meta?.["full_name" as never] as string | null)
-    ?? (meta?.["name" as never] as string | null)
-    ?? null;
-
-  const user = {
-    id: String(sessionUser.id ?? ""),
-    email: String(sessionUser.email ?? ""),
-    displayName,
-    user_metadata: (meta ?? {}),
-    app_metadata: (sessionUser.app_metadata as Record<string, unknown> ?? {}),
-    identities: (sessionUser.identities as unknown[] ?? []),
-  };
-
-  const role = (meta?.["role" as never] as string | undefined)
-    ?? (sessionUser.app_metadata as Record<string, unknown> | null)?.["role" as never] as string | undefined;
-
-  return { user, isAdmin: role === "admin" };
-}
-
-export function AuthProvider({ children, client }: AuthProviderProps) {
-  // Individual selectors to avoid creating new object references each render
-  const storeUser = useAuthStore((s) => s.user);
-  const storeStatus = useAuthStore((s) => s.status);
-  const storeIsAdmin = useAuthStore((s) => s.isAdmin);
-  const restoreSessionAction = useAuthStore((s) => s.restoreSession);
-  const loginAction = useAuthStore((s) => s.login);
-  const registerAction = useAuthStore((s) => s.register);
-  const logoutAction = useAuthStore((s) => s.logout);
-
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  // On mount: hydrate the store
+  // Sync React Query session state to Zustand status
   useEffect(() => {
-    let isActive = true;
-
-    if (client) {
-      // Legacy mode: hydrate from client mock (test compatibility)
-      client.auth
-        .getSession()
-        .then(({ data, error }) => {
-          if (!isActive) return;
-
-          if (error) {
-            setErrorMessage(getErrorMessage(error, AUTH_MESSAGES.SESSION_CHECK_FAILED));
-            useAuthStore.setState({ user: null, status: "unauthenticated", isAdmin: false });
-            return;
-          }
-
-          const { user, isAdmin } = extractUser(data.session as Record<string, unknown> | null);
-
-          if (user) {
-            useAuthStore.setState({ user, status: "authenticated", isAdmin });
-          } else {
-            useAuthStore.setState({ user: null, status: "unauthenticated", isAdmin: false });
-          }
-        })
-        .catch((error: unknown) => {
-          if (!isActive) return;
-          setErrorMessage(getErrorMessage(error, AUTH_MESSAGES.SESSION_CHECK_FAILED));
-          useAuthStore.setState({ user: null, status: "unauthenticated", isAdmin: false });
-        });
-
-      // Listen for auth state changes from client
-      const { data } = client.auth.onAuthStateChange((_event, nextSession) => {
-        if (!isActive) return;
-        const { user, isAdmin } = extractUser(nextSession as Record<string, unknown> | null);
-
-        if (user) {
-          useAuthStore.setState({ user, status: "authenticated", isAdmin });
-          setErrorMessage(null);
-        } else {
-          useAuthStore.setState({ user: null, status: "unauthenticated", isAdmin: false });
-          setErrorMessage(null);
-        }
-      });
-
-      return () => {
-        isActive = false;
-        data.subscription.unsubscribe();
-      };
+    if (isLoading) {
+      setStatus("loading");
+    } else if (sessionData) {
+      setStatus("authenticated");
     } else {
-      // Production mode: use Zustand store
-      restoreSessionAction();
+      // null data (explicitly cleared), error, or initial undefined → unauthenticated
+      setStatus("unauthenticated");
     }
-  }, [client, restoreSessionAction]);
+  }, [isLoading, sessionData, setStatus]);
 
-  const signIn = useCallback(
-    async (email: string, password: string) => {
-      setErrorMessage(null);
+  // Reset auth status on unmount
+  useEffect(() => {
+    return () => {
+      setStatus("unknown");
+    };
+    // Run only on mount/unmount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-      if (client) {
-        const { data, error } = await client.auth.signInWithPassword({ email: email.trim(), password });
-
-        if (error) {
-          throw new Error(error.message);
-        }
-
-        const { user, isAdmin } = extractUser(data.session as Record<string, unknown> | null);
-
-        if (user) {
-          useAuthStore.setState({ user, status: "authenticated", isAdmin });
-        }
-
-        setErrorMessage(null);
-        return { success: true, message: "Sesión iniciada. Redirigiendo al panel privado." };
-      }
-
-      // Production: use Zustand store
-      await loginAction(email, password);
-
+  async function signIn(email: string, password: string): Promise<AuthActionResponse> {
+    try {
+      await loginMutation.mutateAsync({ email, password });
       return { success: true, message: "Sesión iniciada. Redirigiendo al panel privado." };
-    },
-    [client, loginAction],
-  );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "No se pudo iniciar sesión.";
+      throw new Error(message);
+    }
+  }
 
-  const signUp = useCallback(
-    async (email: string, password: string) => {
-      setErrorMessage(null);
-
-      if (client) {
-        const { data, error } = await client.auth.signUp({ email: email.trim(), password });
-
-        if (error) {
-          throw new Error(error.message);
-        }
-
-        const { user, isAdmin } = extractUser(data.session as Record<string, unknown> | null);
-
-        if (user) {
-          useAuthStore.setState({ user, status: "authenticated", isAdmin });
-          setErrorMessage(null);
-          return { success: true, message: "Cuenta creada y sesión iniciada." };
-        }
-
-        return { success: true, message: "Cuenta creada. Revisá tu correo para confirmar el acceso." };
-      }
-
-      // Production: use Zustand store
-      await registerAction(email, password);
-
+  async function signUp(email: string, password: string): Promise<AuthActionResponse> {
+    try {
+      await registerMutation.mutateAsync({ email, password });
       return { success: true, message: "Cuenta creada y sesión iniciada." };
-    },
-    [client, registerAction],
-  );
-
-  const signOut = useCallback(async () => {
-    setErrorMessage(null);
-
-    if (client) {
-      const { error } = await client.auth.signOut();
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      useAuthStore.setState({ user: null, status: "unauthenticated", isAdmin: false });
-      setErrorMessage(null);
-      return;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "No se pudo crear la cuenta.";
+      throw new Error(message);
     }
+  }
 
-    // Production: use Zustand store
-    await logoutAction();
-  }, [client, logoutAction]);
+  async function signOut(): Promise<void> {
+    await logoutMutation.mutateAsync();
+  }
 
-  const signInWithOAuth = useCallback(
-    async (provider: string) => {
-      if (client) {
-        const providerConfig = provider === "google" ? { label: "Google", provider: "google" as const } : { label: "GitHub", provider: provider as "github" | "google" };
+  async function signInWithOAuth(provider: string): Promise<AuthActionResponse> {
+    window.location.href = `/api/auth/oauth/${provider}`;
+    return { success: true, message: "Redirigiendo..." };
+  }
 
-        const { error } = await client.auth.signInWithOAuth({
-          options: { redirectTo: new URL("/auth/callback", window.location.origin).toString() },
-          provider: providerConfig.provider,
-        });
+  /** @deprecated Kept for settings compatibility. Removed in PR #3. */
+  async function linkIdentityAction(_provider: string): Promise<{ success: boolean; message: string }> {
+    throw new Error("Social identity linking is not available in this version.");
+  }
 
-        if (error) {
-          setErrorMessage(error.message);
-          return { success: false, message: error.message };
-        }
+  /** @deprecated Kept for settings compatibility. Removed in PR #3. */
+  async function unlinkIdentityAction(_provider: string): Promise<{ success: boolean; message: string }> {
+    throw new Error("Social identity unlinking is not available in this version.");
+  }
 
-        return { success: true, message: `Redirigiendo a ${providerConfig.label}...` };
-      }
-
-      // Production: redirect to backend OAuth endpoint
-      window.location.href = `/api/auth/oauth/${provider}`;
-      return { success: true, message: "Redirigiendo..." };
-    },
-    [client],
-  );
-
-  // @deprecated Kept for settings compatibility. Removed in PR #3.
-  const linkIdentity = useCallback(async (provider: string) => {
-    if (client) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const clientAuth = client.auth as any;
-      if (clientAuth.linkIdentity) {
-        await clientAuth.linkIdentity({ provider });
-        return { success: true, message: `Vinculando ${provider}...` };
-      }
-    }
-    throw new Error("linkIdentity is not available.");
-  }, [client]);
-
-  // @deprecated Kept for settings compatibility. Removed in PR #3.
-  const unlinkIdentity = useCallback(async (provider: string) => {
-    if (client) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const clientAuth = client.auth as any;
-      if (clientAuth.unlinkIdentity) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const identitiesResult = clientAuth.getUserIdentities ? await clientAuth.getUserIdentities() : { data: { identities: [] } };
-        const identities = identitiesResult.data.identities ?? [];
-        if (identities.length < 2) {
-          return { success: false, message: `Necesitás al menos dos identidades vinculadas para desvincular ${provider}.` };
-        }
-        const targetIdentity = identities.find(
-          (item: { provider: string }) => item.provider === provider,
-        );
-        if (targetIdentity) {
-          await clientAuth.unlinkIdentity(targetIdentity);
-          return { success: true, message: `${provider} desvinculada.` };
-        }
-      }
-    }
-    throw new Error("unlinkIdentity is not available.");
-  }, [client]);
+  const user = sessionData?.user ?? null;
+  const isAdmin = sessionData?.isAdmin ?? false;
 
   const value: AuthContextValue = {
-    errorMessage,
-    isAdmin: storeIsAdmin,
+    errorMessage: null,
+    isAdmin,
     isConfigured: true,
-    session: storeUser ? { user: storeUser } : null,
+    session: user ? { user } : null,
     signIn,
     signInWithOAuth,
     signOut,
     signUp,
-    status: storeStatus,
-    user: storeUser,
-    linkIdentity,
-    unlinkIdentity,
+    status,
+    user,
+    linkIdentity: linkIdentityAction,
+    unlinkIdentity: unlinkIdentityAction,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

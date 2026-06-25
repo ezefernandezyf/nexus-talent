@@ -1,8 +1,6 @@
 import { useMemo } from "react";
-import {
-  createHttpAnalysisRepository,
-  type AnalysisRepository,
-} from "../../../lib/repositories";
+import { createHttpAnalysisRepository } from "@/features/analysis/api/http-repository";
+import type { AnalysisRepository } from "@/features/analysis/api/repository";
 
 export type AnalysisPersistenceScope = "anonymous" | "authenticated";
 

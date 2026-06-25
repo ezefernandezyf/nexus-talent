@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { createHttpAnalysisRepository, type AnalysisRepository, type SavedJobAnalysis } from "../../../lib/repositories";
+import { createHttpAnalysisRepository } from "@/features/analysis/api/http-repository";
+import type { AnalysisRepository, SavedJobAnalysis } from "@/features/analysis/api/repository";
 import type { AnalysisPersistenceScope } from "./useAnalysisRepository";
 
 interface UseAnalysisByIdOptions {

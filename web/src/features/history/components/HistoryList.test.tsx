@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
-import { createSavedAnalysis } from "../../../test/factories/analysis";
+import { createSavedAnalysis } from "@/test/factories/analysis";
 import { HistoryList } from "./HistoryList";
 
 describe("HistoryList", () => {

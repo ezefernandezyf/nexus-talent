@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEventHandler } from "react";
-import { Button } from "../../../components/ui/Button";
-import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisMessageTone } from "../../../schemas/job-analysis";
+import { Button } from "@/shared/components/Button";
+import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisMessageTone } from "@/features/analysis/schemas/job-analysis";
 
 interface JobDescriptionFormProps {
   errorMessage?: string | null;
@@ -88,9 +88,10 @@ export function JobDescriptionForm({
                 setLocalError(null);
               }}
               placeholder="Pega aquí la Job Description completa... (Ctrl+V)"
-              className="min-h-112 w-full resize-none bg-transparent px-6 py-6 text-sm leading-7 text-on-surface placeholder:text-on-surface-variant focus:outline-none sm:min-h-128"
+                className="min-h-112 w-full resize-none bg-transparent px-6 py-6 text-sm leading-7 text-on-surface placeholder:text-on-surface-variant focus:outline-none sm:min-h-128"
               aria-invalid={Boolean(localError)}
               aria-describedby="job-description-error"
+              data-testid="job-description-input"
             />
 
             <div className="absolute bottom-4 right-4 flex items-center gap-2 opacity-30 transition-opacity group-focus-within:opacity-100">
@@ -153,7 +154,7 @@ export function JobDescriptionForm({
           {localError ?? errorMessage ?? " "}
         </p>
         <div className="flex flex-col items-stretch gap-1 sm:items-end">
-          <Button className="w-full px-10 py-4 font-headline text-sm tracking-wide sm:w-auto" type="submit" disabled={isPending}>
+          <Button className="w-full px-10 py-4 font-headline text-sm tracking-wide sm:w-auto" type="submit" data-testid="analysis-submit" disabled={isPending}>
             <span className="material-symbols-outlined text-[18px]" aria-hidden="true" style={{ fontVariationSettings: '"FILL" 1' }}>
               bolt
             </span>

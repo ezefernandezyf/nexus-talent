@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createHttpAnalysisRepository, type AnalysisRepository } from "../../../lib/repositories";
-import { getAnalysisHistoryQueryKey } from "../../analysis/hooks/useAnalysisHistory";
-import type { AnalysisPersistenceScope } from "../../analysis/hooks/useAnalysisRepository";
+import { createHttpAnalysisRepository } from "@/features/analysis/api/http-repository";
+import type { AnalysisRepository } from "@/features/analysis/api/repository";
+import { getAnalysisHistoryQueryKey } from "@/features/analysis/hooks/useAnalysisHistory";
+import type { AnalysisPersistenceScope } from "@/features/analysis/hooks/useAnalysisRepository";
 
 interface UseDeleteAnalysisOptions {
   repository?: AnalysisRepository;

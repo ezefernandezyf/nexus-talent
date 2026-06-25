@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { createAnalysisResult } from "../../../test/factories/analysis";
+import { createAnalysisResult } from "@/test/factories/analysis";
 import { AnalysisCard } from "./AnalysisCard";
 
 describe("AnalysisCard", () => {

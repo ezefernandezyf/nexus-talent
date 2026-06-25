@@ -1,124 +1,45 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 import { renderHook, waitFor } from "@testing-library/react";
-import type { Session, User } from "@supabase/supabase-js";
-import { describe, expect, it, vi } from "vitest";
-import { AuthProvider } from "../../auth";
-import { ThemeProvider } from "../../../lib/theme";
-import { createTestQueryClient } from "../../../test/mocks/query-client";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { AuthProvider } from "@/features/auth";
+import { useAuthStatus } from "@/features/auth/store/auth-status";
+import { ThemeProvider } from "@/core/theme";
+import { createTestQueryClient } from "@/test/mocks/query-client";
 import { useSettings } from "./useSettings";
 
-function createUser(email: string, identities: User["identities"] = []): User {
-  const now = new Date("2026-04-05T12:00:00.000Z").toISOString();
+// Shared mock axios instance
+const mockAxiosInstance = vi.hoisted(() => ({
+  get: vi.fn(),
+  post: vi.fn(),
+  interceptors: {
+    request: { use: vi.fn(), eject: vi.fn() },
+    response: { use: vi.fn(), eject: vi.fn() },
+  },
+}));
 
-  return {
-    aud: "authenticated",
-    app_metadata: {},
-    created_at: now,
-    email,
-    email_confirmed_at: now,
-    id: "user-1",
-    identities: [],
-    is_anonymous: false,
-    last_sign_in_at: now,
-    phone: "",
-    role: "authenticated",
-    updated_at: now,
-    identities,
-    user_metadata: {},
-  } as User;
-}
-
-function createSession(email: string, identities: User["identities"] = []): Session {
-  const user = createUser(email, identities);
-
-  return {
-    access_token: "session-token",
-    expires_at: Math.floor(Date.now() / 1000) + 3600,
-    expires_in: 3600,
-    provider_refresh_token: null,
-    provider_token: null,
-    refresh_token: "refresh-token",
-    token_type: "bearer",
-    user,
-  } as Session;
-}
-
-function createAuthClient(options: { session: Session | null }) {
-  let currentSession = options.session;
-  const listeners = new Set<(event: string, session: Session | null) => void>();
-
-  return {
-    auth: {
-      getSession: vi.fn(async () => ({ data: { session: currentSession }, error: null })),
-      getUserIdentities: vi.fn(async () => ({
-        data: {
-          identities: currentSession?.user.identities ?? [],
-        },
-        error: null,
-      })),
-      linkIdentity: vi.fn(async ({ provider }) => {
-        if (currentSession?.user) {
-          const identityId = `${provider}-identity`;
-          const nextIdentities = [
-            ...(currentSession.user.identities ?? []),
-            { id: identityId, identity_id: identityId, provider, user_id: currentSession.user.id },
-          ];
-
-          currentSession = {
-            ...currentSession,
-            user: {
-              ...currentSession.user,
-              identities: nextIdentities,
-            },
-          };
-
-          listeners.forEach((listener) => listener("SIGNED_IN", currentSession));
-        }
-
-        return { data: { provider, url: null }, error: null };
-      }),
-      onAuthStateChange: vi.fn((callback) => {
-        listeners.add(callback);
-
-        return {
-          data: {
-            subscription: {
-              unsubscribe: () => {
-                listeners.delete(callback);
-              },
-            },
-          },
-        };
-      }),
-      signInWithPassword: vi.fn(async () => ({ data: { session: currentSession, user: currentSession?.user ?? null }, error: null })),
-      signInWithOAuth: vi.fn(async () => ({ data: { provider: "github", url: null }, error: null })),
-      signOut: vi.fn(async () => ({ error: null })),
-      signUp: vi.fn(async () => ({ data: { session: currentSession, user: currentSession?.user ?? null }, error: null })),
-      unlinkIdentity: vi.fn(async (identity) => {
-        if (currentSession?.user) {
-          const nextIdentities = (currentSession.user.identities ?? []).filter((item) => item.provider !== identity.provider);
-
-          currentSession = {
-            ...currentSession,
-            user: {
-              ...currentSession.user,
-              identities: nextIdentities,
-            },
-          };
-
-          listeners.forEach((listener) => listener("SIGNED_IN", currentSession));
-        }
-
-        return { data: {}, error: null };
-      }),
-    },
-  };
-}
+vi.mock("axios", () => ({
+  default: {
+    create: vi.fn(() => mockAxiosInstance),
+    isAxiosError: vi.fn(() => false),
+  },
+}));
 
 describe("useSettings", () => {
+  afterEach(() => {
+    useAuthStatus.getState().setStatus("unknown");
+  });
+
   it("saves the profile through the repository and keeps the cache in sync", async () => {
     const queryClient = createTestQueryClient();
+
+    // Pre-seed the session cache as if already authenticated
+    queryClient.setQueryData(["auth", "session"], {
+      user: { id: "user-1", email: "analyst@nexustalent.dev", displayName: null },
+      isAdmin: false,
+    });
+    useAuthStatus.setState({ status: "authenticated" });
+
     const repository = {
       delete: vi.fn(async () => undefined),
       get: vi.fn(async () => ({
@@ -136,12 +57,11 @@ describe("useSettings", () => {
         updated_at: "2026-04-05T12:00:00.000Z",
       })),
     };
-    const client = createAuthClient({ session: createSession("analyst@nexustalent.dev") });
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
-          <AuthProvider client={client as never}>
+          <AuthProvider>
             <MemoryRouter>{children}</MemoryRouter>
           </AuthProvider>
         </ThemeProvider>
@@ -168,7 +88,17 @@ describe("useSettings", () => {
 
   it("deletes the profile and signs out the active session", async () => {
     const queryClient = createTestQueryClient();
-    const signOut = vi.fn(async () => ({ error: null }));
+
+    // Pre-seed the session cache as if already authenticated
+    queryClient.setQueryData(["auth", "session"], {
+      user: { id: "user-1", email: "analyst@nexustalent.dev", displayName: null },
+      isAdmin: false,
+    });
+    useAuthStatus.setState({ status: "authenticated" });
+
+    // Mock the logout POST so signOut() resolves
+    mockAxiosInstance.post.mockResolvedValue({ data: {} });
+
     const repository = {
       delete: vi.fn(async () => undefined),
       get: vi.fn(async () => null),
@@ -176,19 +106,11 @@ describe("useSettings", () => {
         throw new Error("not used");
       }),
     };
-    const client = createAuthClient({ session: createSession("analyst@nexustalent.dev") });
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
-          <AuthProvider
-            client={{
-              auth: {
-                ...client.auth,
-                signOut,
-              },
-            } as never}
-          >
+          <AuthProvider>
             <MemoryRouter>{children}</MemoryRouter>
           </AuthProvider>
         </ThemeProvider>
@@ -202,17 +124,19 @@ describe("useSettings", () => {
     await expect(result.current.deleteAccount()).resolves.toBeUndefined();
 
     expect(repository.delete).toHaveBeenCalledWith("user-1");
-    expect(signOut).toHaveBeenCalled();
+    expect(mockAxiosInstance.post).toHaveBeenCalledWith("/auth/logout");
   });
 
-  it("links and unlinks platform identities through auth helpers", async () => {
+  it("surfaces an error when trying to link or unlink identities (deprecated)", async () => {
     const queryClient = createTestQueryClient();
-    const client = createAuthClient({
-      session: createSession("analyst@nexustalent.dev", [
-        { id: "github-identity", identity_id: "github-identity", provider: "github", user_id: "user-1" },
-        { id: "google-identity", identity_id: "google-identity", provider: "google", user_id: "user-1" },
-      ]),
+
+    // Pre-seed the session cache as if already authenticated
+    queryClient.setQueryData(["auth", "session"], {
+      user: { id: "user-1", email: "analyst@nexustalent.dev", displayName: null },
+      isAdmin: false,
     });
+    useAuthStatus.setState({ status: "authenticated" });
+
     const repository = {
       delete: vi.fn(async () => undefined),
       get: vi.fn(async () => null),
@@ -224,7 +148,7 @@ describe("useSettings", () => {
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
-          <AuthProvider client={client as never}>
+          <AuthProvider>
             <MemoryRouter>{children}</MemoryRouter>
           </AuthProvider>
         </ThemeProvider>
@@ -234,29 +158,30 @@ describe("useSettings", () => {
     const { result } = renderHook(() => useSettings({ repository: repository as never }), { wrapper });
 
     await waitFor(() => expect(result.current.status).toBe("authenticated"));
-
     expect(result.current.identityLinkingAvailable).toBe(true);
 
-    await expect(result.current.connectAccount("google")).resolves.toMatchObject({
-      message: expect.stringMatching(/vinculando google/i),
-    });
-    expect(result.current.accountActionError).toBeNull();
-    expect(client.auth.linkIdentity).toHaveBeenCalledWith(expect.objectContaining({ provider: "google" }));
+    // linkIdentity now throws — identity linking is deprecated
+    await expect(result.current.connectAccount("google")).rejects.toThrow(
+      "Social identity linking is not available in this version.",
+    );
+    await waitFor(() => expect(result.current.accountActionError).toContain("Social identity linking"));
 
-    await expect(result.current.disconnectAccount("google")).resolves.toMatchObject({
-      message: expect.stringMatching(/google desvinculada\./i),
-    });
-    expect(result.current.accountActionError).toBeNull();
-    expect(client.auth.unlinkIdentity).toHaveBeenCalledWith(expect.objectContaining({ provider: "google" }));
+    // unlinkIdentity also throws (different error message)
+    await expect(result.current.disconnectAccount("google")).rejects.toThrow(
+      "Social identity unlinking is not available in this version.",
+    );
   });
 
-  it("surfaces a validation error when unlinking the last remaining identity", async () => {
+  it("surfaces an error when trying to unlink a single identity (deprecated)", async () => {
     const queryClient = createTestQueryClient();
-    const client = createAuthClient({
-      session: createSession("analyst@nexustalent.dev", [
-        { id: "github-identity", identity_id: "github-identity", provider: "github", user_id: "user-1" },
-      ]),
+
+    // Pre-seed the session cache as if already authenticated
+    queryClient.setQueryData(["auth", "session"], {
+      user: { id: "user-1", email: "analyst@nexustalent.dev", displayName: null },
+      isAdmin: false,
     });
+    useAuthStatus.setState({ status: "authenticated" });
+
     const repository = {
       delete: vi.fn(async () => undefined),
       get: vi.fn(async () => null),
@@ -268,7 +193,7 @@ describe("useSettings", () => {
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
-          <AuthProvider client={client as never}>
+          <AuthProvider>
             <MemoryRouter>{children}</MemoryRouter>
           </AuthProvider>
         </ThemeProvider>
@@ -279,12 +204,10 @@ describe("useSettings", () => {
 
     await waitFor(() => expect(result.current.status).toBe("authenticated"));
 
-    await expect(result.current.disconnectAccount("github")).resolves.toMatchObject({
-      success: false,
-      message: expect.stringMatching(/al menos dos identidades vinculadas/i),
-    });
-
-    await waitFor(() => expect(String(result.current.accountActionError)).toContain("al menos dos identidades vinculadas"));
-    expect(client.auth.unlinkIdentity).not.toHaveBeenCalled();
+    // unlinkIdentity throws immediately — identity linking is deprecated
+    await expect(result.current.disconnectAccount("github")).rejects.toThrow(
+      "Social identity unlinking is not available in this version.",
+    );
+    await waitFor(() => expect(String(result.current.accountActionError)).toContain("Social identity unlinking"));
   });
 });
