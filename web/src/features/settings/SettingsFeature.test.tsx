@@ -3,12 +3,12 @@ import { MemoryRouter } from "react-router-dom";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { AuthProvider } from "../auth";
-import { useAuthStatus } from "../auth/store/auth-status";
+import { AuthProvider } from "@/features/auth";
+import { useAuthStatus } from "@/features/auth/store/auth-status";
 import { createProfileRepository } from "./api/profile-repository";
-import { ThemeProvider } from "../../core/theme";
-import { createTestQueryClient } from "../../test/mocks/query-client";
-import { mockDownloadApis } from "../../test/mocks/browser";
+import { ThemeProvider } from "@/core/theme";
+import { createTestQueryClient } from "@/test/mocks/query-client";
+import { mockDownloadApis } from "@/test/mocks/browser";
 import { SettingsFeature } from "./SettingsFeature";
 
 // Shared mock axios instance

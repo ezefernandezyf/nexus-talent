@@ -3,8 +3,8 @@ import { MemoryRouter } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { HistoryPage } from "./HistoryPage";
-import { createTestQueryClient } from "../../../test/mocks/query-client";
-import { mockDownloadApis } from "../../../test/mocks/browser";
+import { createTestQueryClient } from "@/test/mocks/query-client";
+import { mockDownloadApis } from "@/test/mocks/browser";
 
 vi.mock("../../analysis/hooks/useAnalysisRepository", () => ({
   useAnalysisRepository: vi.fn(() => ({ repository: undefined, scope: "anonymous" })),

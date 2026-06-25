@@ -1,10 +1,10 @@
-import { FeaturePageShell, PageHeader } from "../../../components/ui";
-import { Button } from "../../../components/ui/Button";
-import { useAuth } from "../../auth";
-import { downloadTextFile } from "../../analysis/export";
+import { FeaturePageShell, PageHeader } from "@/shared/components";
+import { Button } from "@/shared/components/Button";
+import { useAuth } from "@/features/auth";
+import { downloadTextFile } from "@/features/analysis/export";
 import { SettingsFeature } from "..";
-import { buildSettingsExportPayload } from "../settings-export";
-import { useTheme } from "../../../core/theme";
+import { buildSettingsExportPayload } from "@/features/settings/settings-export";
+import { useTheme } from "@/core/theme";
 
 export function SettingsPage() {
   const { session, user, status } = useAuth();

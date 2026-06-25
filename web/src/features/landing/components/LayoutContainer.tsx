@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from "react";
-import { cn } from "../../../shared/utils/cn";
+import { cn } from "@/shared/utils/cn";
 
 export interface LayoutContainerProps extends HTMLAttributes<HTMLDivElement> {}
 

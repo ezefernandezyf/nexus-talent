@@ -1,4 +1,4 @@
-import { LoadingSkeleton } from "../../../components/ui";
+import { LoadingSkeleton } from "@/shared/components";
 
 export function HistoryLoadingState() {
   return (

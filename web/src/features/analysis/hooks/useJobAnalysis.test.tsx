@@ -1,9 +1,9 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { createAIOrchestratorError, AI_ERROR_CODES } from "../api/ai-errors";
-import { createJobAnalysisClient, type JobAnalysisClient } from "../api/ai-client";
-import type { GitHubClient } from "../api/github-client";
-import { createAnalysisRequest, createAnalysisRepository, createQueryClientWrapper } from "../../../test/factories/analysis";
+import { createAIOrchestratorError, AI_ERROR_CODES } from "@/features/analysis/api/ai-errors";
+import { createJobAnalysisClient, type JobAnalysisClient } from "@/features/analysis/api/ai-client";
+import type { GitHubClient } from "@/features/analysis/api/github-client";
+import { createAnalysisRequest, createAnalysisRepository, createQueryClientWrapper } from "@/test/factories/analysis";
 import { useJobAnalysis } from "./useJobAnalysis";
 
 function createDeferred<T>() {

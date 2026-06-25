@@ -3,7 +3,7 @@ import {
   JOB_ANALYSIS_RESULT_SCHEMA,
   type JobAnalysisResult,
   type JobAnalysisSkillLevel,
-} from "../schemas/job-analysis";
+} from "@/features/analysis/schemas/job-analysis";
 
 export { GROQ_JOB_ANALYSIS_JSON_SCHEMA };
 

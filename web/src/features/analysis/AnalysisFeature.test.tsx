@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { AnalysisFeature, StatePanel } from "./AnalysisFeature";
-import { createAnalysisResult } from "../../test/factories/analysis";
+import { createAnalysisResult } from "@/test/factories/analysis";
 
 const submitAnalysis = vi.fn();
 

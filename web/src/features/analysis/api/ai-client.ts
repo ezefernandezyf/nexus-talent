@@ -10,7 +10,7 @@ import {
   type JobAnalysisSkill,
   type JobAnalysisSkillGroup,
   type JobAnalysisVacancySummary,
-} from "../schemas/job-analysis";
+} from "@/features/analysis/schemas/job-analysis";
 import { normalizeJobAnalysisResponse } from "./mappers";
 import { createAIOrchestrator } from "./ai-orchestrator";
 import { createBackendProxyAdapter, type JobAnalysisPromptInput } from "./ai-provider";

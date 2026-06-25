@@ -1,4 +1,4 @@
-import { JOB_ANALYSIS_SKILL_LEVEL, type JobAnalysisSkillLevel } from "../../schemas/job-analysis";
+import { JOB_ANALYSIS_SKILL_LEVEL, type JobAnalysisSkillLevel } from "@/features/analysis/schemas/job-analysis";
 
 export interface RawJobAnalysisSkill {
   name?: unknown;

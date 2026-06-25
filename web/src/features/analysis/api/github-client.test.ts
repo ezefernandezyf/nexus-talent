@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { createGitHubClient, parseGitHubRepositoryReference } from "./github-client";
-import { createGitHubFetchResponse, createGitHubRepositoryApiPayload } from "../../../test/factories/github";
+import { createGitHubFetchResponse, createGitHubRepositoryApiPayload } from "@/test/factories/github";
 
 describe("github-client", () => {
   it("parses GitHub repository references", () => {

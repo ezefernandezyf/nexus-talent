@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "../utils/cn";
+import { cn } from "@/shared/utils/cn";
 
 type BadgeVariant = "info" | "success" | "warning" | "error";
 type BadgeSize = "sm" | "md";

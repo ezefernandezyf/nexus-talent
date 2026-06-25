@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createJobAnalysisClient, jobAnalysisClient } from "./ai-client";
 import { AI_ERROR_CODES, createAIOrchestratorError } from "./ai-errors";
-import { JOB_ANALYSIS_MESSAGE_TONE } from "../schemas/job-analysis";
+import { JOB_ANALYSIS_MESSAGE_TONE } from "@/features/analysis/schemas/job-analysis";
 
 describe("ai-client", () => {
   it("normalizes dirty transport payloads before validation", async () => {

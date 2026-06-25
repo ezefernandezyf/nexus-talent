@@ -1,13 +1,13 @@
 import { vi } from "vitest";
-import type { AnalysisRepository } from "../../features/analysis/api/repository";
+import type { AnalysisRepository } from "@/features/analysis/api/repository";
 import {
   JOB_ANALYSIS_MESSAGE_TONE,
   JOB_ANALYSIS_SKILL_LEVEL,
   type JobAnalysisRequest,
   type JobAnalysisResult,
   type SavedJobAnalysis,
-} from "../../features/analysis/schemas/job-analysis";
-import { createQueryClientWrapper } from "../mocks/query-client";
+} from "@/features/analysis/schemas/job-analysis";
+import { createQueryClientWrapper } from "@/test/mocks/query-client";
 
 export function createAnalysisRequest(overrides: Partial<JobAnalysisRequest> = {}): JobAnalysisRequest {
   return {
@@ -118,4 +118,4 @@ export function createAnalysisRepository(options: CreateAnalysisRepositoryOption
   };
 }
 
-export { createQueryClientWrapper } from "../mocks/query-client";
+export { createQueryClientWrapper } from "@/test/mocks/query-client";

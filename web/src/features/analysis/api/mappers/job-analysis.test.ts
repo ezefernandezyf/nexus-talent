@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { JOB_ANALYSIS_SKILL_LEVEL } from "../../schemas/job-analysis";
+import { JOB_ANALYSIS_SKILL_LEVEL } from "@/features/analysis/schemas/job-analysis";
 import { normalizeJobAnalysisResponse } from "./job-analysis";
 
 describe("normalizeJobAnalysisResponse", () => {

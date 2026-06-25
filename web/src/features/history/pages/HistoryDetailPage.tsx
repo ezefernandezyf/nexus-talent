@@ -1,17 +1,17 @@
 import type { ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
-import { FeaturePageShell, PageHeader } from "../../../components/ui";
-import { AnalysisResultView } from "../../analysis/components/AnalysisResultView";
-import { useAnalysisRepository } from "../../analysis/hooks/useAnalysisRepository";
-import { useAnalysisById } from "../../analysis/hooks/useAnalysisById";
-import { HistoryDetailEditor } from "../components";
-import { useUpdateAnalysis } from "../hooks";
+import { FeaturePageShell, PageHeader } from "@/shared/components";
+import { AnalysisResultView } from "@/features/analysis/components/AnalysisResultView";
+import { useAnalysisRepository } from "@/features/analysis/hooks/useAnalysisRepository";
+import { useAnalysisById } from "@/features/analysis/hooks/useAnalysisById";
+import { HistoryDetailEditor } from "@/features/history/components";
+import { useUpdateAnalysis } from "@/features/history/hooks";
 import {
   formatHistoryCardDate,
   getHistoryCompanyLabel,
   getHistoryRoleLabel,
   getHistoryUid,
-} from "../history-formatters";
+} from "@/features/history/history-formatters";
 
 function DetailSection({ children, title }: { children: ReactNode; title: string }) {
   return (

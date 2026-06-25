@@ -85,11 +85,11 @@ Chain strategy: pending
 
 ## Phase 5: Path Aliases + Docs (~250 lines)
 
-- [ ] 5.1 Update `vite.config.ts` — add `resolve.alias` for `@/`, `@/core`, `@/shared`, `@/features`
-- [ ] 5.2 Update `tsconfig.json` — add `paths` mapping matching aliases
-- [ ] 5.3 Replace all relative `../../` imports with `@/features/`, `@/shared/`, `@/core/` aliases
-- [ ] 5.4 Verify `pnpm --filter @nexus-talent/web build` succeeds
-- [ ] 5.5 Write `web/ARCHITECTURE.md` — folder conventions, path alias reference, screaming architecture guide
+- [x] 5.1 Update `vite.config.ts` — add `resolve.alias` for `@/`, `@/core`, `@/shared`, `@/features`, `@/test`
+- [x] 5.2 Update `tsconfig.app.json` — add `paths` mapping matching aliases
+- [x] 5.3 Replace all relative `../../` imports with `@/features/`, `@/shared/`, `@/core/` aliases
+- [x] 5.4 Verify `pnpm --filter @nexus-talent/web build` succeeds
+- [x] 5.5 Write `web/ARCHITECTURE.md` — folder conventions, path alias reference, screaming architecture guide
 
 ## Phase 6: E2E + Security + Logging (~600 lines)
 

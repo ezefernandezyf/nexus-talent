@@ -1,1 +1,1 @@
-export * from "../../shared/components/motion";
+export * from "@/shared/components/motion";

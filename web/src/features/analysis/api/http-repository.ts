@@ -1,4 +1,4 @@
-import { apiClient } from "../../../core/api-client";
+import { apiClient } from "@/core/api-client";
 import type {
   AnalysisPage,
   AnalysisPageResult,
@@ -6,7 +6,7 @@ import type {
   AnalysisUpdatePatch,
   SavedJobAnalysis,
 } from "./repository";
-import type { JobAnalysisResult } from "../schemas/job-analysis";
+import type { JobAnalysisResult } from "@/features/analysis/schemas/job-analysis";
 
 const BASE_URL = "/analyses";
 

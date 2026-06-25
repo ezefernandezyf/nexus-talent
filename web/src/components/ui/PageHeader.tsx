@@ -1,1 +1,1 @@
-export * from "../../shared/components/PageHeader";
+export * from "@/shared/components/PageHeader";

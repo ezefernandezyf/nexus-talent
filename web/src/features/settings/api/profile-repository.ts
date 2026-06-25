@@ -1,4 +1,4 @@
-import { apiClient } from "../../../core/api-client";
+import { apiClient } from "@/core/api-client";
 import {
   PROFILE_SAVE_INPUT_SCHEMA,
   type ProfileRecord,

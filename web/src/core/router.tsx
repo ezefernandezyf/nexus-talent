@@ -1,18 +1,18 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { ProtectedRoute, PublicAuthRoute } from "../features/auth";
-import { LandingPage } from "../features/landing/pages/LandingPage";
-import PrivacyPage from "../features/landing/pages/PrivacyPage";
-import NotFoundPage from "../shared/pages/NotFoundPage";
+import { ProtectedRoute, PublicAuthRoute } from "@/features/auth";
+import { LandingPage } from "@/features/landing/pages/LandingPage";
+import PrivacyPage from "@/features/landing/pages/PrivacyPage";
+import NotFoundPage from "@/shared/pages/NotFoundPage";
 
-const AppLayout = lazy(() => import("../shared/layouts/AppLayout").then((module) => ({ default: module.AppLayout })));
-const AnalysisPage = lazy(() => import("../features/analysis/pages/AnalysisPage").then((module) => ({ default: module.AnalysisPage })));
-const HistoryDetailPage = lazy(() => import("../features/history/pages/HistoryDetailPage").then((module) => ({ default: module.HistoryDetailPage })));
-const HistoryPage = lazy(() => import("../features/history/pages/HistoryPage").then((module) => ({ default: module.HistoryPage })));
-const SettingsPage = lazy(() => import("../features/settings/pages/SettingsPage").then((module) => ({ default: module.SettingsPage })));
-const AuthCallbackPage = lazy(() => import("../features/auth/pages/AuthCallbackPage"));
-const LoginPage = lazy(() => import("../features/auth/pages/LoginPage"));
-const SignupPage = lazy(() => import("../features/auth/pages/SignupPage"));
+const AppLayout = lazy(() => import("@/shared/layouts/AppLayout").then((module) => ({ default: module.AppLayout })));
+const AnalysisPage = lazy(() => import("@/features/analysis/pages/AnalysisPage").then((module) => ({ default: module.AnalysisPage })));
+const HistoryDetailPage = lazy(() => import("@/features/history/pages/HistoryDetailPage").then((module) => ({ default: module.HistoryDetailPage })));
+const HistoryPage = lazy(() => import("@/features/history/pages/HistoryPage").then((module) => ({ default: module.HistoryPage })));
+const SettingsPage = lazy(() => import("@/features/settings/pages/SettingsPage").then((module) => ({ default: module.SettingsPage })));
+const AuthCallbackPage = lazy(() => import("@/features/auth/pages/AuthCallbackPage"));
+const LoginPage = lazy(() => import("@/features/auth/pages/LoginPage"));
+const SignupPage = lazy(() => import("@/features/auth/pages/SignupPage"));
 
 function RouteLoadingFallback() {
   return (

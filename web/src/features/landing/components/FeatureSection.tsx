@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { LandingIcon } from "./LandingIcon";
-import { fadeUpVariants, scaleInVariants } from "../../../components/ui/motion";
+import { fadeUpVariants, scaleInVariants } from "@/shared/components/motion";
 
 interface FeatureCardProps {
   className?: string;

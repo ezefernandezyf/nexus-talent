@@ -2,9 +2,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AuthProvider } from "../AuthProvider";
+import { AuthProvider } from "@/features/auth/AuthProvider";
 import { AuthShell } from "./AuthShell";
-import { createTestQueryClient } from "../../../test/mocks/query-client";
+import { createTestQueryClient } from "@/test/mocks/query-client";
 
 const mockAxiosInstance = vi.hoisted(() => ({
   get: vi.fn(),

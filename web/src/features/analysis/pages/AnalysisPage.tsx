@@ -1,7 +1,7 @@
 import { AnalysisFeature } from "..";
-import { useAnalysisById } from "../hooks/useAnalysisById";
-import { useAnalysisRepository } from "../hooks/useAnalysisRepository";
-import { FeaturePageShell, PageHeader } from "../../../components/ui";
+import { useAnalysisById } from "@/features/analysis/hooks/useAnalysisById";
+import { useAnalysisRepository } from "@/features/analysis/hooks/useAnalysisRepository";
+import { FeaturePageShell, PageHeader } from "@/shared/components";
 import { useLocation, useSearchParams } from "react-router-dom";
 
 type AnalysisReworkState = {

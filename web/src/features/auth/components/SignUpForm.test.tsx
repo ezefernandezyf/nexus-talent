@@ -3,12 +3,12 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { AuthProvider } from "../AuthProvider";
-import { ProtectedRoute } from "../ProtectedRoute";
-import { PublicAuthRoute } from "../PublicAuthRoute";
+import { AuthProvider } from "@/features/auth/AuthProvider";
+import { ProtectedRoute } from "@/features/auth/ProtectedRoute";
+import { PublicAuthRoute } from "@/features/auth/PublicAuthRoute";
 import { SignUpForm } from "./SignUpForm";
-import { useAuthStatus } from "../store/auth-status";
-import { createTestQueryClient } from "../../../test/mocks/query-client";
+import { useAuthStatus } from "@/features/auth/store/auth-status";
+import { createTestQueryClient } from "@/test/mocks/query-client";
 
 const mockAxiosInstance = vi.hoisted(() => ({
   get: vi.fn(),

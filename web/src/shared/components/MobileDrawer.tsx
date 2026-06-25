@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import type { ReactNode } from "react";
-import { cn } from "../utils/cn";
+import { cn } from "@/shared/utils/cn";
 import { panelSlideVariants } from "./motion";
 
 export interface MobileDrawerItem {

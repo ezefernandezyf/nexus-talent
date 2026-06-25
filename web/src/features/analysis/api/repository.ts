@@ -1,4 +1,4 @@
-import type { JobAnalysisResult, SavedJobAnalysis } from "../schemas/job-analysis";
+import type { JobAnalysisResult, SavedJobAnalysis } from "@/features/analysis/schemas/job-analysis";
 
 export const ANALYSIS_HISTORY_STORAGE_KEY = "nexus-talent:analysis-history:v1";
 

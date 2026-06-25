@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { Footer } from "../../features/landing/components/Footer";
-import { MobileDrawer } from "../components/MobileDrawer";
-import { MobileMenuButton } from "../components/MobileMenuButton";
-import { LogoutButton, AUTH_STATUS, useAuth } from "../../features/auth";
-import { useAnalysisHistory } from "../../features/analysis";
-import { getHistoryCardTitle } from "../../features/history/history-formatters";
-import { ThemeProvider, useTheme } from "../../core/theme";
+import { Footer } from "@/features/landing/components/Footer";
+import { MobileDrawer } from "@/shared/components/MobileDrawer";
+import { MobileMenuButton } from "@/shared/components/MobileMenuButton";
+import { LogoutButton, AUTH_STATUS, useAuth } from "@/features/auth";
+import { useAnalysisHistory } from "@/features/analysis";
+import { getHistoryCardTitle } from "@/features/history/history-formatters";
+import { ThemeProvider, useTheme } from "@/core/theme";
 
 type AppNavItem = {
   label: string;

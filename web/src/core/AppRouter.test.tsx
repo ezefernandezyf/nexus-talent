@@ -3,10 +3,10 @@ import { MemoryRouter } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import axios from "axios";
-import { ANALYSIS_HISTORY_STORAGE_KEY } from "../features/analysis/api/repository";
-import { useAuthStatus } from "../features/auth/store/auth-status";
-import { AuthProvider } from "../features/auth";
-import { createTestQueryClient } from "../test/mocks/query-client";
+import { ANALYSIS_HISTORY_STORAGE_KEY } from "@/features/analysis/api/repository";
+import { useAuthStatus } from "@/features/auth/store/auth-status";
+import { AuthProvider } from "@/features/auth";
+import { createTestQueryClient } from "@/test/mocks/query-client";
 import { AppRouter } from "./router";
 
 // ---------------------------------------------------------------------------
