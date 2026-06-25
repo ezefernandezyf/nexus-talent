@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { createJobAnalysisClient, type JobAnalysisClient } from "../api/ai-client";
-import { isAIOrchestratorError } from "../api/ai-errors";
-import { createGitHubClient, type GitHubClient } from "../api/github-client";
-import { createHttpAnalysisRepository } from "../api/http-repository";
-import type { AnalysisRepository } from "../api/repository";
+import { createJobAnalysisClient, type JobAnalysisClient } from "@/features/analysis/api/ai-client";
+import { isAIOrchestratorError } from "@/features/analysis/api/ai-errors";
+import { createGitHubClient, type GitHubClient } from "@/features/analysis/api/github-client";
+import { createHttpAnalysisRepository } from "@/features/analysis/api/http-repository";
+import type { AnalysisRepository } from "@/features/analysis/api/repository";
 import {
   JOB_ANALYSIS_REQUEST_SCHEMA,
   type JobAnalysisRequest,
   type JobAnalysisResult,
-} from "../schemas/job-analysis";
-import { mapGitHubRepositoryToStack } from "../utils/github-stack-mapper";
+} from "@/features/analysis/schemas/job-analysis";
+import { mapGitHubRepositoryToStack } from "@/features/analysis/utils/github-stack-mapper";
 import { getAnalysisHistoryQueryKey } from "./useAnalysisHistory";
 import type { AnalysisPersistenceScope } from "./useAnalysisRepository";
 

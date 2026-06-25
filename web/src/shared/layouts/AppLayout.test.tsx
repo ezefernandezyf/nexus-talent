@@ -4,12 +4,12 @@ import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import axios from "axios";
-import { ANALYSIS_HISTORY_STORAGE_KEY } from "../../features/analysis/api/repository";
-import { useAuthStatus } from "../../features/auth/store/auth-status";
-import { createSavedAnalysis } from "../../test/factories/analysis";
+import { ANALYSIS_HISTORY_STORAGE_KEY } from "@/features/analysis/api/repository";
+import { useAuthStatus } from "@/features/auth/store/auth-status";
+import { createSavedAnalysis } from "@/test/factories/analysis";
 import { AppLayout } from "./AppLayout";
-import { AuthProvider } from "../../features/auth";
-import { createTestQueryClient } from "../../test/mocks/query-client";
+import { AuthProvider } from "@/features/auth";
+import { createTestQueryClient } from "@/test/mocks/query-client";
 
 // ---------------------------------------------------------------------------
 // Axios mock — hooks now use HTTP repo instead of localStorage

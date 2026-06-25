@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { LandingIcon } from "./LandingIcon";
-import { fadeUpVariants, scaleInVariants } from "../../../components/ui/motion";
+import { fadeUpVariants, scaleInVariants } from "@/shared/components/motion";
 
 export function HeroSection() {
   const prefersReducedMotion = useReducedMotion();

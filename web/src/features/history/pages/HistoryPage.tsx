@@ -1,11 +1,11 @@
 import { useCallback } from "react";
 import { Link } from "react-router-dom";
-import { useAnalysisHistory } from "../../analysis";
+import { useAnalysisHistory } from "@/features/analysis";
 import { HistoryFeature } from "..";
-import { buildHistoryExportPayload } from "../history-export";
-import { useAnalysisRepository } from "../../analysis/hooks/useAnalysisRepository";
-import { FeaturePageShell, PageHeader } from "../../../components/ui";
-import { downloadTextFile } from "../../analysis/export";
+import { buildHistoryExportPayload } from "@/features/history/history-export";
+import { useAnalysisRepository } from "@/features/analysis/hooks/useAnalysisRepository";
+import { FeaturePageShell, PageHeader } from "@/shared/components";
+import { downloadTextFile } from "@/features/analysis/export";
 
 export function HistoryPage() {
   const { repository, scope } = useAnalysisRepository();

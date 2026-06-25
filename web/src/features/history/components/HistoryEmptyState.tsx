@@ -1,4 +1,4 @@
-import { EmptyState } from "../../../components/ui";
+import { EmptyState } from "@/shared/components";
 
 interface HistoryEmptyStateProps {
   analysisHref: string;

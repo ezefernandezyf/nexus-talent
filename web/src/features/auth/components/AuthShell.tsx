@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { Card } from "../../../components/ui/Card";
-import { useAuth } from "../hooks/useAuth";
+import { Card } from "@/shared/components/Card";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 const AUTH_SHELL_COPY = {
   "sign-in": {

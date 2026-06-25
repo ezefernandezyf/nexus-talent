@@ -1,1 +1,1 @@
-export * from "../../shared/components/Hero";
+export * from "@/shared/components/Hero";

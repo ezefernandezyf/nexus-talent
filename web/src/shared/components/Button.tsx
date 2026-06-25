@@ -1,5 +1,5 @@
 import { forwardRef, type ButtonHTMLAttributes } from "react";
-import { cn } from "../utils/cn";
+import { cn } from "@/shared/utils/cn";
 
 type ButtonVariant = "primary" | "secondary" | "tertiary";
 

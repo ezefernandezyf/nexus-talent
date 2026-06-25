@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react";
-import { cn } from "../utils/cn";
+import { cn } from "@/shared/utils/cn";
 
 interface FeaturePageShellProps extends PropsWithChildren {
   className?: string;

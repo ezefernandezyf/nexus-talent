@@ -1,1 +1,1 @@
-export * from "../../shared/components/MobileDrawer";
+export * from "@/shared/components/MobileDrawer";

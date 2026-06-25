@@ -6,7 +6,7 @@ import { AuthProvider } from "./AuthProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { PublicAuthRoute } from "./PublicAuthRoute";
 import { useAuthStatus } from "./store/auth-status";
-import { createTestQueryClient } from "../../test/mocks/query-client";
+import { createTestQueryClient } from "@/test/mocks/query-client";
 
 const mockAxiosInstance = vi.hoisted(() => ({
   get: vi.fn(),

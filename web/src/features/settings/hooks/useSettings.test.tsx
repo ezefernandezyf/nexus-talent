@@ -2,10 +2,10 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { AuthProvider } from "../../auth";
-import { useAuthStatus } from "../../auth/store/auth-status";
-import { ThemeProvider } from "../../../core/theme";
-import { createTestQueryClient } from "../../../test/mocks/query-client";
+import { AuthProvider } from "@/features/auth";
+import { useAuthStatus } from "@/features/auth/store/auth-status";
+import { ThemeProvider } from "@/core/theme";
+import { createTestQueryClient } from "@/test/mocks/query-client";
 import { useSettings } from "./useSettings";
 
 // Shared mock axios instance

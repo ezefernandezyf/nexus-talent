@@ -3,8 +3,8 @@ import { MemoryRouter } from "react-router-dom";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import type { AnalysisRepository } from "../../features/analysis/api/repository";
-import type { SavedJobAnalysis } from "../analysis/schemas/job-analysis";
+import type { AnalysisRepository } from "@/features/analysis/api/repository";
+import type { SavedJobAnalysis } from "@/features/analysis/schemas/job-analysis";
 import { HistoryFeature } from "./HistoryFeature";
 
 function createWrapper(queryClient: QueryClient) {

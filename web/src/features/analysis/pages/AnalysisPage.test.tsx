@@ -3,7 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { AnalysisPage } from "./AnalysisPage";
-import { createTestQueryClient } from "../../../test/mocks/query-client";
+import { createTestQueryClient } from "@/test/mocks/query-client";
 
 vi.mock("../../analysis/hooks/useAnalysisById", () => ({
   useAnalysisById: vi.fn(() => ({

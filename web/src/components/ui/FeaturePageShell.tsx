@@ -1,1 +1,1 @@
-export * from "../../shared/components/FeaturePageShell";
+export * from "@/shared/components/FeaturePageShell";

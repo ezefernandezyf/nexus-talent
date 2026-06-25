@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { mapGitHubRepositoryToStack } from "./github-stack-mapper";
-import { createGitHubRepositoryMetadata } from "../../../test/factories/github";
+import { createGitHubRepositoryMetadata } from "@/test/factories/github";
 
 describe("mapGitHubRepositoryToStack", () => {
   it("extracts stack signals from repository metadata", () => {

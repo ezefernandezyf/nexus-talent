@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { LandingIcon } from "./LandingIcon";
-import { fadeUpVariants } from "../../../components/ui/motion";
+import { fadeUpVariants } from "@/shared/components/motion";
 
 export function CTASection() {
   const prefersReducedMotion = useReducedMotion();

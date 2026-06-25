@@ -3,8 +3,8 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createSavedAnalysis } from "../../../test/factories/analysis";
-import { createTestQueryClient } from "../../../test/mocks/query-client";
+import { createSavedAnalysis } from "@/test/factories/analysis";
+import { createTestQueryClient } from "@/test/mocks/query-client";
 import { HistoryDetailPage } from "./HistoryDetailPage";
 
 function createRepository({ shouldFailUpdate = false } = {}) {

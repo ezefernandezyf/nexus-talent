@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { createBackendProxyAdapter } from "./ai-provider";
 import { AI_ERROR_CODES } from "./ai-errors";
-import { JOB_ANALYSIS_MESSAGE_TONE } from "../schemas/job-analysis";
+import { JOB_ANALYSIS_MESSAGE_TONE } from "@/features/analysis/schemas/job-analysis";
 
 describe("createBackendProxyAdapter", () => {
   it("exposes the backend proxy as the concrete provider identity", () => {

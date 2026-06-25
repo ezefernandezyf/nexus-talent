@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button } from "../../../components/ui/Button";
-import { useAuth } from "../hooks/useAuth";
+import { Button } from "@/shared/components/Button";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 interface LogoutButtonProps {
   className?: string;

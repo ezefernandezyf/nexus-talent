@@ -1,4 +1,4 @@
-import { apiClient } from "../../../core/api-client";
+import { apiClient } from "@/core/api-client";
 import {
   APP_SETTINGS_INPUT_SCHEMA,
   createDefaultSettings,

@@ -1,9 +1,9 @@
-import { Button } from "../../../components/ui/Button";
-import { Input } from "../../../components/ui/Input";
-import { useAuth } from "../hooks/useAuth";
+import { Button } from "@/shared/components/Button";
+import { Input } from "@/shared/components/Input";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginFormValues } from "../schemas/auth";
+import { loginSchema, type LoginFormValues } from "@/features/auth/schemas/auth";
 import { useState } from "react";
 
 export function SignInForm() {

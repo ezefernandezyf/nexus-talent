@@ -1,3 +1,4 @@
+import { resolve } from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -54,6 +55,15 @@ function ssrPlugin(): Plugin {
 }
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "src"),
+      "@/core": resolve(__dirname, "src/core"),
+      "@/shared": resolve(__dirname, "src/shared"),
+      "@/features": resolve(__dirname, "src/features"),
+      "@/test": resolve(__dirname, "src/test"),
+    },
+  },
   plugins: [react(), tailwindcss(), ssrPlugin()],
   server: {
     proxy: {

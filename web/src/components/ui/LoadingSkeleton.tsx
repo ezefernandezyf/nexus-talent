@@ -1,1 +1,1 @@
-export * from "../../shared/components/LoadingSkeleton";
+export * from "@/shared/components/LoadingSkeleton";

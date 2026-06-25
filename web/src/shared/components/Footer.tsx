@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "react";
 import { Link } from "react-router-dom";
-import { cn } from "../utils/cn";
+import { cn } from "@/shared/utils/cn";
 
 export interface FooterProps extends HTMLAttributes<HTMLElement> {}
 

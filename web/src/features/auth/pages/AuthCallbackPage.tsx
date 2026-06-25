@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { Link, Navigate, useSearchParams } from "react-router-dom";
-import { Card } from "../../../components/ui/Card";
-import { AUTH_STATUS } from "../store/auth-status";
-import { useAuth } from "../hooks/useAuth";
-import { useSession } from "../api/useSession";
+import { Card } from "@/shared/components/Card";
+import { AUTH_STATUS } from "@/features/auth/store/auth-status";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useSession } from "@/features/auth/api/useSession";
 
 function getCallbackErrorMessage(searchParams: URLSearchParams) {
   const queryError = searchParams.get("error_description") ?? searchParams.get("error");

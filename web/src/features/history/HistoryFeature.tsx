@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
-import type { AnalysisRepository } from "../../features/analysis/api/repository";
-import { useAnalysisHistory } from "../analysis";
+import type { AnalysisRepository } from "@/features/analysis/api/repository";
+import { useAnalysisHistory } from "@/features/analysis";
 import { HistoryEmptyState, HistoryList, HistoryLoadingState } from "./components";
 import { useDeleteAnalysis } from "./hooks";
-import type { AnalysisPersistenceScope } from "../analysis/hooks/useAnalysisRepository";
+import type { AnalysisPersistenceScope } from "@/features/analysis/hooks/useAnalysisRepository";
 
 interface HistoryFeatureProps {
   analysisHref?: string;

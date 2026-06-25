@@ -1,1 +1,1 @@
-export * from "../../shared/components/MobileMenuButton";
+export * from "@/shared/components/MobileMenuButton";

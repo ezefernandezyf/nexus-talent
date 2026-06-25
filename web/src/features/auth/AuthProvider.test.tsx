@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthProvider } from "./AuthProvider";
 import { useAuth } from "./hooks/useAuth";
 import { useAuthStatus } from "./store/auth-status";
-import { createTestQueryClient } from "../../test/mocks/query-client";
+import { createTestQueryClient } from "@/test/mocks/query-client";
 
 function AuthProbe() {
   const { isAdmin, signIn, signInWithOAuth, signOut, signUp, status, user } = useAuth();

@@ -1,6 +1,6 @@
-import type { AuthUser } from "../auth/api/useSession";
+import type { AuthUser } from "@/features/auth/api/useSession";
 import { getOAuthProviderConfig, type OAuthProviderKey } from "./api/oauth-config";
-import type { ThemeMode } from "../../core/theme";
+import type { ThemeMode } from "@/core/theme";
 
 export type { OAuthProviderKey };
 export { getOAuthProviderConfig };

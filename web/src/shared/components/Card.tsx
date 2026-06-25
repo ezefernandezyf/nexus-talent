@@ -1,5 +1,5 @@
 import type { HTMLAttributes, PropsWithChildren } from "react";
-import { cn } from "../utils/cn";
+import { cn } from "@/shared/utils/cn";
 
 interface CardProps extends PropsWithChildren<HTMLAttributes<HTMLDivElement>> {
   tone?: "surface" | "low" | "lowest";

@@ -4,7 +4,7 @@ import {
   isAIOrchestratorError,
   type AIErrorCode,
 } from "./ai-errors";
-import type { JobAnalysisInput, JobAnalysisMessageTone } from "../schemas/job-analysis";
+import type { JobAnalysisInput, JobAnalysisMessageTone } from "@/features/analysis/schemas/job-analysis";
 
 // ── Constants ──────────────────────────────────────────────────
 

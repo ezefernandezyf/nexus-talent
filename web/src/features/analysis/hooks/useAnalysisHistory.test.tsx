@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { createAnalysisRepository, createQueryClientWrapper, createSavedAnalysis } from "../../../test/factories/analysis";
+import { createAnalysisRepository, createQueryClientWrapper, createSavedAnalysis } from "@/test/factories/analysis";
 import { useAnalysisHistory } from "./useAnalysisHistory";
 
 describe("useAnalysisHistory", () => {

@@ -1,1 +1,1 @@
-export * from "../../shared/components/Card";
+export * from "@/shared/components/Card";
