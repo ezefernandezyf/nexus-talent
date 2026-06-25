@@ -1,8 +1,8 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { createAIOrchestratorError, AI_ERROR_CODES } from "../../../lib/ai-errors";
-import { createJobAnalysisClient, type JobAnalysisClient } from "../../../lib/ai-client";
-import { type GitHubClient } from "../../../lib/github-client";
+import { createAIOrchestratorError, AI_ERROR_CODES } from "../api/ai-errors";
+import { createJobAnalysisClient, type JobAnalysisClient } from "../api/ai-client";
+import type { GitHubClient } from "../api/github-client";
 import { createAnalysisRequest, createAnalysisRepository, createQueryClientWrapper } from "../../../test/factories/analysis";
 import { useJobAnalysis } from "./useJobAnalysis";
 

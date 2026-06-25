@@ -1,44 +1,64 @@
 # Skill Registry — Nexus Talent
 
 > Auto-generated. Source of truth: each skill's `SKILL.md` frontmatter.
-> Last updated: 2026-06-17
+> Last updated: 2026-06-25 (init refresh)
 
-## Project Skills (Local — take priority over global)
+## Registry Contract
 
-| Skill | Trigger | Path |
-|-------|---------|------|
-| **frontend-design** | Building web components, pages, or applications with high design quality. Avoids generic AI aesthetics. | `skills/frontend-design/SKILL.md` |
-| **react-19** | Writing React components — no useMemo/useCallback, React Compiler patterns. | `skills/react-19/SKILL.md` |
-| **tailwind-4** | Styling with Tailwind — `cn()`, theme variables, no `var()` in className. | `skills/tailwind-4/SKILL.md` |
-| **typescript** | Writing TypeScript code — strict types, interfaces, generics, `as const`. | `skills/typescript/SKILL.md` |
-| **zod-4** | Using Zod for validation — breaking changes from v3, Zod 4 patterns. | `skills/zod-4/SKILL.md` |
+- Subagents receive **exact SKILL.md paths** and read the full source of truth.
+- Skills are indexed, not summarized. No inline rules injection.
+- Project-level skills take priority over global skills with the same name.
 
-## System Skills (Global)
+## Project Skills (Local)
 
-| Skill | Trigger | Path |
-|-------|---------|------|
-| **branch-pr** | Creating, opening, or preparing PRs for review. | `C:\Users\Alumno\.config\opencode\skills\branch-pr\SKILL.md` |
-| **chained-pr** | PRs over 400 lines, stacked PRs, review slices. | `C:\Users\Alumno\.config\opencode\skills\chained-pr\SKILL.md` |
-| **cognitive-doc-design** | Writing guides, READMEs, RFCs, onboarding, architecture, or review-facing docs. | `C:\Users\Alumno\.config\opencode\skills\cognitive-doc-design\SKILL.md` |
-| **comment-writer** | PR feedback, issue replies, reviews, Slack messages, or GitHub comments. | `C:\Users\Alumno\.config\opencode\skills\comment-writer\SKILL.md` |
-| **go-testing** | Go tests, test coverage, Bubbletea teatest, golden files. | `C:\Users\Alumno\.config\opencode\skills\go-testing\SKILL.md` |
-| **issue-creation** | Creating GitHub issues, bug reports, or feature requests. | `C:\Users\Alumno\.config\opencode\skills\issue-creation\SKILL.md` |
-| **judgment-day** | Adversarial dual review, blind code audit. | `C:\Users\Alumno\.config\opencode\skills\judgment-day\SKILL.md` |
-| **sdd-apply** | Implement SDD tasks from specs and design. | `C:\Users\Alumno\.config\opencode\skills\sdd-apply\SKILL.md` |
-| **sdd-archive** | Archive a completed SDD change by syncing delta specs. | `C:\Users\Alumno\.config\opencode\skills\sdd-archive\SKILL.md` |
-| **sdd-design** | Create SDD technical design and architecture approach. | `C:\Users\Alumno\.config\opencode\skills\sdd-design\SKILL.md` |
-| **sdd-explore** | Explore SDD ideas before committing to a change. | `C:\Users\Alumno\.config\opencode\skills\sdd-explore\SKILL.md` |
-| **sdd-init** | Initialize SDD context, testing capabilities, registry, and persistence. | `C:\Users\Alumno\.config\opencode\skills\sdd-init\SKILL.md` |
-| **sdd-onboard** | Walk users through the SDD workflow on the real codebase. | `C:\Users\Alumno\.config\opencode\skills\sdd-onboard\SKILL.md` |
-| **sdd-propose** | Create an SDD change proposal with intent, scope, and approach. | `C:\Users\Alumno\.config\opencode\skills\sdd-propose\SKILL.md` |
-| **sdd-spec** | Write SDD delta specs with requirements and scenarios. | `C:\Users\Alumno\.config\opencode\skills\sdd-spec\SKILL.md` |
-| **sdd-tasks** | Break an SDD change into implementation tasks. | `C:\Users\Alumno\.config\opencode\skills\sdd-tasks\SKILL.md` |
-| **sdd-verify** | Execute tests and prove implementation matches specs, design, and tasks. | `C:\Users\Alumno\.config\opencode\skills\sdd-verify\SKILL.md` |
-| **skill-creator** | Creating new skills, agent instructions, documenting AI usage patterns. | `C:\Users\Alumno\.config\opencode\skills\skill-creator\SKILL.md` |
-| **skill-improver** | Auditing, upgrading, or refactoring existing skills. | `C:\Users\Alumno\.config\opencode\skills\skill-improver\SKILL.md` |
-| **work-unit-commits** | Implementation, commit splitting, chained PRs, keeping tests and docs with code. | `C:\Users\Alumno\.config\opencode\skills\work-unit-commits\SKILL.md` |
+| Skill | Trigger / Description | Path |
+|-------|----------------------|------|
+| **frontend-design** | Interfaces de alto impacto, diseño visual distintivo | `skills/frontend-design/SKILL.md` |
+| **react-19** | Convenciones React 19 (React Compiler, Actions, ref como prop) | `skills/react-19/SKILL.md` |
+| **tailwind-4** | Tailwind CSS 4, cn(), tokens, responsive | `skills/tailwind-4/SKILL.md` |
+| **typescript** | Tipado estricto, const types, flat interfaces | `skills/typescript/SKILL.md` |
+| **zod-4** | Validación Zod 4, breaking changes desde v3 | `skills/zod-4/SKILL.md` |
+
+## Global Skills (User-Level)
+
+| Skill | Trigger / Description | Path |
+|-------|----------------------|------|
+| **geo-audit** | Full GEO+SEO audit with multi-agent orchestration | `~/.config/opencode/skills/geo-audit/SKILL.md` |
+| **geo-brand-mentions** | Brand mention and authority scanner for AI visibility | `~/.config/opencode/skills/geo-brand-mentions/SKILL.md` |
+| **geo-citability** | AI citability scoring and optimization | `~/.config/opencode/skills/geo-citability/SKILL.md` |
+| **geo-compare** | Monthly delta tracking and progress reporting for GEO | `~/.config/opencode/skills/geo-compare/SKILL.md` |
+| **geo-content** | Content quality and E-E-A-T assessment | `~/.config/opencode/skills/geo-content/SKILL.md` |
+| **geo-crawlers** | AI crawler access analysis (robots.txt, meta, headers) | `~/.config/opencode/skills/geo-crawlers/SKILL.md` |
+| **geo-llmstxt** | llms.txt analysis and generation | `~/.config/opencode/skills/geo-llmstxt/SKILL.md` |
+| **geo-platform-optimizer** | Per-platform AI search optimization | `~/.config/opencode/skills/geo-platform-optimizer/SKILL.md` |
+| **geo-proposal** | Client-ready GEO proposal generation | `~/.config/opencode/skills/geo-proposal/SKILL.md` |
+| **geo-prospect** | CRM-lite for GEO agency pipeline management | `~/.config/opencode/skills/geo-prospect/SKILL.md` |
+| **geo-report** | Client-facing GEO report generation | `~/.config/opencode/skills/geo-report/SKILL.md` |
+| **geo-report-pdf** | PDF generation from GEO audit reports | `~/.config/opencode/skills/geo-report-pdf/SKILL.md` |
+| **geo-schema** | Schema.org structured data audit and generation | `~/.config/opencode/skills/geo-schema/SKILL.md` |
+| **geo-technical** | Technical SEO + GEO-specific infrastructure audit | `~/.config/opencode/skills/geo-technical/SKILL.md` |
+| **geo-update** | Pull latest GEO-SEO skill updates from upstream | `~/.config/opencode/skills/geo-update/SKILL.md` |
+| **geo** | GEO-first SEO analysis (umbrella) | `~/.config/opencode/skills/geo/SKILL.md` |
+| **branch-pr** | Creating, opening, or preparing PRs for review | `~/.config/opencode/skills/branch-pr/SKILL.md` |
+| **chained-pr** | Splitting oversized PRs into stacked review slices | `~/.config/opencode/skills/chained-pr/SKILL.md` |
+| **cognitive-doc-design** | Writing guides, READMEs, RFCs, and architecture docs | `~/.config/opencode/skills/cognitive-doc-design/SKILL.md` |
+| **comment-writer** | Writing warm, direct collaboration comments | `~/.config/opencode/skills/comment-writer/SKILL.md` |
+| **customize-opencode** | Editing opencode's own configuration | `~/.config/opencode/skills/customize-opencode/SKILL.md` |
+| **go-testing** | Go testing patterns (test coverage, golden files) | `~/.config/opencode/skills/go-testing/SKILL.md` |
+| **issue-creation** | Creating GitHub issues, bug reports, feature requests | `~/.config/opencode/skills/issue-creation/SKILL.md` |
+| **judgment-day** | Adversarial dual review, blind code audit | `~/.config/opencode/skills/judgment-day/SKILL.md` |
+| **skill-creator** | Creating LLM-first skills with valid frontmatter | `~/.config/opencode/skills/skill-creator/SKILL.md` |
+| **skill-improver** | Auditing and upgrading existing LLM-first skills | `~/.config/opencode/skills/skill-improver/SKILL.md` |
+| **work-unit-commits** | Planning commits as reviewable work units | `~/.config/opencode/skills/work-unit-commits/SKILL.md` |
 
 ## Project Conventions
 
-- [AGENTS.md](AGENTS.md) — Workspace instructions and SDD protocol.
-- [DESIGN.md](DESIGN.md) — Design System: The Signal (Indigo + Chartreuse).
+- [AGENTS.md](AGENTS.md) — Workspace instructions, SDD protocol, stack, roadmap.
+- DESIGN.md — Not created yet (referenced in AGENTS.md but missing).
+
+## Notes
+
+- **ESLint**: No ESLint config installed. `tsc --noEmit` used as the sole lint/typecheck step.
+- **Prettier**: Installed but no config file — uses Prettier 3 defaults.
+- **Skipped**: `sdd-*`, `_shared`, `skill-registry` (system skills excluded from index).
+- **Deduplication**: geo-* skills found in both `~/.config/opencode/skills/` and `~/.claude/skills/`; first scan path wins.

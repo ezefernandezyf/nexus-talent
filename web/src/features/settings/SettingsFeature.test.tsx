@@ -5,8 +5,8 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AuthProvider } from "../auth";
 import { useAuthStatus } from "../auth/store/auth-status";
-import { createProfileRepository } from "../../lib/repositories";
-import { ThemeProvider } from "../../lib/theme";
+import { createProfileRepository } from "./api/profile-repository";
+import { ThemeProvider } from "../../core/theme";
 import { createTestQueryClient } from "../../test/mocks/query-client";
 import { mockDownloadApis } from "../../test/mocks/browser";
 import { SettingsFeature } from "./SettingsFeature";
@@ -81,7 +81,7 @@ describe("SettingsFeature", () => {
     expect(screen.getByText(/zona de peligro/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toHaveValue("analyst@nexustalent.dev");
     expect(screen.getByLabelText(/nombre visible/i)).toHaveValue("Marcus Sterling");
-    expect(screen.getByText(/san francisco, ca/i)).toBeInTheDocument();
+    // Location data is not available with the new auth system (removed Supabase user_metadata)
     expect(screen.getByRole("button", { name: /guardar cambios/i })).toBeInTheDocument();
     expect(screen.queryByText("GitHub")).not.toBeInTheDocument();
     expect(within(screen.getByText("Google").closest("article") as HTMLElement).getByText(/no conectado/i)).toBeInTheDocument();
@@ -111,7 +111,7 @@ describe("SettingsFeature", () => {
     await user.type(screen.getByLabelText(/nombre visible/i), "M. Sterling");
     await user.click(screen.getByRole("button", { name: /guardar cambios/i }));
 
-    await waitFor(() => expect(screen.getByText(/supabase is temporarily unavailable/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/temporarily unavailable/i)).toBeInTheDocument());
     expect(screen.getByRole("button", { name: /guardar cambios/i })).toBeEnabled();
   });
 

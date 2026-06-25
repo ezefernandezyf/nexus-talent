@@ -1,5 +1,5 @@
-import type { GitHubRepositoryMetadata } from "../../../lib/github-client";
-import { type JobAnalysisGitHubStackSignal } from "../../../schemas/job-analysis";
+import type { GitHubRepositoryMetadata } from "../api/github-client";
+import type { JobAnalysisGitHubStackSignal } from "../schemas/job-analysis";
 
 interface GitHubSignalDefinition {
   label: string;

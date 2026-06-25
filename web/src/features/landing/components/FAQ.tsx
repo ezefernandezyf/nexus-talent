@@ -1,5 +1,5 @@
 import { useState, useCallback, type KeyboardEvent } from "react";
-import { cn } from "../../../lib/cn";
+import { cn } from "../../../shared/utils/cn";
 
 interface FAQItem {
   question: string;

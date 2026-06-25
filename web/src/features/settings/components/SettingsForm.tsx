@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Button } from "../../../components/ui/Button";
-import { PROFILE_FORM_SCHEMA, type ProfileFormInput } from "../../../lib/validation/profile";
+import { PROFILE_FORM_SCHEMA, type ProfileFormInput } from "../../settings/api/validation";
 
 interface SettingsFormProps {
   errorMessage?: string | null;

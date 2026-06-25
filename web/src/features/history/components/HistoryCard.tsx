@@ -1,4 +1,4 @@
-import type { SavedJobAnalysis } from "../../../schemas/job-analysis";
+import type { SavedJobAnalysis } from "../../analysis/schemas/job-analysis";
 import { Link } from "react-router-dom";
 import { Button } from "../../../components/ui/Button";
 import {

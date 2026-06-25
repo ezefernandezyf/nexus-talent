@@ -25,3 +25,6 @@ dist/
 
 coverage
 web/*.tsbuildinfo
+
+# SDD artifacts (auto-generated)
+.atl/

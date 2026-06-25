@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAuth } from "../../auth";
-import { createProfileRepository, type ProfileRepository } from "../../../lib/repositories";
-import { type OAuthProviderKey } from "../../../lib/supabase";
-import { useTheme } from "../../../lib/theme";
-import { type ProfileSaveInput } from "../../../lib/validation/profile";
+import { createProfileRepository, type ProfileRepository } from "../api/profile-repository";
+import type { OAuthProviderKey } from "../api/oauth-config";
+import { useTheme } from "../../../core/theme";
+import type { ProfileSaveInput } from "../api/validation";
 
 export const SETTINGS_QUERY_KEY = ["settings", "profile"] as const;
 

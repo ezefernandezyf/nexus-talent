@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { AnalysisRepository } from "../../lib/repositories";
+import type { AnalysisRepository } from "../../features/analysis/api/repository";
 import { useAnalysisHistory } from "../analysis";
 import { HistoryEmptyState, HistoryList, HistoryLoadingState } from "./components";
 import { useDeleteAnalysis } from "./hooks";

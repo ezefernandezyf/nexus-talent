@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createHttpAnalysisRepository, type AnalysisRepository, type AnalysisUpdatePatch } from "../../../lib/repositories";
+import { createHttpAnalysisRepository } from "../../analysis/api/http-repository";
+import type { AnalysisRepository, AnalysisUpdatePatch } from "../../analysis/api/repository";
 import { getAnalysisHistoryQueryKey } from "../../analysis/hooks/useAnalysisHistory";
 import { getAnalysisByIdQueryKey } from "../../analysis/hooks/useAnalysisById";
 import type { AnalysisPersistenceScope } from "../../analysis/hooks/useAnalysisRepository";

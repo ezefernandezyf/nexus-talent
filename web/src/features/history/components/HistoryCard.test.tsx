@@ -1,7 +1,7 @@
 import { MemoryRouter } from "react-router-dom";
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import type { SavedJobAnalysis } from "../../../schemas/job-analysis";
+import type { SavedJobAnalysis } from "../../analysis/schemas/job-analysis";
 import { getHistoryUid } from "../history-formatters";
 import { HistoryCard } from "./HistoryCard";
 

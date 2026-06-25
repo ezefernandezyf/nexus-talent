@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { type AnalysisRepository } from "../../../lib/repositories";
+import type { AnalysisRepository } from "../../analysis/api/repository";
 import { useDeleteAnalysis } from "./useDeleteAnalysis";
 import { getAnalysisHistoryQueryKey } from "../../analysis/hooks/useAnalysisHistory";
 

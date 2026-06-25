@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
-import { HISTORY_DETAIL_FORM_SCHEMA, type HistoryDetailFormInput } from "../../../lib/validation";
-import type { SavedJobAnalysis } from "../../../schemas/job-analysis";
+import { HISTORY_DETAIL_FORM_SCHEMA, type HistoryDetailFormInput } from "../../history/api/validation";
+import type { SavedJobAnalysis } from "../../analysis/schemas/job-analysis";
 import { getHistoryCardTitle } from "../history-formatters";
 
 interface HistoryDetailEditorProps {

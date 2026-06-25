@@ -3,9 +3,9 @@ import { createRoot } from "react-dom/client";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { App } from "./App";
 import { AuthProvider } from "./features/auth";
-import { queryClient } from "./lib/query-client";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { initLogger } from "./lib/logger";
+import { queryClient } from "./core/query-client";
+import ErrorBoundary from "./core/components/ErrorBoundary";
+import { initLogger } from "./core/logger";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 
