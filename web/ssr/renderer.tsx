@@ -2,7 +2,7 @@ import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LandingPage } from "../src/features/landing/pages/LandingPage";
-import PrivacyPage from "../src/pages/PrivacyPage";
+import PrivacyPage from "../src/features/landing/pages/PrivacyPage";
 
 /**
  * Renders a page to an HTML string for SSR.
