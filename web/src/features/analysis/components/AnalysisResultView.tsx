@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
-import { JOB_ANALYSIS_SKILL_LEVEL, type JobAnalysisGap, type JobAnalysisKeywords, type JobAnalysisResult, type JobAnalysisVacancySummary } from "../../../schemas/job-analysis";
+import { JOB_ANALYSIS_SKILL_LEVEL, type JobAnalysisGap, type JobAnalysisKeywords, type JobAnalysisResult, type JobAnalysisVacancySummary } from "../schemas/job-analysis";
 import {
   buildOutreachExportPayload,
   createOutreachExportFilename,

@@ -4,7 +4,7 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AuthProvider } from "../../auth";
 import { useAuthStatus } from "../../auth/store/auth-status";
-import { ThemeProvider } from "../../../lib/theme";
+import { ThemeProvider } from "../../../core/theme";
 import { createTestQueryClient } from "../../../test/mocks/query-client";
 import { useSettings } from "./useSettings";
 

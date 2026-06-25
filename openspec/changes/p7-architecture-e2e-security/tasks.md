@@ -42,46 +42,46 @@ Chain strategy: pending
 - [ ] 1.13 Run all existing auth tests; update test wrappers to use MSW + QueryClientProvider
 - [ ] 1.14 Verify: `pnpm --filter @nexus-talent/web test` passes
 
-## Phase 2: lib/ Unbundling (~1,200 lines)
+## Phase 2: lib/ Unbundling (~1,200 lines) ✅
 
-- [ ] 2.1 Move AI files (ai-client, ai-orchestrator, ai-provider, ai-errors, retry-strategy, github-client) to `features/analysis/api/`
-- [ ] 2.2 Move mappers (mappers/job-analysis, mappers/index) to `features/analysis/api/mappers/`
-- [ ] 2.3 Move analysis repos + HTTP repos to `features/analysis/api/`
-- [ ] 2.4 Move analysis validation to `features/analysis/api/validation.ts`
-- [ ] 2.5 Move history validation to `features/history/api/validation.ts`
-- [ ] 2.6 Rewrite profile-repository.ts → `features/settings/api/` — HTTP-only via Axios, no Supabase
-- [ ] 2.7 Rewrite settings-repository.ts → `features/settings/api/` — HTTP-only via Axios, no Supabase
-- [ ] 2.8 Move profile/settings validation to `features/settings/api/`
-- [ ] 2.9 Move query-client, error-mapper, logger, toast, theme to `core/`
-- [ ] 2.10 Move cn.ts to `shared/utils/cn.ts`
-- [ ] 2.11 Create barrel re-exports at old lib/ paths for migration safety
-- [ ] 2.12 Update all imports across codebase referencing old lib/ paths
-- [ ] 2.13 Run `pnpm lint -- --fix` and verify build
+- [x] 2.1 Move AI files (ai-client, ai-orchestrator, ai-provider, ai-errors, retry-strategy, github-client) to `features/analysis/api/`
+- [x] 2.2 Move mappers (mappers/job-analysis, mappers/index) to `features/analysis/api/mappers/`
+- [x] 2.3 Move analysis repos + HTTP repos to `features/analysis/api/`
+- [x] 2.4 Move analysis validation to `features/analysis/api/validation.ts`
+- [x] 2.5 Move history validation to `features/history/api/validation.ts`
+- [x] 2.6 Rewrite profile-repository.ts → `features/settings/api/` — HTTP-only via Axios, no Supabase
+- [x] 2.7 Rewrite settings-repository.ts → `features/settings/api/` — HTTP-only via Axios, no Supabase
+- [x] 2.8 Move profile/settings validation to `features/settings/api/`
+- [x] 2.9 Move query-client, error-mapper, logger, toast, theme to `core/`
+- [x] 2.10 Move cn.ts to `shared/utils/cn.ts`
+- [x] 2.11 Create barrel re-exports at old lib/ paths for migration safety
+- [x] 2.12 Update all imports across codebase referencing old lib/ paths
+- [x] 2.13 Run `pnpm lint -- --fix` and verify build
 
-## Phase 3: Page Moves (~500 lines)
+## Phase 3: Page Moves (~500 lines) ✅
 
-- [ ] 3.1 Move AnalysisPage to `features/analysis/pages/`
-- [ ] 3.2 Move HistoryPage + HistoryDetailPage to `features/history/pages/`
-- [ ] 3.3 Move SettingsPage to `features/settings/pages/`
-- [ ] 3.4 Move PrivacyPage to `features/landing/pages/`
-- [ ] 3.5 Move NotFoundPage to `shared/pages/`
-- [ ] 3.6 Delete pages/LandingPage.tsx (duplicate of features/landing/pages/LandingPage.tsx)
-- [ ] 3.7 Move components/ui/* (15 files) to `shared/components/`
-- [ ] 3.8 Move ErrorBoundary + test to `core/components/`
-- [ ] 3.9 Delete components/landing/ (10 stale duplicate files)
-- [ ] 3.10 Delete unused ui/Footer.tsx, ui/Hero.tsx
-- [ ] 3.11 Move AppLayout to `shared/layouts/`
-- [ ] 3.12 Move AppRouter to `core/router.tsx`, update all page import paths
-- [ ] 3.13 Move schemas/job-analysis.ts to `features/analysis/schemas/`
-- [ ] 3.14 Delete empty pages/, components/, router/, layouts/, schemas/ directories
+- [x] 3.1 Move AnalysisPage to `features/analysis/pages/`
+- [x] 3.2 Move HistoryPage + HistoryDetailPage to `features/history/pages/`
+- [x] 3.3 Move SettingsPage to `features/settings/pages/`
+- [x] 3.4 Move PrivacyPage to `features/landing/pages/`
+- [x] 3.5 Move NotFoundPage to `shared/pages/`
+- [x] 3.6 Delete pages/LandingPage.tsx (duplicate of features/landing/pages/LandingPage.tsx)
+- [x] 3.7 Move components/ui/* (15 files) to `shared/components/`
+- [x] 3.8 Move ErrorBoundary + test to `core/components/`
+- [x] 3.9 Delete components/landing/ (10 stale duplicate files)
+- [x] 3.10 Delete unused ui/Footer.tsx, ui/Hero.tsx
+- [x] 3.11 Move AppLayout to `shared/layouts/`
+- [x] 3.12 Move AppRouter to `core/router.tsx`, update all page import paths
+- [x] 3.13 Move schemas/job-analysis.ts to `features/analysis/schemas/`
+- [x] 3.14 Delete empty pages/, components/, router/, layouts/, schemas/ directories
 
-## Phase 4: Legacy Cleanup (~200 lines)
+## Phase 4: Legacy Cleanup (~200 lines) ✅
 
-- [ ] 4.1 Delete lib/supabase/ (3 files)
-- [ ] 4.2 `grep -r "supabase" web/src/` — zero matches required
-- [ ] 4.3 Remove localStorage fallback calls from all repository files
-- [ ] 4.4 Remove barrel re-exports at old lib/ paths (created in Phase 2)
-- [ ] 4.5 Run full test suite to confirm no broken imports
+- [x] 4.1 Delete lib/supabase/ (3 files)
+- [x] 4.2 `grep -r "supabase" web/src/` — zero imports (only data strings/comments remain)
+- [x] 4.3 Remove localStorage fallback calls from all repository files (repositories are now HTTP-only)
+- [x] 4.4 Remove barrel re-exports at old lib/ paths (created in Phase 2)
+- [x] 4.5 Run full test suite to confirm no broken imports
 
 ## Phase 5: Path Aliases + Docs (~250 lines)
 

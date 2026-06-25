@@ -1,4 +1,4 @@
-import type { SavedJobAnalysis } from "../../schemas/job-analysis";
+import type { SavedJobAnalysis } from "../analysis/schemas/job-analysis";
 
 const historyDateFormatter = new Intl.DateTimeFormat("es-AR", {
   dateStyle: "medium",

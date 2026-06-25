@@ -2,7 +2,7 @@ import { useJobAnalysis } from "./hooks/useJobAnalysis";
 import { JobDescriptionForm } from "./components/JobDescriptionForm";
 import { AnalysisCard } from "./components/AnalysisCard";
 import type { AnalysisPersistenceScope } from "./hooks/useAnalysisRepository";
-import type { AnalysisRepository } from "../../lib/repositories";
+import type { AnalysisRepository } from "./api/repository";
 
 interface AnalysisFeatureProps {
   initialGithubRepositoryUrl?: string | null;

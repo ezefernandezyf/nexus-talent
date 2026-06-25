@@ -1,6 +1,6 @@
-import { AppRouter } from "./router/AppRouter";
+import { AppRouter } from "./core/router";
 
-export { AppRouter } from "./router/AppRouter";
+export { AppRouter } from "./core/router";
 
 export function App() {
   return <AppRouter />

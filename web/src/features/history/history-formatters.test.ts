@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createSavedAnalysis } from "../../test/factories/analysis";
-import { JOB_ANALYSIS_SKILL_LEVEL } from "../../schemas/job-analysis";
+import { JOB_ANALYSIS_SKILL_LEVEL } from "../analysis/schemas/job-analysis";
 import {
   formatHistoryCardDate,
   getHistoryCardTitle,

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { queryClient } from "../lib/query-client";
+import { queryClient } from "./query-client";
 import { useAuthStatus } from "../features/auth/store/auth-status";
 
 export const apiClient = axios.create({

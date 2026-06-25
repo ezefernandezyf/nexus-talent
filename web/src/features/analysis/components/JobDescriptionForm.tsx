@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEventHandler } from "react";
 import { Button } from "../../../components/ui/Button";
-import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisMessageTone } from "../../../schemas/job-analysis";
+import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisMessageTone } from "../schemas/job-analysis";
 
 interface JobDescriptionFormProps {
   errorMessage?: string | null;
