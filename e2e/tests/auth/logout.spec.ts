@@ -16,6 +16,6 @@ test.describe("Auth — Logout", () => {
 
     // Assert — redirected to sign-in page
     await expect(page).toHaveURL("/auth/sign-in");
-    await expect(page.locator("text=Iniciá sesión")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Iniciá sesión" })).toBeVisible();
   });
 });

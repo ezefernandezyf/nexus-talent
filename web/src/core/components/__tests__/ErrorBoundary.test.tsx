@@ -1,6 +1,6 @@
 import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import { render } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import ErrorBoundary from '../ErrorBoundary'
 import { setLogSink } from '../../logger'
 import { setToastHandler } from '../../toast'
@@ -10,24 +10,43 @@ function Bomb() {
 }
 
 describe('ErrorBoundary', () => {
-  it('renders fallback UI and logs the error', () => {
+  let originalLocation: Location
+
+  beforeEach(() => {
+    originalLocation = window.location
+  })
+
+  afterEach(() => {
+    Object.defineProperty(window, 'location', {
+      value: originalLocation,
+      writable: true,
+      configurable: true,
+    })
+    vi.restoreAllMocks()
+  })
+
+  it('navigates to /500 on uncaught render error', () => {
     const sink = vi.fn()
     setLogSink(sink)
     const toast = vi.fn()
     setToastHandler(toast)
-    const retry = vi.fn()
+
+    // Stub window.location href via setter
+    let href: string = ''
+    Object.defineProperty(window, 'location', {
+      value: { ...originalLocation, href: '' },
+      writable: true,
+      configurable: true,
+    })
 
     render(
-      <ErrorBoundary onRetry={retry}>
+      <ErrorBoundary>
         <Bomb />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     )
 
-    expect(screen.getByRole('alert')).toBeDefined()
+    expect(window.location.href).toBe('/500')
     expect(sink).toHaveBeenCalled()
     expect(toast).toHaveBeenCalled()
-
-    fireEvent.click(screen.getByRole('button', { name: /recargar aplicación/i }))
-    expect(retry).toHaveBeenCalled()
   })
 })

@@ -25,13 +25,37 @@ vi.mock("axios", () => ({
   },
 }));
 
+function createRenderer() {
+  const queryClient = createTestQueryClient();
+  const ui = (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <MemoryRouter>
+            <SettingsPage />
+          </MemoryRouter>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+  return { queryClient, ui };
+}
+
 describe("SettingsPage", () => {
   afterEach(() => {
     useAuthStatus.getState().setStatus("unknown");
+    localStorage.removeItem("nexus-talent:theme:v1");
+  });
+
+  it("renders the skeleton when auth status is loading", () => {
+    useAuthStatus.setState({ status: "loading" });
+    const { ui } = createRenderer();
+    render(ui);
+    expect(screen.queryByRole("heading", { name: "Configuración" })).not.toBeInTheDocument();
   });
 
   it("renders the user-facing settings shell and top-level actions", async () => {
-    const queryClient = createTestQueryClient();
+    const { queryClient, ui } = createRenderer();
 
     // Pre-seed the session cache as if already authenticated
     queryClient.setQueryData(["auth", "session"], {
@@ -51,17 +75,7 @@ describe("SettingsPage", () => {
     useAuthStatus.setState({ status: "authenticated" });
     localStorage.setItem("nexus-talent:theme:v1", "dark");
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <AuthProvider>
-            <MemoryRouter>
-              <SettingsPage />
-            </MemoryRouter>
-          </AuthProvider>
-        </ThemeProvider>
-      </QueryClientProvider>,
-    );
+    render(ui);
 
     await waitFor(() => expect(screen.getByRole("heading", { name: "Configuración" })).toBeInTheDocument());
     expect(screen.getByRole("button", { name: /tema claro/i })).toBeInTheDocument();

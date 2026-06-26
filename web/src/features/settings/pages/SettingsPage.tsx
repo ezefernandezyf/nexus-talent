@@ -1,4 +1,4 @@
-import { FeaturePageShell, PageHeader } from "@/shared/components";
+import { FeaturePageShell, LoadingSkeleton, PageHeader } from "@/shared/components";
 import { Button } from "@/shared/components/Button";
 import { useAuth } from "@/features/auth";
 import { downloadTextFile } from "@/features/analysis/export";
@@ -25,6 +25,10 @@ export function SettingsPage() {
   }
 
   const isExportDisabled = status !== "authenticated";
+
+  if (status === "loading" || status === "unknown") {
+    return <LoadingSkeleton variant="hero" />;
+  }
 
   return (
     <FeaturePageShell>

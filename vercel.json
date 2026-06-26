@@ -4,6 +4,10 @@
   "installCommand": "pnpm install --frozen-lockfile",
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "https://nexus-talent.onrender.com/api/$1"
+    },
+    {
       "source": "/",
       "destination": "/landing.html"
     },
