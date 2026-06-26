@@ -112,7 +112,7 @@ export async function getGoogleUser(accessToken: string): Promise<GoogleUser> {
  * email matches (graceful account linking).
  */
 export async function findOrCreateGoogleUser(googleUser: GoogleUser) {
-  // 1 — Try by Google ID first
+  // 1 - Try by Google ID first
   const byGoogle = await prisma.profile.findUnique({
     where: { googleId: googleUser.sub },
   });
@@ -129,7 +129,7 @@ export async function findOrCreateGoogleUser(googleUser: GoogleUser) {
     return { id: updated.id, email: updated.email, displayName: updated.displayName };
   }
 
-  // 2 — Try by email (link Google to existing password account)
+  // 2 - Try by email (link Google to existing password account)
   const byEmail = await prisma.profile.findUnique({
     where: { email: googleUser.email },
   });
@@ -148,7 +148,7 @@ export async function findOrCreateGoogleUser(googleUser: GoogleUser) {
     return { id: updated.id, email: updated.email, displayName: updated.displayName };
   }
 
-  // 3 — Create a brand-new OAuth-only user (no password)
+  // 3 - Create a brand-new OAuth-only user (no password)
   const created = await prisma.profile.create({
     data: {
       id: randomBytes(16).toString("hex"),

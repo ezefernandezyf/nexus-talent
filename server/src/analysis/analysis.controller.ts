@@ -41,7 +41,7 @@ export async function analyze(req: Request, res: Response, next: NextFunction): 
       return;
     }
 
-    // Unexpected errors — wrap as 502
+    // Unexpected errors - wrap as 502
     next(new AppError(502, "Analysis service encountered an unexpected error."));
   }
 }

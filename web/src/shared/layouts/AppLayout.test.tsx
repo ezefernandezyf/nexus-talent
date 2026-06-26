@@ -12,7 +12,7 @@ import { AuthProvider } from "@/features/auth";
 import { createTestQueryClient } from "@/test/mocks/query-client";
 
 // ---------------------------------------------------------------------------
-// Axios mock — hooks now use HTTP repo instead of localStorage
+// Axios mock - hooks now use HTTP repo instead of localStorage
 // ---------------------------------------------------------------------------
 
 const mockAxiosInstance = vi.hoisted(() => ({
@@ -91,7 +91,7 @@ describe("AppLayout", () => {
     expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /historial/i })).toHaveAttribute("href", "/app/history");
     expect(within(screen.getByLabelText(/app primary navigation/i)).queryByRole("link", { name: /settings/i })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /nuevo análisis/i })).toHaveAttribute("href", "/app/analysis");
-    expect(screen.queryByText("© 2026 Nexus Talent — Precision Recruiting Layer")).not.toBeInTheDocument();
+    expect(screen.queryByText("© 2026 Nexus Talent - Precision Recruiting Layer")).not.toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByRole("link", { name: /abrir detalle de frontend lead/i })).toHaveAttribute(
         "href",

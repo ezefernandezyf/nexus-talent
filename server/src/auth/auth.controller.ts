@@ -42,7 +42,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     res.cookie("nexus-talent-session", result.token, COOKIE_OPTIONS);
     res.status(200).json({ user: result.user });
   } catch (err) {
-    // Log failure before forwarding — email is the attempted login
+    // Log failure before forwarding - email is the attempted login
     req.log.warn({ event: "login_failure", email: req.body?.email }, "Failed login attempt");
     next(err);
   }

@@ -109,7 +109,7 @@ describe("SignUpForm", () => {
 
     await user.click(screen.getByRole("button", { name: /continuar con google/i }));
 
-    await waitFor(() => expect(window.location.href).toBe("/api/auth/oauth/google"));
+    await waitFor(() => expect(window.location.href).toBe("https://nexus-talent-api.onrender.com/api/auth/oauth/google"));
 
     Object.defineProperty(window, "location", {
       value: originalLocation,

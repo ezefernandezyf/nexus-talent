@@ -16,11 +16,12 @@ apiClient.interceptors.response.use(
 
       // Only redirect to sign-in when the user is on a protected page.
       // Auth pages (sign-in, sign-up) expect 401 responses as part of
-      // the normal "no session" flow — redirecting would break sign-up.
+      // the normal "no session" flow - redirecting would break sign-up.
       if (typeof window !== "undefined") {
         const path = window.location.pathname;
         const isAuthPage = path.startsWith("/auth/");
-        if (!isAuthPage) {
+        // Don't redirect on landing or privacy pages - they load in public mode
+        if (!isAuthPage && path !== "/" && path !== "/privacy") {
           window.location.href = "/auth/sign-in";
         }
       }

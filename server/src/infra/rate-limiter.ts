@@ -20,7 +20,7 @@ export interface RateLimiterOptions {
 export function rateLimiter({ windowMs, max }: RateLimiterOptions) {
   const clients = new Map<string, Entry>();
 
-  // Periodic cleanup — .unref() so it doesn't keep the process alive
+  // Periodic cleanup - .unref() so it doesn't keep the process alive
   const cleanup = setInterval(() => {
     const now = Date.now();
     for (const [key, entry] of clients) {
