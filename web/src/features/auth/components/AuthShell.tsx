@@ -10,10 +10,7 @@ const AUTH_SHELL_COPY = {
     actionPrompt: "¿No tenés acceso todavía?",
     eyebrow: "Acceso privado",
     heading: "Volvé al panel seguro y seguí con tu flujo.",
-    kicker: "Sesión persistente",
     stats: ["Rutas protegidas", "Sesión con JWT", "Historial sincronizado"],
-    subtitle:
-      "Iniciá sesión con tu cuenta para acceder al panel privado. La sesión se mantiene con JWT seguro en cookie httpOnly.",
     title: "Iniciá sesión",
   },
   "sign-up": {
@@ -22,10 +19,7 @@ const AUTH_SHELL_COPY = {
     actionPrompt: "¿Ya tenés una cuenta?",
     eyebrow: "Nuevo acceso",
     heading: "Creá tu acceso y empezá con sesión segura desde el primer día.",
-    kicker: "Alta incremental",
     stats: ["Email/password", "Sesión con JWT", "Sin migración de historia"],
-    subtitle:
-      "Registrá tu cuenta con email y contraseña. La sesión se valida con JWT y el historial queda sincronizado.",
     title: "Crear cuenta",
   },
 } as const;
@@ -72,7 +66,6 @@ export function AuthShell({ children, mode }: AuthShellProps) {
           <Card className="glass-panel ghost-border rounded-xl p-8 shadow-2xl sm:p-10">
             <div className="mb-10 text-center">
               <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-on-surface font-headline">{copy.title}</h1>
-              <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant">{copy.kicker}</p>
             </div>
 
             <div className="space-y-6">
@@ -87,17 +80,6 @@ export function AuthShell({ children, mode }: AuthShellProps) {
                   Faltan variables de entorno. La app se mantiene en modo público hasta que configures Supabase.
                 </div>
               ) : null}
-
-              <div className="space-y-3">
-                <p className="text-base leading-7 text-on-surface-variant">{copy.subtitle}</p>
-                <div className="relative flex items-center py-4">
-                  <div className="grow border-t border-outline-variant/20"></div>
-                  <span className="mx-4 shrink text-[10px] uppercase tracking-widest text-on-surface-variant font-label">
-                    {copy.actionPrompt}
-                  </span>
-                  <div className="grow border-t border-outline-variant/20"></div>
-                </div>
-              </div>
 
               <div>{children}</div>
 
