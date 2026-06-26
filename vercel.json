@@ -5,7 +5,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://nexus-talent-api.onrender.com/api/$1"
+      "destination": "https://nexustalent-api.onrender.com/api/$1"
     },
     {
       "source": "/",
