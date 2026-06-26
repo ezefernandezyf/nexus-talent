@@ -55,6 +55,8 @@ function buildGroqMessages(input: AnalysisRequestDTO): GroqChatMessage[] {
 async function fetchGroq(messages: GroqChatMessage[], signal: AbortSignal): Promise<unknown> {
   const apiKey = process.env.GROQ_API_KEY;
 
+  // TODO: Set GROQ_API_KEY in Render dashboard (nexus-talent service) — manual step,
+  // requires Render dashboard access. Without it, POST /api/ai/analyze returns 502.
   if (!apiKey) {
     throw new AppError(502, "GROQ_API_KEY is not configured on the server.");
   }

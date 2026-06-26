@@ -40,7 +40,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
 
 /**
  * Optionally attach the authenticated user if a valid session exists.
- * Continues silently — req.userId remains undefined when unauthenticated.
+ * Continues silently - req.userId remains undefined when unauthenticated.
  */
 export function optionalAuth(req: Request, res: Response, next: NextFunction): void {
   const userId = getUserIdFromCookie(req.headers.cookie);

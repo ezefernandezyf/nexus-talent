@@ -1,4 +1,4 @@
-// Migrated from lib/supabase/oauth-providers.ts — no Supabase dependency
+// Migrated from lib/supabase/oauth-providers.ts - no Supabase dependency
 
 export type OAuthProviderKey = "github" | "google";
 

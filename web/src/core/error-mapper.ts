@@ -25,8 +25,20 @@ export function mapError(err: unknown): MappedError {
     )
   }
 
-  // Supabase / Postgrest style errors often have name or status
-  if (isErrorLike(err) && (err.name === 'PostgrestError' || typeof err.status !== 'undefined')) {
+  // Distinguish HTTP error types by status code before falling through to db_error
+  if (isErrorLike(err) && typeof err.status !== 'undefined') {
+    if (err.status === 401 || err.status === 403) {
+      const msg = err.message || 'Authentication error'
+      return { userMessage: msg, code: 'auth_error', severity: 'error', meta: { status: err.status } }
+    }
+    if (err.status >= 500) {
+      const msg = err.message || 'API error'
+      return { userMessage: msg, code: 'api_error', severity: 'error', meta: { status: err.status } }
+    }
+  }
+
+  // Postgrest / Prisma database errors
+  if (isErrorLike(err) && err.name === 'PostgrestError') {
     const msg = err.message || 'Database error'
     return { userMessage: msg, code: 'db_error', severity: 'error', meta: { status: err.status } }
   }
