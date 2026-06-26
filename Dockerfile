@@ -12,7 +12,9 @@ RUN pnpm --filter @nexus-talent/server build
 
 FROM node:22-alpine
 WORKDIR /app
-COPY --from=builder /app/server/dist ./dist
+# rootDir is "..", outDir is "dist" → output at dist/server/src/
+COPY --from=builder /app/server/dist/server/src ./dist
+COPY --from=builder /app/server/dist/shared/src ./dist/shared
 COPY --from=builder /app/server/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
 EXPOSE 3001
