@@ -35,7 +35,16 @@ function mockAnalysisState(state = {}) {
 }
 
 describe("AnalysisFeature", () => {
-  it("does not render an empty panel before first analysis", () => {
+  it("renders the empty state when idle and no data", () => {
+    mockAnalysisState({ isIdle: true });
+
+    render(<AnalysisFeature />);
+
+    expect(screen.getByText(/No hay análisis todavía/i)).toBeInTheDocument();
+    expect(screen.getByText(/Pegá una descripción del puesto/i)).toBeInTheDocument();
+  });
+
+  it("does not render an empty panel before first analysis when not idle", () => {
     mockAnalysisState();
 
     render(<AnalysisFeature />);

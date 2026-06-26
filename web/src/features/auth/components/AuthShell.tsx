@@ -11,9 +11,9 @@ const AUTH_SHELL_COPY = {
     eyebrow: "Acceso privado",
     heading: "Volvé al panel seguro y seguí con tu flujo.",
     kicker: "Sesión persistente",
-    stats: ["Rutas protegidas", "Estado persistente", "Historial local intacto"],
+    stats: ["Rutas protegidas", "Sesión con JWT", "Historial sincronizado"],
     subtitle:
-      "La sesión se valida contra Supabase y el shell privado queda aislado. El historial local no se migra en esta fase.",
+      "Iniciá sesión con tu cuenta para acceder al panel privado. La sesión se mantiene con JWT seguro en cookie httpOnly.",
     title: "Iniciá sesión",
   },
   "sign-up": {
@@ -23,9 +23,9 @@ const AUTH_SHELL_COPY = {
     eyebrow: "Nuevo acceso",
     heading: "Creá tu acceso y empezá con sesión segura desde el primer día.",
     kicker: "Alta incremental",
-    stats: ["Email/password", "RLS mínima", "Sin migración de historia"],
+    stats: ["Email/password", "Sesión con JWT", "Sin migración de historia"],
     subtitle:
-      "Registrá tu cuenta con Supabase Auth y mantené separado el historial local hasta que la migración esté lista.",
+      "Registrá tu cuenta con email y contraseña. La sesión se valida con JWT y el historial queda sincronizado.",
     title: "Crear cuenta",
   },
 } as const;
@@ -48,7 +48,7 @@ export function AuthShell({ children, mode }: AuthShellProps) {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 18% 18%, rgba(142, 213, 255, 0.12), transparent 28%), radial-gradient(circle at 82% 14%, rgba(56, 189, 248, 0.1), transparent 22%), radial-gradient(circle at 50% 100%, rgba(99, 102, 241, 0.08), transparent 28%)",
+            "radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--color-primary) 14%, transparent), transparent 28%), radial-gradient(circle at 82% 14%, color-mix(in oklch, var(--color-accent) 10%, transparent), transparent 22%), radial-gradient(circle at 50% 100%, color-mix(in oklch, var(--color-primary-container) 8%, transparent), transparent 28%)",
         }}
       />
       <div
@@ -56,7 +56,7 @@ export function AuthShell({ children, mode }: AuthShellProps) {
         className="pointer-events-none absolute inset-0 opacity-35"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px)",
+            "linear-gradient(color-mix(in oklch, var(--color-primary) 3%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklch, var(--color-primary) 3%, transparent) 1px, transparent 1px)",
           backgroundSize: "84px 84px",
           maskImage:
             "linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.18) 58%, transparent)",
@@ -115,17 +115,17 @@ export function AuthShell({ children, mode }: AuthShellProps) {
       </div>
 
       <footer className="relative z-10 mt-auto flex w-full flex-col items-center justify-between gap-4 border-t border-white/5 px-8 py-6 opacity-60 sm:flex-row">
-        <div className="font-label text-[10px] uppercase tracking-widest text-[#475569]">
+        <div className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
           © 2026 Nexus Talent. Engineered for Precision.
         </div>
         <div className="flex gap-8">
-          <a className="font-label text-[10px] uppercase tracking-widest text-[#475569] transition-colors hover:text-[#38BDF8]" href="#">
+          <a className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant transition-colors hover:text-primary" href="#">
             Privacy Policy
           </a>
-          <a className="font-label text-[10px] uppercase tracking-widest text-[#475569] transition-colors hover:text-[#38BDF8]" href="#">
+          <a className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant transition-colors hover:text-primary" href="#">
             Terms
           </a>
-          <a className="font-label text-[10px] uppercase tracking-widest text-[#475569] transition-colors hover:text-[#38BDF8]" href="#">
+          <a className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant transition-colors hover:text-primary" href="#">
             Support
           </a>
         </div>

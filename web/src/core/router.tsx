@@ -4,6 +4,7 @@ import { ProtectedRoute, PublicAuthRoute } from "@/features/auth";
 import { LandingPage } from "@/features/landing/pages/LandingPage";
 import PrivacyPage from "@/features/landing/pages/PrivacyPage";
 import NotFoundPage from "@/shared/pages/NotFoundPage";
+import ServerErrorPage from "@/shared/pages/ServerErrorPage";
 
 const AppLayout = lazy(() => import("@/shared/layouts/AppLayout").then((module) => ({ default: module.AppLayout })));
 const AnalysisPage = lazy(() => import("@/features/analysis/pages/AnalysisPage").then((module) => ({ default: module.AnalysisPage })));
@@ -44,6 +45,7 @@ export function AppRouter() {
           <Route path="*" element={<Navigate replace to="/404" />} />
         </Route>
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/500" element={<ServerErrorPage />} />
         <Route path="/404" element={<NotFoundPage />} />
         <Route path="/login" element={<Navigate replace to="/auth/sign-in" />} />
         <Route path="/signup" element={<Navigate replace to="/auth/sign-up" />} />

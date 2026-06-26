@@ -1,3 +1,4 @@
+import { EmptyState } from "@/shared/components";
 import { useJobAnalysis } from "./hooks/useJobAnalysis";
 import { JobDescriptionForm } from "./components/JobDescriptionForm";
 import { AnalysisCard } from "./components/AnalysisCard";
@@ -96,9 +97,12 @@ export function AnalysisFeature({ initialGithubRepositoryUrl, initialJobDescript
         <ErrorState message={errorMessage} />
       ) : analysis.data ? (
         <AnalysisCard result={analysis.data} />
-      ) : (
-        null
-      )}
+      ) : analysis.isIdle ? (
+        <EmptyState
+          title="No hay análisis todavía"
+          description="Pegá una descripción del puesto para obtener un análisis completo."
+        />
+      ) : null}
     </section>
   );
 }

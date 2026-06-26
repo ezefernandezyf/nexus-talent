@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: nexus-talent-api
+    env: docker
+    dockerfilePath: server/Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GROQ_API_KEY
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://nexus-talent.vercel.app
