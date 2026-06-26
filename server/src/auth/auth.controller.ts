@@ -3,13 +3,15 @@ import * as authService from "./auth.service.js";
 import * as oauthService from "./oauth.service.js";
 import { parseCookies } from "../infra/request.js";
 
-const SEVEN_DAYS_SECONDS = 7 * 24 * 60 * 60;
+// Express res.cookie() expects maxAge in MILLISECONDS, not seconds.
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+const TEN_MINUTES_MS = 10 * 60 * 1000;
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
   sameSite: "lax" as const,
   path: "/",
-  maxAge: SEVEN_DAYS_SECONDS,
+  maxAge: SEVEN_DAYS_MS,
 };
 
 /**
@@ -89,7 +91,7 @@ export async function googleLogin(_req: Request, res: Response, next: NextFuncti
       httpOnly: true,
       sameSite: "lax",
       path: "/",
-      maxAge: 10 * 60, // 10 minutes
+      maxAge: TEN_MINUTES_MS,
     });
 
     const url = oauthService.getGoogleAuthURL(state);
