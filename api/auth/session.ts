@@ -1,5 +1,5 @@
 /**
- * Vercel Serverless Function — Session Cookie Exchange
+ * Vercel Edge Function — Session Cookie Exchange
  *
  * Sets an httpOnly cookie for .nexustalent.vercel.app so the browser
  * sends it on all /api/* requests through Vercel's proxy to Render.
@@ -8,33 +8,51 @@
  * → sets cookie → redirects to app
  */
 
-const SEVEN_DAYS = 7 * 24 * 60 * 60;
-
 export default function handler(request: Request): Response {
   const url = new URL(request.url);
   const token = url.searchParams.get("token");
-  const redirectTo = url.searchParams.get("redirect") ?? "/app/analysis";
+  const rawRedirect = url.searchParams.get("redirect") ?? "/app/analysis";
+  const redirectTo = safeOrigin(url.origin, rawRedirect);
 
   if (!token) {
-    return Response.redirect(url.origin + "/auth/sign-in", 302);
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: url.origin + "/auth/sign-in",
+      },
+    });
   }
 
-  const response = Response.redirect(url.origin + safePath(redirectTo), 302);
+  const cookieHeader = [
+    `nexus-talent-session=${token}`,
+    "HttpOnly",
+    "Secure",
+    "SameSite=Lax",
+    "Path=/",
+    "Domain=.nexustalent.vercel.app",
+    "Max-Age=604800",
+  ].join("; ");
 
-  response.headers.set(
-    "Set-Cookie",
-    `nexus-talent-session=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Domain=.nexustalent.vercel.app; Max-Age=${SEVEN_DAYS}`,
-  );
-
-  return response;
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: redirectTo,
+      "Set-Cookie": cookieHeader,
+    },
+  });
 }
 
 export const config = {
   runtime: "edge",
 };
 
-function safePath(path: string): string {
-  if (path.includes("://") || path.startsWith("//")) return "/app/analysis";
-  if (!path.startsWith("/")) return "/app/analysis";
-  return path;
+/**
+ * Ensure redirect stays on the same origin (prevent open redirect).
+ */
+function safeOrigin(origin: string, path: string): string {
+  // Only allow absolute paths starting with /
+  if (!path.startsWith("/")) {
+    return origin + "/app/analysis";
+  }
+  return origin + path;
 }
