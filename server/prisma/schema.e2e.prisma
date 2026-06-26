@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Profile {
+  id            String    @id
+  email         String    @unique
+  displayName   String?
+  passwordHash  String?
+  googleId      String?   @unique
+  avatarUrl     String?
+  authProvider  String    @default("email")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  analyses     Analysis[]
+}
+
+model Analysis {
+  id               String    @id @default(uuid())
+  userId           String
+  jobDescription   String
+  summary          String?
+  vacancySummary   String    @default("")
+  skillGroups      String?
+  keywords         String    @default("{}")
+  gaps             String    @default("[]")
+  recruiterMessages String?
+  outreachMessage  String    @default("")
+  displayName      String?
+  notes            String?
+  tone             String    @default("professional")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Settings {
+  id     String @id @default("app-settings")
+  config String @default("{}")
+}

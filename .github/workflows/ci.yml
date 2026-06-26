@@ -5,12 +5,17 @@ on:
   push:
     branches:
       - main
+      - develop
 
 permissions:
   contents: read
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
-  validate:
+  validate-web:
+    name: Web (frontend)
     runs-on: ubuntu-latest
 
     steps:
@@ -21,19 +26,71 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-          cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Enable corepack
+        run: corepack enable
 
-      - name: Run typecheck
-        run: npm run typecheck
+      - name: Install dependencies (web + shared only)
+        run: pnpm install --frozen-lockfile --filter @nexus-talent/web...
 
-      - name: Run tests
-        run: npm run test
+      - name: Typecheck
+        run: pnpm --filter @nexus-talent/web typecheck
 
-      - name: Run tests with coverage
-        run: npm run test:coverage
+      - name: Test
+        run: pnpm --filter @nexus-talent/web test
 
-      - name: Build application
-        run: npm run build
+      - name: Build
+        run: pnpm --filter @nexus-talent/web build
+
+  validate-server:
+    name: Server (backend)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: nexus
+          POSTGRES_PASSWORD: nexus
+          POSTGRES_DB: nexus-test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies (server + shared only)
+        run: pnpm install --frozen-lockfile --filter @nexus-talent/server --filter @nexus-talent/shared...
+
+      - name: Generate Prisma client
+        run: pnpm --filter @nexus-talent/server prisma:generate
+        env:
+          DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
+
+      - name: Push schema to DB
+        run: pnpm --filter @nexus-talent/server prisma:push
+        env:
+          DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
+
+      - name: Typecheck
+        run: pnpm --filter @nexus-talent/server typecheck
+
+      - name: Test
+        run: pnpm --filter @nexus-talent/server test --passWithNoTests
+        env:
+          DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
+          JWT_SECRET: ci-test-secret-do-not-use-in-prod

@@ -1,18 +1,40 @@
 # openspec/config.yaml
+# REFRESHED: 2026-06-25 — post-Supabase migration, monorepo restructure
 schema: spec-driven
 persistence: hybrid
 
 context: |
   Project: Nexus Talent (AI Job Assistant)
-  Stack: React 19, TypeScript, Tailwind 4, Zod 4, Supabase, TanStack Query.
-  Architecture: Feature-based Domain Isolation, Decoupled UI.
-  Design System: The Precision Instrument.
-  Git: Atomic commits (EN title / ES desc), Phase-based branches.
+  Stack: Express 5 + React 19 + TypeScript + Vite 6 + Tailwind 4 + Zod 4 + Prisma 7 + TanStack Query + Zustand
+  Architecture: pnpm monorepo (server/, web/, shared/, e2e/) — screaming architecture
+  Auth: Custom JWT (HS256) in httpOnly cookies (no more Supabase Auth)
+  Design System: "The Signal" — Indigo / Chartreuse, Cabinet Grotesk (display) + Satoshi (body), dark-first
+  Git: develop → main, conventional commits (EN title / ES desc)
+  CI/CD: GitHub Actions (lint + test on PR + push)
+
+testing:
+  strict_tdd: true
+  runner:
+    command: pnpm test
+    framework: Vitest 3
+  layers:
+    unit: { available: true, tool: Vitest (server + web) }
+    integration: { available: false, tool: "" }
+    e2e: { available: true, tool: Playwright 1.52 }
+  coverage:
+    available: true
+    command: pnpm --filter @nexus-talent/web test -- --coverage
+    provider: v8
+    thresholds: { lines: 90, functions: 90, branches: 90, statements: 90 }
+  quality:
+    linter: { available: false, command: "tsc --noEmit (no ESLint config found)" }
+    type_checker: { available: true, command: "pnpm -r typecheck (tsc --noEmit strict)" }
+    formatter: { available: true, command: "pnpm -r format (Prettier 3, no config file)" }
 
 rules:
   proposal:
     - Include rollback plan for risky changes
-    - Identify affected modules/packages
+    - Identify affected packages (server/web/shared/e2e)
   specs:
     - Use Given/When/Then format for scenarios
     - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
@@ -23,10 +45,11 @@ rules:
     - Group tasks by phase (infrastructure, implementation, testing)
     - Use hierarchical numbering (1.1, 1.2, etc.)
   apply:
-    - Follow AGENTS.md and DESIGN.md strictly
+    - Follow AGENTS.md strictly
     - Load relevant local skills from ./skills/
   verify:
-    - Run unit tests for mappers and validation
-    - Verify UI against DESIGN.md principles
+    - Run unit tests for affected packages
+    - Run pnpm test before declaring done
+    - Verify type check passes (tsc --noEmit)
   archive:
     - Sync delta specs to main specs

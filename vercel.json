@@ -1,7 +1,20 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
+  "buildCommand": "pnpm --filter @nexus-talent/web build",
+  "outputDirectory": "web/dist",
+  "installCommand": "pnpm install --frozen-lockfile",
   "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://nexus-talent.onrender.com/api/$1"
+    },
+    {
+      "source": "/",
+      "destination": "/landing.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

@@ -1,0 +1,20 @@
+# Nexus Talent — AI Recruiting Assistant
+# https://nexustalent.vercel.app
+# Last updated: 2026-06-22
+
+## About
+Nexus Talent is an AI-powered recruiting assistant that transforms raw job
+descriptions into structured analyses, skill requirement matrices, and
+personalized candidate outreach copy.
+
+## Core Pages
+- Home: https://nexustalent.vercel.app/ — Product landing page and AI job description analyzer
+- Privacy: https://nexustalent.vercel.app/privacy — Privacy policy
+
+## Key Topics
+- AI recruiting assistant
+- Job description analysis
+- Skill requirement extraction
+- Candidate outreach generation
+- Structured job intake
+- Recruiting automation

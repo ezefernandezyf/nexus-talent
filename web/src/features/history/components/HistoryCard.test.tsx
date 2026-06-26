@@ -1,0 +1,107 @@
+import { MemoryRouter } from "react-router-dom";
+import { render, screen, within } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import type { SavedJobAnalysis } from "@/features/analysis/schemas/job-analysis";
+import { getHistoryUid } from "@/features/history/history-formatters";
+import { HistoryCard } from "./HistoryCard";
+
+const analysis: SavedJobAnalysis = {
+  id: "550e8400-e29b-41d4-a716-446655440000",
+  createdAt: "2026-04-05T12:05:00.000Z",
+  jobDescription: "Frontend Engineer\nReact, testing and TypeScript",
+  summary:
+    "Lead the product frontend strategy with strong React, TypeScript, testing and accessibility practices while collaborating with design and backend teams.",
+  skillGroups: [
+    {
+      category: "Core stack",
+      skills: [
+        { name: "React", level: "core" },
+        { name: "TypeScript", level: "core" },
+        { name: "Accessibility", level: "strong" },
+      ],
+    },
+    {
+      category: "Quality",
+      skills: [
+        { name: "Testing", level: "strong" },
+        { name: "Performance", level: "strong" },
+        { name: "React", level: "adjacent" },
+        { name: "Architecture", level: "adjacent" },
+      ],
+    },
+  ],
+  outreachMessage: {
+    subject: "Interés en el puesto",
+    body: "Hola equipo,",
+  },
+};
+
+describe("HistoryCard", () => {
+  it("renders the title fallback, summary snippet and keeps the title bounded", () => {
+    const onDelete = vi.fn();
+    const longDisplayName = "Frontend Engineer Principal con responsabilidad de plataforma y observabilidad";
+
+    render(
+      <MemoryRouter>
+        <HistoryCard
+          analysis={{
+            ...analysis,
+            displayName: longDisplayName,
+          }}
+          iconName="apartment"
+          onDelete={onDelete}
+        />
+      </MemoryRouter>,
+    );
+
+    const row = screen.getByRole("listitem", { name: longDisplayName });
+
+    expect(within(row).getByText(longDisplayName)).toHaveClass("truncate");
+    expect(within(row).getByText(getHistoryUid(analysis))).toBeInTheDocument();
+    expect(within(row).getByText("React, testing and TypeScript")).toBeInTheDocument();
+    expect(within(row).getByText(/lead the product frontend strategy with strong react/i)).toBeInTheDocument();
+    expect(within(row).getByText(/5 abr 2026/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /abrir detalle de frontend engineer/i })).toHaveAttribute(
+      "href",
+      `/app/history/${analysis.id}`,
+    );
+    expect(screen.queryByText(/%/)).not.toBeInTheDocument();
+  });
+
+  it("delegates delete actions to the provided callback", async () => {
+    const onDelete = vi.fn();
+
+    render(
+      <MemoryRouter>
+        <HistoryCard analysis={analysis} iconName="apartment" onDelete={onDelete} />
+      </MemoryRouter>,
+    );
+
+    await screen.getByRole("button", { name: /eliminar frontend engineer/i }).click();
+
+    expect(onDelete).toHaveBeenCalledWith(analysis.id);
+  });
+
+  it("prefers the persisted display name when available", () => {
+    const onDelete = vi.fn();
+
+    render(
+      <MemoryRouter>
+        <HistoryCard
+          analysis={{
+            ...analysis,
+            displayName: "Frontend Lead",
+          }}
+          iconName="apartment"
+          onDelete={onDelete}
+        />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByRole("listitem", { name: "Frontend Lead" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /abrir detalle de frontend lead/i })).toHaveAttribute(
+      "href",
+      `/app/history/${analysis.id}`,
+    );
+  });
+});

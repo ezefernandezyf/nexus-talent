@@ -1,145 +1,193 @@
 # Nexus Talent
 
-Nexus Talent es una aplicación web de reclutamiento de precisión asistida por IA para personas que buscan trabajo y equipos técnicos que quieren interpretar una vacante con criterio.
+> Asistente de reclutamiento de precisión asistido por IA. Transformá una descripción de puesto en tres salidas accionables: resumen estructurado, matriz de habilidades y borrador de outreach editable.
 
-La primera capacidad del producto convierte una descripción de puesto en tres salidas accionables:
-
-- un resumen estructurado del rol,
-- una matriz de habilidades agrupada por señales relevantes,
-- y un borrador de outreach editable antes de copiar.
-
-## Estado del proyecto
-
-El proyecto está en fase final de producto. La base funcional, la navegación pública, el historial, settings, autenticación social y la capa de análisis están implementadas y verificadas. El foco actual queda en mantenimiento, pulido visual y despliegue.
+---
 
 ## Stack
 
-- React 19
-- TypeScript
-- Tailwind CSS 4
-- Zod 4
-- TanStack Query
-- Supabase Auth
-- React Router
-- Vitest
-- React Testing Library
-- Vite
+| Capa | Tecnología |
+|---|---|
+| Frontend | **React 19**, TypeScript strict, Vite 6, Tailwind CSS 4, React Router 7 |
+| Backend | **Express 5**, TypeScript, Prisma 7 (Supabase PostgreSQL), Zod 4 |
+| Server State | **TanStack Query** (React Query v5) |
+| UI State | **Zustand** (auth status, UI toggles) |
+| Auth | Custom JWT (HS256) en cookies httpOnly, bcrypt, Google OAuth |
+| AI | **Groq API** server-side (nunca expuesta al cliente) |
+| Testing | **Vitest** (unit), **Playwright** (E2E) |
+| Forms | React Hook Form + Zod resolver |
+| Package Manager | **pnpm** 11 (workspace monorepo) |
 
-## Deployment
+---
 
-El despliegue objetivo es Vercel con la URL final `https://nexustalent.vercel.app`.
+## Architecture
 
-- `vercel.json` ya apunta al build de Vite y a `dist`.
-- `robots.txt` y `sitemap.xml` viven en `public/` para que Vite los copie al build.
-- La variable `VITE_APP_URL` debe quedar en `http://localhost:5173` en desarrollo y configurarse como `https://yourdomain.com` para producción.
-- Si agregás nuevas páginas públicas, actualizá el sitemap junto con la ruta real.
-
-## Flujo de datos
-
-El proyecto sigue este flujo obligatorio:
-
-`Input del usuario -> Validación Zod -> Request a ai-client -> Respuesta IA -> Validación Zod -> Render en UI`
-
-Si la IA devuelve algo inválido, la app no debe romperse: tiene que mostrar un estado de error claro y recuperable.
-
-## Estructura principal
-
-- `src/App.tsx`: shell principal de la app.
-- `src/features/analysis/`: módulo de análisis de vacantes.
-- `src/lib/ai-client.ts`: cliente local/adaptable para el análisis.
-- `src/schemas/job-analysis.ts`: contratos Zod para entrada y salida.
-- `openspec/`: artefactos SDD del proyecto.
-- `AGENTS.md`: reglas de trabajo y contexto del proyecto.
-
-## Scripts
-
-```bash
-npm install
-npm run dev
-npm run test
-npm run test:coverage
-npm run typecheck
-npm run build
+```
+nexus-talent/
+├── server/          ← Express 5 backend (screaming architecture)
+│   ├── src/
+│   │   ├── auth/    ── JWT, register, login, OAuth, middleware
+│   │   ├── analysis/ ── Groq AI proxy, validation
+│   │   ├── profile/  ── User profile endpoints
+│   │   ├── history/  ── CRUD de analyses
+│   │   └── infra/    ── App shell, Prisma, rate limiter, logger
+│   ├── prisma/       ── Schema, migrations, seeds
+│   └── Dockerfile
+├── web/             ← React 19 frontend
+│   └── src/
+│       ├── auth/       ── AuthProvider, guards, store, API hooks
+│       ├── features/   ── Feature domains (analysis, history, settings, landing)
+│       ├── core/       ── Router, API client, ErrorBoundary, utilities
+│       └── shared/     ── Reusable components (Button, Card, Input, EmptyState, LoadingSkeleton)
+├── shared/          ← Zod schemas + types compartidos front/back
+│   └── contracts/      ── Single source of truth para validación
+├── e2e/             ← Playwright end-to-end tests
+└── openspec/        ← Artefactos SDD (especificaciones, diseño, tareas)
 ```
 
-## Desarrollo local
+### Flujo de datos obligatorio
 
-1. Instalá dependencias con `npm install`.
-2. Levantá la app con `npm run dev`.
-3. Ejecutá `npm run test` y `npm run typecheck` antes de abrir un cambio.
+```
+Input Usuario → Validación Zod (shared) → Request API → Server validation →
+Groq API → Response IA → Zod validation → Response al frontend → Render
+```
 
-## Calidad esperada
+---
 
-- Cobertura crítica objetivo: 90%+
-- UX de pantallas principales: 95+ Lighthouse cuando aplique
-- Estados asíncronos: loading, success, error y vacío
-- Validación estricta de input y output con Zod
+## Design System — "The Signal"
 
-## SDD
+- **Paleta**: Indigo + Chartreuse en OKLCH (ver `DESIGN.md`)
+- **Tipografía**: Cabinet Grotesk (display) + Satoshi (body), auto-hosted desde Fontshare
+- **Estrategia**: Dark-first, con variante `data-theme="light"`
+- **Principios**: Anti-convergencia basado en portfolio-personality (estilo Minimal/Elegant)
 
-Este repositorio usa un flujo Spec-Driven Development con artefactos en OpenSpec y memoria persistente en Engram.
+---
 
-Orden esperado para cambios grandes:
+## Comandos
 
-1. `sdd-init`
-2. `sdd-explore`
-3. `sdd-propose`
-4. `sdd-spec`
-5. `sdd-design`
-6. `sdd-tasks`
-7. `sdd-apply`
-8. `sdd-verify`
-9. `sdd-archive`
+```bash
+# Instalar dependencias (todo el workspace)
+pnpm install
 
-## AI Service
+# Generar cliente Prisma
+pnpm run prisma:generate
 
-El segundo cambio SDD introduce una capa de orquestación para AI con Groq como primer proveedor concreto.
+# Correr migraciones
+pnpm run prisma:migrate
 
-- El cliente de análisis sigue validando entrada y salida con Zod.
-- La capa de orquestación centraliza retries, timeouts y normalización de errores.
-- En desarrollo local, el adapter puede caer al transporte de respaldo para no exigir credenciales de Groq desde el primer día.
-- El rate limiting client-side quedó diferido para evitar sobrediseño en la primera integración.
+# Desarrollo — dos terminales
+pnpm run dev:server   # Backend en http://localhost:3001
+pnpm run dev:web      # Frontend en http://localhost:5173
 
-## Supabase Auth
+# Tests unitarios (server + web)
+pnpm run test
 
-La autenticación del módulo 07 usa Supabase como origen de verdad para la sesión.
+# Tests E2E (Playwright)
+pnpm run test:e2e
 
-- `VITE_SUPABASE_URL`: URL del proyecto de Supabase.
-- `VITE_SUPABASE_ANON_KEY`: clave pública anon del proyecto.
-- `VITE_APP_URL`: URL base de la app para redirects y configuración local o de producción.
+# Lint + formato
+pnpm run lint
+pnpm run format
 
-Si estas variables faltan, la app se mantiene en el shell público de autenticación y no expone las rutas privadas.
+# Build
+pnpm run build:server
+pnpm run build:web
+```
 
-La base mínima de esquema vive en `supabase/migrations/20260405_module_07_auth_users.sql`.
+---
 
-## SEO
+## Deploy
 
-- La landing pública y la página de privacidad son indexables.
-- Las rutas privadas y de autenticación no forman parte del sitemap.
-- `robots.txt` referencia el sitemap y limita el rastreo a las superficies públicas.
-- Mantener el copy público honesto y actualizado ayuda más que agregar texto genérico extra.
+| Componente | Plataforma | Config |
+|---|---|---|
+| Frontend | **Vercel** | `vercel.json` — pnpm workspace filter + API proxy a Render |
+| Backend | **Render** | `render.yaml` (Blueprint) + Dockerfile |
 
-## CI/CD
+### Vercel
 
-- El repo ejecuta validación automática con GitHub Actions en pull requests y en pushes a `main`.
-- El workflow corre `npm ci`, `npm run test`, `npm run typecheck` y `npm run build`.
-- Node queda fijado con `.nvmrc` y `package.json` para evitar drift entre local y CI.
-- El despliegue queda listo para Vercel mediante el build de Vite y `vercel.json`.
+- Build: `pnpm --filter @nexus-talent/web build`
+- Output: `web/dist`
+- SPA catch-all + prerender para `/` y `/privacy`
+- API proxy: `/api/*` → `https://nexus-talent.onrender.com/api/*`
 
-## Rutas públicas
+### Render
 
-- `/` landing principal.
-- `/privacy` política de privacidad.
-- `/404` página de error.
-- `/auth/sign-in` y `/auth/sign-up` existen como entrada pública de autenticación, pero no se incluyen en el sitemap.
+- Web service con Dockerfile en `server/`
+- Health check: `GET /health`
+- Variables requeridas: ver tabla abajo
+
+---
+
+## Variables de Entorno
+
+| Variable | Desarrollo | Producción | Requerida |
+|---|---|---|---|
+| `DATABASE_URL` | `file:./dev.db` (SQLite local) | PostgreSQL connection string de Supabase | ✓ |
+| `JWT_SECRET` | `dev-secret-...` | Secreto robusto de 256+ bits | ✓ |
+| `GROQ_API_KEY` | (opcional en local) | API key de Groq | ✓ (prod) |
+| `CORS_ORIGIN` | `http://localhost:5173` | URL de Vercel | ✓ |
+| `VITE_API_URL` | `http://localhost:3001` | URL de Render | ✓ |
+| `VITE_APP_URL` | `http://localhost:5173` | URL del frontend en Vercel | ✓ |
+| `PORT` | `3001` | Asignado por Render | — |
+
+---
+
+## Testing
+
+### Unit Tests (Vitest)
+
+```bash
+pnpm test                    # Server + web
+pnpm --filter @nexus-talent/server test
+pnpm --filter @nexus-talent/web test
+```
+
+### End-to-End (Playwright)
+
+```bash
+pnpm run test:e2e
+```
+
+Ejecuta 10 tests en chromium:
+- Smoke de landing page
+- Auth: register, login, logout, protected redirect
+- Analysis: submit + validation
+- History: list + empty state
+- Usa base de datos SQLite efímera por ejecución
+
+---
+
+## SDD (Spec-Driven Development)
+
+Este repositorio sigue SDD con artefactos en `openspec/` y memoria persistente en Engram.
+
+Ciclo completo:
+1. `sdd-init` → 2. `sdd-explore` → 3. `sdd-propose` → 4. `sdd-spec`
+→ 5. `sdd-design` → 6. `sdd-tasks` → 7. `sdd-apply` → 8. `sdd-verify` → 9. `sdd-archive`
+
+Ver `AGENTS.md` para reglas detalladas de trabajo y contexto del proyecto.
+
+---
 
 ## Convenciones
 
-- El UI está pensado en español primero.
-- El outreach generado debe poder editarse antes de copiarse.
-- Las dependencias sensibles deben fijarse explícitamente cuando corresponda.
-- Los cambios importantes se trabajan en ramas dedicadas y con commits atómicos.
+- **Commits**: Conventional Commits. Título en inglés, descripción en español.
+- **React 19**: Sin useMemo/useCallback (React Compiler lo maneja). Named exports.
+- **TypeScript**: Strict mode. Sin `any`. Prefer `interface` sobre `type` para props.
+- **Zod**: Schemas compartidos en `shared/contracts/` son la única fuente de verdad.
+- **No-Line Rule**: Separar por contraste de fondo o ghost borders, no por líneas sólidas de 1px.
+- **UX States**: Todo proceso asíncrono debe tener estados Loading, Success, Error y Empty.
+- **0 sobreingeniería**: Clara sobre ingeniosa. Si no hace falta, no está.
 
-## Estado actual
+---
 
-El proyecto quedó cerrado con la base funcional completa, módulos de polish aplicados y preparación de despliegue y SEO lista para Vercel.
+## Estado del Proyecto
+
+- ✅ P1: Infraestructura (monorepo, Prisma, Express skeleton, Render deploy)
+- ✅ P2: Auth Backend (JWT custom, email/password, Google OAuth)
+- ✅ P3: AI Proxy (Groq server-side, Zod validation)
+- ✅ P4: History API (CRUD de analyses)
+- ✅ P5: Frontend Refactor (AuthProvider, TanStack Query, Zustand)
+- ✅ P6: Design Identity + GEO Foundation (OKLCH, tipografía, landing, SSR, SEO)
+- ✅ P7: E2E + Security (Playwright, CSP, rate limiting, logging)
+- 🔄 P8: Polish + Deploy (error boundaries, skeletons, docs, Vercel proxy)
