@@ -29,6 +29,10 @@ export default function handler(request: Request): Response {
   return response;
 }
 
+export const config = {
+  runtime: "edge",
+};
+
 function safePath(path: string): string {
   if (path.includes("://") || path.startsWith("//")) return "/app/analysis";
   if (!path.startsWith("/")) return "/app/analysis";
