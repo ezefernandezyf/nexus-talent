@@ -31,7 +31,7 @@ function AuthProbe() {
   );
 }
 
-// Shared mock axios instance — configured per test via configureApiMocks()
+// Shared mock axios instance - configured per test via configureApiMocks()
 const mockAxiosInstance = vi.hoisted(() => ({
   get: vi.fn(),
   post: vi.fn(),
@@ -158,7 +158,7 @@ describe("AuthProvider", () => {
 
     await user.click(screen.getByRole("button", { name: /google oauth/i }));
 
-    expect(window.location.href).toBe("/api/auth/oauth/google");
+    expect(window.location.href).toBe("https://nexus-talent-api.onrender.com/api/auth/oauth/google");
 
     Object.defineProperty(window, "location", {
       value: originalLocation,

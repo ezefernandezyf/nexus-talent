@@ -141,7 +141,7 @@ export function createBackendProxyAdapter(
               }),
             });
           } catch {
-            // Network error — trigger fallback
+            // Network error - trigger fallback
             if (fallbackTransport) {
               return Promise.resolve(fallbackTransport(input));
             }
@@ -169,7 +169,7 @@ export function createBackendProxyAdapter(
 
     parseResponse(response: unknown) {
       // Server already returns a validated AnalysisResponseDTO-shaped JSON.
-      // No envelope parsing needed — pass through directly.
+      // No envelope parsing needed - pass through directly.
       if (typeof response === "string") {
         return JSON.parse(response) as unknown;
       }

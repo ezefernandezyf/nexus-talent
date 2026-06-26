@@ -10,7 +10,7 @@ import { createTestQueryClient } from "@/test/mocks/query-client";
 import { AppRouter } from "./router";
 
 // ---------------------------------------------------------------------------
-// Axios mock — hooks now use HTTP repo instead of localStorage
+// Axios mock - hooks now use HTTP repo instead of localStorage
 // ---------------------------------------------------------------------------
 
 const mockAxiosInstance = vi.hoisted(() => ({

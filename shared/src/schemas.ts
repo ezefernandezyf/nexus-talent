@@ -6,7 +6,7 @@ import { z } from "zod";
 
 /**
  * Login request body.
- * Password minimum 8 chars (up from previous 6 — hardened for V1.1).
+ * Password minimum 8 chars (up from previous 6 - hardened for V1.1).
  */
 export const authLoginSchema = z.object({
   email: z.email(),
@@ -15,7 +15,7 @@ export const authLoginSchema = z.object({
 
 /**
  * Register request body.
- * `displayName` is optional — defaults to null / email prefix on server.
+ * `displayName` is optional - defaults to null / email prefix on server.
  */
 export const authRegisterSchema = authLoginSchema.extend({
   displayName: z.string().min(1).max(100).optional(),

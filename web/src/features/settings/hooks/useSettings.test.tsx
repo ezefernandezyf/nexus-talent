@@ -160,7 +160,7 @@ describe("useSettings", () => {
     await waitFor(() => expect(result.current.status).toBe("authenticated"));
     expect(result.current.identityLinkingAvailable).toBe(true);
 
-    // linkIdentity now throws — identity linking is deprecated
+    // linkIdentity now throws - identity linking is deprecated
     await expect(result.current.connectAccount("google")).rejects.toThrow(
       "Social identity linking is not available in this version.",
     );
@@ -204,7 +204,7 @@ describe("useSettings", () => {
 
     await waitFor(() => expect(result.current.status).toBe("authenticated"));
 
-    // unlinkIdentity throws immediately — identity linking is deprecated
+    // unlinkIdentity throws immediately - identity linking is deprecated
     await expect(result.current.disconnectAccount("github")).rejects.toThrow(
       "Social identity unlinking is not available in this version.",
     );
