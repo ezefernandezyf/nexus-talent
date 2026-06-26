@@ -14,10 +14,6 @@ const COOKIE_OPTIONS = {
 
 /**
  * POST /api/auth/register
- *
- * After creating the session, redirects to Vercel Edge session endpoint
- * which re-sets the cookie with the correct .nexustalent.vercel.app domain.
- * This solves the cross-domain cookie issue (Render → Vercel).
  */
 export async function register(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
@@ -26,9 +22,8 @@ export async function register(req: Request, res: Response, next: NextFunction):
 
     req.log.info({ event: "register", userId: result.user.id }, "User registered");
 
-    const clientUrl = process.env.CLIENT_URL ?? "http://localhost:5173";
-    // Redirect to Vercel Edge session endpoint (not Render) to set cookie with correct domain
-    res.redirect(`${clientUrl}/auth/session?token=${result.token}&redirect=${clientUrl}/app/analysis`);
+    res.cookie("nexus-talent-session", result.token, COOKIE_OPTIONS);
+    res.status(201).json({ user: result.user });
   } catch (err) {
     next(err);
   }
@@ -36,9 +31,6 @@ export async function register(req: Request, res: Response, next: NextFunction):
 
 /**
  * POST /api/auth/login
- *
- * After creating the session, redirects to Vercel Edge session endpoint
- * which re-sets the cookie with the correct .nexustalent.vercel.app domain.
  */
 export async function login(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
@@ -47,8 +39,8 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
 
     req.log.info({ event: "login_success", userId: result.user.id }, "User logged in");
 
-    const clientUrl = process.env.CLIENT_URL ?? "http://localhost:5173";
-    res.redirect(`${clientUrl}/auth/session?token=${result.token}&redirect=${clientUrl}/app/analysis`);
+    res.cookie("nexus-talent-session", result.token, COOKIE_OPTIONS);
+    res.status(200).json({ user: result.user });
   } catch (err) {
     // Log failure before forwarding - email is the attempted login
     req.log.warn({ event: "login_failure", email: req.body?.email }, "Failed login attempt");
@@ -141,8 +133,8 @@ export async function googleCallback(req: Request, res: Response, next: NextFunc
     const result = await oauthService.handleOAuthCallback(code);
 
     const clientUrl = process.env.CLIENT_URL ?? "http://localhost:5173";
-    // Redirect to Vercel Edge session endpoint to set cookie with correct domain
-    res.redirect(`${clientUrl}/auth/session?token=${result.token}&redirect=${clientUrl}/app/analysis`);
+    // Redirect to Vercel Edge Function to set cookie with correct domain
+    res.redirect(`${clientUrl}/api/auth/session?token=${result.token}&redirect=/app/analysis`);
   } catch (err) {
     next(err);
   }
