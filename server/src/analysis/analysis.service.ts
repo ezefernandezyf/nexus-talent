@@ -9,8 +9,8 @@ import { logger } from "../infra/logger.js";
 // ============================================================================
 
 const GROQ_CHAT_COMPLETIONS_URL = "https://api.groq.com/openai/v1/chat/completions";
-const DEFAULT_GROQ_MODEL = "openai/gpt-oss-20b";
-const GROQ_TIMEOUT_MS = 30_000;
+const DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile";
+const GROQ_TIMEOUT_MS = 60_000;
 
 // ============================================================================
 // Types
@@ -55,8 +55,8 @@ function buildGroqMessages(input: AnalysisRequestDTO): GroqChatMessage[] {
 async function fetchGroq(messages: GroqChatMessage[], signal: AbortSignal): Promise<unknown> {
   const apiKey = process.env.GROQ_API_KEY;
 
-  // TODO: Set GROQ_API_KEY in Render dashboard (nexus-talent service) - manual step,
-  // requires Render dashboard access. Without it, POST /api/ai/analyze returns 502.
+  // GROQ_API_KEY is configured in Render env vars. The key must have access
+  // to the llama-3.3-70b-versatile model with structured output support.
   if (!apiKey) {
     throw new AppError(502, "GROQ_API_KEY is not configured on the server.");
   }
