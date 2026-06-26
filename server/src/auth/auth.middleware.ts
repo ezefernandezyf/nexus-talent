@@ -25,50 +25,28 @@ function getUserIdFromCookie(cookieHeader: string | undefined): string | null {
 /**
  * Require a valid authenticated session.
  * Responds with 401 if the session cookie is missing, expired, or invalid.
- *
- * Supports two auth mechanisms:
- * 1. Cookie: standard httpOnly cookie (browser → Vercel proxy → here)
- * 2. X-User-Id header: set by Vercel Edge Middleware after reading the httpOnly cookie
- *    This solves the cross-domain cookie issue where the browser can't send
- *    a cookie set by Render (.nexustalent-api.onrender.com) to Vercel (.nexustalent.vercel.app).
  */
 export function requireAuth(req: Request, res: Response, next: NextFunction): void {
-  // Primary: X-User-Id header from trusted Vercel Edge Middleware
-  const headerUserId = req.headers["x-user-id"];
-  if (typeof headerUserId === "string" && headerUserId.length > 0) {
-    req.userId = headerUserId;
-    next();
+  const userId = getUserIdFromCookie(req.headers.cookie);
+
+  if (!userId) {
+    res.status(401).json({ error: "Authentication required" });
     return;
   }
 
-  // Fallback: direct cookie (for local dev or direct Render access)
-  const cookieUserId = getUserIdFromCookie(req.headers.cookie);
-  if (cookieUserId) {
-    req.userId = cookieUserId;
-    next();
-    return;
-  }
-
-  res.status(401).json({ error: "Authentication required" });
+  req.userId = userId;
+  next();
 }
 
 /**
  * Optionally attach the authenticated user if a valid session exists.
  * Continues silently - req.userId remains undefined when unauthenticated.
- *
- * Supports both X-User-Id header (Vercel Edge) and direct cookie.
  */
 export function optionalAuth(req: Request, res: Response, next: NextFunction): void {
-  const headerUserId = req.headers["x-user-id"];
-  if (typeof headerUserId === "string" && headerUserId.length > 0) {
-    req.userId = headerUserId;
-    next();
-    return;
-  }
+  const userId = getUserIdFromCookie(req.headers.cookie);
 
-  const cookieUserId = getUserIdFromCookie(req.headers.cookie);
-  if (cookieUserId) {
-    req.userId = cookieUserId;
+  if (userId) {
+    req.userId = userId;
   }
 
   next();
