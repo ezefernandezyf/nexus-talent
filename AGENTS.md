@@ -168,17 +168,33 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [x] Structured logging (pino-http middleware + event logging)
 - [x] Input sanitization (Zod validation at API layer)
 
-### P8: Polish + Deploy
-> Error boundaries, skeletons, docs
+### P8: Polish + Deploy ✅
+> Error boundaries, skeletons, docs, OAuth security
+- [x] CI/CD: GitHub Actions (lint, type, test on PR + push)
+- [x] Vercel deploy config (vercel.json en raíz, pnpm workspace filter)
+- [x] Vercel rewrites for SPA + API proxy (proxy /api/* → Render)
+- [x] Render health check + deploy config
+- [x] ServerErrorPage + AuthShell redesign
+- [x] DESIGN.md + README docs
+- [x] **OAuth Code Exchange**: one-time code en vez de JWT en redirect URL (seguridad)
 - [ ] Error boundaries + error pages
 - [ ] Loading skeletons for all pages
 - [ ] Empty states (no history, no analysis yet)
-- [ ] Vercel rewrites for SPA + API proxy
-- [ ] Render health check + deploy config
-- [x] CI/CD: GitHub Actions (lint, type, test on PR + push)
-- [x] Vercel deploy config (vercel.json en raíz, pnpm workspace filter)
 - [ ] **Lighthouse 90+** en mobile (SEO — Core Web Vitals)
 
+---
+## V1.1 — Released ✅
+> Tag: `v1.1` | Deploy: Vercel + Render + Supabase
+
+### V1.1 Bug Fixes
+- [x] maxAge en milisegundos (no segundos) — OAuth state + session cookies
+- [x] fix(proxy): Render subdomain en Vercel rewrite (nexus-talent-api)
+- [x] fix(build): skip prerender en Vercel para evitar OOM
+- [x] fix(analysis): Groq json_object + Zod sin id/createdAt
+- [x] fix(auth): cross-domain session cookies (Vercel Edge Function)
+- [x] chore: remove em-dashes from entire project
+
+---
 ## Roadmap — V1.2
 
 ### V1.2.1: User Profiles + Brand Authority
