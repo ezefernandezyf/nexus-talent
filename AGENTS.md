@@ -63,6 +63,24 @@ pnpm run dev:server             # terminal 1: backend on :3001
 pnpm run dev:web                # terminal 2: frontend on :5173
 ```
 
+## Design Tools (V1.2)
+
+```bash
+# Anti-slop detector (antes de cada commit de UI)
+npx impeccable detect web/src/
+
+# Design review commands (dentro del agente)
+/impeccable init        # setup inicial (PRODUCT.md + DESIGN.md)
+/impeccable shape       # planificar antes de codear
+/impeccable audit       # quality checks técnicos
+/impeccable critique    # UX review
+/impeccable polish      # final pass antes de merge
+/impeccable animate     # review de animaciones
+/impeccable bolder      # amplificar diseño aburrido
+/impeccable quieter     # bajar intensidad
+/impeccable distill     # simplificar
+```
+
 ## Key Files
 - `server/prisma/schema.prisma` — data model
 - `server/prisma.config.ts` — Prisma 7 datasource config (env DATABASE_URL)
@@ -192,63 +210,146 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [x] chore: remove em-dashes from entire project
 
 ---
-## Roadmap — V1.2
+## V1.2 — Redesign & UX Excellence
 
-### 🔴 Must-have (core app)
-- [ ] **Error boundaries** — boundary components en layout principal + páginas
-- [ ] **Loading skeletons** — skeletons para analysis, history, settings pages
-- [ ] **Empty states** — "No analysis yet", "No history" con CTA contextual
+> **Filosofía**: Rehacer el frontend desde cero con un design system sólido, usando Impeccable (anti-slop + 23 comandos) y taste-skill (dirección visual + anti-repetición).
 
-### 🟡 Should-have (UX + docs)
-- [ ] **Lighthouse 90+** mobile — Core Web Vitals optimization
-- [ ] **DESIGN.md** — documentar "The Signal" design system (portfolio-personality)
+### 🎨 P9: Design System Foundation
+> Setup de herramientas + DESIGN.md + tokens globales. **Sin componentes nuevos todavía — solo base.**
 
-### 🔵 V1.2.1: User Profiles + Brand Authority
-> Información persistente del usuario + presencia en plataformas (GEO Week 3-4)
-- [ ] PUT /api/profile — skills, experiencia, rol, resume
-- [ ] Profile UI — formulario de datos del candidato
+**Skills activas**: impeccable, taste-skill/design-taste-frontend, taste-skill/minimalist-ui
+
+- [ ] `/impeccable init` — generar PRODUCT.md + DESIGN.md con la identidad del proyecto
+- [ ] Definir paleta de colores final (OKLCH, dark-first, con taste-skill guidance)
+- [ ] Definir escala tipográfica (fuentes display + body, sin Inter/Arial)
+- [ ] Definir spacing scale + radii + shadows (con impeccable anti-pattern checks)
+- [ ] CSS reset + custom properties globales (`:root` variables)
+- [ ] Audit de componentes existentes con taste-skill/redesign-existing-projects
+- [ ] `npx impeccable detect web/src/` — limpiar anti-patrones detectados
+
+### 🧱 P10: Core Components Redesign
+> **Desde cero.** Cada componente usa taste-skill para dirección visual e impeccable para anti-slop.
+
+**Skills activas**: taste-skill/design-taste-frontend, taste-skill/high-end-visual-design, impeccable
+
+- [ ] Button (variants: primary, secondary, ghost, danger, sizes)
+- [ ] Input + Textarea (con estados: focus, error, disabled, with icon)
+- [ ] Card + Card variants (flat, elevated, interactive)
+- [ ] Modal + Drawer (con backdrop + focus trap + animation)
+- [ ] Badge + Tag + Status indicators
+- [ ] Toast / Notification + toast provider
+- [ ] Dropdown / Select / Menu
+- [ ] Tabs + Toggle Group
+- [ ] Tooltip + Popover
+- [ ] Skeleton loader primitives (base para P11)
+- [ ] `/impeccable audit` cada batch de componentes
+- [ ] Tests unitarios (Vitest) + snapshots para cada componente
+
+### 📄 P11: Page Shells + UX States
+> Layouts, skeletons, empty states, error boundaries. **Sin estos, el app se siente roto.**
+
+- [ ] ErrorBoundary component (con fallback UI + retry)
+- [ ] Loading skeletons: AnalysisPage, HistoryPage, HistoryDetailPage, SettingsPage
+- [ ] Empty states: "No analysis yet" (con CTA), "No history found", "No results"
+- [ ] AppLayout redesign (sidebar/navbar/topbar con nueva identidad)
+- [ ] AuthShell redesign (sign-in, sign-up, OAuth callback pages)
+- [ ] Landing page redesign (manteniendo SEO/GEO content, nuevo diseño visual)
+- [ ] MobileDrawer + responsive navigation
+- [ ] `/impeccable critique` en cada página terminada
+
+### ✨ P12: Polish + Animation
+> Micro-interacciones, transiciones, feedback visual.
+
+**Skills activas**: taste-skill/high-end-visual-design, impeccable (animate, polish, delight)
+
+- [ ] Page transitions (route changes con framer-motion)
+- [ ] Hover + focus states en todos los componentes interactivos
+- [ ] Loading → Success → Error state transitions
+- [ ] Skeleton → Content reveal animation
+- [ ] Toast enter/exit animations
+- [ ] Modal/Drawer open/close con spring physics
+- [ ] Scroll-triggered reveals (landing page)
+- [ ] `/impeccable animate` review
+- [ ] `/impeccable polish` final pass
+
+### 🚀 P13: Performance + Lighthouse
+> Core Web Vitals, bundle size, SEO técnico.
+
+- [ ] Lighthouse 90+ mobile (Performance, Accessibility, Best Practices, SEO)
+- [ ] Bundle analysis (`vite build --debug`) — split chunks grandes
+- [ ] Dynamic imports + lazy loading de páginas y componentes pesados
+- [ ] Image optimization (WebP/AVIF, lazy loading, responsive sizes)
+- [ ] Font loading strategy (font-display: swap, subset, preload)
+- [ ] CSS purge / unused style removal
+- [ ] `npx impeccable detect` — limpiar issues restantes
+- [ ] Google Search Console: submit sitemap (manual)
+
+---
+## V1.2.1 — User Profiles + Brand Authority
+
+### 👤 P14: User Profiles
+- [ ] PUT /api/profile — skills, experiencia, rol, resume, linkedin, github
+- [ ] Profile UI — formulario con validación Zod + React Hook Form
 - [ ] Prompt enrichment — Groq usa datos del perfil en outreach messages
-- [ ] Backend: settings endpoints — CRUD para settings
-- [ ] **GEO/SEO Brand Building** (Week 3-4 del audit):
-  - [ ] sameAs links en Organization schema (GEO)
-  - [ ] Crear/claim LinkedIn company page (GEO CRITICAL #BRA-1)
-  - [ ] Product Hunt launch (GEO CRITICAL #BRA-1)
-  - [ ] Crunchbase company profile (GEO)
-  - [ ] Poblar GitHub org con README/documentación (GEO)
-  - [ ] Registrar en G2 y Capterra (GEO)
-  - [ ] Blog content: 2-3 artículos SSR-rendered (GEO Week 4)
-  - [ ] YouTube demo video (GEO Week 4)
-  - [ ] Re-run GEO audit — target: 50-60/100 (GEO Week 4)
-- [ ] **GEO/SEO Long-term** (Post-30d):
-  - [ ] Evaluar viabilidad del nombre "Nexus Talent" (colisión con 4+ entidades)
-  - [ ] Wikidata Q-ID para entity disambiguation (GEO)
-  - [ ] Dominio `nexustalent.com` para producción
-  - [ ] Backlinks: guest posts, directorios, publicaciones de industria
-  - [ ] Participación en r/recruiting, r/humanresources (GEO)
-  - [ ] Audit GEO Score target: 65-75/100
+- [ ] Profile picture / avatar upload (opcional, Cloudinary o similar)
 
-### 🟢 V1.2.2: CV Generator
-> Armado automático de CV tailor-made basado en análisis
-- [ ] POST /api/cv/generate — JD + perfil → CV
-- [ ] CV preview + export (PDF/HTML)
-- [ ] Templates por seniority/industria
+### ⚙️ P15: Settings Backend
+- [ ] CRUD endpoints: GET/PUT /api/settings
+- [ ] Settings UI — theme, notifications, account preferences
+- [ ] Rate limit settings: configuración por usuario
 
-### V1.1 Release Artifacts → DONE ✅
-- [x] V1.1 release PR: develop → main
-- [x] Tag: v1.1
-- [x] OAuth code exchange archived
-- [x] AGENTS.md updated
+### 🌐 P16: GEO Brand Building (async, paralelo al dev)
+> Semana 3-4 del GEO audit. La mayoría es manual, no código.
 
-## Skills del Proyecto
+- [ ] sameAs links en Organization schema (GEO)
+- [ ] Crear/claim LinkedIn company page (GEO CRITICAL)
+- [ ] Product Hunt launch prep (GEO CRITICAL)
+- [ ] Crunchbase company profile
+- [ ] Poblar GitHub org con README + docs
+- [ ] Registrar en G2 y Capterra
+- [ ] Blog content: 2-3 artículos SSR-rendered
+- [ ] YouTube demo video (2-3 min)
+- [ ] Re-run GEO audit — target: 50-60/100
 
-Skills locales en `skills/` que deben priorizarse según la tarea:
+---
+## V1.2.2 — CV Generator
 
-- `frontend-design` — Interfaces de alto impacto, diseño visual distintivo
-- `react-19` — Convenciones React 19 (React Compiler, Actions, ref como prop)
+### 📝 P17: CV Generator
+- [ ] POST /api/cv/generate — JD + perfil → CV (Groq + template system)
+- [ ] CV preview UI (live rendering, no export todavía)
+- [ ] Templates: tech, business, creative (por seniority/industria)
+- [ ] PDF export (puppeteer o similar en server)
+- [ ] HTML export (download .html standalone)
+- [ ] CV history — guardar y reutilizar CVs generados
+
+---
+## V1.2 Skills Instaladas
+
+Skills locales en `.opencode/skills/` y `.agents/skills/` que deben priorizarse:
+
+### Diseño
+- `impeccable` (`.opencode/skills/impeccable/`) — 23 comandos de diseño, detector anti-slop, `/impeccable audit/polish/critique/animate/bolder/quieter`
+- `design-taste-frontend` (`.agents/skills/design-taste-frontend/`) — taste-skill v2 con diales VARIANCE/MOTION/DENSITY
+- `high-end-visual-design` (`.agents/skills/high-end-visual-design/`) — UI premium, contraste suave, spring motion
+- `minimalist-ui` (`.agents/skills/minimalist-ui/`) — Estilo Notion/Linear, paleta contenida
+- `redesign-existing-projects` (`.agents/skills/redesign-existing-projects/`) — Auditoría de UI existente → fix
+- `portfolio-personality` (`.opencode/skills/portfolio-personality/`) — Anti-convergencia, identidad visual distintiva
+
+### Desarrollo
+- `react-19` — React 19 (Compiler, Actions, ref como prop)
 - `tailwind-4` — Tailwind CSS 4, cn(), tokens, responsive
 - `typescript` — Tipado estricto, const types, flat interfaces
-- `zod-4` — Validación Zod 4, breaking changes desde v3
-- `portfolio-personality` — Principios de diseño para que no parezca hecho por IA: paletas audaces, tipografías con carácter, composiciones intencionales. Guía para aplicar "The Signal" (Indigo + Chartreuse, Clash Display + Satoshi)
+- `zod-4` — Validación Zod 4
+- `go-testing` — Patrones de testing Go (si aplica)
+
+## Convenciones V1.2
+
+- **Design-first**: Siempre `/impeccable init`/`shape` antes de escribir componentes
+- **Anti-slop**: Correr `npx impeccable detect` antes de cada commit de UI
+- **No em-dashes**: Ya limpiados. No reintroducir.
+- **Componentes nuevos en `web/src/shared/components/`**: Reemplazan los viejos de V1.1
+- **Feature flag**: Componentes viejos se mantienen hasta que los nuevos estén completos
+- **Testing**: Snapshot tests para componentes visuales, unit tests para lógica
 
 ## Responsabilidades Clínicas (Orchestrator vs Agents)
 
