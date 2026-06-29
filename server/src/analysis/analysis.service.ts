@@ -4,6 +4,8 @@ import type { AnalysisRequestDTO, AnalysisResponseDTO } from "../../../shared/sr
 import { AppError } from "../infra/error-handler.js";
 import { logger } from "../infra/logger.js";
 
+const groqResponseSchema = analysisResponseSchema.omit({ id: true, createdAt: true });
+
 // ============================================================================
 // Constants
 // ============================================================================
@@ -159,7 +161,7 @@ export async function analyze(input: AnalysisRequestDTO): Promise<AnalysisRespon
     const envelope = await fetchGroq(messages, controller.signal);
     const raw = parseGroqEnvelope(envelope);
 
-    const result = analysisResponseSchema.safeParse(raw);
+    const result = groqResponseSchema.safeParse(raw);
     if (!result.success) {
       logger.warn({ issues: result.error.issues, raw: JSON.stringify(raw).slice(0, 500) }, "Zod validation failed");
       throw new AppError(502, "AI response format was unexpected. Please try again.");
