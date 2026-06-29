@@ -5,12 +5,13 @@ import { parseCookies } from "../infra/request.js";
 import { codeStore } from "./code-store.js";
 
 const SEVEN_DAYS_SECONDS = 7 * 24 * 60 * 60;
+const SEVEN_DAYS_MS = SEVEN_DAYS_SECONDS * 1000;
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
   sameSite: "lax" as const,
   path: "/",
-  maxAge: SEVEN_DAYS_SECONDS,
+  maxAge: SEVEN_DAYS_MS,
 };
 
 /**
@@ -90,7 +91,7 @@ export async function googleLogin(_req: Request, res: Response, next: NextFuncti
       httpOnly: true,
       sameSite: "lax",
       path: "/",
-      maxAge: 10 * 60, // 10 minutes
+      maxAge: 10 * 60 * 1000, // 10 minutes in milliseconds
     });
 
     const url = oauthService.getGoogleAuthURL(state);
