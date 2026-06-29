@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { analysisResponseSchema, GROQ_JOB_ANALYSIS_JSON_SCHEMA } from "../../../shared/src/schemas.js";
+import { analysisResponseSchema } from "../../../shared/src/schemas.js";
 import type { AnalysisRequestDTO, AnalysisResponseDTO } from "../../../shared/src/schemas.js";
 import { AppError } from "../infra/error-handler.js";
 import { logger } from "../infra/logger.js";
@@ -72,12 +72,7 @@ async function fetchGroq(messages: GroqChatMessage[], signal: AbortSignal): Prom
       model: process.env.GROQ_MODEL ?? DEFAULT_GROQ_MODEL,
       messages,
       response_format: {
-        type: "json_schema",
-        json_schema: {
-          name: "job_analysis",
-          strict: true,
-          schema: GROQ_JOB_ANALYSIS_JSON_SCHEMA,
-        },
+        type: "json_object",
       },
     }),
   });
