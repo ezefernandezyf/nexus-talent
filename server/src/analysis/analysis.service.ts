@@ -83,8 +83,9 @@ async function fetchGroq(messages: GroqChatMessage[], signal: AbortSignal): Prom
   });
 
   if (!response.ok) {
-    logger.warn({ status: response.status, statusText: response.statusText }, "Groq API returned non-OK status");
-    throw new AppError(502, `Groq API responded with status ${response.status}.`);
+    const errorBody = await response.text().catch(() => "<unreadable>");
+    logger.warn({ status: response.status, statusText: response.statusText, body: errorBody }, "Groq API returned non-OK status");
+    throw new AppError(502, `Groq API responded with status ${response.status}: ${errorBody.slice(0, 200)}`);
   }
 
   const body = (await response.json()) as unknown;
