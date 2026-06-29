@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm --filter @nexus-talent/web build",
+  "buildCommand": "NODE_OPTIONS=\"--max-old-space-size=4096\" pnpm --filter @nexus-talent/web build:ci",
   "outputDirectory": "web/dist",
   "installCommand": "pnpm install --frozen-lockfile",
   "rewrites": [
