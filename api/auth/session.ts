@@ -8,7 +8,7 @@
  * → POSTs code to Render exchange endpoint → gets JWT → sets cookie → redirects
  */
 
-const RENDER_URL = process.env.RENDER_URL ?? "https://nexus-talent-api-um0a.onrender.com";
+const RENDER_URL = process.env.RENDER_URL ?? "https://nexus-talent-api-svik.onrender.com";
 const EXCHANGE_SECRET = process.env.EXCHANGE_SECRET ?? "";
 
 export default async function handler(request: Request): Promise<Response> {

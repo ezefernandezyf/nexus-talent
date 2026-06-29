@@ -95,7 +95,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Redirect directly to Render backend so the state cookie is set on
   // the same domain as the Google callback URL - avoids cookie mismatch.
-  const RENDER_BACKEND_URL = "https://nexus-talent-api-um0a.onrender.com";
+  const RENDER_BACKEND_URL = "https://nexus-talent-api-svik.onrender.com";
 
   async function signInWithOAuth(provider: string): Promise<AuthActionResponse> {
     window.location.href = `${RENDER_BACKEND_URL}/api/auth/oauth/${provider}`;
