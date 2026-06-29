@@ -53,7 +53,7 @@ Executed focused verification suites:
 
 ---
 
-### Correctness (Static — Structural Evidence)
+### Correctness (Static - Structural Evidence)
 | Requirement | Status | Notes |
 |------------|--------|-------|
 | Deep Space palette and no-line separation | ✅ Implemented | The shared design utilities are centralized in `src/index.css` and consumed by the feature shells. |

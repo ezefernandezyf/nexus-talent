@@ -1,6 +1,6 @@
 ## Verification Report
 
-**Change**: P6 — Design Identity "The Signal" + GEO Foundation
+**Change**: P6 - Design Identity "The Signal" + GEO Foundation
 **Version**: N/A
 **Mode**: Standard
 
@@ -10,7 +10,7 @@
 | Tasks total | 37 (35 core + 2 anti-convergence) |
 | Tasks complete | 30 checked + 1 implemented-but-unchecked (5.1) |
 | Tasks incomplete | 4 (5.2, 5.4, 5.5, 5.6) |
-| Tasks skipped (legitimate) | 2 (4.2, 4.3 — Vike incompatible) |
+| Tasks skipped (legitimate) | 2 (4.2, 4.3 - Vike incompatible) |
 
 ### Build & Tests Execution
 **Build**: ✅ Passed
@@ -25,7 +25,7 @@ Test Files  57 passed (57)
      Tests  223 passed (223)
    Duration  76.08s
 ```
-Notable: `Badge.test.tsx` — 6/6 passed. `LandingPage.test.tsx` — 1/1 passed. All auth, analysis, history, settings, and router tests pass.
+Notable: `Badge.test.tsx` - 6/6 passed. `LandingPage.test.tsx` - 1/1 passed. All auth, analysis, history, settings, and router tests pass.
 
 **Coverage**: ➖ Not available (no coverage config in test runner)
 
@@ -74,7 +74,7 @@ Notable: `Badge.test.tsx` — 6/6 passed. `LandingPage.test.tsx` — 1/1 passed.
 | favicon | ✅ Implemented | Stable file (667KB, no hash in name) |
 | og-image.png | ✅ Implemented | 1200×630 RGBA PNG |
 | Badge component | ✅ Implemented | 4 variants + 2 sizes + optional icon; styled with token classes |
-| Component refresh | ✅ Implemented | Button, Card, Input, Modal — zero HEX, all use token classes via Tailwind `@theme` |
+| Component refresh | ✅ Implemented | Button, Card, Input, Modal - zero HEX, all use token classes via Tailwind `@theme` |
 | Landing content | ✅ Implemented | 1430 source words, H1 + 4 H2 sections + 5 FAQ Q&A + 2 CTAs |
 | FAQ accordion | ✅ Implemented | 5 honest Q&A, no invented features |
 | Layout + nav redesign | ✅ Implemented | AppLayout, MobileDrawer, Footer migrated to tokens |
@@ -96,15 +96,15 @@ Notable: `Badge.test.tsx` — 6/6 passed. `LandingPage.test.tsx` — 1/1 passed.
 **CRITICAL**: None
 
 **WARNING**:
-1. **W1**: 1 remaining HEX color `#ffffff` in `web/src/index.css:222` — spec requires zero HEX hardcodes. Appears to be a gradient fallback in a `@theme` block. Minor, easily fixable.
+1. **W1**: 1 remaining HEX color `#ffffff` in `web/src/index.css:222` - spec requires zero HEX hardcodes. Appears to be a gradient fallback in a `@theme` block. Minor, easily fixable.
 2. **W2**: Badge variant names mismatch: spec says `(default, outline, subtle)`, design+implementation use `(info, success, warning, error)`. Implementation follows the design, not the delta spec. Spec should be updated to match.
 3. **W3**: Font loading method diverges from design: design says `@fontsource`, implementation uses self-hosted `@font-face` from Fontshare (matching the tasks.md decision). Functionally identical, but design doc is out of date.
 4. **W4**: Vike SSR replaced by build-time prerender. Spec says Vike; implementation adapted correctly for Vite 6 incompatibility. Delivers equivalent HTML output (verified), but spec needs updating.
-5. **W5**: 4 Phase 5 verification tasks unchecked: 5.2 (visual diff), 5.4 (JSON-LD validation), 5.5 (E2E JS-disabled), 5.6 (WCAG). These are verification/QA tasks, not implementation tasks — they don't block the feature but should be addressed before merge.
-6. **W6**: Design.md still references `@fontsource` imports and Vike SSR — should be updated to reflect actual implementation (self-hosted fonts + build-time prerender).
+5. **W5**: 4 Phase 5 verification tasks unchecked: 5.2 (visual diff), 5.4 (JSON-LD validation), 5.5 (E2E JS-disabled), 5.6 (WCAG). These are verification/QA tasks, not implementation tasks - they don't block the feature but should be addressed before merge.
+6. **W6**: Design.md still references `@fontsource` imports and Vike SSR - should be updated to reflect actual implementation (self-hosted fonts + build-time prerender).
 
 **SUGGESTION**:
-1. **S1**: Mark task 5.1 as complete — `Badge.test.tsx` exists and passes 6/6 tests with production-identical assertions.
+1. **S1**: Mark task 5.1 as complete - `Badge.test.tsx` exists and passes 6/6 tests with production-identical assertions.
 2. **S2**: Run JSON-LD through Google Rich Results Test or schema.org validator (task 5.4).
 3. **S3**: Verify OG image renders correctly on Twitter Card / LinkedIn share preview.
 4. **S4**: Add `prefers-reduced-motion` media query to disable all framer-motion/fade animations (WCAG).

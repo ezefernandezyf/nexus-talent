@@ -3,7 +3,7 @@
 ## MODIFIED Requirements
 
 ### Requirement: AppLayout Token Migration
-The `AppLayout` MUST use OKLCH design tokens for backgrounds, borders, and typography. The header, sidebar, and content area SHALL reference CSS custom properties — zero HEX hardcodes.
+The `AppLayout` MUST use OKLCH design tokens for backgrounds, borders, and typography. The header, sidebar, and content area SHALL reference CSS custom properties - zero HEX hardcodes.
 (Previously: AppLayout used hardcoded HEX color values.)
 
 #### Scenario: Authenticated user views the app shell

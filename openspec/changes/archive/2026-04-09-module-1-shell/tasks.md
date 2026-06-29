@@ -1,4 +1,4 @@
-# Tasks: Module 1 — Shell + Mobile Navigation + Footer
+# Tasks: Module 1 - Shell + Mobile Navigation + Footer
 
 ## Phase 1: Foundation
 

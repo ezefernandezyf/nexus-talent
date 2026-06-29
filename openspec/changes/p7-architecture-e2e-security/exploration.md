@@ -5,7 +5,7 @@
 
 ## 1. Current Architecture Map
 
-### 1.1 web/src/ — Complete File Tree
+### 1.1 web/src/ - Complete File Tree
 
 ```
 web/src/
@@ -204,7 +204,7 @@ web/src/
         └── query-client.tsx
 ```
 
-### 1.2 server/src/ — Already Screaming ✅
+### 1.2 server/src/ - Already Screaming ✅
 
 ```
 server/src/
@@ -256,8 +256,8 @@ server/src/
 | `src/pages/HistoryDetailPage.tsx` | Should be in `features/history/pages/` | Move |
 | `src/pages/SettingsPage.tsx` | Should be in `features/settings/pages/` | Move |
 | `src/pages/LandingPage.tsx` | Duplicate of `features/landing/pages/LandingPage.tsx` | Delete |
-| `src/pages/PrivacyPage.tsx` | Static privacy page — could stay or move to `features/landing/pages/` | Move |
-| `src/pages/NotFoundPage.tsx` | Truly global page — could stay in `pages/` or `shared/pages/` | Move to shared |
+| `src/pages/PrivacyPage.tsx` | Static privacy page - could stay or move to `features/landing/pages/` | Move |
+| `src/pages/NotFoundPage.tsx` | Truly global page - could stay in `pages/` or `shared/pages/` | Move to shared |
 
 ### P3: `lib/` is a grab-bag (mixes domains, infra, UI, legacy)
 
@@ -290,8 +290,8 @@ server/src/
 
 | Location | Status |
 |----------|--------|
-| `components/landing/` (10 files) | STALE — missing `FAQ.tsx`, has old `FeatureSection.test.tsx` |
-| `features/landing/components/` (10 files) | ACTIVE — has `FAQ.tsx`, moved test |
+| `components/landing/` (10 files) | STALE - missing `FAQ.tsx`, has old `FeatureSection.test.tsx` |
+| `features/landing/components/` (10 files) | ACTIVE - has `FAQ.tsx`, moved test |
 
 ### P5: Shared UI components in wrong location
 
@@ -309,7 +309,7 @@ The `core/` directory should be the infrastructure layer. Currently only has `ap
 - `logger.ts` (client logger)
 - `toast.ts` (toast system)
 - `theme.tsx` (theme provider)
-- `router.tsx` (already in `router/` — could stay)
+- `router.tsx` (already in `router/` - could stay)
 
 ## 3. State Separation Analysis
 
@@ -324,8 +324,8 @@ The `core/` directory should be the infrastructure layer. Currently only has `ap
 
 | Hook | Data | Type | Verdict |
 |------|------|------|---------|
-| `useAnalysisHistory` | List of analyses | Server state | OK — pure React Query |
-| `useAnalysisById` | Single analysis detail | Server state | OK — pure React Query |
+| `useAnalysisHistory` | List of analyses | Server state | OK - pure React Query |
+| `useAnalysisById` | Single analysis detail | Server state | OK - pure React Query |
 | `useJobAnalysis` | Analysis result | Server mutation + local UI viewState | OK pattern (mutation + local state) |
 | `useDeleteAnalysis` | Delete action | Server mutation | OK |
 | `useUpdateAnalysis` | Update action | Server mutation | OK |
@@ -335,7 +335,7 @@ The `core/` directory should be the infrastructure layer. Currently only has `ap
 
 Current auth-store (Zustand) holds:
 - `user` (server state) → should be `useSession()` via React Query: `queryKey: ["auth", "session"]`, calling `GET /api/auth/me`
-- `status` (derived from user) → should be a thin Zustand slice: `{ status: "unknown" | "loading" | "authenticated" | "unauthenticated" }` — this is UI state (used by route guards, layout)
+- `status` (derived from user) → should be a thin Zustand slice: `{ status: "unknown" | "loading" | "authenticated" | "unauthenticated" }` - this is UI state (used by route guards, layout)
 - `isAdmin` (derived) → derived from `user` data
 - `login/register/logout` → React Query mutations that invalidate the session query
 
@@ -519,14 +519,14 @@ web/src/
 │           └── settings-export.ts   # (stay)
 │
 ├── test/
-│   └── (keep — test helpers are cross-domain)
+│   └── (keep - test helpers are cross-domain)
 │
-├── pages/                           # DELETE — all pages migrated to features
-├── components/                      # DELETE — stale landing/ moved, ui/ → shared/, ErrorBoundary → core/
-├── lib/                             # DELETE — all files rehomed
+├── pages/                           # DELETE - all pages migrated to features
+├── components/                      # DELETE - stale landing/ moved, ui/ → shared/, ErrorBoundary → core/
+├── lib/                             # DELETE - all files rehomed
 ├── router/                          # KEEP or merge into core/router.tsx
 ├── schemas/                         # KEEP or move job-analysis.ts into features/analysis/api/
-└── auth/                            # DELETE — auth-store.ts moved to features/auth/store/
+└── auth/                            # DELETE - auth-store.ts moved to features/auth/store/
 ```
 
 ## 6. State Separation Plan
@@ -540,7 +540,7 @@ web/src/
 | `useJobAnalysis` viewState | `features/analysis/store.ts` | Zustand (UI) | Extract the `AnalysisViewState` (status/data/error of current analysis) to a Zustand store slice |
 | `useSettings` theme/toggle | `core/theme.tsx` | Already separate | No change needed |
 
-### Auth Store Split — Detailed Plan
+### Auth Store Split - Detailed Plan
 
 Current `auth-store.ts` fields:
 ```
@@ -555,7 +555,7 @@ logout()                        → React Query mutation: POST /api/auth/logout,
 clearSession()                  → queryClient.setQueryData(["auth", "session"], null) + status store reset
 ```
 
-## 7. P7 Impact — How the Reorg Enables P7
+## 7. P7 Impact - How the Reorg Enables P7
 
 ### P7 Tasks (from AGENTS.md)
 
@@ -585,7 +585,7 @@ clearSession()                  → queryClient.setQueryData(["auth", "session"]
 - **Security headers**: Pure server-side (`server/src/infra/app.ts`)
 - **Rate limiting**: Pure server-side (`server/src/infra/rate-limiter.ts`, `server/src/auth/auth.middleware.ts`)
 - **Structured logging**: Already configured on server (`server/src/infra/logger.ts`)
-- **Input sanitization**: New work — needs to be added to request pipeline
+- **Input sanitization**: New work - needs to be added to request pipeline
 
 ## 8. Risks and Tradeoffs
 
@@ -593,15 +593,15 @@ clearSession()                  → queryClient.setQueryData(["auth", "session"]
 
 1. **Auth store split** (Zustand → React Query + Zustand slice)
    - **What could break**: ProtectedRoute, PublicAuthRoute, AppLayout, all uses of `useAuth()`, `LogoutButton`, sign-in/sign-up flows
-   - **Mitigation**: Keep the same public API from `features/auth/index.ts` — components consuming `useAuth()` should see no API change
+   - **Mitigation**: Keep the same public API from `features/auth/index.ts` - components consuming `useAuth()` should see no API change
    - **Test impact**: All auth tests need updating (AuthProvider.test.tsx, ProtectedRoute.test.tsx, etc.)
-   - **Effort**: HIGH — most complex part of the reorg
+   - **Effort**: HIGH - most complex part of the reorg
 
 2. **File move cascade (lib/ unbundling)**
    - **What could break**: Every import from `../../lib/{file}` across the entire codebase
-   - **Mitigation**: Update barrel exports — each feature's `index.ts` re-exports the moved files temporarily
+   - **Mitigation**: Update barrel exports - each feature's `index.ts` re-exports the moved files temporarily
    - **Test impact**: All test imports need updating
-   - **Effort**: HIGH — dozens of files, but mechanical (find-replace)
+   - **Effort**: HIGH - dozens of files, but mechanical (find-replace)
 
 ### Medium Risk
 
@@ -623,10 +623,10 @@ clearSession()                  → queryClient.setQueryData(["auth", "session"]
 
 ### Low Risk
 
-6. **Server screaming architecture** — NO changes needed (already clean)
-7. **E2E Playwright config** — Minimal changes (paths in page objects might need updating)
-8. **Pino logging** — Already on server, no impact
-9. **Rate limiting** — Server-side only, no impact
+6. **Server screaming architecture** - NO changes needed (already clean)
+7. **E2E Playwright config** - Minimal changes (paths in page objects might need updating)
+8. **Pino logging** - Already on server, no impact
+9. **Rate limiting** - Server-side only, no impact
 
 ### Test Update Inventory
 
@@ -649,7 +649,7 @@ clearSession()                  → queryClient.setQueryData(["auth", "session"]
 
 **Proceed with the architecture reorg BEFORE P7 E2E/Security tasks.**
 
-The reorg is a prerequisite — doing E2E tests against the current structure means writing tests against paths that will change. The auth store split (Zustand → React Query) is particularly important because:
+The reorg is a prerequisite - doing E2E tests against the current structure means writing tests against paths that will change. The auth store split (Zustand → React Query) is particularly important because:
 
 1. E2E tests can leverage React Query DevTools for debugging
 2. Auth smoke tests need the clean useSession() pattern

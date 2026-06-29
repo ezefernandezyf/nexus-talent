@@ -1,4 +1,4 @@
-# Archive Report: P6 — Design Identity "The Signal" + GEO Foundation
+# Archive Report: P6 - Design Identity "The Signal" + GEO Foundation
 
 **Archived**: 2026-06-22
 **Change name**: p6-design-identity
@@ -14,10 +14,10 @@ The tasks artifact contained unchecked items at archive time. The verify-report 
 | 4.2 (Vike +config/renderer) | Legitimately skipped | Vike incompatible with Vite 6.4.3 (requires Vite ≥7.1) |
 | 4.3 (Vike pages) | Legitimately skipped | Vike incompatible; build-time prerenderer used instead |
 | 5.1 (Badge unit tests) | Implemented but unchecked | `Badge.test.tsx` exists, 6/6 tests pass with production-identical assertions |
-| 5.2 (Visual diff) | Incomplete — QA task | Not an implementation blocker |
-| 5.4 (JSON-LD validation) | Incomplete — QA task | Implementation confirmed correct |
-| 5.5 (E2E JS-disabled) | Incomplete — QA task | Verified via curl inspection |
-| 5.6 (WCAG) | Incomplete — QA task | Implementation uses OKLCH tokens with contrast-safe palette |
+| 5.2 (Visual diff) | Incomplete - QA task | Not an implementation blocker |
+| 5.4 (JSON-LD validation) | Incomplete - QA task | Implementation confirmed correct |
+| 5.5 (E2E JS-disabled) | Incomplete - QA task | Verified via curl inspection |
+| 5.6 (WCAG) | Incomplete - QA task | Implementation uses OKLCH tokens with contrast-safe palette |
 
 The orchestrator explicitly instructed archive with full knowledge of these items. No CRITICAL issues in verify-report. Archive proceeds as intentional-with-warnings.
 

@@ -4,7 +4,7 @@
 |--------|-------------|------|
 | REQ-HIST-007 | useAnalysisRepository MUST always return HttpAnalysisRepository. Remove localStorage branch entirely. | MODIFIED |
 | REQ-HIST-008 | Delete/update MUST always call DELETE/PATCH /api/analyses/:id. No localStorage fallback. | MODIFIED |
-| REQ-PER-001 | Save/GetAll/GetById/Delete localStorage paths — removed. All CRUD through HTTP. | REMOVED |
+| REQ-PER-001 | Save/GetAll/GetById/Delete localStorage paths - removed. All CRUD through HTTP. | REMOVED |
 
 ### Scenario: Always HTTP
 - GIVEN any auth state → useAnalysisRepository → HttpAnalysisRepository (Previously: LocalAnalysisRepository when anonymous)

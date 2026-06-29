@@ -59,7 +59,7 @@ Executed routing/layout/refactor tests:
 
 ---
 
-### Correctness (Static — Structural Evidence)
+### Correctness (Static - Structural Evidence)
 | Requirement | Status | Notes |
 |------------|--------|-------|
 | Thin app entry point | ✅ Implemented | [src/App.tsx](../../../src/App.tsx) now renders [AppRouter](../../../src/router/AppRouter.tsx) only. |

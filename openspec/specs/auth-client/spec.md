@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Defines the behavior for the auth client on the frontend — Zustand-based session management that replaces the Supabase Auth SDK. Session is driven by httpOnly JWT cookies via backend HTTP APIs.
+Defines the behavior for the auth client on the frontend - Zustand-based session management that replaces the Supabase Auth SDK. Session is driven by httpOnly JWT cookies via backend HTTP APIs.
 
 ## Requirements
 
 ### Requirement: Zustand Session Store (REQ-AUTH-001)
 
-The frontend MUST maintain a Zustand store for auth state with `user`, `status` (unknown/loading/authenticated/unauthenticated). No session token MAY exist in JavaScript — httpOnly cookies only.
+The frontend MUST maintain a Zustand store for auth state with `user`, `status` (unknown/loading/authenticated/unauthenticated). No session token MAY exist in JavaScript - httpOnly cookies only.
 
 #### Scenario: Session restore
 - GIVEN a valid httpOnly JWT cookie

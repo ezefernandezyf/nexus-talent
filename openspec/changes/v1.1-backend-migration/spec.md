@@ -84,7 +84,7 @@ The system MUST implement `AnalysisRepository` using Prisma + PostgreSQL, preser
 #### Requirement: Storage Entity Schema Definition
 The schema MUST use the Prisma model `analyses` (previously: Zod-only localStorage entity). Zod schemas in `shared/contracts/analysis.ts` MUST remain the single source of truth for DTOs; Prisma schema is the source for persistence columns.
 
-- GIVEN a `SaveJobAnalysis` schema in shared/contracts / WHEN Prisma generates types / THEN they MUST be compatible — shared Zod types MUST be used for API validation and response serialization
+- GIVEN a `SaveJobAnalysis` schema in shared/contracts / WHEN Prisma generates types / THEN they MUST be compatible - shared Zod types MUST be used for API validation and response serialization
 
 #### Requirement: Repository Interface Contract
 The `AnalysisRepository` interface MUST remain unchanged in the `web/` package (previously: single codebase). The `web/` package injects an HTTP-backed implementation that calls `/api/analyses` instead of localStorage.
@@ -120,7 +120,7 @@ Deletion MUST be performed via `DELETE /api/analyses/:id` (previously: localStor
 - GIVEN a non-existent ID / WHEN DELETE /api/analyses/:id / THEN 404
 
 #### Requirement: History Card Data (Unchanged)
-The existing UI contract for history card display MUST remain unchanged — same shape returned by `GET /api/analyses`.
+The existing UI contract for history card display MUST remain unchanged - same shape returned by `GET /api/analyses`.
 
 - GIVEN a saved analysis in the DB / WHEN GET /api/analyses returns it / THEN the response MUST match the `SavedJobAnalysis` Zod schema from `shared/contracts/`
 
@@ -140,7 +140,7 @@ All DTOs shared between `server/` and `web/` MUST be defined as Zod schemas in `
 `shared/` MUST be a workspace package (`@nexus-talent/shared`) exporting from `contracts/`, `types/`, and `utils/` directories.
 
 - GIVEN the workspace is installed / WHEN `pnpm add @nexus-talent/shared` / THEN both server and web can import `@nexus-talent/shared/contracts/auth`
-- GIVEN a consumer imports from `@nexus-talent/shared` / WHEN the import path is not found / THEN the build MUST fail — no catch-all re-exports
+- GIVEN a consumer imports from `@nexus-talent/shared` / WHEN the import path is not found / THEN the build MUST fail - no catch-all re-exports
 
 #### Requirement: No Server Logic in Shared
 The `shared/` package MUST NOT contain server-only logic (Prisma, Express, bcrypt) or client-only code (React hooks, browser APIs).

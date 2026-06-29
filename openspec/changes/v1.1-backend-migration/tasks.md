@@ -1,4 +1,4 @@
-# Tasks: V1.1 Backend Migration — Phase 1: Infrastructure
+# Tasks: V1.1 Backend Migration - Phase 1: Infrastructure
 
 ## Review Workload Forecast
 
@@ -80,7 +80,7 @@ Chain strategy: pending
 ## REVIEW
 
 - **Estimated total changed lines**: ~350–420 (P1). New files: server skeleton (~180), shared contracts (~90), web migration (~50 net after move), configs (~50). Well within the 400-line budget but close due to schema + contracts size.
-- **Risk assessment**: Medium — Prisma schema + Zod contracts are dense but formulaic. Web migration is a `git mv` with import path updates. If git doesn't detect renames cleanly, the diff could exceed 400 lines. Recommended: single PR to `develop` with squash-merge.
+- **Risk assessment**: Medium - Prisma schema + Zod contracts are dense but formulaic. Web migration is a `git mv` with import path updates. If git doesn't detect renames cleanly, the diff could exceed 400 lines. Recommended: single PR to `develop` with squash-merge.
 - **Testing approach**: No integration tests in P1 (server has no business logic yet). Verify with: `pnpm install` (resolution), `pnpm run dev:server` (starts, health check OK), `pnpm run dev:web` (Vite proxying), `pnpm run typecheck` (both packages compile), `pnpm run prisma:generate` (client generated).
 
 ---
@@ -136,21 +136,21 @@ Chain strategy: pending
 
 ### Task 2.4: Create auth middleware (requireAuth + optionalAuth)
 - **Files**: `server/src/auth/auth.middleware.ts`
-- **Description**: `requireAuth` — read `nexus-talent-session` cookie via parseCookies, verify JWT, attach decoded user to `req`. Return 401 if missing/expired/invalid. `optionalAuth` — same but continues silently; `req.userId` stays undefined if no valid JWT.
+- **Description**: `requireAuth` - read `nexus-talent-session` cookie via parseCookies, verify JWT, attach decoded user to `req`. Return 401 if missing/expired/invalid. `optionalAuth` - same but continues silently; `req.userId` stays undefined if no valid JWT.
 - **Acceptance**: Protected route returns 401 without cookie, 200 with valid cookie, 401 with expired cookie. OptionalAuth allows access regardless.
 - **Dependencies**: 2.2
 - **Estimated effort**: S
 
 ### Task 2.5: Implement auth service
 - **Files**: `server/src/auth/auth.service.ts`
-- **Description**: `register(email, password, displayName?)` — bcrypt hash (10 rounds), create Profile via Prisma, sign JWT. `login(email, password)` — find Profile by email, bcrypt verify, sign JWT. Throw typed errors: `ConflictError` for duplicate email, `UnauthorizedError` for bad credentials. `getUserById(id)` for me endpoint.
+- **Description**: `register(email, password, displayName?)` - bcrypt hash (10 rounds), create Profile via Prisma, sign JWT. `login(email, password)` - find Profile by email, bcrypt verify, sign JWT. Throw typed errors: `ConflictError` for duplicate email, `UnauthorizedError` for bad credentials. `getUserById(id)` for me endpoint.
 - **Acceptance**: register creates Profile + returns JWT. register with existing email throws ConflictError. login with correct credentials returns JWT. login with wrong password throws UnauthorizedError.
 - **Dependencies**: 2.1, 2.2, 1.4
 - **Estimated effort**: M
 
 ### Task 2.6: Implement auth controller
 - **Files**: `server/src/auth/auth.controller.ts`
-- **Description**: `register` — validate body with RegisterSchema, call service.register, Set-Cookie (`httpOnly`, `sameSite=lax`, `path=/`, `maxAge=7d`), return 201 `{ user }`. `login` — same flow, return 200. `me` — fetch user via req.userId, return 200 with session. `logout` — Set-Cookie with `maxAge=0`. Error handling maps service errors to HTTP codes.
+- **Description**: `register` - validate body with RegisterSchema, call service.register, Set-Cookie (`httpOnly`, `sameSite=lax`, `path=/`, `maxAge=7d`), return 201 `{ user }`. `login` - same flow, return 200. `me` - fetch user via req.userId, return 200 with session. `logout` - Set-Cookie with `maxAge=0`. Error handling maps service errors to HTTP codes.
 - **Acceptance**: All 4 endpoints return correct status, cookie headers, and body per spec scenarios. Duplicate email → 409. Bad password → 401. Valid me → 200 with user object. Logout clears cookie.
 - **Dependencies**: 2.5, 2.4
 - **Estimated effort**: M
@@ -164,7 +164,7 @@ Chain strategy: pending
 
 ### Task 2.8: Implement Google OAuth
 - **Files**: `server/src/auth/auth.controller.ts`, `server/src/auth/auth.service.ts`, `server/src/auth/auth.router.ts`
-- **Description**: `GET /api/auth/google` — validate `GOOGLE_OAUTH_CLIENT_ID` env var, redirect to Google consent URL with PKCE (generate+store code_verifier in session cookie). `GET /api/auth/google/callback` — exchange code via Google token endpoint, find or create Profile by `googleId`, sign JWT, set cookie, redirect to frontend (`/app`). Handle error callback gracefully.
+- **Description**: `GET /api/auth/google` - validate `GOOGLE_OAUTH_CLIENT_ID` env var, redirect to Google consent URL with PKCE (generate+store code_verifier in session cookie). `GET /api/auth/google/callback` - exchange code via Google token endpoint, find or create Profile by `googleId`, sign JWT, set cookie, redirect to frontend (`/app`). Handle error callback gracefully.
 - **Acceptance**: Without `GOOGLE_OAUTH_CLIENT_ID`, Google OAuth route returns 400. Redirect to Google consent has correct params. Callback creates Profile, sets JWT, redirects to frontend. Error callback redirects with `?error=`.
 - **Dependencies**: 2.2, 2.5, 2.7
 - **Estimated effort**: M

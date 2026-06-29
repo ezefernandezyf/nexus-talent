@@ -15,7 +15,7 @@ Move analysis history from localStorage to server-side persistence (Prisma/Supab
 - `shared-contracts` schemas: `analysisUpdateSchema`, `displayName`/`notes` in response
 
 ### Out of Scope
-- Pagination overhaul (stays client-side — low data volume)
+- Pagination overhaul (stays client-side - low data volume)
 - Anonymous server storage (localStorage remains fallback)
 - UI refresh or component changes
 - Cross-device sync UX (infra ready, UI deferred)
@@ -23,21 +23,21 @@ Move analysis history from localStorage to server-side persistence (Prisma/Supab
 ## Capabilities
 
 ### New
-- `history-api`: REST CRUD — list, detail, delete, patch under `/api/analyses`
+- `history-api`: REST CRUD - list, detail, delete, patch under `/api/analyses`
 
 ### Modified
 - `persistence`: Add `update()` to `AnalysisRepository`; allow local + HTTP implementations
 - `shared-contracts`: Add `analysisUpdateSchema`; `displayName`, `notes` in response
-- `analysis`: P3 save coupling — persist to DB after Groq returns
+- `analysis`: P3 save coupling - persist to DB after Groq returns
 - `history`: Data source changes from localStorage to HTTP API (UI behavior unchanged)
 
 ## API Contract
 
 | Method | Route | Auth | Request | Response |
 |--------|-------|------|---------|----------|
-| GET | `/api/analyses` | required | — | `{ items: Analysis[], total: number }` |
-| GET | `/api/analyses/:id` | required | — | `Analysis` |
-| DELETE | `/api/analyses/:id` | required | — | `204` |
+| GET | `/api/analyses` | required | - | `{ items: Analysis[], total: number }` |
+| GET | `/api/analyses/:id` | required | - | `Analysis` |
+| DELETE | `/api/analyses/:id` | required | - | `204` |
 | PATCH | `/api/analyses/:id` | required | `{ displayName?, notes? }` | `Analysis` |
 
 All scoped to `req.userId`.
@@ -69,7 +69,7 @@ Client-side pagination: `getAll()` loads all, UI paginates (same as today).
 | Migration breaks existing analysis data | Low | Test locally first, backup DB |
 | Auth middleware not applied to new routes | Low | `requireAuth` on every endpoint |
 | P3 save coupling breaks analysis response | Med | Isolate in try/catch, never fail the response |
-| `getAll()` loads all rows — perf on large datasets | Low | Revisit if users exceed 500 analyses |
+| `getAll()` loads all rows - perf on large datasets | Low | Revisit if users exceed 500 analyses |
 
 ## Rollback Plan
 

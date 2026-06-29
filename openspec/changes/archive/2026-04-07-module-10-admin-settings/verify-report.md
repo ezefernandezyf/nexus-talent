@@ -47,7 +47,7 @@
 
 ---
 
-### Correctness (Static — Structural Evidence)
+### Correctness (Static - Structural Evidence)
 | Requirement | Status | Notes |
 |------------|--------|-------|
 | Admin role exposure | ✅ Implemented | `AuthProvider` now exposes `isAdmin` from user metadata/app metadata. |

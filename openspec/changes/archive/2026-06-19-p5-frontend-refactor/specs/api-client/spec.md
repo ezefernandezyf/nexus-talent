@@ -4,7 +4,7 @@
 |--------|-------------|------|
 | REQ-API-001 | Axios instance: `baseURL: "/api"`, `withCredentials: true`. Replaces all raw `fetch()` calls. | ADDED |
 | REQ-API-002 | 401 response interceptor MUST clear auth store and redirect to /auth/sign-in. | ADDED |
-| REQ-API-003 | Responses MUST be typed via shared Zod contracts — never `any`. | ADDED |
+| REQ-API-003 | Responses MUST be typed via shared Zod contracts - never `any`. | ADDED |
 
 ### Scenario: Cookie sent
 - GIVEN withCredentials:true → any /api/* request attaches httpOnly JWT cookie

@@ -19,7 +19,7 @@ Transform raw job descriptions into actionable, structured data to help users qu
 
 ## Approach
 
-We will build this within a new `features/analysis` module (Feature-based Domain Isolation). The data flow will be: `User Input -> Zod Validation -> ai-client -> LLM -> Zod Validation -> React UI`. We rely on TanStack Query to manage the server state (mutation) for the AI request. The UI will explicitly follow `DESIGN.md`—using Ghost Borders for the input, `surface-container` cards for results, and `label-sm` tech chips for the skills matrix.
+We will build this within a new `features/analysis` module (Feature-based Domain Isolation). The data flow will be: `User Input -> Zod Validation -> ai-client -> LLM -> Zod Validation -> React UI`. We rely on TanStack Query to manage the server state (mutation) for the AI request. The UI will explicitly follow `DESIGN.md`-using Ghost Borders for the input, `surface-container` cards for results, and `label-sm` tech chips for the skills matrix.
 
 ## Affected Areas
 

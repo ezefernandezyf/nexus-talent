@@ -2,7 +2,7 @@
 
 **Date**: 2026-06-19
 **Archiver**: sdd-archive sub-agent
-**Status**: **SUCCESS — Intentional with Stale Checkbox Reconciliation**
+**Status**: **SUCCESS - Intentional with Stale Checkbox Reconciliation**
 
 ---
 
@@ -21,8 +21,8 @@ The persisted `tasks.md` had unchecked tasks for PR #1 (tasks 1.1-1.10) and PR #
 | Task | Evidence |
 |------|----------|
 | 1.1-1.10 (Auth) | AuthProvider.test.tsx passes (4 tests), auth-store.ts exists at `web/src/auth/auth-store.ts`, SignInForm/SignUpForm tests pass (5 each), guards pass (3 tests) |
-| 3.1 (AdminRoute.tsx) | File does not exist — confirmed deletion |
-| 3.2 (AdminRoute.test.tsx) | File does not exist — test count dropped 219→217 |
+| 3.1 (AdminRoute.tsx) | File does not exist - confirmed deletion |
+| 3.2 (AdminRoute.test.tsx) | File does not exist - test count dropped 219→217 |
 | 3.3 (Remove export) | Zero admin refs in `features/auth/index.ts` |
 | 3.4 (Remove route) | Zero admin refs in `router/AppRouter.tsx` |
 
@@ -46,8 +46,8 @@ The persisted `tasks.md` had unchecked tasks for PR #1 (tasks 1.1-1.10) and PR #
 
 | Domain | Action | Details |
 |--------|--------|---------|
-| auth-client | **Created** | `openspec/specs/auth-client/spec.md` — 6 requirements (REQ-AUTH-001 through REQ-AUTH-006) |
-| api-client | **Created** | `openspec/specs/api-client/spec.md` — 3 requirements (REQ-API-001 through REQ-API-003) |
+| auth-client | **Created** | `openspec/specs/auth-client/spec.md` - 6 requirements (REQ-AUTH-001 through REQ-AUTH-006) |
+| api-client | **Created** | `openspec/specs/api-client/spec.md` - 3 requirements (REQ-API-001 through REQ-API-003) |
 | admin | **Modified** | Removed REQ-ADM-001 (Admin Role Identification) and REQ-ADM-002 (Admin Route Protection). Added migration note. |
 | auth | **Modified** | Removed REQ-AUTH-009 (Admin Exposure in Auth Context / `isAdmin`). Added migration note. |
 | persistence | **Modified** | REQ-HIST-007: always HttpAnalysisRepository (no localStorage branch). REQ-HIST-008: always HTTP (no auth conditional). REQ-PER-001: localStorage paths removed from Save/GetAll/GetById/Delete. |
@@ -66,22 +66,22 @@ The persisted `tasks.md` had unchecked tasks for PR #1 (tasks 1.1-1.10) and PR #
 | specs/persistence/spec.md | ✅ |
 | specs/history/spec.md | ✅ |
 | design.md | ✅ |
-| tasks.md | ✅ (25/25 tasks complete — stale checkboxes reconciled) |
+| tasks.md | ✅ (25/25 tasks complete - stale checkboxes reconciled) |
 | verify-report.md | ✅ |
 
 ---
 
 ## Verification Status
 
-**PASS WITH WARNINGS** — 0 CRITICAL, 4 WARNING, 3 SUGGESTION
+**PASS WITH WARNINGS** - 0 CRITICAL, 4 WARNING, 3 SUGGESTION
 
 Key warnings carried forward:
 1. `isAdmin` still in auth context surface (always `false`, zero runtime risk)
 2. AuthProvider legacy client mock code (~180 LOC, removed in V1.2.1)
-3. auth-store uses raw `fetch()` (intentional — avoids interceptor recursion)
+3. auth-store uses raw `fetch()` (intentional - avoids interceptor recursion)
 4. Missing 401 interceptor unit test (covered by E2E)
 
-No CRITICAL issues — archive proceeds.
+No CRITICAL issues - archive proceeds.
 
 ---
 

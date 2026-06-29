@@ -4,12 +4,12 @@
 
 Nexus Talent is a pure SPA with 4 critical issues blocking portfolio-readiness:
 
-1. **XSS vulnerability**: Supabase Auth stores JWT in localStorage — accessible to any injected script
-2. **Exposed API key**: `VITE_GROQ_API_KEY` in client bundle — anyone can extract it
-3. **Volatile history**: localStorage-only — lost on browser clear, no cross-device sync
+1. **XSS vulnerability**: Supabase Auth stores JWT in localStorage - accessible to any injected script
+2. **Exposed API key**: `VITE_GROQ_API_KEY` in client bundle - anyone can extract it
+3. **Volatile history**: localStorage-only - lost on browser clear, no cross-device sync
 4. **No backend architecture**: all AI calls, auth, and data access happen client-side
 
-V1.1 introduces a Node.js backend (Express 5) with screaming architecture, httpOnly cookie auth, server-side AI orchestration, and PostgreSQL persistence — mirroring the proven echolog architecture.
+V1.1 introduces a Node.js backend (Express 5) with screaming architecture, httpOnly cookie auth, server-side AI orchestration, and PostgreSQL persistence - mirroring the proven echolog architecture.
 
 ## Scope
 
@@ -18,7 +18,7 @@ V1.1 introduces a Node.js backend (Express 5) with screaming architecture, httpO
 - **Auth**: Custom JWT (HS256) in httpOnly cookies, email/password + Google OAuth
 - **API**: REST under `/api/*` with rate limiting, structured logging (pino), CSP (helmet)
 - **DB**: Supabase PostgreSQL via Prisma, schema for profiles + analyses + settings
-- **Shared contracts**: Zod schemas in `shared/contracts/` — single source of truth
+- **Shared contracts**: Zod schemas in `shared/contracts/` - single source of truth
 - **AI orchestration**: Groq calls moved server-side, proxied through `/api/ai/analyze`
 - **History migration**: localStorage → PostgreSQL, repository pattern preserved
 - **E2E tests**: Playwright test suite
@@ -51,7 +51,7 @@ V1.1 introduces a Node.js backend (Express 5) with screaming architecture, httpO
 
 ## Approach
 
-**Slice-based monorepo migration** — no big-bang rewrite. Each slice is a feature branch → `develop` → `main` when V1.1 is ready.
+**Slice-based monorepo migration** - no big-bang rewrite. Each slice is a feature branch → `develop` → `main` when V1.1 is ready.
 
 1. **Infrastructure**: Create `server/`, `shared/` in pnpm workspace, Prisma schema, Dockerfile
 2. **Auth**: Custom JWT flow + Supabase OAuth verification + httpOnly cookie wiring
@@ -76,13 +76,13 @@ V1.1 introduces a Node.js backend (Express 5) with screaming architecture, httpO
 
 ### Chained PR strategy
 - P1→P2→P3 can chain (each adds backend surface)
-- P5 (frontend refactor) is highest-risk — expect 400+ lines
-- P6 (design) is CSS-only — safe as single PR
+- P5 (frontend refactor) is highest-risk - expect 400+ lines
+- P6 (design) is CSS-only - safe as single PR
 
 ## AGENTS.md Structure (mirroring echolog)
 
 ```markdown
-# Nexus Talent — Agent Context
+# Nexus Talent - Agent Context
 
 ## Stack
 - **Frontend**: React 19 + TypeScript + Vite + Tailwind 4 + React Router 7
@@ -95,11 +95,11 @@ V1.1 introduces a Node.js backend (Express 5) with screaming architecture, httpO
 
 ## Architecture
 - **Screaming architecture**: business domains as top-level dirs in `server/src/`
-- **Monorepo**: `server/`, `web/`, `shared/` — each `"type": "module"`
+- **Monorepo**: `server/`, `web/`, `shared/` - each `"type": "module"`
 - **API**: REST JSON under `/api/*`, Express routers with controller-service-prisma layers
 
 ## Conventions
-- Conventional Commits: `feat(scope):`, `fix(scope):`, `chore:` — title EN, desc ES
+- Conventional Commits: `feat(scope):`, `fix(scope):`, `chore:` - title EN, desc ES
 - React 19: no useMemo/useCallback, named imports only
 - TypeScript: strict, never `any`, `as const` pattern
 
@@ -118,22 +118,22 @@ pnpm run dev:web      # :5173
 ```
 
 ## Key Files
-- `server/prisma/schema.prisma` — data model
-- `server/src/infra/app.ts` — Express + route wiring
-- `server/src/auth/auth.middleware.ts` — JWT cookie → req.userId
-- `shared/contracts/` — Zod schemas
-- `web/src/core/api-client.ts` — Axios + `/api` proxy
-- `web/vite.config.ts` — Vite + API proxy to :3001
+- `server/prisma/schema.prisma` - data model
+- `server/src/infra/app.ts` - Express + route wiring
+- `server/src/auth/auth.middleware.ts` - JWT cookie → req.userId
+- `shared/contracts/` - Zod schemas
+- `web/src/core/api-client.ts` - Axios + `/api` proxy
+- `web/vite.config.ts` - Vite + API proxy to :3001
 
 ## Roadmap
-(See Phased Roadmap above — P1 through P8)
+(See Phased Roadmap above - P1 through P8)
 ```
 
 ## Design Exploration: 3 Aesthetic Directions
 
 The user wants a NEW visual identity (not echolog's portfolio-personality), but using portfolio-personality **principles** to avoid AI-generated look.
 
-### Option A: "The Terminal" — Cyber-Teal + Amber
+### Option A: "The Terminal" - Cyber-Teal + Amber
 
 | Aspect | Value |
 |--------|-------|
@@ -142,23 +142,23 @@ The user wants a NEW visual identity (not echolog's portfolio-personality), but 
 | **Vibe** | High-signal, low-noise. Feels like a mission-control dashboard. Terminal-inspired but editorial. Glowing accent elements for CTAs. Dark-first with a high-contrast light mode (warm cream background). |
 | **Why** | Fits "precision instrument" principle. Genuine developer aesthetic, recycled from no template. |
 
-### Option B: "The Studio" — Coral + Slate
+### Option B: "The Studio" - Coral + Slate
 
 | Aspect | Value |
 |--------|-------|
 | **Palette** | Coral primary `#FF6B6B`, Slate secondary `#6C7A89`, Warm Charcoal base `#1A1D23`, Off-white `#F5F0EB` |
-| **Typography** | Satoshi (display), Inter (body) — same pairing as echolog's principles |
+| **Typography** | Satoshi (display), Inter (body) - same pairing as echolog's principles |
 | **Vibe** | Warm, human, creative. Coral brings energy without being aggressive. Soft shadows, generous whitespace, card-based layouts. Light mode feels like a design portfolio. |
 | **Why** | Stands out from cold SaaS. Accessible (coral/slate passes WCAG AA on dark). Portfolio-friendly for a junior dev. |
 
-### Option C: "The Signal" — Indigo + Chartreuse
+### Option C: "The Signal" - Indigo + Chartreuse
 
 | Aspect | Value |
 |--------|-------|
 | **Palette** | Indigo primary `#6366F1`, Chartreuse accent `#B3E762`, Neutral deep base `#111118`, Cool grey text `#D4D4D8` |
-| **Typography** | Clash Display (headings), Satoshi (body) — editorial contrast |
+| **Typography** | Clash Display (headings), Satoshi (body) - editorial contrast |
 | **Vibe** | Bold, modern, slightly experimental. Indigo anchors trust; chartreuse adds unexpected pop. Asymmetric layouts, large type, generous negative space. Dark mode with subtle glass panels. |
-| **Why** | Breaks SaaS conventions while remaining professional. The accent color forces deliberate design choices — impossible to get an "AI template" look. |
+| **Why** | Breaks SaaS conventions while remaining professional. The accent color forces deliberate design choices - impossible to get an "AI template" look. |
 
 ## Affected Areas
 
@@ -183,18 +183,18 @@ The user wants a NEW visual identity (not echolog's portfolio-personality), but 
 | Risk | Likelihood | Mitigation |
 |------|------------|------------|
 | Auth migration breaks sessions for existing users | Medium | Deploy backend first; keep Supabase SDK as fallback during P1-P2; old JWT in localStorage can be exchanged for httpOnly cookie |
-| Groq API format changes | Low | Zod validation on response — same protection as today; tests catch shape drift |
+| Groq API format changes | Low | Zod validation on response - same protection as today; tests catch shape drift |
 | Frontend refactor (P5) exceeds 400-line budget | High | Chain PRs: P5a (auth swap), P5b (API client swap), P5c (repository swap) |
-| Design identity changes feel inconsistent mid-migration | Low | Design lock (P6) happens after all feature work — single visual sweep |
+| Design identity changes feel inconsistent mid-migration | Low | Design lock (P6) happens after all feature work - single visual sweep |
 | Playwright infra adds CI complexity | Medium | Start with 3 smoke tests; expand in parallel with feature work |
 
 ## Rollback Plan
 
-1. **Per-slice rollback**: Each slice is a feature branch into `develop` — revert the PR to roll back
+1. **Per-slice rollback**: Each slice is a feature branch into `develop` - revert the PR to roll back
 2. **Full rollback**: Reset `develop` to commit before P1 started (tagged as `pre-v1.1-backend`)
-3. **Data**: Existing data can be dropped (user confirmed) — no migration reversal needed
+3. **Data**: Existing data can be dropped (user confirmed) - no migration reversal needed
 4. **Env vars**: Keep `VITE_GROQ_API_KEY` and `VITE_SUPABASE_*` in Vercel during migration; if backend fails, frontend still works as standalone SPA
-5. **Deploy**: Render deploy is additive — Vercel continues serving the SPA; backend being down means auth/history fail gracefully (user sees error states, not breakage)
+5. **Deploy**: Render deploy is additive - Vercel continues serving the SPA; backend being down means auth/history fail gracefully (user sees error states, not breakage)
 
 ## Dependencies
 
@@ -206,8 +206,8 @@ The user wants a NEW visual identity (not echolog's portfolio-personality), but 
 
 ## Success Criteria
 
-- [ ] No `VITE_GROQ_API_KEY` in client bundle — AI calls go through backend
-- [ ] Auth uses httpOnly cookies — no JWT in localStorage, no XSS token leak
+- [ ] No `VITE_GROQ_API_KEY` in client bundle - AI calls go through backend
+- [ ] Auth uses httpOnly cookies - no JWT in localStorage, no XSS token leak
 - [ ] Analysis history persists across browser clears and devices
 - [ ] All existing frontend tests pass without modification (Vitest)
 - [ ] Playwright E2E covers: login, signup, run analysis, view history, logout

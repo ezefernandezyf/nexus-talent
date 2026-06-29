@@ -7,7 +7,7 @@ The Groq API key (`VITE_GROQ_API_KEY`) is currently exposed in the browser bundl
 ## Scope
 
 ### In Scope
-- `POST /api/ai/analyze` endpoint — receive JD + tone, call Groq, return validated result
+- `POST /api/ai/analyze` endpoint - receive JD + tone, call Groq, return validated result
 - Groq call via Node.js native `fetch` (zero new deps)
 - Zod validation on request input (`analysisRequestSchema`) and response (`analysisResponseSchema`)
 - Rate limiting (analysis: 20/min, reusing existing `rate-limiter.ts`)
@@ -15,15 +15,15 @@ The Groq API key (`VITE_GROQ_API_KEY`) is currently exposed in the browser bundl
 - Align `shared/src/schemas.ts` `analysisResponseSchema` field names with frontend `JOB_ANALYSIS_RESULT_SCHEMA`
 
 ### Out of Scope
-- Local analysis engine — stays client-side in `ai-client.ts` as fallback
-- GitHub enrichment — stays frontend-only (`github-client.ts`)
-- UI changes — Web continues calling the same `ai-client.ts` API; only transport changes
-- History persistence — covered in P4
+- Local analysis engine - stays client-side in `ai-client.ts` as fallback
+- GitHub enrichment - stays frontend-only (`github-client.ts`)
+- UI changes - Web continues calling the same `ai-client.ts` API; only transport changes
+- History persistence - covered in P4
 
 ## Capabilities
 
 ### New Capabilities
-- `ai-proxy`: Server-side Groq API proxy. Client sends only the JD and tone — API key never leaves the server.
+- `ai-proxy`: Server-side Groq API proxy. Client sends only the JD and tone - API key never leaves the server.
 
 ### Modified Capabilities
 - `ai-orchestrator`: Client-side orchestrator now sends HTTP request to `/api/ai/analyze` instead of direct Groq. Provider adapter (`createGroqProviderAdapter`) gets a new transport that calls the backend. Response shape and Zod validation contract are preserved.
@@ -40,16 +40,16 @@ The Groq API key (`VITE_GROQ_API_KEY`) is currently exposed in the browser bundl
 }
 ```
 
-**Response** (200): Matches `analysisResponseSchema` in `shared/src/schemas.ts` — full `SavedJobAnalysis` shape.
+**Response** (200): Matches `analysisResponseSchema` in `shared/src/schemas.ts` - full `SavedJobAnalysis` shape.
 
 **Errors**:
-- `400` — Zod validation failure on input
-- `429` — Rate limit exceeded (20/min)
-- `502` — Groq unreachable or malformed response
+- `400` - Zod validation failure on input
+- `429` - Rate limit exceeded (20/min)
+- `502` - Groq unreachable or malformed response
 
 ## Approach
 
-1. **Server**: Create `server/src/analysis/analysis.service.ts` — calls Groq via native `fetch` with `GROQ_API_KEY`, builds prompt from existing `buildGroqMessages()` logic. Create `analysis.controller.ts` — validates request with `validate(analysisRequestSchema)`, calls service, validates response with `analysisResponseSchema`, returns result.
+1. **Server**: Create `server/src/analysis/analysis.service.ts` - calls Groq via native `fetch` with `GROQ_API_KEY`, builds prompt from existing `buildGroqMessages()` logic. Create `analysis.controller.ts` - validates request with `validate(analysisRequestSchema)`, calls service, validates response with `analysisResponseSchema`, returns result.
 2. **Client**: Swap `createGroqProviderAdapter` transport from direct Groq call to `POST /api/ai/analyze`. The fallback transport (local analysis engine) stays unchanged.
 3. **Shared**: Fix `analysisResponseSchema` keywords and `recruiterMessages` to match frontend types. Re-export from `shared/src/schemas.ts`.
 4. **Rate limiting**: Apply `rateLimiter({ windowMs: 60_000, max: 20 })` to the new endpoint.
@@ -78,7 +78,7 @@ The Groq API key (`VITE_GROQ_API_KEY`) is currently exposed in the browser bundl
 ## Rollback Plan
 
 1. Revert the feature branch PR to `develop`
-2. Keep `VITE_GROQ_API_KEY` in Vercel env — frontend falls back to direct Groq
+2. Keep `VITE_GROQ_API_KEY` in Vercel env - frontend falls back to direct Groq
 3. Rate limiter removal: no data migration needed
 
 ## Dependencies
@@ -88,7 +88,7 @@ The Groq API key (`VITE_GROQ_API_KEY`) is currently exposed in the browser bundl
 
 ## Success Criteria
 
-- [ ] `VITE_GROQ_API_KEY` removable from `web/` — no Groq key in browser bundle
+- [ ] `VITE_GROQ_API_KEY` removable from `web/` - no Groq key in browser bundle
 - [ ] `POST /api/ai/analyze` returns same validated shape as current client-side call
 - [ ] All existing `ai-client.test.ts` and `ai-orchestrator.test.ts` pass
 - [ ] Rate limiter returns 429 after 20 req/min from same IP

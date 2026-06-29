@@ -1,4 +1,4 @@
-# Proposal: 2026-04-10 — Module 05 — History Repository & UI Shell
+# Proposal: 2026-04-10 - Module 05 - History Repository & UI Shell
 
 ## Summary
 
@@ -15,7 +15,7 @@ Implement a small, well-scoped feature that provides a stable, testable reposito
 ## Scope
 
 - Files to add/modify: `src/lib/repositories/*`, `src/features/history/hooks/useHistory.ts`, `src/features/history/HistoryFeature.tsx` (small wiring), tests under `src/**/__tests__`.
-- Does NOT include Supabase migration or auth-bound persistence — that will be a separate change.
+- Does NOT include Supabase migration or auth-bound persistence - that will be a separate change.
 
 ## Acceptance Criteria
 
@@ -27,7 +27,7 @@ Implement a small, well-scoped feature that provides a stable, testable reposito
 ## Risks
 
 - Changing the persisted shape could require migration later; we intentionally keep the shape minimal and compatible with existing local-storage usage.
-- Duplication with `analysis` hooks — we'll reuse `JobAnalysisResult` types where possible.
+- Duplication with `analysis` hooks - we'll reuse `JobAnalysisResult` types where possible.
 
 ## Owner
 

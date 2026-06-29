@@ -2,7 +2,7 @@
 
 ## ADDED Requirements
 
-> **Note**: The "Admin Exposure in Auth Context" requirement (REQ-AUTH-009) was removed in P5 Frontend Refactor. The auth context no longer exposes `isAdmin` as a meaningful property — it defaults to `false` and is never mutated by store actions. The `AdminRoute` component was deleted.
+> **Note**: The "Admin Exposure in Auth Context" requirement (REQ-AUTH-009) was removed in P5 Frontend Refactor. The auth context no longer exposes `isAdmin` as a meaningful property - it defaults to `false` and is never mutated by store actions. The `AdminRoute` component was deleted.
 
 ### Requirement: Signup Must Confirm Password
 

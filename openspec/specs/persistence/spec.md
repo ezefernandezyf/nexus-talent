@@ -84,7 +84,7 @@ The system MUST allow users to delete a saved analysis from history via HTTP.
 
 ### Requirement: Repository injection by auth status (REQ-HIST-007)
 
-`useAnalysisRepository` MUST always return `HttpAnalysisRepository`. The localStorage branch is removed entirely — all data operations go through HTTP regardless of auth state.
+`useAnalysisRepository` MUST always return `HttpAnalysisRepository`. The localStorage branch is removed entirely - all data operations go through HTTP regardless of auth state.
 
 #### Scenario: Always HTTP
 - GIVEN any auth state

@@ -55,7 +55,7 @@ Focused suite:
 
 ---
 
-### Correctness (Static — Structural Evidence)
+### Correctness (Static - Structural Evidence)
 | Requirement | Status | Notes |
 |------------|--------|-------|
 | Landing Page Layout | ✅ Implemented | `src/pages/LandingPage.tsx` composes the stitched hero, feature list and CTA/footer sections. |

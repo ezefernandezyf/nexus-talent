@@ -6,7 +6,7 @@ Define the layout shell, navigation, and shared UI chrome including the app layo
 ## Requirements
 
 ### Requirement: AppLayout Token Migration
-The `AppLayout` MUST use OKLCH design tokens for backgrounds, borders, and typography. The header, sidebar, and content area SHALL reference CSS custom properties — zero HEX hardcodes.
+The `AppLayout` MUST use OKLCH design tokens for backgrounds, borders, and typography. The header, sidebar, and content area SHALL reference CSS custom properties - zero HEX hardcodes.
 
 #### Scenario: Authenticated user views the app shell
 - GIVEN the user is authenticated

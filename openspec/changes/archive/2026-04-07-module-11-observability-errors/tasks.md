@@ -1,14 +1,14 @@
 # Tasks: module-11-observability-errors
 
 ## Phase 1: Foundation
-1.1 Create `src/lib/logger.ts` — typed logger with levels (error,warn,info,debug) and `initLogger(config)` entry.
+1.1 Create `src/lib/logger.ts` - typed logger with levels (error,warn,info,debug) and `initLogger(config)` entry.
 1.2 Add config schema `src/lib/logger.ts` export for env-driven toggles (console vs telemetry endpoint).
-1.3 Create `src/lib/error-mapper.ts` — pure mapper: Error -> {code, category, message, meta}.
+1.3 Create `src/lib/error-mapper.ts` - pure mapper: Error -> {code, category, message, meta}.
 
 ## Phase 2: Core Implementation
-2.1 Implement `src/components/ErrorBoundary.tsx` — captureError, componentDidCatch, call `logger.error` and `errorMapper` then rethrow or show fallback.
-2.2 Implement `src/hooks/useToasts.ts` — expose `showErrorToast(error|string)` and unit-testable side effects.
-2.3 Update `src/lib/query-client.ts` — add global onError handler to call `errorMapper` + `logger` + `useToasts` integration point.
+2.1 Implement `src/components/ErrorBoundary.tsx` - captureError, componentDidCatch, call `logger.error` and `errorMapper` then rethrow or show fallback.
+2.2 Implement `src/hooks/useToasts.ts` - expose `showErrorToast(error|string)` and unit-testable side effects.
+2.3 Update `src/lib/query-client.ts` - add global onError handler to call `errorMapper` + `logger` + `useToasts` integration point.
 2.4 Add telemetry sender helper in `src/lib/logger.ts` (`sendTelemetry(payload)`) with configurable retry strategy.
 
 ## Phase 3: Integration/Wiring
@@ -17,8 +17,8 @@
 3.3 Ensure `ai-client`/`github-client` errors bubble to `query-client` handlers (modify client catch to rethrow typed Error).
 
 ## Phase 4: Testing
-4.1 Unit: `logger` — test level filtering and `sendTelemetry` call on `logger.error` (mock endpoint).
-4.2 Unit: `error-mapper` — spec scenarios: "Network outage", "Validation error", "Unhandled exception" from openspec specs; assert mapped `category` and `code`.
+4.1 Unit: `logger` - test level filtering and `sendTelemetry` call on `logger.error` (mock endpoint).
+4.2 Unit: `error-mapper` - spec scenarios: "Network outage", "Validation error", "Unhandled exception" from openspec specs; assert mapped `category` and `code`.
 4.3 Component integration: render a child that throws inside `ErrorBoundary` → assert `logger.error` called and `useToasts.showErrorToast` called.
 4.4 Integration: simulate query-client API 500 (spec scenario "API failure") → assert toast shown, logger telemetry contains request id.
 

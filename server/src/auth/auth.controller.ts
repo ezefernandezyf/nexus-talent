@@ -4,15 +4,13 @@ import * as oauthService from "./oauth.service.js";
 import { parseCookies } from "../infra/request.js";
 import { codeStore } from "./code-store.js";
 
-// Express res.cookie() expects maxAge in MILLISECONDS, not seconds.
-const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
-const TEN_MINUTES_MS = 10 * 60 * 1000;
+const SEVEN_DAYS_SECONDS = 7 * 24 * 60 * 60;
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
   sameSite: "lax" as const,
   path: "/",
-  maxAge: SEVEN_DAYS_MS,
+  maxAge: SEVEN_DAYS_SECONDS,
 };
 
 /**
@@ -92,7 +90,7 @@ export async function googleLogin(_req: Request, res: Response, next: NextFuncti
       httpOnly: true,
       sameSite: "lax",
       path: "/",
-      maxAge: TEN_MINUTES_MS,
+      maxAge: 10 * 60, // 10 minutes
     });
 
     const url = oauthService.getGoogleAuthURL(state);
@@ -136,7 +134,7 @@ export async function googleCallback(req: Request, res: Response, next: NextFunc
     const result = await oauthService.handleOAuthCallback(code);
 
     const clientUrl = process.env.CLIENT_URL ?? "http://localhost:5173";
-    // Generate one-time code and store JWT — no JWT in redirect URL
+    // Generate one-time code and store JWT, no JWT in redirect URL
     const oneTimeCode = codeStore.set(result.token);
     res.redirect(`${clientUrl}/api/auth/session?code=${oneTimeCode}&redirect=/app/analysis`);
   } catch (err) {
@@ -157,7 +155,7 @@ export async function exchangeCode(req: Request, res: Response): Promise<void> {
   const provided = req.headers["x-exchange-secret"];
 
   if (!secret) {
-    console.error("EXCHANGE_SECRET is not configured — OAuth code exchange will fail all requests");
+    console.error("EXCHANGE_SECRET is not configured. OAuth code exchange will fail all requests");
     res.status(401).json({ error: "Unauthorized" });
     return;
   }

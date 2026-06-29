@@ -6,14 +6,14 @@ Replace the JWT-in-URL OAuth redirect with a one-time code exchange. After succe
 
 ## Architecture Decisions
 
-### Decision: Code Store — In-memory Map (rate-limiter pattern)
+### Decision: Code Store - In-memory Map (rate-limiter pattern)
 | Option | Tradeoff | Verdict |
 |--------|----------|---------|
 | Redis | Adds infra dep for ephemeral 60s data | ❌ Reject |
-| DB table (Prisma) | Overkill — single-use codes, no persistence | ❌ Reject |
+| DB table (Prisma) | Overkill - single-use codes, no persistence | ❌ Reject |
 | `Map<string, {jwt,expiresAt}>` | Same pattern as `rate-limiter.ts`, zero deps | ✅ Adopt |
 
-### Decision: Caller Auth — Shared Secret Header
+### Decision: Caller Auth - Shared Secret Header
 | Option | Tradeoff | Verdict |
 |--------|----------|---------|
 | IP whitelist | Vercel IP ranges change; brittle | ❌ Reject |
@@ -90,7 +90,7 @@ class CodeStore {
 | Unit | `code-store.ts` | Store → retrieve → re-retrieve returns null (single-use). Expire via manual sweep. Pure logic, no deps |
 | Unit | `exchangeCode` controller | Mock codeStore, verify 200 (valid code), 401 (bad secret), 404 (miss/expired) |
 | Integration | Full OAuth redirect | Hit `/oauth/google/callback` with a mocked OAuth code, verify `?code=` in Location header (no `?token=`) |
-| E2E | Existing Playwright OAuth flow | No structural change — test still exercises the same redirect chain. Verify `exchange_failed` error path |
+| E2E | Existing Playwright OAuth flow | No structural change - test still exercises the same redirect chain. Verify `exchange_failed` error path |
 
 ## Migration / Rollout
 
