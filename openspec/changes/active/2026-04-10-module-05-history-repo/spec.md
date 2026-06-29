@@ -1,4 +1,4 @@
-# Spec: Module 05 — History Repository & UI Shell
+# Spec: Module 05 - History Repository & UI Shell
 
 ## Data Shape
 
@@ -42,13 +42,13 @@ The hook will use `AnalysisRepository` injected from a small factory or direct i
 ## UI Requirements
 
 - `HistoryFeature` will call `useHistory` and render states: Loading (skeleton), Empty (empty state component), Error (toast or inline message), Populated (list of `HistoryCard`).
-- Pagination controls: simple page indicator and next/prev; server-side pagination is not required — use the repository's `list` with `page` and `pageSize`.
+- Pagination controls: simple page indicator and next/prev; server-side pagination is not required - use the repository's `list` with `page` and `pageSize`.
 - Accessibility: list items must be keyboard-focusable and have `aria-labelledby` linking to the title.
 
 ## Test Scenarios
 
-1. Fetching history — returns items sorted newest-first.
-2. Empty history — returns empty list and empty state is shown.
-3. Save analysis — repository returns saved item with `id` and `createdAt`.
-4. Delete analysis — item removed and list updates.
+1. Fetching history - returns items sorted newest-first.
+2. Empty history - returns empty list and empty state is shown.
+3. Save analysis - repository returns saved item with `id` and `createdAt`.
+4. Delete analysis - item removed and list updates.
 5. Hook exposes `isLoading` then `data`.

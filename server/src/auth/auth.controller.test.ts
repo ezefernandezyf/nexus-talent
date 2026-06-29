@@ -16,7 +16,7 @@ vi.mock("@prisma/client", () => ({
   PrismaClient: vi.fn(),
 }));
 
-// Mock the code store — use vi.hoisted so the mock factory can reference it
+// Mock the code store, use vi.hoisted so the mock factory can reference it
 const { mockGet } = vi.hoisted(() => ({
   mockGet: vi.fn<(code: string) => string | null>(),
 }));
@@ -80,7 +80,7 @@ describe("exchangeCode", () => {
     await exchangeCode(req, res);
 
     expect(consoleError).toHaveBeenCalledWith(
-      "EXCHANGE_SECRET is not configured — OAuth code exchange will fail all requests",
+      "EXCHANGE_SECRET is not configured. OAuth code exchange will fail all requests",
     );
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ error: "Unauthorized" });

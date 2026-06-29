@@ -50,7 +50,7 @@ Executed focused verification suites:
 
 ---
 
-### Correctness (Static — Structural Evidence)
+### Correctness (Static - Structural Evidence)
 | Requirement | Status | Notes |
 |------------|--------|-------|
 | Optional GitHub URL input is surfaced | ✅ Implemented | `src/features/analysis/components/JobDescriptionForm.tsx` now renders an optional GitHub URL field and trims it before submit. |

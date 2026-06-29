@@ -1,4 +1,4 @@
-# Tasks: Module 05 — History Repository & UI Shell
+# Tasks: Module 05 - History Repository & UI Shell
 
 Implementation checklist. Mark tasks as completed as you implement them.
 

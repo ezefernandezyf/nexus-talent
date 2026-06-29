@@ -1,4 +1,4 @@
-# P3 AI Proxy — Delta Specs
+# P3 AI Proxy - Delta Specs
 
 ## Domain: ai-proxy (NEW)
 
@@ -15,27 +15,27 @@ Server-side Groq proxy. Client sends JD + tone; server holds `GROQ_API_KEY`.
 
 ### Scenarios
 
-**REQ-AI-001 — Valid input**
+**REQ-AI-001 - Valid input**
 - GIVEN `{ jobDescription: "Senior dev...", messageTone: "formal" }`
 - WHEN POST /api/ai/analyze
 - THEN 200 with validated result
 
-**REQ-AI-001 — Invalid input**
+**REQ-AI-001 - Invalid input**
 - GIVEN empty `jobDescription`
 - WHEN POST /api/ai/analyze
 - THEN 400 with Zod error details
 
-**REQ-AI-002 — Key missing**
+**REQ-AI-002 - Key missing**
 - GIVEN `GROQ_API_KEY` unset
 - WHEN valid request arrives
 - THEN 502; key never reaches client
 
-**REQ-AI-004 — Rate limit hit**
+**REQ-AI-004 - Rate limit hit**
 - GIVEN 20 requests from same IP in 60s
 - WHEN 21st request arrives
 - THEN 429 with `Retry-After`
 
-**REQ-AI-006 — Timeout**
+**REQ-AI-006 - Timeout**
 - GIVEN Groq does not respond within 30s
 - WHEN timeout fires
 - THEN 502 returned
@@ -54,7 +54,7 @@ Server-side Groq proxy. Client sends JD + tone; server holds `GROQ_API_KEY`.
 
 ### MODIFIED
 
-**Integration with ai-client** — Backward-compatible transport swap from direct Groq to `POST /api/ai/analyze`. `ai-client` Zod layer unchanged.  
+**Integration with ai-client** - Backward-compatible transport swap from direct Groq to `POST /api/ai/analyze`. `ai-client` Zod layer unchanged.  
 (Previously: orchestrator wrapped direct Groq SDK calls.)
 
 #### Scenario: Callers unaffected
@@ -64,12 +64,12 @@ Server-side Groq proxy. Client sends JD + tone; server holds `GROQ_API_KEY`.
 
 ### REMOVED
 
-**Groq adapter as first concrete provider** — Frontend no longer calls Groq directly.  
+**Groq adapter as first concrete provider** - Frontend no longer calls Groq directly.  
 **Migration**: Replace `createGroqProviderAdapter` with HTTP transport in `web/src/lib/ai-provider.ts`. Delete `VITE_GROQ_API_KEY`.
 
 ---
 
-## Domain: shared-contracts (MODIFIED — no prior spec)
+## Domain: shared-contracts (MODIFIED - no prior spec)
 
 | ID | Requirement |
 |----|-------------|
@@ -95,5 +95,5 @@ Server-side Groq proxy. Client sends JD + tone; server holds `GROQ_API_KEY`.
 | REQ-AI-013 | `ai-client.test.ts` and `ai-orchestrator.test.ts` MUST pass post-migration |
 | REQ-AI-014 | Removing `VITE_GROQ_API_KEY` MUST NOT break local dev (Vite proxy → `:3001`) |
 
-**REQ-AI-013 Scenario** — `pnpm test` in web workspace passes with zero regressions.  
-**REQ-AI-014 Scenario** — Dev servers running, `GROQ_API_KEY` in `server/.env`, analysis flow reaches backend via `/api/ai` proxy.
+**REQ-AI-013 Scenario** - `pnpm test` in web workspace passes with zero regressions.  
+**REQ-AI-014 Scenario** - Dev servers running, `GROQ_API_KEY` in `server/.env`, analysis flow reaches backend via `/api/ai` proxy.

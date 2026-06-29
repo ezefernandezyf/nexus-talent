@@ -2,7 +2,7 @@
 
 ## Technical Approach
 
-Slice-based monorepo migration: extract the current SPA (`src/`) into a pnpm workspace (`web/`, `server/`, `shared/`, `e2e/`). The server implements screaming-architecture REST under `/api/*` with custom HS256 JWT in httpOnly cookies, server-side Groq proxy, and Prisma-backed CRUD. The web layer preserves its existing repository interfaces and UI contracts — swapping localStorage/Supabase SDK for HTTP calls and auth cookie flows.
+Slice-based monorepo migration: extract the current SPA (`src/`) into a pnpm workspace (`web/`, `server/`, `shared/`, `e2e/`). The server implements screaming-architecture REST under `/api/*` with custom HS256 JWT in httpOnly cookies, server-side Groq proxy, and Prisma-backed CRUD. The web layer preserves its existing repository interfaces and UI contracts - swapping localStorage/Supabase SDK for HTTP calls and auth cookie flows.
 
 ## Architecture Decisions
 
@@ -11,42 +11,42 @@ Slice-based monorepo migration: extract the current SPA (`src/`) into a pnpm wor
 | Option | Tradeoff | Decision |
 |--------|----------|----------|
 | `jsonwebtoken` npm | + standard, - extra dep for HS256 | **Rejected** |
-| `crypto.createHmac` | + zero deps, - need manual verify | **Selected** — HS256 is simple enough; one `jwt.ts` file with sign/verify/parseCookies is lighter and auditable |
+| `crypto.createHmac` | + zero deps, - need manual verify | **Selected** - HS256 is simple enough; one `jwt.ts` file with sign/verify/parseCookies is lighter and auditable |
 
 ### Decision: Screaming Architecture vs layered
 
 | Option | Tradeoff | Decision |
 |--------|----------|----------|
 | routes/controllers/services/ | familiar, but scatters a domain across 4 dirs | **Rejected** |
-| auth/, analysis/, profile/, history/ | each domain is self-contained; infra/ for shared concerns | **Selected** — mirrors the existing pattern in the codebase's AGENTS.md |
+| auth/, analysis/, profile/, history/ | each domain is self-contained; infra/ for shared concerns | **Selected** - mirrors the existing pattern in the codebase's AGENTS.md |
 
 ### Decision: HTTP-only cookies vs localStorage + Authorization header
 
 | Option | Tradeoff | Decision |
 |--------|----------|----------|
 | localStorage + `Authorization: Bearer` | XSS-vulnerable (current state) | **Rejected** |
-| httpOnly cookie | immune to XSS, sent automatically by browser, requires CSRF protection | **Selected** — `sameSite: lax` + CSP covers the CSRF vector for this API surface |
+| httpOnly cookie | immune to XSS, sent automatically by browser, requires CSRF protection | **Selected** - `sameSite: lax` + CSP covers the CSRF vector for this API surface |
 
 ### Decision: Zod schemas in shared package vs duplicated
 
 | Option | Tradeoff | Decision |
 |--------|----------|----------|
 | Each side duplicates | + independent, - drift guaranteed | **Rejected** |
-| `shared/contracts/` as single truth | + no drift, server validates input, web infers types, - one more workspace package | **Selected** — already the pattern in current validation layer; move `src/schemas/` + `src/lib/validation/` to `shared/contracts/` |
+| `shared/contracts/` as single truth | + no drift, server validates input, web infers types, - one more workspace package | **Selected** - already the pattern in current validation layer; move `src/schemas/` + `src/lib/validation/` to `shared/contracts/` |
 
 ### Decision: Zustand vs React Context for auth state
 
 | Option | Tradeoff | Decision |
 |--------|----------|----------|
 | React Context (current) | re-renders all consumers on any change, no devtools | **Replaced** |
-| Zustand store | fine-grained subscriptions, devtools, simple API | **Selected** — already used for UI state; auth state (`session`, `status`) maps naturally to a store |
+| Zustand store | fine-grained subscriptions, devtools, simple API | **Selected** - already used for UI state; auth state (`session`, `status`) maps naturally to a store |
 
 ### Decision: Design identity
 
 | Option | Tradeoff | Decision |
 |--------|----------|----------|
 | Current "Precision Instrument" | dark/teal/Inter | **Replaced** by proposal's Option C |
-| "The Signal" — Indigo + Chartreuse | bold, breaks SaaS conventions, editorial typography | **User-selected** in proposal. CSS variables replace hardcoded colors |
+| "The Signal" - Indigo + Chartreuse | bold, breaks SaaS conventions, editorial typography | **User-selected** in proposal. CSS variables replace hardcoded colors |
 
 ## Data Flow
 
@@ -140,7 +140,7 @@ export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(item: T) =>
 
 | Layer | What to Test | Approach |
 |-------|-------------|----------|
-| Unit - Zod schemas | All shared contracts validate correctly | Vitest + `safeParse` — migrate existing zod tests |
+| Unit - Zod schemas | All shared contracts validate correctly | Vitest + `safeParse` - migrate existing zod tests |
 | Unit - JWT | sign/verify roundtrip, expired token, bad signature | Vitest with `vi.advanceTimersByTime` |
 | Unit - Services | auth.register (bcrypt + prisma), analysis orchestration | Vitest + mocked Prisma client |
 | Integration - API | Every endpoint: 200, 400, 401, 404, 429 | Supertest against Express app (no auth mock) |
@@ -148,7 +148,7 @@ export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(item: T) =>
 
 ## Migration / Rollout
 
-**Phase P1-P4 (backend)**: Deploy server to Render. Frontend still connects via Supabase SDK + localStorage. No breaking changes — the SPA keeps working as-is. **Phase P5 (frontend)**: Swap auth provider + repositories in one deploy. At this point, localStorage data is abandoned (user confirmed in proposal). Rollback per slice: revert the feature branch PR. Full rollback: reset `develop` to tag `pre-v1.1-backend`.
+**Phase P1-P4 (backend)**: Deploy server to Render. Frontend still connects via Supabase SDK + localStorage. No breaking changes - the SPA keeps working as-is. **Phase P5 (frontend)**: Swap auth provider + repositories in one deploy. At this point, localStorage data is abandoned (user confirmed in proposal). Rollback per slice: revert the feature branch PR. Full rollback: reset `develop` to tag `pre-v1.1-backend`.
 
 ## Open Questions
 

@@ -57,7 +57,7 @@ The workspace coverage artifact shows overall coverage above 90%, but it does no
 
 ---
 
-### Correctness (Static — Structural Evidence)
+### Correctness (Static - Structural Evidence)
 | Requirement | Status | Notes |
 |------------|--------|-------|
 | Centralized mapper layer | ✅ Implemented | `src/lib/mappers/job-analysis.ts` normalizes raw payloads, strips unknown keys by reconstruction, and canonicalizes skill levels. |

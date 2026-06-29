@@ -31,10 +31,10 @@ The `web/src/` tree SHALL consist of `features/{domain}/`, `core/`, `shared/`, a
 | Removed | Files migrated to |
 |---------|------------------|
 | `lib/` (22 files) | `features/{domain}/api/`, `core/`, `shared/utils/` |
-| `lib/supabase/` (3 files) | DELETED — legacy Supabase SDK |
+| `lib/supabase/` (3 files) | DELETED - legacy Supabase SDK |
 | `pages/` (7 files) | `features/{domain}/pages/`, `shared/pages/` |
 | `auth/` (1 file) | `features/auth/store/` + `features/auth/api/` |
-| `components/landing/` (10 files) | DELETED — duplicate of `features/landing/components/` |
+| `components/landing/` (10 files) | DELETED - duplicate of `features/landing/components/` |
 | `components/ui/` (15 files) | `shared/components/` |
 | `components/ErrorBoundary.tsx` | `core/ErrorBoundary.tsx` |
 

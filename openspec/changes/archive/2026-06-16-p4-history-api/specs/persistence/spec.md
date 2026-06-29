@@ -12,7 +12,7 @@ The system MUST define an abstract `AnalysisRepository` interface to decouple th
 - THEN it MUST use `save`, `getAll`, `getById`, `delete`, and `update` methods
 - AND concrete implementations MUST satisfy all methods
 
-(Previously: interface had save, getAll, getById, delete — no update method.)
+(Previously: interface had save, getAll, getById, delete - no update method.)
 
 ## ADDED Requirements
 

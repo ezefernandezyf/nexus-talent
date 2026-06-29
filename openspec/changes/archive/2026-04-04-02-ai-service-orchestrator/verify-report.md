@@ -62,7 +62,7 @@ tsc -p tsconfig.json --noEmit
 
 ---
 
-### Correctness (Static — Structural Evidence)
+### Correctness (Static - Structural Evidence)
 
 | Requirement | Status | Notes |
 |------------|--------|-------|

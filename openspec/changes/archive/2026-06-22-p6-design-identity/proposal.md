@@ -1,8 +1,8 @@
-# Proposal: P6 — Design Identity "The Signal" + GEO Foundation
+# Proposal: P6 - Design Identity "The Signal" + GEO Foundation
 
 ## Intent
 
-CSR SPA → AI crawlers see `<div id="root">`. GEO score: **7/100**. Design uses HEX colors, Inter/Space Grotesk, no token system. Landing has ~87 words — no answer blocks, FAQ, or structured AI-citable content.
+CSR SPA → AI crawlers see `<div id="root">`. GEO score: **7/100**. Design uses HEX colors, Inter/Space Grotesk, no token system. Landing has ~87 words - no answer blocks, FAQ, or structured AI-citable content.
 
 ## Scope
 
@@ -18,9 +18,9 @@ CSR SPA → AI crawlers see `<div id="root">`. GEO score: **7/100**. Design uses
 
 ## Approach
 
-**Track A — GEO + Tokens (Week 1):** Install fonts, rewrite index.css (HEX → OKLCH, swap fonts), update index.html (meta, Schema, noscript), create llms.txt/robots.txt/favicon/og-image, rewrite landing content, refresh all UI components, redesign AppLayout + AuthShell + footer.
+**Track A - GEO + Tokens (Week 1):** Install fonts, rewrite index.css (HEX → OKLCH, swap fonts), update index.html (meta, Schema, noscript), create llms.txt/robots.txt/favicon/og-image, rewrite landing content, refresh all UI components, redesign AppLayout + AuthShell + footer.
 
-**Track B — SSR (Week 2):** Vike × Vite 6 compatibility spike. If green: add Vike, SSR-enable `/` and `/privacy`, update vercel.json. If fails: swap to Vercel Edge prerendering. Verify hydration + dark mode parity.
+**Track B - SSR (Week 2):** Vike × Vite 6 compatibility spike. If green: add Vike, SSR-enable `/` and `/privacy`, update vercel.json. If fails: swap to Vercel Edge prerendering. Verify hydration + dark mode parity.
 
 ## Risks
 
@@ -43,7 +43,7 @@ Vike × Vite 6 + React 19 compatibility (verify in spike). @fontsource/cabinet-g
 
 - [ ] GEO re-audit ≥ 35/100 (baseline: 7)
 - [ ] `curl` landing → full HTML (no JS): H1, H2 blocks, FAQ, 300+ words
-- [ ] Zero HEX hardcodes — all components use OKLCH tokens
+- [ ] Zero HEX hardcodes - all components use OKLCH tokens
 - [ ] Dark/light parity across all pages
 - [ ] Fonts load without CLS
 - [ ] `/` and `/privacy` deliver SSR HTML; app routes remain CSR

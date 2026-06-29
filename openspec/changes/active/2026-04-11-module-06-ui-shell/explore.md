@@ -1,4 +1,4 @@
-## Exploration: Module 06 — UI/UX Feature Shells (Analysis & History)
+## Exploration: Module 06 - UI/UX Feature Shells (Analysis & History)
 
 ### Current State
 
@@ -7,15 +7,15 @@
   - `src/features/history/components/HistoryCard.tsx`, `HistoryEmptyState.tsx`, `HistoryLoadingState.tsx`
   - `src/features/analysis/components/AnalysisResultView.tsx`, `JobDescriptionForm.tsx` (analysis UI pieces)
 - The data layer and hooks are separated (e.g., `useJobAnalysis`, `useAnalysisHistory`, `createLocalAnalysisRepository`).
-- There is no `docs/assets/` folder checked into the repo (no source HTML/CSS assets found in workspace), so pixel-exact extraction from source assets is not possible here — we will rely on `DESIGN.md` and existing component markup as reference.
+- There is no `docs/assets/` folder checked into the repo (no source HTML/CSS assets found in workspace), so pixel-exact extraction from source assets is not possible here - we will rely on `DESIGN.md` and existing component markup as reference.
 
 ### Affected Areas
 
-- `src/features/history/*` — history cards, loading and empty states, feature shell.
-- `src/features/analysis/*` — analysis result view, job description form, feature page.
-- `src/components/landing/*` & `src/features/landing/*` — hero and marketing blocks to standardize.
-- `src/components/ui/` — target location for extracted shared presentational components (to create).
-- Tests: `src/features/*/*.test.tsx` — snapshot/accessibility tests will be added/updated.
+- `src/features/history/*` - history cards, loading and empty states, feature shell.
+- `src/features/analysis/*` - analysis result view, job description form, feature page.
+- `src/components/landing/*` & `src/features/landing/*` - hero and marketing blocks to standardize.
+- `src/components/ui/` - target location for extracted shared presentational components (to create).
+- Tests: `src/features/*/*.test.tsx` - snapshot/accessibility tests will be added/updated.
 
 ### Approaches
 
@@ -50,9 +50,9 @@
 ### Risks
 
 - Missing reference assets (`docs/assets/`) mean visual parity may need iterative adjustments once assets are supplied.
-- Refactor touches many files — keep changes small and use feature branches per component to reduce risk.
+- Refactor touches many files - keep changes small and use feature branches per component to reduce risk.
 - Snapshot tests can be brittle; prefer focused snapshot regions (Hero, Card) rather than full-page snapshots.
 
 ### Ready for Proposal
 
-Yes — enough information to proceed with `sdd-propose` and `sdd-spec`. Next action: implement `src/components/ui/*` primitives and update pages to compose them.
+Yes - enough information to proceed with `sdd-propose` and `sdd-spec`. Next action: implement `src/components/ui/*` primitives and update pages to compose them.

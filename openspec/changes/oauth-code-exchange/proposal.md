@@ -42,7 +42,7 @@ Render callback generates code, stores `{ jwt, expiresAt }`, redirects to Vercel
 |------|--------|-------|
 | `server/src/auth/` | Modified + New | `auth.controller.ts`, `auth.router.ts`, `oauth.service.ts`, `code-store.ts` (new) |
 | `api/auth/` | Modified | `session.ts` |
-| `web/` | None | — |
+| `web/` | None | - |
 
 ## Risks
 
@@ -65,7 +65,7 @@ Revert: 3 files + 1 deletion. No DB migration.
 ## Dependencies
 
 - `EXCHANGE_SECRET` env var (must match on Render and Vercel)
-- `crypto.randomBytes` — built-in, already used in `oauth.service.ts`
+- `crypto.randomBytes` - built-in, already used in `oauth.service.ts`
 
 ## Success Criteria
 

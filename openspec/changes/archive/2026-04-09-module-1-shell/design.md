@@ -1,4 +1,4 @@
-# Design: Module 1 — Shell + Mobile Navigation + Footer
+# Design: Module 1 - Shell + Mobile Navigation + Footer
 
 ## Technical Approach
 

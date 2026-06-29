@@ -47,7 +47,7 @@ The system MUST provide a `Badge` component supporting variant (info, success, w
 - THEN it displays with the correct OKLCH background and text colors
 
 ### Requirement: OKLCH Token Usage in Components
-All UI components (Button, Card, Input, Modal, Badge) MUST reference OKLCH CSS custom properties — zero HEX hardcodes. Components MUST use `cn()` for class merging.
+All UI components (Button, Card, Input, Modal, Badge) MUST reference OKLCH CSS custom properties - zero HEX hardcodes. Components MUST use `cn()` for class merging.
 
 #### Scenario: Button uses OKLCH tokens
 - GIVEN a `<Button variant="primary">`

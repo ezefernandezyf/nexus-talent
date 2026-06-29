@@ -1,4 +1,4 @@
-# Proposal: P8 — Polish + Deploy
+# Proposal: P8 - Polish + Deploy
 
 ## Intent
 
@@ -7,15 +7,15 @@ Nexus Talent is feature-complete (P1–P7 done) but lacks production polish: no 
 ## Scope
 
 ### In Scope
-- **500 error page** — dedicated server-error route with retry + messaging
-- **SettingsPage skeleton** — skeleton loader while settings data fetches
-- **Analysis "no analysis yet" state** — guidance before first run
-- **Vercel API proxy** — `/api/*` rewrites → Render backend in `vercel.json`
-- **render.yaml** — Render Blueprint with health check, Dockerfile path, env vars
-- **Lighthouse 90+** — Core Web Vitals on mobile (LCP < 2.5s, CLS < 0.1)
-- **Auth redesign** — AuthShell aligned to Indigo/Chartreuse, Cabinet Grotesk + Satoshi, remove Supabase references (deferred from P6)
-- **DESIGN.md** — design system doc based on portfolio-personality principles
-- **README rewrite** — current stack, pnpm monorepo, architecture, run commands
+- **500 error page** - dedicated server-error route with retry + messaging
+- **SettingsPage skeleton** - skeleton loader while settings data fetches
+- **Analysis "no analysis yet" state** - guidance before first run
+- **Vercel API proxy** - `/api/*` rewrites → Render backend in `vercel.json`
+- **render.yaml** - Render Blueprint with health check, Dockerfile path, env vars
+- **Lighthouse 90+** - Core Web Vitals on mobile (LCP < 2.5s, CLS < 0.1)
+- **Auth redesign** - AuthShell aligned to Indigo/Chartreuse, Cabinet Grotesk + Satoshi, remove Supabase references (deferred from P6)
+- **DESIGN.md** - design system doc based on portfolio-personality principles
+- **README rewrite** - current stack, pnpm monorepo, architecture, run commands
 
 ### Out of Scope
 - New features (V1.2 work: profiles, CV generator, brand building)
@@ -25,7 +25,7 @@ Nexus Talent is feature-complete (P1–P7 done) but lacks production polish: no 
 
 ## Capabilities
 
-> Research: `openspec/specs/` is empty — no existing specs to modify.
+> Research: `openspec/specs/` is empty - no existing specs to modify.
 
 ### New Capabilities
 - `ux-resilience`: Error boundary polish, skeleton loading, empty states across analysis/history/settings
@@ -35,7 +35,7 @@ Nexus Talent is feature-complete (P1–P7 done) but lacks production polish: no 
 - `project-docs`: DESIGN.md (portfolio-personality principles) + README (stack, arch, run)
 
 ### Modified Capabilities
-None — no existing specs in `openspec/specs/`.
+None - no existing specs in `openspec/specs/`.
 
 ## Approach
 
@@ -71,7 +71,7 @@ None — no existing specs in `openspec/specs/`.
 ## Rollback Plan
 
 - **vercel.json**: revert to previous rewrite config (SPA fallback only)
-- **AuthShell**: git revert the component file — visual-only change, no logic
+- **AuthShell**: git revert the component file - visual-only change, no logic
 - **render.yaml**: delete file; Render Blueprint is additive, not destructive
 
 ## Dependencies

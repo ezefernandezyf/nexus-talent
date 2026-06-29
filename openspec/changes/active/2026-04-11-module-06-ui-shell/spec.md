@@ -1,12 +1,12 @@
-# Spec: Module 06 — UI/UX Feature Shells (Analysis & History)
+# Spec: Module 06 - UI/UX Feature Shells (Analysis & History)
 
 ## Component Contracts
 
-- `Hero` — props: `{ title: string; subtitle?: string; ctas?: { label: string; href: string }[] }`.
-- `AnalysisCard` — props: `{ analysis: SavedJobAnalysis; onOpen?: (id:string)=>void }`.
-- `HistoryList` — props: `{ items: SavedJobAnalysis[]; onDelete?: (id:string)=>void }`.
-- `EmptyState` — props: `{ title: string; description?: string; cta?: { label: string; href: string } }`.
-- `LoadingSkeleton` — presentational skeleton matching the design token sizes for hero and list items.
+- `Hero` - props: `{ title: string; subtitle?: string; ctas?: { label: string; href: string }[] }`.
+- `AnalysisCard` - props: `{ analysis: SavedJobAnalysis; onOpen?: (id:string)=>void }`.
+- `HistoryList` - props: `{ items: SavedJobAnalysis[]; onDelete?: (id:string)=>void }`.
+- `EmptyState` - props: `{ title: string; description?: string; cta?: { label: string; href: string } }`.
+- `LoadingSkeleton` - presentational skeleton matching the design token sizes for hero and list items.
 
 ## Accessibility Requirements
 

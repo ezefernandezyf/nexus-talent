@@ -3,7 +3,7 @@
  *
  * The webServer chained command handles Prisma client generation,
  * schema push, and starting the server. This global setup is a
- * no-op — the webServer's chained command is the authoritative
+ * no-op : the webServer's chained command is the authoritative
  * setup mechanism for the E2E test database.
  */
 export default async function globalSetup(): Promise<void> {

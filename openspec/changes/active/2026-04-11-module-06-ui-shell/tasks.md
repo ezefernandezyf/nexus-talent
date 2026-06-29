@@ -1,4 +1,4 @@
-# Tasks: Module 06 — UI/UX Feature Shells (Analysis & History)
+# Tasks: Module 06 - UI/UX Feature Shells (Analysis & History)
 
 - [x] 1. sdd-explore: extract visual blocks from `docs/assets` and map to components.
 - [x] 2. componentization: implement `Hero`, `AnalysisCard`, `HistoryList`, `EmptyState`, `LoadingSkeleton` under `src/components/ui/` and `src/features/*/components/`.

@@ -6,7 +6,7 @@
 
 ### Requirement: React Query Session + Zustand Status (REQ-AUTH-001)
 
-The frontend MUST manage session data (`user`, `isAdmin`) via React Query `useSession()` hook (GET /api/auth/me). UI-only auth status MAY live in a thin Zustand slice: `{ status: "unknown" | "loading" | "authenticated" | "unauthenticated" }`. No user object, mutations, or tokens SHALL exist in Zustand beyond the status field. No session token MAY exist in JavaScript — httpOnly cookies only.
+The frontend MUST manage session data (`user`, `isAdmin`) via React Query `useSession()` hook (GET /api/auth/me). UI-only auth status MAY live in a thin Zustand slice: `{ status: "unknown" | "loading" | "authenticated" | "unauthenticated" }`. No user object, mutations, or tokens SHALL exist in Zustand beyond the status field. No session token MAY exist in JavaScript - httpOnly cookies only.
 (Previously: monolithic Zustand store held user, status, and all auth actions.)
 
 #### Scenario: Session restore

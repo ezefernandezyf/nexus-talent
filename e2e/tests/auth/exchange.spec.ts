@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Code Exchange — Error Paths", () => {
+test.describe("Code Exchange: Error Paths", () => {
   test("returns 401 when X-Exchange-Secret is missing", async ({ request }) => {
     const response = await request.post("/api/auth/exchange", {
       data: { code: "any-code" },

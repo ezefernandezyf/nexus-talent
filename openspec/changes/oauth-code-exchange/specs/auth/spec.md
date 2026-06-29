@@ -19,7 +19,7 @@ The system MUST provide an in-memory code store (`Map<string, { jwt, expiresAt }
 - THEN expired codes MUST be removed
 - AND the interval MUST use `.unref()` to not block process exit
 
-#### Scenario: Single-use — second exchange denied
+#### Scenario: Single-use - second exchange denied
 
 - GIVEN a code was consumed by a successful exchange
 - WHEN a second request attempts the same code
