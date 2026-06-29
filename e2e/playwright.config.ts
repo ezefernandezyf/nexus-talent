@@ -42,6 +42,7 @@ export default defineConfig({
         NODE_ENV: "test",
         PORT: "3001",
         JWT_SECRET: "e2e-test-secret-key-not-for-production",
+        EXCHANGE_SECRET: "e2e-test-exchange-secret",
       },
     },
     {

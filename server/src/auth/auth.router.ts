@@ -20,3 +20,6 @@ authRouter.post("/logout", requireAuth, controller.logout);
 // OAuth
 authRouter.get("/oauth/google", controller.googleLogin);
 authRouter.get("/oauth/google/callback", controller.googleCallback);
+
+// Code exchange
+authRouter.post("/exchange", controller.exchangeCode);
