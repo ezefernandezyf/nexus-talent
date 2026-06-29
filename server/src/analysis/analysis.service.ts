@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { analysisResponseSchema } from "../../../shared/src/schemas.js";
+import { analysisResponseSchema, GROQ_JOB_ANALYSIS_JSON_SCHEMA } from "../../../shared/src/schemas.js";
 import type { AnalysisRequestDTO, AnalysisResponseDTO } from "../../../shared/src/schemas.js";
 import { AppError } from "../infra/error-handler.js";
 import { logger } from "../infra/logger.js";
@@ -9,7 +9,7 @@ import { logger } from "../infra/logger.js";
 // ============================================================================
 
 const GROQ_CHAT_COMPLETIONS_URL = "https://api.groq.com/openai/v1/chat/completions";
-const DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile";
+const DEFAULT_GROQ_MODEL = "llama-3.2-90b-vision-preview";
 const GROQ_TIMEOUT_MS = 60_000;
 
 // ============================================================================
@@ -72,7 +72,12 @@ async function fetchGroq(messages: GroqChatMessage[], signal: AbortSignal): Prom
       model: process.env.GROQ_MODEL ?? DEFAULT_GROQ_MODEL,
       messages,
       response_format: {
-        type: "json_object",
+        type: "json_schema",
+        json_schema: {
+          name: "job_analysis",
+          strict: true,
+          schema: GROQ_JOB_ANALYSIS_JSON_SCHEMA,
+        },
       },
     }),
   });
