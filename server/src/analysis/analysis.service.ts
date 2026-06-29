@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { analysisResponseSchema, GROQ_JOB_ANALYSIS_JSON_SCHEMA } from "../../../shared/src/schemas.js";
+import { analysisResponseSchema } from "../../../shared/src/schemas.js";
 import type { AnalysisRequestDTO, AnalysisResponseDTO } from "../../../shared/src/schemas.js";
 import { AppError } from "../infra/error-handler.js";
 import { logger } from "../infra/logger.js";
@@ -9,8 +9,8 @@ import { logger } from "../infra/logger.js";
 // ============================================================================
 
 const GROQ_CHAT_COMPLETIONS_URL = "https://api.groq.com/openai/v1/chat/completions";
-const DEFAULT_GROQ_MODEL = "llama-3.2-90b-vision-preview";
-const GROQ_TIMEOUT_MS = 60_000;
+const DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile";
+const GROQ_TIMEOUT_MS = 90_000;
 
 // ============================================================================
 // Types
@@ -25,38 +25,79 @@ interface GroqChatMessage {
 // Internal helpers
 // ============================================================================
 
-/**
- * Build the system + user messages for the Groq prompt.
- * Ported from `web/src/lib/ai-provider.ts` `buildGroqMessages()`.
- */
 function buildGroqMessages(input: AnalysisRequestDTO): GroqChatMessage[] {
   const toneInstruction =
     input.messageTone === "casual"
-      ? "Usá un tono casual, directo y cercano."
+      ? "Usa un tono casual, directo y cercano."
       : input.messageTone === "persuasive"
-        ? "Usá un tono persuasivo, enérgico y orientado a resultados."
-        : "Usá un tono formal, ejecutivo y claro.";
+        ? "Usa un tono persuasivo, energetico y orientado a resultados."
+        : "Usa un tono formal, ejecutivo y claro.";
 
   return [
     {
       role: "system",
-      content: `Sos un analizador de vacantes. Devolvé un JSON estricto con summary, vacancySummary, skillGroups, keywords, gaps, outreachMessage y recruiterMessages, sin texto extra. El summary debe ser una lectura ejecutiva breve, clara y orientada a recruiting. vacancySummary debe traer bullets sobre el rol, seniority, modalidad/ubicación, top 5 responsabilidades y must-have vs nice-to-have. keywords debe separar hard skills, soft skills, dominio/negocio y términos ATS exactos de la vacante. gaps debe incluir 3 posibles faltantes con mitigación y encuadre al comunicar. outreachMessage debe funcionar como la versión A lista para email/LinkedIn: tono profesional, humano y directo, 120 a 180 palabras, con conexión al rol o empresa, match con 3 requisitos clave, 2 a 3 logros o impactos y cierre con CTA para pedir una llamada. recruiterMessages.dmShort debe ser la versión B para DM corto, con un máximo de 600 caracteres y el mismo tono. No reutilices plantillas genéricas entre vacantes; cambiá el énfasis según seniority, dominio y señales reales del puesto. Mantené el lenguaje natural y respetá un límite de longitud que evite cortes bruscos, palabras partidas o artefactos de truncación. ${toneInstruction}`,
+      content: `Eres un analizador de vacantes. Responde UNICAMENTE con un objeto JSON valido, sin markdown, sin explicaciones. El JSON debe tener exactamente estas claves: summary, vacancySummary, skillGroups, keywords, gaps, outreachMessage, recruiterMessages.
+
+Formato exacto requerido:
+{
+  "summary": "string",
+  "vacancySummary": {
+    "role": "string",
+    "seniority": "string",
+    "modalityLocation": "string",
+    "responsibilities": ["string"],
+    "mustHave": ["string"],
+    "niceToHave": ["string"]
+  },
+  "skillGroups": [
+    { "category": "string", "skills": [{"name": "string", "level": "core|strong|adjacent"}] }
+  ],
+  "keywords": {
+    "hardSkills": ["string"],
+    "softSkills": ["string"],
+    "domainKeywords": ["string"],
+    "atsTerms": ["string"]
+  },
+  "gaps": [
+    { "gap": "string", "mitigation": "string", "framing": "string" }
+  ],
+  "outreachMessage": {
+    "subject": "string",
+    "body": "string"
+  },
+  "recruiterMessages": {
+    "emailLinkedIn": {
+      "subject": "string",
+      "body": "string"
+    },
+    "dmShort": {
+      "body": "string"
+    }
+  }
+}
+
+Instrucciones adicionales:
+- summary: lectura ejecutiva breve y clara orientada a recruiting.
+- vacancySummary: bullets sobre el rol, seniority, modalidad/ubicacion, top 5 responsabilidades y must-have vs nice-to-have.
+- skillGroups: minimo 3 categorias con skills marcadas como core, strong o adjacent.
+- keywords: separa hard skills, soft skills, dominio/negocio y terminos ATS exactos.
+- gaps: exactamente 3 posibles faltantes con mitigacion y encuadre.
+- outreachMessage: version lista para email/LinkedIn, 120-180 palabras, tono profesional y humano.
+- recruiterMessages.emailLinkedIn: subject + body completos.
+- recruiterMessages.dmShort: version corta maximo 600 caracteres.
+- ${toneInstruction}
+- No uses placeholders ni texto generico. Responde en espanol.`,
     },
     {
       role: "user",
-      content: `Tono del mensaje: ${input.messageTone ?? "formal"}\n\nDescripción del puesto:\n${input.jobDescription}`,
+      content: `Descripcion del puesto:\n${input.jobDescription}`,
     },
   ];
 }
 
-/**
- * Call the Groq API with the given messages and return the raw response body.
- */
 async function fetchGroq(messages: GroqChatMessage[], signal: AbortSignal): Promise<unknown> {
   const apiKey = process.env.GROQ_API_KEY;
 
-  // GROQ_API_KEY is configured in Render env vars. The key must have access
-  // to the llama-3.3-70b-versatile model with structured output support.
   if (!apiKey) {
     throw new AppError(502, "GROQ_API_KEY is not configured on the server.");
   }
@@ -71,41 +112,36 @@ async function fetchGroq(messages: GroqChatMessage[], signal: AbortSignal): Prom
     body: JSON.stringify({
       model: process.env.GROQ_MODEL ?? DEFAULT_GROQ_MODEL,
       messages,
-      response_format: {
-        type: "json_schema",
-        json_schema: {
-          name: "job_analysis",
-          strict: true,
-          schema: GROQ_JOB_ANALYSIS_JSON_SCHEMA,
-        },
-      },
+      temperature: 0.3,
+      response_format: { type: "json_object" },
     }),
   });
 
   if (!response.ok) {
     const errorBody = await response.text().catch(() => "<unreadable>");
-    logger.warn({ status: response.status, statusText: response.statusText, body: errorBody }, "Groq API returned non-OK status");
-    throw new AppError(502, `Groq API responded with status ${response.status}: ${errorBody.slice(0, 200)}`);
+    logger.warn({ status: response.status, body: errorBody }, "Groq API error");
+    throw new AppError(502, `Groq API error ${response.status}: ${errorBody.slice(0, 200)}`);
   }
 
-  const body = (await response.json()) as unknown;
-  return body;
+  return (await response.json()) as unknown;
 }
 
-/**
- * Extract the parsed JSON content from a Groq chat completion envelope.
- */
-function parseGroqEnvelope(envelope: unknown): unknown {
+function parseGroqEnvelope(envelope: unknown): Record<string, unknown> {
   const env = envelope as { choices?: Array<{ message?: { content?: string | null } }> };
   const content = env.choices?.[0]?.message?.content;
 
   if (typeof content !== "string" || content.trim().length === 0) {
-    throw new AppError(502, "Groq response did not include usable content.");
+    throw new AppError(502, "Groq returned empty response.");
   }
 
   try {
-    return JSON.parse(content) as unknown;
-  } catch {
+    const parsed = JSON.parse(content) as unknown;
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+      throw new AppError(502, "Groq response is not a JSON object.");
+    }
+    return parsed as Record<string, unknown>;
+  } catch (err) {
+    if (err instanceof AppError) throw err;
     throw new AppError(502, "Groq returned invalid JSON.");
   }
 }
@@ -114,10 +150,6 @@ function parseGroqEnvelope(envelope: unknown): unknown {
 // Public API
 // ============================================================================
 
-/**
- * Analyze a job description via the Groq API.
- * Returns a validated `AnalysisResponseDTO`.
- */
 export async function analyze(input: AnalysisRequestDTO): Promise<AnalysisResponseDTO> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
@@ -129,8 +161,8 @@ export async function analyze(input: AnalysisRequestDTO): Promise<AnalysisRespon
 
     const result = analysisResponseSchema.safeParse(raw);
     if (!result.success) {
-      logger.warn({ issues: result.error.issues }, "Groq response failed Zod validation");
-      throw new AppError(502, "Groq response failed validation.");
+      logger.warn({ issues: result.error.issues, raw: JSON.stringify(raw).slice(0, 500) }, "Zod validation failed");
+      throw new AppError(502, "AI response format was unexpected. Please try again.");
     }
 
     return {
@@ -139,17 +171,12 @@ export async function analyze(input: AnalysisRequestDTO): Promise<AnalysisRespon
       createdAt: new Date().toISOString(),
     };
   } catch (error) {
-    if (error instanceof AppError) {
-      throw error;
-    }
-
+    if (error instanceof AppError) throw error;
     if (error instanceof DOMException && error.name === "AbortError") {
-      throw new AppError(502, "Groq did not respond within the time limit.");
+      throw new AppError(502, "Analysis timed out. Please try with a shorter job description.");
     }
-
-    // Network or unexpected error
-    logger.error({ err: error }, "Unexpected error calling Groq API");
-    throw new AppError(502, "Failed to communicate with the AI service.");
+    logger.error({ err: error }, "Unexpected analysis error");
+    throw new AppError(502, "Analysis service unavailable.");
   } finally {
     clearTimeout(timeoutId);
   }
