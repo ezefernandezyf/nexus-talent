@@ -122,18 +122,18 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [x] PATCH /api/analyses/:id (edit displayName/notes)
 - [x] Repository pattern preserved (HTTP client in web, localStorage fallback)
 
-### P5: Frontend Refactor
+### P5: Frontend Refactor ✅
 > Swap AuthProvider, API client, remove localStorage
-- [ ] New AuthProvider (session via GET /api/auth/me)
-- [ ] Zustand store: session + status (authenticated/unauthenticated/unknown)
-- [ ] Axios client con withCredentials: true
-- [ ] ProtectedRoute + PublicRoute guards
-- [ ] Swap repositories: localStorage → HTTP API calls
-- [ ] Remove Supabase client SDK dependency
-- [ ] Remove VITE_GROQ_API_KEY from env
-- [ ] History list → backend-backed pagination
+- [x] New AuthProvider (session via GET /api/auth/me)
+- [x] Zustand store: session + status (authenticated/unauthenticated/unknown)
+- [x] Axios client con withCredentials: true
+- [x] ProtectedRoute + PublicRoute guards
+- [x] Swap repositories: localStorage → HTTP API calls
+- [x] Remove Supabase client SDK dependency
+- [x] Remove VITE_GROQ_API_KEY from env
+- [x] History list → backend-backed pagination
 
-### P6: Design Identity — "The Signal" + GEO Foundation
+### P6: Design Identity — "The Signal" + GEO Foundation ✅
 > Basado en portfolio-personality (Estilo B: Minimal/Elegant). Dark-first. Paleta Indigo + Chartreuse. Cabinet Grotesk (display) + Satoshi (body). SSR con Vike (fallback: Vercel Edge). GEO Score 7 → 35.
 - [x] **SSR con Vike** para landing `/` y privacy `/privacy`. Vike falló (requiere Vite ≥7.1, tenemos 6.4.3). Fallback: build-time prerender con Vite SSR. ✅
 - [x] Design tokens: OKLCH colors, shadows, radii, typography scale
@@ -141,21 +141,18 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 - [x] Component refresh: buttons, cards, inputs, modals, badges
 - [x] Layout & navigation redesign
 - [x] Landing page redesign **con contenido estructurado**: H1, H2 sections, FAQ (5 Q&A), 300+ palabras, answer blocks para AI citability (GEO HIGH #CTB-1)
-- [ ] Auth pages redesign → P8 (Polish)
-- [ ] Analysis/history/settings pages alignment → P8 (Polish)
 - [x] Responsive + dark mode parity
-- [ ] DESIGN.md → crear nuevo basado en portfolio-personality
 - [x] **GEO/SEO Quick Wins** (Week 1-2 del audit):
   - [x] Schema JSON-LD: Organization + SoftwareApplication + WebSite (GEO CRITICAL #SCH-1)
   - [x] Open Graph + Twitter Card meta tags (GEO HIGH #TEC-2)
-  - [x] Title tag optimizado: "Nexus Talent — AI Recruiting Assistant | Transform Job Descriptions into Insights" (SEO)
-  - [x] Keywords target: "AI job description analyzer", "AI recruiting assistant", "JD to skills", "outreach generator" (SEO)
+  - [x] Title tag optimizado (SEO)
+  - [x] Keywords target (SEO)
   - [x] Canonical URL tag (GEO HIGH #CTB-2)
   - [x] llms.txt estático en `/public/` (GEO HIGH #TEC-1)
-  - [x] robots.txt con AI crawlers explícitos: GPTBot, Claude-Web, PerplexityBot (GEO)
+  - [x] robots.txt con AI crawlers explícitos (GEO)
   - [x] `<noscript>` fallback con contenido clave (GEO Quick Win #5)
-  - [ ] Google Search Console: submit sitemap (SEO) → manual, requiere acceso a GSC
   - [x] Favicon estable sin hash (GEO LOW #CON-3)
+  - [ ] Google Search Console: submit sitemap (SEO) → manual, requiere acceso a GSC
 
 ### P7: E2E + Security ✅
 > Playwright flows, hardening
@@ -197,14 +194,23 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 ---
 ## Roadmap — V1.2
 
-### V1.2.1: User Profiles + Brand Authority
+### 🔴 Must-have (core app)
+- [ ] **Error boundaries** — boundary components en layout principal + páginas
+- [ ] **Loading skeletons** — skeletons para analysis, history, settings pages
+- [ ] **Empty states** — "No analysis yet", "No history" con CTA contextual
+
+### 🟡 Should-have (UX + docs)
+- [ ] **Lighthouse 90+** mobile — Core Web Vitals optimization
+- [ ] **DESIGN.md** — documentar "The Signal" design system (portfolio-personality)
+
+### 🔵 V1.2.1: User Profiles + Brand Authority
 > Información persistente del usuario + presencia en plataformas (GEO Week 3-4)
 - [ ] PUT /api/profile — skills, experiencia, rol, resume
 - [ ] Profile UI — formulario de datos del candidato
 - [ ] Prompt enrichment — Groq usa datos del perfil en outreach messages
-- [ ] **Backend: settings endpoints** — CRUD para settings (pendiente de P5)
+- [ ] Backend: settings endpoints — CRUD para settings
 - [ ] **GEO/SEO Brand Building** (Week 3-4 del audit):
-  - [ ] `sameAs` links en Organization schema (GEO)
+  - [ ] sameAs links en Organization schema (GEO)
   - [ ] Crear/claim LinkedIn company page (GEO CRITICAL #BRA-1)
   - [ ] Product Hunt launch (GEO CRITICAL #BRA-1)
   - [ ] Crunchbase company profile (GEO)
@@ -212,21 +218,26 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
   - [ ] Registrar en G2 y Capterra (GEO)
   - [ ] Blog content: 2-3 artículos SSR-rendered (GEO Week 4)
   - [ ] YouTube demo video (GEO Week 4)
-  - [ ] **Re-run GEO audit** — target: 50-60/100 (GEO Week 4)
+  - [ ] Re-run GEO audit — target: 50-60/100 (GEO Week 4)
 - [ ] **GEO/SEO Long-term** (Post-30d):
-  - [ ] Evaluar viabilidad del nombre "Nexus Talent" (colisión con 4+ entidades) (GEO CRITICAL #BRA-1)
+  - [ ] Evaluar viabilidad del nombre "Nexus Talent" (colisión con 4+ entidades)
   - [ ] Wikidata Q-ID para entity disambiguation (GEO)
-  - [ ] Dominio `nexustalent.com` para producción (GEO — vercel.app es señal débil)
-  - [ ] Backlinks: guest posts, directorios, publicaciones de industria (SEO)
+  - [ ] Dominio `nexustalent.com` para producción
+  - [ ] Backlinks: guest posts, directorios, publicaciones de industria
   - [ ] Participación en r/recruiting, r/humanresources (GEO)
-  - [ ] **Audit GEO Score target**: 65-75/100
+  - [ ] Audit GEO Score target: 65-75/100
 
-### V1.2.2: CV Generator
+### 🟢 V1.2.2: CV Generator
 > Armado automático de CV tailor-made basado en análisis
-- [ ] POST /api/cv/generate — JD + perfil → CV (reusa lógica de cv-hub)
+- [ ] POST /api/cv/generate — JD + perfil → CV
 - [ ] CV preview + export (PDF/HTML)
 - [ ] Templates por seniority/industria
-- [ ] V1.1 release PR: develop → main
+
+### V1.1 Release Artifacts → DONE ✅
+- [x] V1.1 release PR: develop → main
+- [x] Tag: v1.1
+- [x] OAuth code exchange archived
+- [x] AGENTS.md updated
 
 ## Skills del Proyecto
 
