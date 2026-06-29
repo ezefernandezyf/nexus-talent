@@ -53,7 +53,7 @@ Every POST /api/ai/analyze request MUST be logged with the authenticated user ID
 - THEN a log entry MUST include `event: "analysis_request"`, `userId`, and `inputLength`
 
 ### Requirement: Error Stack in Development, Sanitized in Production
-Errors logged via pino MUST include full stack traces when `NODE_ENV=development`. In production, error messages SHALL be sanitized — no stack traces, no internal paths.
+Errors logged via pino MUST include full stack traces when `NODE_ENV=development`. In production, error messages SHALL be sanitized - no stack traces, no internal paths.
 
 #### Scenario: Development error with stack
 - GIVEN NODE_ENV is "development"

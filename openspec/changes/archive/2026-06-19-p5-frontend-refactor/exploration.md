@@ -1,4 +1,4 @@
-## Exploration: P5 — Frontend Refactor
+## Exploration: P5 - Frontend Refactor
 
 ### Current State
 
@@ -6,7 +6,7 @@ The web frontend is in a hybrid state: the backend (Express 5 + Prisma) is fully
 
 ### Affected Areas
 
-#### 1. Auth Flow — Supabase SDK → Backend API
+#### 1. Auth Flow - Supabase SDK → Backend API
 
 **Current** (`web/src/features/auth/AuthProvider.tsx`):
 - Creates Supabase client via `createClient()` from `@supabase/supabase-js`
@@ -14,7 +14,7 @@ The web frontend is in a hybrid state: the backend (Express 5 + Prisma) is fully
 - Sign in: `client.auth.signInWithPassword(email, password)`
 - Sign up: `client.auth.signUp(email, password)`
 - Sign out: `client.auth.signOut()`
-- OAuth: `client.auth.signInWithOAuth({ provider: "google" })` — uses Supabase's own OAuth flow
+- OAuth: `client.auth.signInWithOAuth({ provider: "google" })` - uses Supabase's own OAuth flow
 - Identity linking/unlinking: `client.auth.linkIdentity()`, `client.auth.unlinkIdentity()`
 - **Admin detection**: `user?.user_metadata?.role === "admin"` or `user?.app_metadata?.role === "admin"`
 - Context type: uses `Session` and `User` from `@supabase/supabase-js`
@@ -26,10 +26,10 @@ The web frontend is in a hybrid state: the backend (Express 5 + Prisma) is fully
 - Sign up: `POST /api/auth/register` → sets httpOnly cookie
 - Sign out: `POST /api/auth/logout` → clears cookie
 - Google OAuth: redirect to `GET /api/auth/google` → backend handles flow → redirects with session cookie
-- No Supabase `Session`/`User` types — use local DTOs
+- No Supabase `Session`/`User` types - use local DTOs
 - Admin detection: from backend response (e.g., `GET /api/auth/me` returns `{ user: { role: "admin" } }`)
 
-#### 2. API Client — Axios with `withCredentials: true`
+#### 2. API Client - Axios with `withCredentials: true`
 
 **Current**: No centralized HTTP client. Uses raw `fetch()`:
 - `web/src/lib/repositories/http-analysis-repository.ts`: `fetch(url, { credentials: "include" })`
@@ -43,9 +43,9 @@ The web frontend is in a hybrid state: the backend (Express 5 + Prisma) is fully
 #### 3. Repository Pattern
 
 **Current analysis repositories**:
-- `createHttpAnalysisRepository()` — works, uses `fetch()` to `/api/analyses`, `credentials: "include"`
-- `createLocalAnalysisRepository()` — localStorage fallback using key `nexus-talent:analysis-history:v1`
-- `useAnalysisRepository()` hook — switches between HTTP (authenticated) and localStorage (anonymous)
+- `createHttpAnalysisRepository()` - works, uses `fetch()` to `/api/analyses`, `credentials: "include"`
+- `createLocalAnalysisRepository()` - localStorage fallback using key `nexus-talent:analysis-history:v1`
+- `useAnalysisRepository()` hook - switches between HTTP (authenticated) and localStorage (anonymous)
 
 **Problem**: Many hooks default to localStorage directly, bypassing the switch:
 - `web/src/features/analysis/hooks/useAnalysisHistory.ts` → `createLocalAnalysisRepository()` as default
@@ -54,7 +54,7 @@ The web frontend is in a hybrid state: the backend (Express 5 + Prisma) is fully
 - `web/src/features/history/hooks/useDeleteAnalysis.ts` → `createLocalAnalysisRepository()` as default
 - `web/src/features/analysis/hooks/useJobAnalysis.ts` → `createLocalAnalysisRepository()` as default
 
-**Settings and Profile repositories** — still use Supabase client directly:
+**Settings and Profile repositories** - still use Supabase client directly:
 - `settings-repository.ts`: Attempts Supabase query first, falls back to localStorage
 - `profile-repository.ts`: Attempts Supabase query first, falls back to localStorage
 - No HTTP-based implementations exist
@@ -66,7 +66,7 @@ The web frontend is in a hybrid state: the backend (Express 5 + Prisma) is fully
 
 #### 4. Route Guards
 
-**Current**: `ProtectedRoute`, `PublicAuthRoute`, `AdminRoute` all use `useAuth()` from Supabase-based context. Structure is fine — only the underlying auth needs to change.
+**Current**: `ProtectedRoute`, `PublicAuthRoute`, `AdminRoute` all use `useAuth()` from Supabase-based context. Structure is fine - only the underlying auth needs to change.
 
 **Target**: Keep the same guard structure. The guards just need the new Zustand-based auth context to work.
 
@@ -90,13 +90,13 @@ The web frontend is in a hybrid state: the backend (Express 5 + Prisma) is fully
 | `web/src/router/AppRouter.test.tsx` | `Session`, `User` |
 
 **Supabase lib module imports** (9 files):
-- `web/src/features/auth/AuthProvider.tsx` — `createSupabaseClient`, `getOAuthProviderConfig`, `getOAuthRedirectTo`, `AuthClientLike`, `OAuthProviderKey`
-- `web/src/features/settings/SettingsFeature.tsx` — `getOAuthProviderConfig`
-- `web/src/features/settings/settings-export.ts` — `getOAuthProviderConfig`, `OAuthProviderKey`
-- `web/src/features/settings/hooks/useSettings.ts` — `OAuthProviderKey`
+- `web/src/features/auth/AuthProvider.tsx` - `createSupabaseClient`, `getOAuthProviderConfig`, `getOAuthRedirectTo`, `AuthClientLike`, `OAuthProviderKey`
+- `web/src/features/settings/SettingsFeature.tsx` - `getOAuthProviderConfig`
+- `web/src/features/settings/settings-export.ts` - `getOAuthProviderConfig`, `OAuthProviderKey`
+- `web/src/features/settings/hooks/useSettings.ts` - `OAuthProviderKey`
 - Test files: `AuthClientLike`
 
-#### 6. AI Proxy — Already Migrated
+#### 6. AI Proxy - Already Migrated
 
 The AI client (`web/src/lib/ai-client.ts`) already uses `createBackendProxyAdapter()` which calls `POST /api/ai/analyze`. Local fallback engine exists but only activates when the server is unreachable.
 
@@ -112,7 +112,7 @@ Still in `web/.env.example` and root `.env`. Used by `web/src/lib/supabase/clien
 
 ### Approaches
 
-1. **Incremental — replace providers one by one**
+1. **Incremental - replace providers one by one**
    - Start with Zustand auth store + new AuthProvider
    - Then Axios client
    - Then repository defaults
@@ -121,13 +121,13 @@ Still in `web/.env.example` and root `.env`. Used by `web/src/lib/supabase/clien
    - Cons: More phases, temporary dead code
    - Effort: Medium
 
-2. **Big bang — rewrite all at once**
+2. **Big bang - rewrite all at once**
    - Create all new files, swap everything, then delete Supabase
    - Pros: Clean cut, no dead code
    - Cons: Large diff (difficult review), higher risk of regression
    - Effort: High
 
-3. **Recommended: Hybrid — grouped slices**
+3. **Recommended: Hybrid - grouped slices**
    - **Slice A**: Zustand store + new AuthProvider + AuthCallbackPage update + guards (auth flow)
    - **Slice B**: Axios client + repository defaults swap (data layer)
    - **Slice C**: Remove Supabase lib, clean up deps, update tests
@@ -138,9 +138,9 @@ Still in `web/.env.example` and root `.env`. Used by `web/src/lib/supabase/clien
 ### Recommendation
 
 **Approach 3 (Hybrid/Sliced)**: Split into 3 reviewable PR slices:
-1. **Auth slice** — Zustand store (`auth-store.ts`), new `AuthProvider` calling `GET /api/auth/me`, update guards, update Login/Signup forms, update LogoutButton, update OAuth flow (redirect to `GET /api/auth/google`), remove `AuthCallbackPage` reliance on Supabase
-2. **Data layer slice** — Axios client, swap repository defaults from localStorage to HTTP, create HTTP implementations for settings/profile (if backend endpoints exist)
-3. **Cleanup slice** — Remove `web/src/lib/supabase/` entirely, remove `@supabase/supabase-js` from `package.json`, remove `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` from env, update all test mocks, remove `linkIdentity`/`unlinkIdentity` from AuthProvider
+1. **Auth slice** - Zustand store (`auth-store.ts`), new `AuthProvider` calling `GET /api/auth/me`, update guards, update Login/Signup forms, update LogoutButton, update OAuth flow (redirect to `GET /api/auth/google`), remove `AuthCallbackPage` reliance on Supabase
+2. **Data layer slice** - Axios client, swap repository defaults from localStorage to HTTP, create HTTP implementations for settings/profile (if backend endpoints exist)
+3. **Cleanup slice** - Remove `web/src/lib/supabase/` entirely, remove `@supabase/supabase-js` from `package.json`, remove `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` from env, update all test mocks, remove `linkIdentity`/`unlinkIdentity` from AuthProvider
 
 ### Risks
 
@@ -158,7 +158,7 @@ Still in `web/.env.example` and root `.env`. Used by `web/src/lib/supabase/clien
 
 ### Ready for Proposal
 
-**Yes** — but with the blocking question: **Do backend endpoints for profile and settings exist?** If not, Slice C (cleanup) cannot fully remove Supabase for settings/profile until V1.2.1. The auth slice and analysis data layer slice can proceed independently.
+**Yes** - but with the blocking question: **Do backend endpoints for profile and settings exist?** If not, Slice C (cleanup) cannot fully remove Supabase for settings/profile until V1.2.1. The auth slice and analysis data layer slice can proceed independently.
 
 The orchestrator should also verify:
 - Does `GET /api/auth/me` return `{ user: { id, email, role, displayName } }`?

@@ -40,7 +40,7 @@
 
 **Compliance summary**: 11/11 scenarios compliant
 
-### Correctness (Static — Structural Evidence)
+### Correctness (Static - Structural Evidence)
 | Requirement | Status | Notes |
 |------------|--------|-------|
 | Authenticated settings access | ✅ Implemented | `/app/settings` is mounted behind `ProtectedRoute` in `src/router/AppRouter.tsx`. |

@@ -17,7 +17,7 @@ Deliver pixel-faithful Landing, Login and Signup pages and wire them to the exis
    - Acceptance: Each component matches the visual structure and supports props for dynamic text
 
 4. Crear `AuthForm` dumb component
-   - `src/features/auth/components/AuthForm.tsx` — props: `onSubmit`, `isLoading`, `errors`
+   - `src/features/auth/components/AuthForm.tsx` - props: `onSubmit`, `isLoading`, `errors`
    - Acceptance: Renders form fields and exposes submit event without business logic
 
 5. Implementar `LoginPage` y `SignupPage`

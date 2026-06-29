@@ -1,4 +1,4 @@
-# Proposal: Module 1 — Shell + Mobile Navigation + Footer
+# Proposal: Module 1 - Shell + Mobile Navigation + Footer
 
 ## Intent
 

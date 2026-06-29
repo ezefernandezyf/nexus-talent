@@ -53,7 +53,7 @@ Executed history-focused tests:
 
 ---
 
-### Correctness (Static — Structural Evidence)
+### Correctness (Static - Structural Evidence)
 | Requirement | Status | Notes |
 |------------|--------|-------|
 | History shell composition | ✅ Implemented | [src/App.tsx](../../../src/App.tsx) mounts [HistoryFeature](../../../src/features/history/HistoryFeature.tsx) below [AnalysisFeature](../../../src/features/analysis/AnalysisFeature.tsx). |

@@ -1,4 +1,4 @@
-# Design: P6 — Design Identity "The Signal" + GEO Foundation
+# Design: P6 - Design Identity "The Signal" + GEO Foundation
 
 ## Technical Approach
 
@@ -25,13 +25,13 @@ Browser → Vercel
              └─ /app/*, /auth/* → SPA catch-all → /index.html (CSR)
 ```
 
-Vike `+onRenderHtml.tsx` streams React HTML with `data-theme` on `<html>`. framer-motion animations gated behind `typeof window !== "undefined"` — static content renders server-side, animations hydrate client-side with zero mismatch.
+Vike `+onRenderHtml.tsx` streams React HTML with `data-theme` on `<html>`. framer-motion animations gated behind `typeof window !== "undefined"` - static content renders server-side, animations hydrate client-side with zero mismatch.
 
 ## Component Architecture
 
-**Badge contract:** `{ variant: "info"|"success"|"warning"|"error"; size?: "sm"|"md"; icon?: ReactNode; children }` — styled with OKLCH tokens, uses `cn()`.
+**Badge contract:** `{ variant: "info"|"success"|"warning"|"error"; size?: "sm"|"md"; icon?: ReactNode; children }` - styled with OKLCH tokens, uses `cn()`.
 
-**Component refresh pattern:** Replace hardcoded class references (e.g., `primary-button`, `surface-panel`) with Tailwind token utilities (`bg-primary`, `text-on-surface`, `rounded-lg`). Existing `cn()` (clsx+tailwind-merge) remains the single merger. `theme.tsx` unchanged — already toggles `data-theme` on `<html>`.
+**Component refresh pattern:** Replace hardcoded class references (e.g., `primary-button`, `surface-panel`) with Tailwind token utilities (`bg-primary`, `text-on-surface`, `rounded-lg`). Existing `cn()` (clsx+tailwind-merge) remains the single merger. `theme.tsx` unchanged - already toggles `data-theme` on `<html>`.
 
 ## File Changes
 
@@ -72,11 +72,11 @@ Vike `+onRenderHtml.tsx` streams React HTML with `data-theme` on `<html>`. frame
 
 ## Migration / Rollout
 
-Track A deploys immediately — revert `index.css` + `index.html` undoes everything. Track B: spike first; if Vike passes, add dependency and verify with `curl`. If fails, swap to Vercel Edge Function. Rollback: `git revert` vite.config + vercel.json. No data migration.
+Track A deploys immediately - revert `index.css` + `index.html` undoes everything. Track B: spike first; if Vike passes, add dependency and verify with `curl`. If fails, swap to Vercel Edge Function. Rollback: `git revert` vite.config + vercel.json. No data migration.
 
 ## Open Questions
 
-- [ ] Exact OKLCH values for Indigo/Chartreuse "Signal" palette — designer approval needed
-- [ ] Vike + Vite 6 + React 19 compatibility — spike result pending (blocks Track B)
-- [ ] OG image — placeholder or custom artwork? (placeholder acceptable for Week 1)
-- [ ] Clash Display vs Cabinet Grotesk — exploration notes font mismatch; proposal settled on Cabinet Grotesk — confirm
+- [ ] Exact OKLCH values for Indigo/Chartreuse "Signal" palette - designer approval needed
+- [ ] Vike + Vite 6 + React 19 compatibility - spike result pending (blocks Track B)
+- [ ] OG image - placeholder or custom artwork? (placeholder acceptable for Week 1)
+- [ ] Clash Display vs Cabinet Grotesk - exploration notes font mismatch; proposal settled on Cabinet Grotesk - confirm

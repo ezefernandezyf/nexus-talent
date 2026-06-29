@@ -9,7 +9,7 @@ const __dirname = dirname(__filename);
  * Global Playwright teardown.
  *
  * Removes the ephemeral SQLite test database.
- * Does NOT restore the PostgreSQL Prisma client automatically —
+ * Does NOT restore the PostgreSQL Prisma client automatically.
  * run `pnpm run prisma:generate` from the server directory after
  * E2E tests if you need the PostgreSQL client.
  */

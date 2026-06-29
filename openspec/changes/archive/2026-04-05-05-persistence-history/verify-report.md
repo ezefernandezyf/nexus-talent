@@ -72,7 +72,7 @@ Pass summary from the executed files:
 
 ---
 
-### Correctness (Static — Structural Evidence)
+### Correctness (Static - Structural Evidence)
 | Requirement | Status | Notes |
 |------------|--------|-------|
 | Storage schema and persisted entity | ✅ Implemented | [src/schemas/job-analysis.ts](../../src/schemas/job-analysis.ts) defines `SAVED_JOB_ANALYSIS_SCHEMA` and `SavedJobAnalysis` on top of `JOB_ANALYSIS_RESULT_SCHEMA`. |

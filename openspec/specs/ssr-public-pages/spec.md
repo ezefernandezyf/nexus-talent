@@ -1,7 +1,7 @@
 # SSR Public Pages Specification
 
 ## Purpose
-Server-side rendering for `/` and `/privacy` — delivering full HTML to crawlers while keeping all app routes client-side.
+Server-side rendering for `/` and `/privacy` - delivering full HTML to crawlers while keeping all app routes client-side.
 
 ## Requirements
 

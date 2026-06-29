@@ -2,7 +2,7 @@
 
 ## Intent
 
-The frontend (`web/src/`) does NOT scream its architecture — auth is split across `auth/` and `features/auth/`, pages live in both `pages/` and `features/{domain}/pages/`, `lib/` is a 22-file grab-bag mixing infra, AI clients, repos, Supabase legacy, and validation. The Zustand `auth-store.ts` holds server state (user, session) when it should hold only UI state. This makes E2E testing brittle and security hardening harder. Fix the architecture FIRST, then deliver the remaining P7 tasks (E2E, security, rate limiting, logging, sanitization).
+The frontend (`web/src/`) does NOT scream its architecture - auth is split across `auth/` and `features/auth/`, pages live in both `pages/` and `features/{domain}/pages/`, `lib/` is a 22-file grab-bag mixing infra, AI clients, repos, Supabase legacy, and validation. The Zustand `auth-store.ts` holds server state (user, session) when it should hold only UI state. This makes E2E testing brittle and security hardening harder. Fix the architecture FIRST, then deliver the remaining P7 tasks (E2E, security, rate limiting, logging, sanitization).
 
 ## Scope
 
@@ -18,7 +18,7 @@ The frontend (`web/src/`) does NOT scream its architecture — auth is split acr
 - No new features (analysis, history, auth behavior unchanged)
 - No backend restructuring (server screaming architecture is already clean)
 - No database changes (Prisma schema untouched)
-- No design system overhaul (design tokens, shared UI components stay — only relocate)
+- No design system overhaul (design tokens, shared UI components stay - only relocate)
 - No auth pages redesign (deferred to P8 Polish)
 - No analysis/history/settings alignment to design system (P8)
 
@@ -30,13 +30,13 @@ The frontend (`web/src/`) does NOT scream its architecture — auth is split acr
 - `server-logging`: Structured request logging via pino middleware
 
 ### Modified Capabilities
-- `auth-client`: REQ-AUTH-001 changes — Zustand store splits into React Query `useSession()` hook + thin Zustand `auth-status` slice. REQ-AUTH-002 updates — AuthProvider simplified to sync React Query session. REQ-AUTH-003/004 — login/register/logout become React Query mutations that invalidate session cache. Auth flow behavior preserved externally.
+- `auth-client`: REQ-AUTH-001 changes - Zustand store splits into React Query `useSession()` hook + thin Zustand `auth-status` slice. REQ-AUTH-002 updates - AuthProvider simplified to sync React Query session. REQ-AUTH-003/004 - login/register/logout become React Query mutations that invalidate session cache. Auth flow behavior preserved externally.
 
 ## Approach
 
 Six sequential phases:
 
-1. **Auth store split**: Extract `user` + session to React Query `useSession()`, keep only `status` in Zustand `auth-status.ts`. AuthProvider becomes thin sync layer. Feature branch isolation — merge only when all tests pass.
+1. **Auth store split**: Extract `user` + session to React Query `useSession()`, keep only `status` in Zustand `auth-status.ts`. AuthProvider becomes thin sync layer. Feature branch isolation - merge only when all tests pass.
 2. **`lib/` unbundling**: Move each file to its domain (`features/{domain}/api/`), infra files to `core/`, `cn.ts` to `shared/utils/`. Update all imports.
 3. **Page moves**: Move `pages/AnalysisPage.tsx` → `features/analysis/pages/`, same for history, settings. Delete `pages/LandingPage.tsx` (duplicate). Move `PrivacyPage.tsx` → `features/landing/pages/`, `NotFoundPage.tsx` → `shared/pages/`.
 4. **Legacy cleanup (P5)**: Delete `lib/supabase/`. Refactor `profile-repository.ts` + `settings-repository.ts` to use HTTP API (Axios) exclusively. Remove all `.env` Supabase vars.
@@ -67,7 +67,7 @@ Six sequential phases:
 
 | Risk | Likelihood | Mitigation |
 |------|------------|------------|
-| Auth store split breaks protected pages | High | Feature branch isolation. Keep same public API from `features/auth/index.ts` — consuming components see no API change. Rollback = delete branch. |
+| Auth store split breaks protected pages | High | Feature branch isolation. Keep same public API from `features/auth/index.ts` - consuming components see no API change. Rollback = delete branch. |
 | File move cascade breaks imports | Medium | Update barrel exports per feature. Run `pnpm run lint -- --fix` after each phase. |
 | Missed Supabase import | Medium | `grep -r supabase web/src/` after cleanup phase. Block merge on any survivor. |
 | Duplicate landing component confusion | Low | Delete `components/landing/` entirely. Active copy is in `features/landing/components/`. |
@@ -78,7 +78,7 @@ Six sequential phases:
 Two-tier rollback:
 
 1. **Auth split failure**: Delete the feature branch. Restore `auth-store.ts` from `develop`. Zero impact to mainline.
-2. **File moves cause regression**: Each phase is a separate commit. Revert individual commits via `git revert <hash>`. Barrel re-exports at old locations provide a safety net during development — remove them only at the end after verification.
+2. **File moves cause regression**: Each phase is a separate commit. Revert individual commits via `git revert <hash>`. Barrel re-exports at old locations provide a safety net during development - remove them only at the end after verification.
 3. **Full rollback**: `git checkout develop && git branch -D feat/p7-architecture-e2e-security`. All P7 work is in the branch, `develop` untouched.
 
 ## Dependencies
@@ -93,7 +93,7 @@ Two-tier rollback:
 - [ ] All imports use `@/features/{domain}/`, `@/shared/`, `@/core/` path aliases (zero relative `../../` patterns)
 - [ ] Every file lives in a domain folder that screams its purpose
 - [ ] Zero `import ... from "@supabase/supabase-js"` in `web/src/`
-- [ ] Zustand `auth-status.ts` holds only `status: AuthStatus` — no user, no session, no login/logout
+- [ ] Zustand `auth-status.ts` holds only `status: AuthStatus` - no user, no session, no login/logout
 - [ ] React Query `useSession()` is the single source of truth for auth state
 - [ ] All existing Vitest tests pass (`pnpm --filter @nexus-talent/web test`)
 - [ ] Playwright E2E smokes pass for auth, analysis, history flows

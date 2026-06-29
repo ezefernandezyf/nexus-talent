@@ -1,5 +1,5 @@
 /**
- * Vercel Edge Function — Session Cookie Exchange
+ * Vercel Edge Function: Session Cookie Exchange
  *
  * Sets an httpOnly cookie for .nexustalent.vercel.app so the browser
  * sends it on all /api/* requests through Vercel's proxy to Render.

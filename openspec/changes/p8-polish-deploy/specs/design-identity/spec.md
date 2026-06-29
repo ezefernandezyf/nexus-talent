@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Align the AuthShell component to "The Signal" design system: replace legacy sky-blue gradients with Indigo/Chartreuse OKLCH tokens, remove all Supabase references from copy, and apply Cabinet Grotesk for headings. Visual-only changes — auth flow logic MUST remain unchanged.
+Align the AuthShell component to "The Signal" design system: replace legacy sky-blue gradients with Indigo/Chartreuse OKLCH tokens, remove all Supabase references from copy, and apply Cabinet Grotesk for headings. Visual-only changes - auth flow logic MUST remain unchanged.
 
 ## Requirements
 

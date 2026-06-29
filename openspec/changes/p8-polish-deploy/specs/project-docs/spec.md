@@ -6,7 +6,7 @@ Define the DESIGN.md design system document (based on portfolio-personality anti
 
 ## Requirements
 
-### Requirement: DESIGN.md — Design System Documentation
+### Requirement: DESIGN.md - Design System Documentation
 
 The project MUST include a `DESIGN.md` at the repo root documenting "The Signal" design system. It MUST cover palette, typography, spacing, component patterns, and dark/light strategy, following portfolio-personality anti-convergence principles.
 

@@ -1,4 +1,4 @@
-# Design: P8 — Polish + Deploy
+# Design: P8 - Polish + Deploy
 
 ## Technical Approach
 
@@ -10,7 +10,7 @@ Five independent capabilities are applied in parallel across the frontend, deplo
 
 | Option | Tradeoff | Decision |
 |--------|----------|----------|
-| `window.location.href = '/500'` | Full page reload — clean tree, no corrupted state | **Chosen** |
+| `window.location.href = '/500'` | Full page reload - clean tree, no corrupted state | **Chosen** |
 | React Router `navigate()` | Keeps React tree alive, risk of corrupted child state | Rejected |
 | Inline error card (current) | No dedicated route, no recovery path | Rejected |
 
@@ -90,7 +90,7 @@ Vercel request:
 | `web/src/features/settings/pages/SettingsPage.tsx` | Modify | Wrap content in conditional: show `<LoadingSkeleton variant="hero" />` when `status` is `'loading'` or `'unknown'`. |
 | `web/src/features/analysis/AnalysisFeature.tsx` | Modify | Replace `null` fallback (line 99-100) with `<EmptyState title="No hay análisis todavía" description="Pegá una descripción del puesto para obtener un análisis completo." />`. |
 | `web/src/features/auth/components/AuthShell.tsx` | Modify | Replace `rgba(142, 213, 255, ...)` / `rgba(56, 189, 248, ...)` gradients with OKLCH `color-mix(in oklch, var(--color-accent) ...)`. Replace `AUTH_SHELL_COPY` strings: remove Supabase/RLS references, use JWT-agnostic wording. Swap footer link colors from `#38BDF8` to `var(--color-primary)`. |
-| `web/src/features/auth/components/AuthForm.tsx` | Delete | Unused wrapper — AuthShell renders children directly via Card. |
+| `web/src/features/auth/components/AuthForm.tsx` | Delete | Unused wrapper - AuthShell renders children directly via Card. |
 | `vercel.json` | Modify | Add `{ "source": "/api/(.*)", "destination": "https://nexus-talent.onrender.com/api/$1" }` as first rewrite entry, before prerender routes. |
 | `render.yaml` | Create | Render Blueprint: web service, Dockerfile path `server/Dockerfile`, health check `/health`, env vars `DATABASE_URL`, `JWT_SECRET`, `GROQ_API_KEY`, `CORS_ORIGIN`. |
 | `DESIGN.md` | Create | Design system doc: palette (OKLCH tokens), typography (Cabinet Grotesk + Satoshi), spacing/radii/shadow tokens, component patterns (buttons, cards, inputs, modals), dark-first strategy with light variant, anti-convergence rationale. |
@@ -101,7 +101,7 @@ Vercel request:
 No new TypeScript interfaces or Zod schemas. The `EmptyState` and `LoadingSkeleton` props are already defined in `web/src/shared/components/`. The `ServerErrorPage` is a standalone component with no props.
 
 ```typescript
-// ServerErrorPage — no props, fully self-contained
+// ServerErrorPage - no props, fully self-contained
 // Uses window.location.reload() for retry, matching NotFoundPage pattern
 ```
 
@@ -113,7 +113,7 @@ No new TypeScript interfaces or Zod schemas. The `EmptyState` and `LoadingSkelet
 | Unit | SettingsPage skeleton on loading status | Mock `useAuth` to return `{ status: 'loading' }`, assert `LoadingSkeleton` is rendered |
 | Unit | ErrorBoundary navigates to /500 | Stub `window.location`, catch error in child, assert href was set |
 | Manual | `/500` route renders correctly | Navigate to `/500` in browser, verify retry reloads app |
-| Manual | AuthShell visual tokens | Visual diff on `/auth/sign-in` — no sky-blue, no Supabase text |
+| Manual | AuthShell visual tokens | Visual diff on `/auth/sign-in` - no sky-blue, no Supabase text |
 | Manual | Vercel proxy | Preview deploy: `/api/auth/me` returns 200 from Render |
 | E2E | Login flow after AuthShell redesign | Existing Playwright auth smoke test passes |
 
@@ -123,4 +123,4 @@ No migration required. All changes are additive or visual-only. `vercel.json` ch
 
 ## Open Questions
 
-- [ ] Confirm `"loading"` is the correct status value during session fetch (vs `"unknown"` on initial mount) — verified in AuthProvider: `unknown` is initial Zustand default, then `loading` during fetch, then `authenticated`/`unauthenticated`. Both must be handled.
+- [ ] Confirm `"loading"` is the correct status value during session fetch (vs `"unknown"` on initial mount) - verified in AuthProvider: `unknown` is initial Zustand default, then `loading` during fetch, then `authenticated`/`unauthenticated`. Both must be handled.

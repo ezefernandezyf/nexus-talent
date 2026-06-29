@@ -1,4 +1,4 @@
-# Verification Report — V1.1 Bug Fixes
+# Verification Report - V1.1 Bug Fixes
 
 **Change**: `v1.1-bug-fixes`
 **Branch**: `fix/v1.1-bugs`
@@ -15,7 +15,7 @@
 | Proposal | ✅ Present | 6 bugs, approach, risks, rollback |
 | Delta Specs | ✅ Present | 7 requirements, 12 scenarios |
 | Tasks | ✅ Present | 10 tasks across 4 phases |
-| Design | ⏭️ Skipped | No design artifact — 6 trivial fixes, no architectural decisions |
+| Design | ⏭️ Skipped | No design artifact - 6 trivial fixes, no architectural decisions |
 | Apply Report | ✅ Present (Engram) | Mem #1181: all 7 impl tasks applied |
 
 ---
@@ -56,9 +56,9 @@ server/src/history/history.service.ts(97-100): error TS2322
 ### Format (Prettier)
 
 ```
-⚠️ shared/src/schemas.ts        — code style issues (caused by em-dash replacement)
-⚠️ server/src/analysis/analysis.controller.ts — code style issues (caused by em-dash replacement)
-⚠️ server/src/analysis/analysis.service.ts    — code style issues (new TODO comment)
+⚠️ shared/src/schemas.ts        - code style issues (caused by em-dash replacement)
+⚠️ server/src/analysis/analysis.controller.ts - code style issues (caused by em-dash replacement)
+⚠️ server/src/analysis/analysis.service.ts    - code style issues (new TODO comment)
 ```
 
 ---
@@ -133,7 +133,7 @@ server/src/history/history.service.ts(97-100): error TS2322
 
 ## Design Coherence
 
-⏭️ **Skipped** — No design artifact exists. All 6 bugs are trivial fix-scope with no architectural decisions. The proposal (proposal.md) serves as the design reference and the implementation matches it exactly.
+⏭️ **Skipped** - No design artifact exists. All 6 bugs are trivial fix-scope with no architectural decisions. The proposal (proposal.md) serves as the design reference and the implementation matches it exactly.
 
 ---
 
@@ -142,24 +142,24 @@ server/src/history/history.service.ts(97-100): error TS2322
 ### CRITICAL
 
 1. **Bug 4: U+2014 em-dash remains in `server/src/analysis/analysis.service.ts:58`**
-   - **Finding**: The TODO comment added in task 2.1 contains `—` (U+2014) after "(nexus-talent service) — manual step"
-   - **Spec ref**: `[content-cleanup]` — "All `.ts` and `.tsx` files SHALL use hyphens (U+002D) instead of em-dashes"
+   - **Finding**: The TODO comment added in task 2.1 contains `-` (U+2014) after "(nexus-talent service) - manual step"
+   - **Spec ref**: `[content-cleanup]` - "All `.ts` and `.tsx` files SHALL use hyphens (U+002D) instead of em-dashes"
    - **Impact**: Violates the spec requirement for zero em-dashes in TypeScript files
-   - **Fix**: Replace `—` with `-` on line 58 of `server/src/analysis/analysis.service.ts`
+   - **Fix**: Replace `-` with `-` on line 58 of `server/src/analysis/analysis.service.ts`
 
 ### WARNING
 
 2. **Prettier format warnings in 3 files (caused by our changes)**
-   - `shared/src/schemas.ts` — em-dash→hyphen replacement in comments broke Prettier alignment
-   - `server/src/analysis/analysis.controller.ts` — same root cause
-   - `server/src/analysis/analysis.service.ts` — new TODO comment needs formatting
+   - `shared/src/schemas.ts` - em-dash→hyphen replacement in comments broke Prettier alignment
+   - `server/src/analysis/analysis.controller.ts` - same root cause
+   - `server/src/analysis/analysis.service.ts` - new TODO comment needs formatting
    - **Impact**: `pnpm run format` exits with failure. No functional impact.
    - **Fix**: Run `pnpm -r exec prettier --write src/` on affected files
 
 3. **Pre-existing lint errors in `server/src/history/history.service.ts`**
    - Lines 97-100: `Type 'object' is not assignable to type 'string'` (Prisma JSON field)
    - **Impact**: `pnpm run lint` exits with failure. NOT caused by this change (only em-dash in comment was touched)
-   - **Fix**: Out of scope for this change — needs Prisma JSON column type handling
+   - **Fix**: Out of scope for this change - needs Prisma JSON column type handling
 
 ### SUGGESTION
 
@@ -176,7 +176,7 @@ server/src/history/history.service.ts(97-100): error TS2322
 
 ## Verdict
 
-**PASS WITH WARNINGS** — 6 of 7 bugs are fully verified. Bug 4 has one remaining em-dash that must be fixed before archive. Formatting warnings and pre-existing lint errors should be addressed but don't block the functional correctness of the fixes.
+**PASS WITH WARNINGS** - 6 of 7 bugs are fully verified. Bug 4 has one remaining em-dash that must be fixed before archive. Formatting warnings and pre-existing lint errors should be addressed but don't block the functional correctness of the fixes.
 
 ---
 

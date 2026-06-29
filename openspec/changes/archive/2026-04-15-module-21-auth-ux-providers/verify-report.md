@@ -29,11 +29,11 @@ tsc -p tsconfig.json --noEmit
 
 **Tests**: ✅ 19 passed / ❌ 0 failed / ⚠️ 0 skipped
 ```text
-src/features/auth/components/SignUpForm.test.tsx — 5 passed
-src/features/auth/components/SignInForm.test.tsx — 5 passed
-src/features/auth/components/AuthShell.test.tsx — 1 passed
-src/features/auth/AuthProvider.test.tsx — 6 passed
-src/lib/supabase/oauth-providers.test.ts — 2 passed
+src/features/auth/components/SignUpForm.test.tsx - 5 passed
+src/features/auth/components/SignInForm.test.tsx - 5 passed
+src/features/auth/components/AuthShell.test.tsx - 1 passed
+src/features/auth/AuthProvider.test.tsx - 6 passed
+src/lib/supabase/oauth-providers.test.ts - 2 passed
 ```
 
 **Coverage**: ➖ Not configured

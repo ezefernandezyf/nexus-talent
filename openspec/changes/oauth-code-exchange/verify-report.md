@@ -39,7 +39,7 @@ pnpm --filter e2e test
 |-------------|----------|------|--------|
 | One-Time Code Store | Code stored after OAuth callback | `code-store.test.ts` > set/get | ✅ COMPLIANT |
 | One-Time Code Store | Expired codes purged by interval | `code-store.test.ts` > sweep tests | ✅ COMPLIANT |
-| One-Time Code Store | Single-use — second exchange denied | `code-store.test.ts` + `auth.controller.test.ts` | ✅ COMPLIANT |
+| One-Time Code Store | Single-use - second exchange denied | `code-store.test.ts` + `auth.controller.test.ts` | ✅ COMPLIANT |
 | OAuth Callback Redirects | Successful OAuth callback (code in URL, no JWT) | `google-callback.test.ts` > redirects with ?code= | ✅ COMPLIANT |
 | Code Exchange Endpoint | Valid exchange returns JWT | `auth.controller.test.ts` > 200 + token | ✅ COMPLIANT |
 | Code Exchange Endpoint | Wrong or missing secret returns 401 | `auth.controller.test.ts` + `exchange.spec.ts` (E2E) | ✅ COMPLIANT |
@@ -48,12 +48,12 @@ pnpm --filter e2e test
 | Edge Function | Exchange failure redirects to sign-in | Source: `api/auth/session.ts` lines 38-43 | ⚠️ PARTIAL |
 | Edge Function | Missing code redirects to sign-in | Source: `api/auth/session.ts` lines 20-25 | ⚠️ PARTIAL |
 
-**Compliance summary**: 7/10 scenarios COMPLIANT, 3/10 scenarios PARTIAL (Edge Function — runtime tests not possible in local env; source verified)
+**Compliance summary**: 7/10 scenarios COMPLIANT, 3/10 scenarios PARTIAL (Edge Function - runtime tests not possible in local env; source verified)
 
 ### Correctness (Static Evidence)
 | Requirement | Status | Notes |
 |------------|--------|-------|
-| Code store: Map<string, {jwt, expiresAt}> with 60s TTL | ✅ Implemented | `code-store.ts` — Map, set/get, sweep, setInterval.unref() |
+| Code store: Map<string, {jwt, expiresAt}> with 60s TTL | ✅ Implemented | `code-store.ts` - Map, set/get, sweep, setInterval.unref() |
 | Code store: single-use deletion on get() | ✅ Implemented | `code-store.ts` line 54: `this.store.delete(code)` |
 | Code store: 30s cleanup via setInterval.unref() | ✅ Implemented | `code-store.ts` lines 63-67, .unref() at line 66 |
 | Callback: generate 64-hex code via randomBytes(32) | ✅ Implemented | `code-store.ts` line 37: `randomBytes(32).toString("hex")` |

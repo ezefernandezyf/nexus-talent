@@ -1,4 +1,4 @@
-# Proposal: P5 — Frontend Refactor
+# Proposal: P5 - Frontend Refactor
 
 ## Intent
 
@@ -15,7 +15,7 @@ Replace Supabase SDK with backend HTTP APIs for auth, analysis, and history. Rem
 
 ### Out of Scope
 - Settings/profile repos → kept on Supabase until V1.2.1
-- Identity linking/unlinking (removed — backend doesn't support)
+- Identity linking/unlinking (removed - backend doesn't support)
 - React Router v7 upgrade
 - AI client (already migrated to POST /api/ai/analyze)
 
@@ -70,9 +70,9 @@ Per-slice revert commits. Full rollback: `git revert` on each slice in reverse o
 
 ## Dependencies
 
-- Backend auth endpoints (P2) — ✅ complete
-- Backend history endpoints (P4) — ✅ complete
-- Settings/profile endpoints — N/A (deferred to V1.2.1)
+- Backend auth endpoints (P2) - ✅ complete
+- Backend history endpoints (P4) - ✅ complete
+- Settings/profile endpoints - N/A (deferred to V1.2.1)
 
 ## Success Criteria
 

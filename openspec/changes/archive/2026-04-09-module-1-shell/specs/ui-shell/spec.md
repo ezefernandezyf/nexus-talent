@@ -53,7 +53,7 @@ The footer MUST be available to any user who visits the site, including public a
 #### Scenario: User scrolls to the bottom
 - GIVEN the user is on any main application page or the landing page
 - WHEN the user scrolls to the bottom of the content
-- THEN a footer containing copyright information ("© 2026 Nexus Talent — Precision Recruiting Layer") MUST be visible
+- THEN a footer containing copyright information ("© 2026 Nexus Talent - Precision Recruiting Layer") MUST be visible
 
 #### Scenario: User visits the site without signing in
 - GIVEN the user is browsing the public site

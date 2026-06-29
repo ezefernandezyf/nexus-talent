@@ -16,7 +16,7 @@ POST /api/ai/analyze MUST accept `analysisRequestSchema`-validated body and pers
 | REQ-AI-006 | MUST enforce 30s timeout on Groq fetch |
 | REQ-HIST-009 | MUST persist validated result to DB after Groq returns (best-effort; save failure MUST NOT fail the analysis response) |
 
-(Previously: no database persistence — analysis results were not saved server-side.)
+(Previously: no database persistence - analysis results were not saved server-side.)
 
 #### Scenario: Save succeeds after analysis
 - GIVEN a valid analysis request

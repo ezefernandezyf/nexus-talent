@@ -1,8 +1,8 @@
-# Design: P5 — Frontend Refactor
+# Design: P5 - Frontend Refactor
 
 ## Technical Approach
 
-Incremental, per-slice execution across 4 chained PRs (feature-branch-chain). Each slice targets its predecessor — no big-bang rewrites. Auth migrates from Supabase SDK to backend HTTP APIs with httpOnly cookies; data layer gets centralized Axios; dead admin code removed; history moves to server-side pagination. Settings/profile repos stay on Supabase until V1.2.1.
+Incremental, per-slice execution across 4 chained PRs (feature-branch-chain). Each slice targets its predecessor - no big-bang rewrites. Auth migrates from Supabase SDK to backend HTTP APIs with httpOnly cookies; data layer gets centralized Axios; dead admin code removed; history moves to server-side pagination. Settings/profile repos stay on Supabase until V1.2.1.
 
 ## Architecture Decisions
 
@@ -14,19 +14,19 @@ Incremental, per-slice execution across 4 chained PRs (feature-branch-chain). Ea
 | React Query | Already used for server state; mixing creates dual-source bugs | Rejected |
 | Plain React Context | Causes re-render cascades across all consumers | Rejected |
 
-**Rationale**: AGENTS.md mandates Zustand for UI state. Auth session is UI state — a single store avoids context-propagation re-renders. React Query stays for server data (analyses, settings).
+**Rationale**: AGENTS.md mandates Zustand for UI state. Auth session is UI state - a single store avoids context-propagation re-renders. React Query stays for server data (analyses, settings).
 
 ### Decision: AuthProvider stays as thin context wrapper
 
-**Rationale**: Existing 12+ test files already wrap AuthProvider. Changing the context shape entirely breaks every test. Instead, the new Zustand store sits underneath — AuthProvider reads from it and exposes the same `useAuth()` API shape (minus `isAdmin`, `linkIdentity`, `unlinkIdentity`).
+**Rationale**: Existing 12+ test files already wrap AuthProvider. Changing the context shape entirely breaks every test. Instead, the new Zustand store sits underneath - AuthProvider reads from it and exposes the same `useAuth()` API shape (minus `isAdmin`, `linkIdentity`, `unlinkIdentity`).
 
 ### Decision: Axios over native fetch
 
-**Rationale**: Interceptors eliminate per-route 401 boilerplate. With `withCredentials: true`, cookies attach automatically — no `credentials: "include"` per call site.
+**Rationale**: Interceptors eliminate per-route 401 boilerplate. With `withCredentials: true`, cookies attach automatically - no `credentials: "include"` per call site.
 
 ## Data Flow
 
-### Slice A — Auth (PR #1)
+### Slice A - Auth (PR #1)
 
 ```
 App mount
@@ -45,7 +45,7 @@ OAuth flow:
     → AuthCallbackPage: GET /api/auth/me → 200 → Navigate to /app
 ```
 
-### Slice B — API Client (PR #2)
+### Slice B - API Client (PR #2)
 
 ```
 Any hook → HttpAnalysisRepository → axiosInstance.get("/api/analyses")
@@ -53,7 +53,7 @@ Any hook → HttpAnalysisRepository → axiosInstance.get("/api/analyses")
                                        └─ 401 interceptor → authStore.clearSession() → navigate /auth/sign-in
 ```
 
-### Slice D — History Pagination (PR #4)
+### Slice D - History Pagination (PR #4)
 
 ```
 HistoryPage → useHistory({ page, limit })
@@ -119,7 +119,7 @@ export const apiClient = axios.create({
 
 1. **Slice A**: New Zustand store + AuthProvider rewrite deploy first. Supabase `client.ts` and `oauth-providers.ts` still exist (settings/profile need them until V1.2.1). Only auth flow changes.
 2. **Slice B**: Axios replaces raw `fetch()` in `HttpAnalysisRepository`. `LocalAnalysisRepository` deleted. useAnalysisRepository simplified.
-3. **Slice C**: AdminRoute, isAdmin removed. No rollback risk — just dead code.
+3. **Slice C**: AdminRoute, isAdmin removed. No rollback risk - just dead code.
 4. **Slice D**: Pagination added. Backend already supports page/limit params from P4.
 5. **Slice F (future)**: When V1.2.1 delivers settings/profile endpoints, delete `web/src/lib/supabase/` and `@supabase/supabase-js`.
 

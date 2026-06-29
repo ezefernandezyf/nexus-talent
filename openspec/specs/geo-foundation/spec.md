@@ -14,7 +14,7 @@ The system MUST include three JSON-LD blocks in `<head>`: `Organization`, `Softw
 - THEN it finds valid JSON-LD for Organization, SoftwareApplication, and WebSite
 
 ### Requirement: Social Meta Tags
-The system MUST include Open Graph and Twitter Card meta tags with correct image paths, a canonical `<link>` tag, and the title "Nexus Talent — AI Recruiting Assistant | Transform Job Descriptions into Insights".
+The system MUST include Open Graph and Twitter Card meta tags with correct image paths, a canonical `<link>` tag, and the title "Nexus Talent - AI Recruiting Assistant | Transform Job Descriptions into Insights".
 
 #### Scenario: Link shared on social platforms
 - GIVEN a user shares the site URL on LinkedIn, Twitter, or Slack

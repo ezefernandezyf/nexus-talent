@@ -2,7 +2,7 @@
 
 | REQ ID | Requirement | Type |
 |--------|-------------|------|
-| REQ-AUTH-001 | Zustand store: `user`, `status` (unknown/loading/authenticated/unauthenticated). No session token in JS — httpOnly cookies only. | ADDED |
+| REQ-AUTH-001 | Zustand store: `user`, `status` (unknown/loading/authenticated/unauthenticated). No session token in JS - httpOnly cookies only. | ADDED |
 | REQ-AUTH-002 | AuthProvider MUST call GET /api/auth/me on mount. On 200→authenticated with user. On 401→unauthenticated. | ADDED |
 | REQ-AUTH-003 | Login: POST /api/auth/login → Set-Cookie → status→authenticated. Register: POST /api/auth/register → same. | ADDED |
 | REQ-AUTH-004 | Logout: POST /api/auth/logout → clear store (status→unauthenticated, user→null). | ADDED |

@@ -55,7 +55,7 @@ Executed focused verification suites:
 
 ---
 
-### Correctness (Static — Structural Evidence)
+### Correctness (Static - Structural Evidence)
 | Requirement | Status | Notes |
 |------------|--------|-------|
 | Mobile menu on landing and app shell | ✅ Implemented | `LandingPage` and `AppLayout` both own local drawer state and render the shared `MobileMenuButton` + `MobileDrawer`. |

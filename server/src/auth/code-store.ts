@@ -78,7 +78,7 @@ export class CodeStore {
 
   /**
    * Manually purge expired entries.
-   * Exposed for testing — the cleanup interval calls this automatically.
+   * Exposed for testing; the cleanup interval calls this automatically.
    */
   sweep(): void {
     const now = Date.now();

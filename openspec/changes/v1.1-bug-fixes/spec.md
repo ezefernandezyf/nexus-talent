@@ -1,4 +1,4 @@
-# Delta Specs — V1.1 Bug Fixes
+# Delta Specs - V1.1 Bug Fixes
 
 ## MODIFIED Requirements
 

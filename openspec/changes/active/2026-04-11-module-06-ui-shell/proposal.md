@@ -1,4 +1,4 @@
-# Proposal: 2026-04-11 — Module 06 — UI/UX Feature Shells (Analysis & History)
+# Proposal: 2026-04-11 - Module 06 - UI/UX Feature Shells (Analysis & History)
 
 ## Summary
 
