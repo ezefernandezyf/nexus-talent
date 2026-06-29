@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import * as authService from "./auth.service.js";
 import * as oauthService from "./oauth.service.js";
 import { parseCookies } from "../infra/request.js";
+import { codeStore } from "./code-store.js";
 
 const SEVEN_DAYS_SECONDS = 7 * 24 * 60 * 60;
 
@@ -133,9 +134,50 @@ export async function googleCallback(req: Request, res: Response, next: NextFunc
     const result = await oauthService.handleOAuthCallback(code);
 
     const clientUrl = process.env.CLIENT_URL ?? "http://localhost:5173";
-    // Redirect to Vercel Edge Function to set cookie with correct domain
-    res.redirect(`${clientUrl}/api/auth/session?token=${result.token}&redirect=/app/analysis`);
+    // Generate one-time code and store JWT — no JWT in redirect URL
+    const oneTimeCode = codeStore.set(result.token);
+    res.redirect(`${clientUrl}/api/auth/session?code=${oneTimeCode}&redirect=/app/analysis`);
   } catch (err) {
     next(err);
   }
+}
+
+// ── Code Exchange ─────────────────────────────────────────────
+
+/**
+ * POST /api/auth/exchange
+ *
+ * Exchanges a one-time code for a JWT.
+ * Protected by X-Exchange-Secret header matching EXCHANGE_SECRET env var.
+ */
+export async function exchangeCode(req: Request, res: Response): Promise<void> {
+  const secret = process.env.EXCHANGE_SECRET;
+  const provided = req.headers["x-exchange-secret"];
+
+  if (!secret) {
+    console.error("EXCHANGE_SECRET is not configured — OAuth code exchange will fail all requests");
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  if (!provided || provided !== secret) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  const { code } = req.body;
+
+  if (typeof code !== "string") {
+    res.status(404).json({ error: "Code not found or expired" });
+    return;
+  }
+
+  const token = codeStore.get(code);
+
+  if (!token) {
+    res.status(404).json({ error: "Code not found or expired" });
+    return;
+  }
+
+  res.status(200).json({ token });
 }
