@@ -15,6 +15,9 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@carrot-kpi/switzer-font": "^0.1.0",
+    "@fontsource/geist": "^5.2.9",
+    "@fontsource/geist-mono": "^5.2.8",
     "@hookform/resolvers": "^5.2.2",
     "@nexus-talent/shared": "workspace:*",
     "@supabase/supabase-js": "^2.101.1",
