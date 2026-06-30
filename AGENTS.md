@@ -125,6 +125,7 @@ npx impeccable detect web/src/
 
 **Skills activas**: taste-skill/design-taste-frontend, taste-skill/high-end-visual-design, impeccable
 
+- [ ] Fixear errores de lint preexistentes en `server/src/history/history.service.ts` (V1.1, detectados en verify de P9)
 - [ ] Button (variants: primary, secondary, ghost, danger, sizes)
 - [ ] Input + Textarea (con estados: focus, error, disabled, with icon)
 - [ ] Card + Card variants (flat, elevated, interactive)
@@ -168,6 +169,7 @@ npx impeccable detect web/src/
 ### 🚀 P13: Performance + Lighthouse
 > Core Web Vitals, bundle size, SEO técnico.
 
+- [ ] Fixear E2E port conflict (detectado en verify de P9)
 - [ ] Lighthouse 90+ mobile (Performance, Accessibility, Best Practices, SEO)
 - [ ] Bundle analysis (`vite build --debug`) — split chunks grandes
 - [ ] Dynamic imports + lazy loading de páginas y componentes pesados
