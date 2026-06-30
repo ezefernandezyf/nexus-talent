@@ -75,7 +75,7 @@ export function LandingPage() {
             variants={fadeUpVariants}
           >
             Transform Job Descriptions into{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <span className="text-accent">
               Actionable Insights
             </span>
           </motion.h1>

@@ -274,7 +274,7 @@
   }
 }
 
-/* Layer preserved for backward compat — @layer components aliases added in PR 2 */
+/* Layer preserved for backward compat — all 11 old CSS class aliases use new tokens */
 @layer components {
   .surface-panel {
     border-radius: 1.25rem;
