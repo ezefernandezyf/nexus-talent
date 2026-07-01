@@ -3,7 +3,7 @@ services:
     name: nexus-talent-api
     env: node
     buildCommand: pnpm --filter @nexus-talent/server run build
-    startCommand: pnpm --filter @nexus-talent/server run start
+    startCommand: cd server && node dist/server/src/index.js
     healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
