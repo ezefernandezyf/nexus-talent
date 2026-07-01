@@ -1,4 +1,4 @@
-import { LoadingSkeleton } from "@/shared/components";
+import { Skeleton } from "@/shared/components/skeleton";
 
 export function HistoryLoadingState() {
   return (
@@ -15,15 +15,15 @@ export function HistoryLoadingState() {
           <div className="flex items-center gap-4 lg:col-span-4">
             <div className="h-10 w-10 rounded-lg bg-surface-container" />
             <div className="min-w-0 flex-1 space-y-2">
-              <LoadingSkeleton />
+              <Skeleton variant="text" />
               <div className="h-3 w-24 rounded bg-surface-container" />
             </div>
           </div>
           <div className="lg:col-span-4">
-            <LoadingSkeleton />
+            <Skeleton variant="text" />
           </div>
           <div className="lg:col-span-2">
-            <LoadingSkeleton />
+            <Skeleton variant="text" />
           </div>
           <div className="flex items-center justify-start lg:col-span-2 lg:justify-end">
             <div className="h-10 w-24 rounded-lg bg-surface-container" />

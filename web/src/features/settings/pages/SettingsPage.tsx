@@ -1,4 +1,5 @@
-import { FeaturePageShell, LoadingSkeleton, PageHeader } from "@/shared/components";
+import { Skeleton } from "@/shared/components/skeleton";
+import { FeaturePageShell, PageHeader } from "@/shared/components";
 import { Button } from "@/shared/components/Button";
 import { useAuth } from "@/features/auth";
 import { downloadTextFile } from "@/features/analysis/export";
@@ -27,7 +28,17 @@ export function SettingsPage() {
   const isExportDisabled = status !== "authenticated";
 
   if (status === "loading" || status === "unknown") {
-    return <LoadingSkeleton variant="hero" />;
+    return (
+      <div className="animate-pulse space-y-4 p-6" aria-busy="true" aria-label="Cargando configuración" role="status">
+        <Skeleton variant="text" height={32} width={160} />
+        <Skeleton variant="text" height={48} width="100%" />
+        <Skeleton variant="text" height={24} width="75%" />
+        <div className="flex gap-3 mt-4">
+          <Skeleton variant="rect" width={128} height={40} />
+          <Skeleton variant="rect" width={96} height={40} />
+        </div>
+      </div>
+    );
   }
 
   return (
