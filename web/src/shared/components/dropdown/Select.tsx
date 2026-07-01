@@ -1,4 +1,4 @@
-import { useId, useState, useMemo, useRef, useEffect, useCallback } from "react";
+import { useId, useState, useRef, useEffect } from "react";
 import {
   useFloating,
   autoUpdate,
@@ -36,10 +36,7 @@ export function Select({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const selectedLabel = useMemo(() => {
-    const selected = options.find((o) => o.value === value);
-    return selected?.label ?? placeholder;
-  }, [options, value, placeholder]);
+  const selectedLabel = options.find((o) => o.value === value)?.label ?? placeholder;
 
   const floating = useFloating({
     open: isOpen,
@@ -71,7 +68,7 @@ export function Select({
     return () => document.removeEventListener("mousedown", handleMousedown);
   }, [isOpen]);
 
-  useEscapeKey(useCallback(() => setIsOpen(false), []));
+  useEscapeKey(() => setIsOpen(false));
 
   function handleToggle() {
     setIsOpen((prev) => !prev);

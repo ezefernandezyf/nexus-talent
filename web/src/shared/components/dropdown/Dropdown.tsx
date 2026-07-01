@@ -1,4 +1,4 @@
-import { useId, useState, useRef, useEffect, useCallback, type ReactElement, type ReactNode } from "react";
+import { useId, useState, useRef, useEffect, type ReactElement, type ReactNode } from "react";
 import {
   useFloating,
   autoUpdate,
@@ -57,7 +57,7 @@ export function Dropdown({ trigger, items, className }: DropdownProps) {
     return () => document.removeEventListener("mousedown", handleMousedown);
   }, [isOpen]);
 
-  useEscapeKey(useCallback(() => setIsOpen(false), []));
+  useEscapeKey(() => setIsOpen(false));
 
   function handleToggle() {
     setIsOpen((prev) => !prev);
