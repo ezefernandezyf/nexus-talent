@@ -1,9 +1,10 @@
 services:
   - type: web
     name: nexus-talent-api
-    env: docker
-    dockerfilePath: server/Dockerfile
-    healthCheckPath: /health
+    env: node
+    buildCommand: pnpm --filter @nexus-talent/server run build
+    startCommand: cd server && node dist/server/src/index.js
+    healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
         sync: false

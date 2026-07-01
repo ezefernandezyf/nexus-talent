@@ -1,0 +1,81 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Dropdown snapshots > renders dropdown in dark mode 1`] = `
+<div
+  class="relative inline-block"
+>
+  <div
+    aria-controls="dropdown-menu-_r_0_"
+    aria-expanded="false"
+    aria-haspopup="menu"
+  >
+    <button>
+      Menu
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Select snapshots > renders select in dark mode 1`] = `
+<div
+  class="relative"
+>
+  <button
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    aria-labelledby="select-listbox-_r_3_"
+    class="flex h-10 w-full items-center justify-between gap-2 rounded-lg bg-[var(--color-surface-base)] px-3 text-sm text-[var(--color-on-surface)] shadow-[inset_0_0_0_1px] shadow-[var(--color-on-surface)]/10 transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus:outline-none focus:shadow-[inset_0_0_0_2px] focus:shadow-[var(--color-brand)]"
+    type="button"
+  >
+    <span
+      class="text-[var(--color-on-surface-variant)]"
+    >
+      Choose...
+    </span>
+    <svg
+      class="text-[var(--color-on-surface-variant)] transition-transform"
+      fill="currentColor"
+      height="14"
+      viewBox="0 0 256 256"
+      width="14"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M216.49,104.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.52a12,12,0,0,1,17,17Z"
+      />
+    </svg>
+  </button>
+</div>
+`;
+
+exports[`Select snapshots > renders select with a value selected 1`] = `
+<div
+  class="relative"
+>
+  <button
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    aria-labelledby="select-listbox-_r_5_"
+    class="flex h-10 w-full items-center justify-between gap-2 rounded-lg bg-[var(--color-surface-base)] px-3 text-sm text-[var(--color-on-surface)] shadow-[inset_0_0_0_1px] shadow-[var(--color-on-surface)]/10 transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus:outline-none focus:shadow-[inset_0_0_0_2px] focus:shadow-[var(--color-brand)]"
+    type="button"
+  >
+    <span
+      class=""
+    >
+      Option 2
+    </span>
+    <svg
+      class="text-[var(--color-on-surface-variant)] transition-transform"
+      fill="currentColor"
+      height="14"
+      viewBox="0 0 256 256"
+      width="14"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M216.49,104.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.52a12,12,0,0,1,17,17Z"
+      />
+    </svg>
+  </button>
+</div>
+`;
