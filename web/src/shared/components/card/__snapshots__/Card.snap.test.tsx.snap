@@ -1,0 +1,63 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Card snapshot > renders all variants in dark mode 1`] = `
+<div>
+  <div
+    class="rounded-[var(--radius-md)] flex flex-col gap-2 bg-[var(--color-surface-elevated-1)] shadow-[inset_0_0_0_1px] shadow-[var(--color-on-surface)]/5 p-3"
+  >
+    <div
+      class="font-display text-lg font-semibold text-[var(--color-on-surface)]"
+    >
+      Flat Header
+    </div>
+    <div
+      class="text-[var(--color-on-surface-variant)]"
+    >
+      Flat body content with more text.
+    </div>
+    <div
+      class="flex items-center gap-2 pt-2"
+    >
+      Flat footer
+    </div>
+  </div>
+  <div
+    class="rounded-[var(--radius-md)] flex flex-col gap-2 bg-[var(--color-surface-elevated-2)] shadow-[var(--shadow-md)] p-4"
+  >
+    <div
+      class="font-display text-lg font-semibold text-[var(--color-on-surface)]"
+    >
+      Elevated Header
+    </div>
+    <div
+      class="text-[var(--color-on-surface-variant)]"
+    >
+      Elevated body content.
+    </div>
+    <div
+      class="flex items-center gap-2 pt-2"
+    >
+      Elevated footer
+    </div>
+  </div>
+  <div
+    class="rounded-[var(--radius-md)] flex flex-col gap-2 bg-[var(--color-surface-elevated-1)] shadow-[var(--shadow-sm)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-lg)] cursor-pointer transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] p-6"
+  >
+    <div
+      class="font-display text-lg font-semibold text-[var(--color-on-surface)]"
+    >
+      Interactive Header
+    </div>
+    <div
+      class="text-[var(--color-on-surface-variant)]"
+    >
+      Interactive body content.
+    </div>
+    <div
+      class="flex items-center gap-2 pt-2"
+    >
+      Interactive footer
+    </div>
+  </div>
+</div>
+`;
