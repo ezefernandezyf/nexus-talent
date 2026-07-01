@@ -88,6 +88,8 @@ jobs:
 
       - name: Typecheck
         run: pnpm --filter @nexus-talent/server typecheck
+        env:
+          DATABASE_URL: postgresql://nexus:nexus@localhost:5432/nexus-test
 
       - name: Test
         run: pnpm --filter @nexus-talent/server test --passWithNoTests
