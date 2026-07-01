@@ -3,7 +3,7 @@ services:
     name: nexus-talent-api
     env: docker
     dockerfilePath: server/Dockerfile
-    healthCheckPath: /health
+    healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
         sync: false
