@@ -44,12 +44,12 @@ Groq API -> Response IA -> Zod validation -> Response al frontend -> Render
 - Cero sobreingeniería. Cero complejidad sin justificación explícita. "Clear over clever."
 
 ## Git Workflow (STRICT — zero exceptions)
-1. **Develop branch**: `develop` is the integration branch for V1.1. All feature branches merge here.
+1. **Develop branch**: `develop` is the integration branch for V1.2. All feature branches merge here.
 2. **Feature branches**: EVERY task starts on a new branch from `develop`
 3. **Branch naming**: `feat/short-name`, `fix/short-name`, `chore/short-name`
 4. **Atomic commits**: one logical change layer per commit, conventional format
 5. **Push + PR + Merge**: push branch, create PR to `develop`, squash-merge
-6. **V1.1 Release**: `develop` → PR to `main` when all phases are done
+6. **V1.2 Release**: `develop` → PR to `main` when all phases are done
 7. **Clean working tree**: no untracked files, no WIP before PR
 8. **Lint before push**: `pnpm run lint && pnpm run format` must pass
 9. **Tests before merge**: `pnpm test` (server + web) must pass
@@ -100,114 +100,7 @@ npx impeccable detect web/src/
 - `web/src/auth/auth-guard.tsx` — ProtectedRoute + PublicRoute
 - `vercel.json` — Vercel deploy config (monorepo pnpm workspace filter)
 
-## Roadmap — V1.1 Backend Migration
-
-La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 está completo, `develop` se mergea a `main`.
-
-### P1: Infrastructure ✅
-> pnpm monorepo, Prisma schema + Supabase PostgreSQL, Express 5 skeleton, Render deploy config
-- [x] pnpm-workspace.yaml con server/web/shared/e2e
-- [x] Migrar `src/` → `web/src/`
-- [x] Prisma schema: profiles, analyses, settings
-- [x] Express app skeleton con screaming architecture (auth/, analysis/, profile/, history/)
-- [x] Render health check + Dockerfile
-- [x] Vite proxy a :3001
-
-### P2: Auth Backend ✅
-> Custom JWT (HS256), email/password + Google OAuth, middleware, migration script
-- [x] JWT custom (crypto.createHmac — sin jsonwebtoken)
-- [x] POST /api/auth/register (bcrypt + Prisma)
-- [x] POST /api/auth/login (bcrypt + JWT → httpOnly cookie)
-- [x] GET /api/auth/me (requireAuth → session)
-- [x] POST /api/auth/logout (clear cookie)
-- [x] Google OAuth (zero-dependency: crypto + fetch, anti-CSRF state)
-- [x] requireAuth + optionalAuth middleware
-- [x] parseCookies utility (sin cookie-parser)
-- [x] Rate limiting (auth: 5/15min)
-
-### P3: AI Proxy ✅
-> Server-side Groq API, Zod validation
-- [x] POST /api/ai/analyze (receive JD → Groq → validated response)
-- [x] Groq SDK server-side (no más VITE_GROQ_API_KEY en bundle)
-- [x] Zod validation on response
-- [x] Error handling + fallback (local analysis engine server-side)
-
-### P4: History API ✅
-> CRUD de analyses con Prisma
-- [x] GET /api/analyses (list, scoped by userId)
-- [x] GET /api/analyses/:id (detail)
-- [x] DELETE /api/analyses/:id
-- [x] PATCH /api/analyses/:id (edit displayName/notes)
-- [x] Repository pattern preserved (HTTP client in web, localStorage fallback)
-
-### P5: Frontend Refactor ✅
-> Swap AuthProvider, API client, remove localStorage
-- [x] New AuthProvider (session via GET /api/auth/me)
-- [x] Zustand store: session + status (authenticated/unauthenticated/unknown)
-- [x] Axios client con withCredentials: true
-- [x] ProtectedRoute + PublicRoute guards
-- [x] Swap repositories: localStorage → HTTP API calls
-- [x] Remove Supabase client SDK dependency
-- [x] Remove VITE_GROQ_API_KEY from env
-- [x] History list → backend-backed pagination
-
-### P6: Design Identity — "The Signal" + GEO Foundation ✅
-> Basado en portfolio-personality (Estilo B: Minimal/Elegant). Dark-first. Paleta Indigo + Chartreuse. Cabinet Grotesk (display) + Satoshi (body). SSR con Vike (fallback: Vercel Edge). GEO Score 7 → 35.
-- [x] **SSR con Vike** para landing `/` y privacy `/privacy`. Vike falló (requiere Vite ≥7.1, tenemos 6.4.3). Fallback: build-time prerender con Vite SSR. ✅
-- [x] Design tokens: OKLCH colors, shadows, radii, typography scale
-- [x] Global styles + CSS variables
-- [x] Component refresh: buttons, cards, inputs, modals, badges
-- [x] Layout & navigation redesign
-- [x] Landing page redesign **con contenido estructurado**: H1, H2 sections, FAQ (5 Q&A), 300+ palabras, answer blocks para AI citability (GEO HIGH #CTB-1)
-- [x] Responsive + dark mode parity
-- [x] **GEO/SEO Quick Wins** (Week 1-2 del audit):
-  - [x] Schema JSON-LD: Organization + SoftwareApplication + WebSite (GEO CRITICAL #SCH-1)
-  - [x] Open Graph + Twitter Card meta tags (GEO HIGH #TEC-2)
-  - [x] Title tag optimizado (SEO)
-  - [x] Keywords target (SEO)
-  - [x] Canonical URL tag (GEO HIGH #CTB-2)
-  - [x] llms.txt estático en `/public/` (GEO HIGH #TEC-1)
-  - [x] robots.txt con AI crawlers explícitos (GEO)
-  - [x] `<noscript>` fallback con contenido clave (GEO Quick Win #5)
-  - [x] Favicon estable sin hash (GEO LOW #CON-3)
-  - [ ] Google Search Console: submit sitemap (SEO) → manual, requiere acceso a GSC
-
-### P7: E2E + Security ✅
-> Playwright flows, hardening
-- [x] Playwright setup (ephemeral SQLite per run via chained webServer command)
-- [x] Auth smoke: login + register + logout (via API)
-- [x] Analysis smoke: validate endpoint behavior (502 no key, 400 empty JD)
-- [x] History smoke: view history, delete non-existent returns 404
-- [x] **Security headers**: CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy (GEO MEDIUM #TEC-3) — manual middleware, no helmet dependency
-- [x] Rate limiting (auth: 100/test, 5/prod; analysis: 10/min)
-- [x] Structured logging (pino-http middleware + event logging)
-- [x] Input sanitization (Zod validation at API layer)
-
-### P8: Polish + Deploy ✅
-> Error boundaries, skeletons, docs, OAuth security
-- [x] CI/CD: GitHub Actions (lint, type, test on PR + push)
-- [x] Vercel deploy config (vercel.json en raíz, pnpm workspace filter)
-- [x] Vercel rewrites for SPA + API proxy (proxy /api/* → Render)
-- [x] Render health check + deploy config
-- [x] ServerErrorPage + AuthShell redesign
-- [x] DESIGN.md + README docs
-- [x] **OAuth Code Exchange**: one-time code en vez de JWT en redirect URL (seguridad)
-- [ ] Error boundaries + error pages
-- [ ] Loading skeletons for all pages
-- [ ] Empty states (no history, no analysis yet)
-- [ ] **Lighthouse 90+** en mobile (SEO — Core Web Vitals)
-
----
-## V1.1 — Released ✅
-> Tag: `v1.1` | Deploy: Vercel + Render + Supabase
-
-### V1.1 Bug Fixes
-- [x] maxAge en milisegundos (no segundos) — OAuth state + session cookies
-- [x] fix(proxy): Render subdomain en Vercel rewrite (nexus-talent-api)
-- [x] fix(build): skip prerender en Vercel para evitar OOM
-- [x] fix(analysis): Groq json_object + Zod sin id/createdAt
-- [x] fix(auth): cross-domain session cookies (Vercel Edge Function)
-- [x] chore: remove em-dashes from entire project
+> V1.1 released. Tag: `v1.1` | Deploy: Vercel + Render + Supabase
 
 ---
 ## V1.2 — Redesign & UX Excellence
@@ -232,6 +125,7 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 
 **Skills activas**: taste-skill/design-taste-frontend, taste-skill/high-end-visual-design, impeccable
 
+- [ ] Fixear errores de lint preexistentes en `server/src/history/history.service.ts` (V1.1, detectados en verify de P9)
 - [ ] Button (variants: primary, secondary, ghost, danger, sizes)
 - [ ] Input + Textarea (con estados: focus, error, disabled, with icon)
 - [ ] Card + Card variants (flat, elevated, interactive)
@@ -275,6 +169,7 @@ La migración es slice-based: feature branches apuntan a `develop`. Cuando V1.1 
 ### 🚀 P13: Performance + Lighthouse
 > Core Web Vitals, bundle size, SEO técnico.
 
+- [ ] Fixear E2E port conflict (detectado en verify de P9)
 - [ ] Lighthouse 90+ mobile (Performance, Accessibility, Best Practices, SEO)
 - [ ] Bundle analysis (`vite build --debug`) — split chunks grandes
 - [ ] Dynamic imports + lazy loading de páginas y componentes pesados

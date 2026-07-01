@@ -1,7 +1,6 @@
-/* ===== New fonts (V1.2) — Geist (body) + Switzer (display) + JetBrains Mono ===== */
-/* TODO: Self-host before production deployment — replace @import with @font-face blocks */
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Switzer:wght@300;400;500;600;700;800;900&display=swap");
+/* ===== Self-hosted fonts — Geist (body) + Switzer (display) + JetBrains Mono ===== */
+@import "@fontsource/geist/index.css";
+@import "@carrot-kpi/switzer-font/index.css";
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap");
 
 @import "tailwindcss";
@@ -64,6 +63,8 @@
   --text-h2: clamp(1.5rem, 2vw + 0.25rem, 2.5rem);
   --text-h3: clamp(1.25rem, 1.5vw + 0.25rem, 2rem);
   --text-h4: clamp(1.1rem, 1vw + 0.25rem, 1.5rem);
+  --text-h5: clamp(1rem, 0.75vw + 0.25rem, 1.25rem);
+  --text-h6: clamp(0.9rem, 0.5vw + 0.3rem, 1.1rem);
   --text-body: clamp(0.875rem, 0.5vw + 0.75rem, 1rem);
   --text-caption: clamp(0.75rem, 0.25vw + 0.7rem, 0.875rem);
   --text-label: 0.68rem;
@@ -103,8 +104,8 @@
   --z-dropdown: 10;
   --z-sticky: 20;
   --z-modal-backdrop: 30;
-  --z-modal: 40;
-  --z-toast: 50;
+  --z-modal: 50;
+  --z-toast: 40;
   --z-tooltip: 60;
 
   /* ===== Animation ===== */
@@ -215,8 +216,9 @@
   }
 
   a {
-    color: inherit;
-    text-decoration: none;
+    color: var(--color-brand);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   button,
@@ -274,7 +276,7 @@
   }
 }
 
-/* Layer preserved for backward compat — @layer components aliases added in PR 2 */
+/* Layer preserved for backward compat — all 11 old CSS class aliases use new tokens */
 @layer components {
   .surface-panel {
     border-radius: 1.25rem;
