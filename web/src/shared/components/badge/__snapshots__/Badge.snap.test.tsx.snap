@@ -1,0 +1,143 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Badge snapshots > renders all badge variants in dark mode 1`] = `
+<div>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-info)]/10 text-[var(--color-info)] h-6 px-2 text-[0.7rem]"
+  >
+    Info
+  </span>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-success)]/10 text-[var(--color-success)] h-6 px-2 text-[0.7rem]"
+  >
+    Success
+  </span>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-warning)]/10 text-[var(--color-warning)] h-6 px-2 text-[0.7rem]"
+  >
+    Warning
+  </span>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-error)]/10 text-[var(--color-error)] h-6 px-2 text-[0.7rem]"
+  >
+    Error
+  </span>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-brand)]/10 text-[var(--color-brand)] h-6 px-2 text-[0.7rem]"
+  >
+    Brand
+  </span>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-surface-elevated-2)] text-[var(--color-on-surface-variant)] h-6 px-2 text-[0.7rem]"
+  >
+    Neutral
+  </span>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-success)]/10 text-[var(--color-success)] h-6 px-2 text-[0.7rem]"
+  >
+    <span
+      class="flex-shrink-0 text-[1em] leading-none"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 256 256"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"
+        />
+      </svg>
+    </span>
+    Icon
+  </span>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-brand)]/10 text-[var(--color-brand)] h-5 px-1.5 text-[0.65rem]"
+  >
+    Small
+  </span>
+</div>
+`;
+
+exports[`Badge snapshots > renders status indicators in dark mode 1`] = `
+<div>
+  <span
+    class="inline-flex items-center gap-1.5 font-body text-xs font-medium text-[var(--color-success)]"
+  >
+    <span
+      aria-hidden="true"
+      class="h-1.5 w-1.5 rounded-full bg-[var(--color-success)]"
+    />
+    Online
+  </span>
+  <span
+    class="inline-flex items-center gap-1.5 font-body text-xs font-medium text-[var(--color-error)]"
+  >
+    <span
+      aria-hidden="true"
+      class="h-1.5 w-1.5 rounded-full bg-[var(--color-error)]"
+    />
+    Offline
+  </span>
+  <span
+    class="inline-flex items-center gap-1.5 font-body text-xs font-medium text-[var(--color-warning)]"
+  >
+    <span
+      aria-hidden="true"
+      class="h-1.5 w-1.5 rounded-full bg-[var(--color-warning)]"
+    />
+    Away
+  </span>
+  <span
+    class="inline-flex items-center gap-1.5 font-body text-xs font-medium text-[var(--color-info)]"
+  >
+    <span
+      aria-hidden="true"
+      class="h-1.5 w-1.5 rounded-full bg-[var(--color-info)]"
+    />
+    Pending
+  </span>
+  <span
+    class="inline-flex items-center gap-1.5 font-body text-xs font-medium text-[var(--color-on-surface-variant)]"
+  >
+    <span
+      aria-hidden="true"
+      class="h-1.5 w-1.5 rounded-full bg-[var(--color-on-surface-variant)]"
+    />
+    Draft
+  </span>
+</div>
+`;
+
+exports[`Badge snapshots > renders tags in dark mode 1`] = `
+<div>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] px-2 py-0.5 text-[0.7rem] font-body font-medium bg-[var(--color-brand)]/10 text-[var(--color-brand)]"
+  >
+    React
+  </span>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] px-2 py-0.5 text-[0.7rem] font-body font-medium bg-[var(--color-info)]/10 text-[var(--color-info)]"
+  >
+    Dismiss
+    <button
+      aria-label="Remove"
+      class="ml-0.5 flex items-center justify-center rounded-full p-0.5 opacity-60 transition-opacity hover:opacity-100"
+      type="button"
+    >
+      <svg
+        fill="currentColor"
+        height="10"
+        viewBox="0 0 256 256"
+        width="10"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M208.49,191.51a12,12,0,0,1-17,17L128,145,64.49,208.49a12,12,0,0,1-17-17L111,128,47.51,64.49a12,12,0,0,1,17-17L128,111l63.51-63.52a12,12,0,0,1,17,17L145,128Z"
+        />
+      </svg>
+    </button>
+  </span>
+</div>
+`;
