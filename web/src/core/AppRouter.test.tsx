@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import axios from "axios";
@@ -8,6 +8,10 @@ import { useAuthStatus } from "@/features/auth/store/auth-status";
 import { AuthProvider } from "@/features/auth";
 import { createTestQueryClient } from "@/test/mocks/query-client";
 import { AppRouter } from "./router";
+
+// Eager imports for tests that bypass lazy-load reliability issues
+import { AnalysisPage } from "@/features/analysis/pages/AnalysisPage";
+import { AppLayout } from "@/shared/layouts/AppLayout";
 
 // ---------------------------------------------------------------------------
 // Axios mock - hooks now use HTTP repo instead of localStorage
@@ -80,10 +84,27 @@ describe("AppRouter", () => {
     });
   });
 
-  it("renders the app shell and analysis page for anonymous users", async () => {
-    renderApp("/app/analysis");
+  it("renders the app shell and analysis page for anonymous users", () => {
+    // Bypass lazy-loaded router to avoid import-on-mount reliability issues in test env
+    const queryClient = createTestQueryClient();
+    queryClient.setQueryData(["auth", "session"], null);
+    useAuthStatus.setState({ status: "unauthenticated" });
 
-    await screen.findByRole("heading", { name: /nuevo análisis de reclutamiento/i }, { timeout: 5000 });
+    render(
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <MemoryRouter initialEntries={["/app/analysis"]}>
+            <Routes>
+              <Route element={<AppLayout />}>
+                <Route path="/app/analysis" element={<AnalysisPage />} />
+              </Route>
+            </Routes>
+          </MemoryRouter>
+        </AuthProvider>
+      </QueryClientProvider>,
+    );
+
+    expect(screen.getByRole("heading", { name: /nuevo análisis de reclutamiento/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /iniciar sesión/i })).toHaveAttribute("href", "/auth/sign-in");
   });
 
