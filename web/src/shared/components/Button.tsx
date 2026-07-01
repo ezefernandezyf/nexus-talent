@@ -1,21 +1,5 @@
-import { forwardRef, type ButtonHTMLAttributes } from "react";
-import { cn } from "@/shared/utils/cn";
-
-type ButtonVariant = "primary" | "secondary" | "tertiary";
-
-const buttonVariants: Record<ButtonVariant, string> = {
-  primary: "primary-button",
-  secondary: "secondary-button",
-  tertiary: "tertiary-button",
-};
-
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-}
-
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant = "primary", type = "button", ...props },
-  ref,
-) {
-  return <button ref={ref} className={cn(buttonVariants[variant], className)} type={type} {...props} />;
-});
+/**
+ * @deprecated Use `@/shared/components/button` instead.
+ * This file is a backward-compat re-export for V1.1 consumers.
+ */
+export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./button";
