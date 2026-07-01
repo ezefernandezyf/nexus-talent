@@ -1,8 +1,9 @@
 services:
   - type: web
     name: nexus-talent-api
-    env: docker
-    dockerfilePath: server/Dockerfile
+    env: node
+    buildCommand: cd server && npm install && npx prisma generate && npx tsc
+    startCommand: cd server && node dist/index.js
     healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
