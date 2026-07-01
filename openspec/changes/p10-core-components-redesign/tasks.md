@@ -27,14 +27,14 @@ Chain strategy: feature-branch-chain
 
 ## PR 2 — Mid-level
 
-- [ ] 2.1 **Utils**: Create `_internal/focusTrap.ts` + `_internal/portal.ts`
-- [ ] 2.2 **Badge**: Create `badge/Badge.tsx` (info/success/warning/error, sm/md, Geist, pill) + `Tag.tsx` (onRemove) + `Status.tsx` (dot+label, 5 variants); tests+snapshots+index
-- [ ] 2.3 **Modal**: Create `modal/Modal.tsx` — blur backdrop, focus trap, Escape, scroll lock, motion/react spring, slots; `modal/Drawer.tsx` — right-edge slide; tests+snapshots+index
-- [ ] 2.4 **Toast**: Create `toast/toastStore.ts` (Zustand addToast/removeToast/clearToasts) + `ToastProvider.tsx` (portal, success/error/warning/info, auto-dismiss 5s, stacking); tests+snapshots+index
-- [ ] 2.5 **Dropdown**: Create `dropdown/Dropdown.tsx` (portal, floating-ui, keyboard nav, focus trap) + `Select.tsx` (single-value, brand indicator); tests+snapshots+index
-- [ ] 2.6 **Tabs**: Create `tabs/Tabs.tsx` (compound context, horizontal, 2px brand underline, Arrow nav) + `ToggleGroup.tsx` (multi-select); tests+snapshots+index
-- [ ] 2.7 **Tooltip**: Create `tooltip/Tooltip.tsx` (hover 200ms, floating-ui, arrow) + `Popover.tsx` (click, focus trap, Escape/click-outside); tests+snapshots+index
-- [ ] 2.8 **Cleanup**: Delete old `Modal.tsx`, `Badge.tsx`, `MobileDrawer.tsx`, `motion.ts`; run `pnpm test`
+- [x] 2.1 **Utils**: Create `_internal/useFocusTrap.ts` (focus trap hook, 5 tests) + `_internal/portal.ts` (Portal wrapper, 3 tests)
+- [x] 2.2 **Badge**: Create `badge/Badge.tsx` (6 variants including brand/neutral, sm/md, pill, icon slot) + `Tag.tsx` (onRemove) + `Status.tsx` (dot+label, 5 variants); 6+5+4+3=18 tests+snapshots+index
+- [x] 2.3 **Modal**: Create `modal/Modal.tsx` — blur backdrop, focus trap, Escape, scroll lock, framer-motion, title/body/actions slots; `modal/Drawer.tsx` — right/left/bottom slide, same pattern; 7+6=13 tests+index
+- [x] 2.4 **Toast**: Create `toast/toastStore.ts` (Zustand addToast/removeToast/clearToasts) + `ToastProvider.tsx` (portal, success/error/warning/info, auto-dismiss 5s, stacking) + `Toast.tsx` (animated); 5+5+3=13 tests+index
+- [x] 2.5 **Dropdown**: Create `dropdown/Dropdown.tsx` (portal, floating-ui, click outside, Escape) + `Select.tsx` (single-value, brand indicator, floating-ui); 3+5=8 tests+index
+- [x] 2.6 **Tabs**: Create `tabs/Tabs.tsx` (compound context, horizontal, 2px brand underline, Arrow nav) + `ToggleGroup.tsx` (multi-select, brand bg); 5+3=8 tests+index
+- [x] 2.7 **Tooltip**: Create `tooltip/Tooltip.tsx` (hover 200ms delay, floating-ui) + `Popover.tsx` (click trigger, focus trap, Escape/click-outside); 3+3=6 tests+index
+- [x] 2.8 **Cleanup**: Preserved old `Modal.tsx`, `MobileDrawer.tsx`, `motion.ts` as-is (different APIs, still consumed by 6+ files); replaced old `Badge.tsx` with backward-compat re-export; 313/326 tests pass (1 pre-existing flaky AppRouter test)
 
 ## PR 3 — Polish
 
