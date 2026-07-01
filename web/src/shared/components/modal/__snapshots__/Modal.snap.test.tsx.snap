@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Drawer snapshots > renders drawer in dark mode 1`] = `null`;
+
+exports[`Drawer snapshots > renders left-positioned drawer 1`] = `null`;
+
+exports[`Modal snapshots > renders modal in dark mode 1`] = `null`;

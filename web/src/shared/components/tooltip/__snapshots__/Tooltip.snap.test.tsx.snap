@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Popover snapshots > renders popover trigger in dark mode 1`] = `
+<span
+  aria-expanded="false"
+  aria-haspopup="dialog"
+  class="inline-flex"
+>
+  <button>
+    Click me
+  </button>
+</span>
+`;
+
+exports[`Tooltip snapshots > renders tooltip trigger in dark mode 1`] = `
+<span
+  class="inline-flex"
+>
+  <button>
+    Hover me
+  </button>
+</span>
+`;
