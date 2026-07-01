@@ -94,10 +94,13 @@ export async function saveAnalysis(userId: string, payload: SaveAnalysisPayload)
       jobDescription,
       summary: result.summary,
       vacancySummary: JSON.stringify(result.vacancySummary),
+      // Prisma 7 stub types (no DATABASE_URL in CI) resolve Json fields as `string`.
+      // Runtime values are valid JSON objects — InputJsonValue would work with a real client.
+      // Revisit when Prisma improves stub type generation.
       skillGroups: result.skillGroups as any,
       keywords: result.keywords as any,
       gaps: result.gaps as any,
-      recruiterMessages: (result.recruiterMessages ?? Prisma.DbNull) as any,
+      recruiterMessages: result.recruiterMessages as any,
       outreachMessage:
         typeof result.outreachMessage === "object"
           ? JSON.stringify(result.outreachMessage)
