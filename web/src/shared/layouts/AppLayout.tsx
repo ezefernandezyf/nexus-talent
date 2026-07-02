@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { Footer } from "@/features/landing/components/Footer";
+import { Footer } from "@/shared/components/Footer";
 import { MobileDrawer } from "@/shared/components/MobileDrawer";
 import { MobileMenuButton } from "@/shared/components/MobileMenuButton";
 import { LogoutButton, AUTH_STATUS, useAuth } from "@/features/auth";
@@ -210,7 +210,7 @@ function AppLayoutContent() {
           </div>
         </div>
 
-        <Footer />
+        <Footer variant="app" />
       </div>
 
       <MobileDrawer actions={mobileDrawerActions} heading="Nexus Talent" isOpen={isMobileMenuOpen} items={visibleNavItems} onClose={() => setIsMobileMenuOpen(false)} />

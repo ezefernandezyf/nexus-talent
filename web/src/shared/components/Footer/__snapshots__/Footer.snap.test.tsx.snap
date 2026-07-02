@@ -1,0 +1,61 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Footer snapshot > renders both variants consistently 1`] = `
+<footer
+  class="w-full border-t border-outline-variant/15 bg-surface-container-lowest px-8 py-12 text-xs uppercase tracking-widest text-on-surface-variant"
+>
+  <div
+    class="mx-auto flex max-w-screen-2xl flex-col items-center justify-between gap-6 font-label sm:flex-row"
+  >
+    <div
+      class="font-display text-lg font-black text-on-surface"
+    >
+      Nexus Talent
+    </div>
+    <div
+      class="text-on-surface-variant"
+    >
+      © 2026 Nexus Talent. Built for the machine era.
+    </div>
+  </div>
+</footer>
+`;
+
+exports[`Footer snapshot > renders both variants consistently 2`] = `
+<footer
+  class="w-full border-t border-outline-variant/15 bg-surface-container-lowest px-8 py-12 text-xs uppercase tracking-widest text-on-surface-variant"
+>
+  <div
+    class="mx-auto flex max-w-screen-2xl flex-col items-center justify-between gap-6 font-label sm:flex-row"
+  >
+    <div
+      class="font-display text-lg font-black text-on-surface"
+    >
+      Nexus Talent
+    </div>
+    <div
+      class="flex items-center gap-8"
+    >
+      <a
+        class="text-on-surface-variant/60 transition-colors hover:text-primary"
+        href="/privacy"
+      >
+        Privacy
+      </a>
+      <a
+        class="text-on-surface-variant/60 transition-colors hover:text-primary"
+        href="https://github.com/nexustalent"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        GitHub
+      </a>
+    </div>
+    <div
+      class="text-on-surface-variant/60"
+    >
+      © 2026 Nexus Talent. Built for the machine era.
+    </div>
+  </div>
+</footer>
+`;

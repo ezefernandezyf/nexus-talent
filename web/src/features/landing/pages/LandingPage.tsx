@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { Navbar } from "@/features/landing/components/Navbar";
-import { Footer } from "@/features/landing/components/Footer";
+import { Footer } from "@/shared/components/Footer";
 import { LandingIcon } from "@/features/landing/components/LandingIcon";
 import { FAQ } from "@/features/landing/components/FAQ";
 import { MobileDrawer } from "@/shared/components/MobileDrawer";
@@ -341,7 +341,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer variant="landing" />
 
       <MobileDrawer
         actions={
