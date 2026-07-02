@@ -5,6 +5,8 @@ import { LandingPage } from "@/features/landing/pages/LandingPage";
 import PrivacyPage from "@/features/landing/pages/PrivacyPage";
 import NotFoundPage from "@/shared/pages/NotFoundPage";
 import ServerErrorPage from "@/shared/pages/ServerErrorPage";
+import { AppLayoutSkeleton } from "@/core/components/AppLayoutSkeleton";
+import { RouteErrorFallback } from "@/core/components/RouteErrorFallback";
 
 const AppLayout = lazy(() => import("@/shared/layouts/AppLayout").then((module) => ({ default: module.AppLayout })));
 const AnalysisPage = lazy(() => import("@/features/analysis/pages/AnalysisPage").then((module) => ({ default: module.AnalysisPage })));
@@ -15,17 +17,9 @@ const AuthCallbackPage = lazy(() => import("@/features/auth/pages/AuthCallbackPa
 const LoginPage = lazy(() => import("@/features/auth/pages/LoginPage"));
 const SignupPage = lazy(() => import("@/features/auth/pages/SignupPage"));
 
-function RouteLoadingFallback() {
-  return (
-    <div aria-busy="true" aria-live="polite" className="min-h-screen bg-surface-container-lowest text-on-surface">
-      <span className="sr-only">Cargando pantalla</span>
-    </div>
-  );
-}
-
 export function AppRouter() {
   return (
-    <Suspense fallback={<RouteLoadingFallback />}>
+    <Suspense fallback={<AppLayoutSkeleton />}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route element={<PublicAuthRoute />} path="/auth">
@@ -36,11 +30,11 @@ export function AppRouter() {
         </Route>
         <Route element={<AppLayout />} path="/app">
           <Route index element={<Navigate replace to="analysis" />} />
-          <Route path="analysis" element={<AnalysisPage />} />
-          <Route path="history" element={<HistoryPage />} />
-          <Route path="history/:analysisId" element={<HistoryDetailPage />} />
+          <Route path="analysis" element={<AnalysisPage />} errorElement={<RouteErrorFallback />} />
+          <Route path="history" element={<HistoryPage />} errorElement={<RouteErrorFallback />} />
+          <Route path="history/:analysisId" element={<HistoryDetailPage />} errorElement={<RouteErrorFallback />} />
           <Route element={<ProtectedRoute />} path="settings">
-            <Route index element={<SettingsPage />} />
+            <Route index element={<SettingsPage />} errorElement={<RouteErrorFallback />} />
           </Route>
           <Route path="*" element={<Navigate replace to="/404" />} />
         </Route>
