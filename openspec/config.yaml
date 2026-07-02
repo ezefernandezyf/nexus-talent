@@ -1,5 +1,5 @@
 # openspec/config.yaml
-# REFRESHED: 2026-06-25 — post-Supabase migration, monorepo restructure
+# REFRESHED: 2026-07-02 — post P9/P10 Apex design system
 schema: spec-driven
 persistence: hybrid
 
@@ -8,8 +8,8 @@ context: |
   Stack: Express 5 + React 19 + TypeScript + Vite 6 + Tailwind 4 + Zod 4 + Prisma 7 + TanStack Query + Zustand
   Architecture: pnpm monorepo (server/, web/, shared/, e2e/) — screaming architecture
   Auth: Custom JWT (HS256) in httpOnly cookies (no more Supabase Auth)
-  Design System: "The Signal" — Indigo / Chartreuse, Cabinet Grotesk (display) + Satoshi (body), dark-first
-  Git: develop → main, conventional commits (EN title / ES desc)
+  Design System: "Apex" — Deep Teal + Warm Amber (OKLCH), Switzer (display) + Geist (body), dark-first with light parity
+  Git: develop → main, conventional commits (EN title / ES desc), feature-branch-chain PR strategy
   CI/CD: GitHub Actions (lint + test on PR + push)
 
 testing:
