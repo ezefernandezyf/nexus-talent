@@ -58,10 +58,10 @@ export function MobileDrawer({ actions, heading, isOpen, items, onClose }: Mobil
   return createPortal(
     <AnimatePresence>
       {isOpen ? (
-        <div className="fixed inset-0 z-40 md:hidden">
+        <>
           <motion.button
             aria-label="Cerrar menú"
-            className="absolute inset-0 z-0 cursor-default bg-surface-container-lowest/75 backdrop-blur-sm"
+            className="fixed inset-0 cursor-default bg-surface-container-lowest/75 backdrop-blur-sm md:hidden [z-index:var(--z-drawer-backdrop)]"
             initial={prefersReducedMotion ? false : { opacity: 0 }}
             animate={prefersReducedMotion ? undefined : { opacity: 1 }}
             exit={prefersReducedMotion ? undefined : { opacity: 0 }}
@@ -71,7 +71,7 @@ export function MobileDrawer({ actions, heading, isOpen, items, onClose }: Mobil
           <motion.aside
             aria-label={heading}
             aria-modal="true"
-            className="absolute right-0 top-0 z-10 flex h-full w-[min(86vw,22rem)] flex-col gap-5 overflow-y-auto bg-surface-container-low px-5 py-5 shadow-[0_32px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/8 sm:px-6"
+            className="fixed right-0 top-0 z-10 flex h-full w-[min(86vw,22rem)] flex-col gap-5 overflow-y-auto bg-surface-container-low px-5 py-5 shadow-[0_32px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/8 sm:px-6 md:hidden [z-index:var(--z-drawer)]"
             id="mobile-navigation-drawer"
             initial={prefersReducedMotion ? false : "hidden"}
             animate={prefersReducedMotion ? undefined : "visible"}
@@ -103,7 +103,7 @@ export function MobileDrawer({ actions, heading, isOpen, items, onClose }: Mobil
 
             {actions ? <div className="mt-auto space-y-3 pt-5">{actions}</div> : null}
           </motion.aside>
-        </div>
+        </>
       ) : null}
     </AnimatePresence>,
     document.body,

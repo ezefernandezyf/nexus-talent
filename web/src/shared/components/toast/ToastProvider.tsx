@@ -16,7 +16,7 @@ export function ToastProvider() {
       <div
         aria-live="polite"
         aria-label="Notifications"
-        className="pointer-events-none fixed bottom-4 right-4 z-[50] flex flex-col gap-2"
+        className="pointer-events-none fixed bottom-4 right-4 flex flex-col gap-2 [z-index:var(--z-toast)]"
       >
         <AnimatePresence mode="popLayout">
           {toasts.map((toast) => (

@@ -107,7 +107,7 @@ function ModalBase({ open, onClose, title, children, className }: ModalProps) {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-[40] flex items-center justify-center p-4"
+            className="fixed inset-0 flex items-center justify-center p-4 [z-index:var(--z-modal)]"
             initial="hidden"
             animate="visible"
             exit="exit"
