@@ -41,13 +41,13 @@ Chain strategy: feature-branch-chain
 
 ## Phase 2: z-index Tokens + AppLayout (PR 2)
 
-- [ ] 2.1 Extend z-index scale in `web/src/index.css` — add `--z-sidebar`, `--z-topbar`, `--z-drawer-backdrop`, `--z-drawer`, `--z-fab` (ASH-02, DTK-A01)
-- [ ] 2.2 Replace hardcoded `z-30`/`z-40`/`z-50`/`z-[N]` with `var(--z-*)` in `web/src/shared/layouts/AppLayout.tsx` (ASH-02)
-- [ ] 2.3 Update MobileDrawer z-index to `var(--z-drawer)` + `var(--z-drawer-backdrop)` (USH-M02)
-- [ ] 2.4 Replace `primary-button`/`secondary-button` → `<Button>` in AppLayout sidebar/nav (ASH-01)
-- [ ] 2.5 Replace `surface-panel` → `<Card>` in AppLayout sidebar structure (ASH-01)
-- [ ] 2.6 Update nav labels to Switzer `font-display` + OKLCH accent active state (USH-M03, DTK-M01)
-- [ ] 2.7 Update `web/src/shared/layouts/AppLayout.test.tsx` for new component usage (ASH-01)
+- [x] 2.1 Extend z-index scale in `web/src/index.css` — add `--z-sidebar`, `--z-topbar`, `--z-drawer-backdrop`, `--z-drawer`, `--z-fab` (ASH-02, DTK-A01)
+- [x] 2.2 Replace hardcoded `z-30`/`z-40`/`z-50`/`z-[N]` with `var(--z-*)` in `web/src/shared/layouts/AppLayout.tsx` (ASH-02)
+- [x] 2.3 Update MobileDrawer z-index to `var(--z-drawer)` + `var(--z-drawer-backdrop)` (USH-M02)
+- [x] 2.4 Replace `primary-button`/`secondary-button` → `<Button>` in AppLayout sidebar/nav (ASH-01)
+- [x] 2.5 Replace `surface-panel` → `<Card>` in AppLayout sidebar structure (ASH-01)
+- [x] 2.6 Update nav labels to Switzer `font-display` + OKLCH accent active state (USH-M03, DTK-M01)
+- [x] 2.7 Update `web/src/shared/layouts/AppLayout.test.tsx` for new component usage (ASH-01)
 
 ## Phase 3: Dangling Class Replacements (PR 3)
 
