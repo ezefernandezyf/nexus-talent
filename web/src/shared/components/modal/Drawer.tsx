@@ -129,7 +129,7 @@ function DrawerBase({
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-[40]"
+            className="fixed inset-0 [z-index:var(--z-modal)]"
             initial="hidden"
             animate="visible"
             exit="exit"

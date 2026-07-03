@@ -61,7 +61,7 @@ export function HeroSection() {
         <motion.div className="group relative" variants={fadeUpVariants}>
           <motion.div className="absolute inset-0 bg-primary/20 blur-[100px] group-hover:bg-primary/30 transition-all" aria-hidden="true" />
           <div className="relative grid gap-4 sm:grid-cols-6 sm:grid-rows-6 lg:h-150">
-            <motion.div className="glass-panel flex flex-col justify-between rounded-xl border border-outline-variant/20 p-5 sm:col-span-4 sm:row-span-3 sm:p-6" variants={scaleInVariants} whileHover={prefersReducedMotion ? undefined : { y: -4 }} transition={{ duration: 0.2 }}>
+            <motion.div className="flex flex-col justify-between rounded-xl border border-outline-variant/20 bg-[var(--color-surface-elevated-2)] shadow-[var(--shadow-md)] p-5 sm:col-span-4 sm:row-span-3 sm:p-6" variants={scaleInVariants} whileHover={prefersReducedMotion ? undefined : { y: -4 }} transition={{ duration: 0.2 }}>
               <div>
                 <motion.h3 className="font-label text-sm text-primary mb-4 flex items-center gap-2" style={{}} variants={fadeUpVariants}>
                   <LandingIcon className="h-4.5 w-4.5 text-primary" name="analytics" />

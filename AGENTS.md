@@ -24,7 +24,7 @@
 - **Database**: Prisma with Supabase PostgreSQL
 - **Auth**: Custom HS256 JWT in httpOnly cookies (inmune a XSS), email/password + Google OAuth
 - **AI Proxy**: Server-side Groq calls — client sends only the JD, API key stays on the server
-- **Design System**: "The Signal" — Indigo / Chartreuse palette, Cabinet Grotesk (display) + Satoshi (body), dark-first, basado en portfolio-personality (anti-convergencia)
+- **Design System**: "Apex" — Deep Teal + Warm Amber OKLCH palette, Switzer (display) + Geist (body), dark-first with light parity, anti-convergence via portfolio-personality
 
 ### Flujo de Datos Obligatorio
 ```
@@ -107,37 +107,39 @@ npx impeccable detect web/src/
 
 > **Filosofía**: Rehacer el frontend desde cero con un design system sólido, usando Impeccable (anti-slop + 23 comandos) y taste-skill (dirección visual + anti-repetición).
 
-### 🎨 P9: Design System Foundation
+### 🎨 ✅ P9: Design System Foundation (DONE — PRs #55 + #57)
 > Setup de herramientas + DESIGN.md + tokens globales. **Sin componentes nuevos todavía — solo base.**
 
 **Skills activas**: impeccable, taste-skill/design-taste-frontend, taste-skill/minimalist-ui
 
-- [ ] `/impeccable init` — generar PRODUCT.md + DESIGN.md con la identidad del proyecto
-- [ ] Definir paleta de colores final (OKLCH, dark-first, con taste-skill guidance)
-- [ ] Definir escala tipográfica (fuentes display + body, sin Inter/Arial)
-- [ ] Definir spacing scale + radii + shadows (con impeccable anti-pattern checks)
-- [ ] CSS reset + custom properties globales (`:root` variables)
-- [ ] Audit de componentes existentes con taste-skill/redesign-existing-projects
-- [ ] `npx impeccable detect web/src/` — limpiar anti-patrones detectados
+- [x] `/impeccable init` — generar PRODUCT.md + DESIGN.md con la identidad del proyecto
+- [x] Definir paleta de colores final (OKLCH, dark-first, con taste-skill guidance) → "Apex": Deep Teal + Warm Amber
+- [x] Definir escala tipográfica (fuentes display + body, sin Inter/Arial) → Switzer + Geist
+- [x] Definir spacing scale + radii + shadows (con impeccable anti-pattern checks)
+- [x] CSS reset + custom properties globales (`:root` variables)
+- [x] Audit de componentes existentes con taste-skill/redesign-existing-projects
+- [x] `npx impeccable detect web/src/` — limpiar anti-patrones detectados
 
-### 🧱 P10: Core Components Redesign
-> **Desde cero.** Cada componente usa taste-skill para dirección visual e impeccable para anti-slop.
+### 🧱 ✅ P10: Core Components Redesign (DONE — PRs #59 + #62 + #58)
+> **Desde cero.** 12 familias de componentes con Apex design system. 345 tests, build limpio.
 
 **Skills activas**: taste-skill/design-taste-frontend, taste-skill/high-end-visual-design, impeccable
 
-- [ ] Fixear errores de lint preexistentes en `server/src/history/history.service.ts` (V1.1, detectados en verify de P9)
-- [ ] Button (variants: primary, secondary, ghost, danger, sizes)
-- [ ] Input + Textarea (con estados: focus, error, disabled, with icon)
-- [ ] Card + Card variants (flat, elevated, interactive)
-- [ ] Modal + Drawer (con backdrop + focus trap + animation)
-- [ ] Badge + Tag + Status indicators
-- [ ] Toast / Notification + toast provider
-- [ ] Dropdown / Select / Menu
-- [ ] Tabs + Toggle Group
-- [ ] Tooltip + Popover
-- [ ] Skeleton loader primitives (base para P11)
-- [ ] `/impeccable audit` cada batch de componentes
-- [ ] Tests unitarios (Vitest) + snapshots para cada componente
+- [x] Fixear errores de lint preexistentes en `server/src/history/history.service.ts`
+- [x] Button (variants: primary, secondary, ghost, danger, sizes)
+- [x] Input + Textarea (con estados: focus, error, disabled, with icon)
+- [x] Card + Card variants (flat, elevated, interactive)
+- [x] Modal + Drawer (con backdrop + focus trap + animation)
+- [x] Badge + Tag + Status indicators
+- [x] Toast / Notification + toast provider (Zustand store)
+- [x] Dropdown / Select / Menu
+- [x] Tabs + Toggle Group
+- [x] Tooltip + Popover (custom Portal for FloatingPortal bug)
+- [x] Skeleton loader primitives (base para P11)
+- [x] `/impeccable audit` cada batch de componentes
+- [x] Tests unitarios (Vitest) + snapshots para cada componente (345 total)
+
+> **Nota P10**: El bloque `@layer components` fue eliminado de `index.css` (-204 líneas). Los layouts y páginas existentes aún referencian clases viejas como `primary-button`, `surface-panel`, etc. — esto se arregla en P11.
 
 ### 📄 P11: Page Shells + UX States
 > Layouts, skeletons, empty states, error boundaries. **Sin estos, el app se siente roto.**

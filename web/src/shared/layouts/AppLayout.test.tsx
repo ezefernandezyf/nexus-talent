@@ -65,6 +65,18 @@ describe("AppLayout", () => {
     mockAxiosInstance.get.mockResolvedValue({ data: { items: [], total: 0 } });
   });
 
+  it("renders empty sidebar state when no analyses exist", async () => {
+    const queryClient = createTestQueryClient();
+
+    // Pre-seed: unauthenticated — default mock already returns empty list
+    queryClient.setQueryData(["auth", "session"], null);
+    useAuthStatus.setState({ status: "unauthenticated" });
+
+    renderAppLayout(queryClient);
+
+    await waitFor(() => expect(screen.getByText("Aún no hay análisis guardados.")).toBeInTheDocument());
+  });
+
   it("renders the shared shell and outlet content for public users", async () => {
     const queryClient = createTestQueryClient();
 

@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { Footer } from "@/features/landing/components/Footer";
+import { cn } from "@/shared/utils/cn";
+import { Footer } from "@/shared/components/Footer";
 import { MobileDrawer } from "@/shared/components/MobileDrawer";
 import { MobileMenuButton } from "@/shared/components/MobileMenuButton";
 import { LogoutButton, AUTH_STATUS, useAuth } from "@/features/auth";
 import { useAnalysisHistory } from "@/features/analysis";
 import { getHistoryCardTitle } from "@/features/history/history-formatters";
 import { ThemeProvider, useTheme } from "@/core/theme";
+import { Button } from "@/shared/components/Button";
+import { Card } from "@/shared/components/Card";
 
 type AppNavItem = {
   label: string;
@@ -21,11 +24,29 @@ const appNavItems: AppNavItem[] = [
 ];
 
 function getNavLinkClassName({ isActive }: { isActive: boolean }) {
-  return [
-    "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-colors",
-    isActive ? "bg-surface-container-high text-white" : "text-on-surface-variant hover:bg-surface-container-high/60 hover:text-white",
-  ].join(" ");
+  return cn(
+    "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-colors font-display",
+    isActive
+      ? "bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
+      : "text-on-surface-variant hover:bg-surface-container-high/60 hover:text-white",
+  );
 }
+
+const linkBtnPrimary = cn(
+  "inline-flex items-center justify-center rounded-full font-label select-none",
+  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
+  "bg-[var(--color-brand)] text-[var(--color-on-brand)]",
+  "hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97]",
+  "h-10 px-4 text-label text-base gap-2",
+);
+
+const linkBtnSecondary = cn(
+  "inline-flex items-center justify-center rounded-full font-label select-none",
+  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
+  "bg-[var(--color-accent)] text-[var(--color-on-accent)]",
+  "hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97]",
+  "h-10 px-4 text-label text-base gap-2",
+);
 
 export function AppLayout() {
   return (
@@ -58,7 +79,7 @@ function AppLayoutContent() {
       <div className="rounded-2xl bg-surface-container-lowest/50 px-4 py-3 text-sm leading-6 text-on-surface-variant">Verificando acceso</div>
     ) : (
       <div className="space-y-3">
-        <Link className="secondary-button w-full justify-center" to="/auth/sign-in" onClick={() => setIsMobileMenuOpen(false)}>
+        <Link className={cn(linkBtnSecondary, "w-full justify-center")} to="/auth/sign-in" onClick={() => setIsMobileMenuOpen(false)}>
           Iniciar sesión
         </Link>
         <div className="rounded-2xl bg-surface-container-lowest/50 px-4 py-3 text-sm leading-6 text-on-surface-variant">Modo público activo</div>
@@ -79,7 +100,7 @@ function AppLayoutContent() {
       />
 
       <div className="relative mx-auto flex min-h-screen w-full flex-col gap-6 px-4 py-4 sm:px-6 lg:px-8">
-        <header className="fixed left-0 top-0 z-30 flex h-16 w-full items-center justify-between bg-surface-container-low px-6">
+        <header className="fixed left-0 top-0 flex h-16 w-full items-center justify-between bg-surface-container-low px-6 [z-index:var(--z-topbar)]">
           <div className="flex items-center gap-8">
             <Link className="font-display text-xl font-bold tracking-tight text-on-surface transition-opacity hover:opacity-90" to="/">
               Nexus Talent
@@ -96,7 +117,7 @@ function AppLayoutContent() {
           <div className="flex items-center gap-3">
             <MobileMenuButton isOpen={isMobileMenuOpen} onClick={() => setIsMobileMenuOpen((current) => !current)} />
             {!isAuthenticated ? (
-              <Link className="secondary-button hidden md:inline-flex" to="/auth/sign-in">
+              <Link className={cn(linkBtnSecondary, "hidden md:inline-flex")} to="/auth/sign-in">
                 Iniciar sesión
               </Link>
             ) : (
@@ -122,7 +143,7 @@ function AppLayoutContent() {
                 {isDesktopMenuOpen ? (
                   <div
                     aria-label="Acciones de cuenta"
-                    className="absolute right-0 top-full z-40 mt-3 w-72 rounded-3xl bg-surface-container-high p-3 shadow-2xl shadow-black/30 ring-1 ring-white/5"
+                    className="absolute right-0 top-full mt-3 w-72 rounded-3xl bg-surface-container-high p-3 shadow-2xl shadow-black/30 ring-1 ring-white/5 [z-index:var(--z-dropdown)]"
                     id="desktop-account-menu"
                   >
                     <div className="rounded-2xl bg-surface-container-lowest/70 px-4 py-3 text-sm leading-6 text-on-surface-variant">
@@ -130,7 +151,7 @@ function AppLayoutContent() {
                     </div>
                     <div className="mt-3 space-y-2">
                       <Link
-                        className="secondary-button w-full justify-center"
+                        className={cn(linkBtnSecondary, "w-full justify-center")}
                         to="/app/settings"
                         onClick={() => setIsDesktopMenuOpen(false)}
                       >
@@ -164,7 +185,7 @@ function AppLayoutContent() {
               <p className="text-[10px] uppercase tracking-[0.28em] text-on-surface/40">Historial Reciente</p>
             </div>
 
-            <Link className="primary-button mb-2 justify-center text-center" to="/app/analysis">
+            <Link className={cn(linkBtnPrimary, "mb-2 justify-center text-center")} to="/app/analysis">
               <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
                 add
               </span>
@@ -190,9 +211,9 @@ function AppLayoutContent() {
                   </Link>
                 ))
               ) : (
-                <div className="rounded-lg bg-surface-container-low/40 p-3 text-sm leading-6 text-on-surface-variant">
+                <Card variant="flat" padding="sm" className="text-sm leading-6 text-on-surface-variant">
                   Aún no hay análisis guardados.
-                </div>
+                </Card>
               )}
             </div>
 
@@ -210,7 +231,7 @@ function AppLayoutContent() {
           </div>
         </div>
 
-        <Footer />
+        <Footer variant="app" />
       </div>
 
       <MobileDrawer actions={mobileDrawerActions} heading="Nexus Talent" isOpen={isMobileMenuOpen} items={visibleNavItems} onClose={() => setIsMobileMenuOpen(false)} />

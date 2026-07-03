@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Button } from "@/shared/components/Button";
+import { Badge } from "@/shared/components/Badge";
 import { PROFILE_FORM_SCHEMA, type ProfileFormInput } from "@/features/settings/api/validation";
 
 interface SettingsFormProps {
@@ -69,7 +70,7 @@ export function SettingsForm({
             {initials}
           </div>
           <div className="space-y-2">
-            <span className="label-chip">Perfil</span>
+            <Badge variant="neutral" size="sm">Perfil</Badge>
             <h3 className="text-xl font-semibold tracking-[-0.02em] text-white">Actualizá tu perfil sin salir del panel.</h3>
             <p className="text-sm leading-6 text-on-surface-variant">El nombre visible sigue siendo editable y la ubicación se conserva como referencia del perfil.</p>
           </div>
@@ -79,7 +80,7 @@ export function SettingsForm({
           <label className="space-y-2 sm:col-span-2">
             <span className="text-[10px] font-label uppercase tracking-[0.28em] text-on-surface-variant">Nombre visible</span>
             <input
-              className="field-surface w-full px-4 py-3 text-base text-on-surface placeholder:text-on-surface-variant/60"
+              className="w-full rounded-lg bg-surface-container-low px-4 py-3 text-base text-on-surface placeholder:text-on-surface-variant/60"
               disabled={isFormDisabled}
               maxLength={120}
               placeholder="Marcus Sterling"
@@ -92,7 +93,7 @@ export function SettingsForm({
             <span className="text-[10px] font-label uppercase tracking-[0.28em] text-on-surface-variant">Email</span>
             <input
               aria-readonly="true"
-              className="field-surface w-full px-4 py-3 text-base text-on-surface placeholder:text-on-surface-variant/60"
+              className="w-full rounded-lg bg-surface-container-low px-4 py-3 text-base text-on-surface placeholder:text-on-surface-variant/60"
               readOnly
               value={email}
             />
@@ -100,33 +101,33 @@ export function SettingsForm({
 
           <div className="space-y-2">
             <span className="text-[10px] font-label uppercase tracking-[0.28em] text-on-surface-variant">Ubicación</span>
-            <div className="field-surface flex min-h-12 items-center px-4 py-3 text-base text-on-surface-variant">{resolvedLocation}</div>
+            <div className="flex min-h-12 items-center rounded-lg bg-surface-container-low px-4 py-3 text-base text-on-surface-variant">{resolvedLocation}</div>
           </div>
         </div>
       </div>
 
       {errorMessage ? (
-        <p className="ghost-frame rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
+        <p className="rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
           {errorMessage}
         </p>
       ) : null}
       {isLoading ? (
-        <p className="ghost-frame rounded-2xl bg-primary/10 px-4 py-3 text-sm leading-6 text-on-surface-variant" role="status">
+        <p className="rounded-2xl bg-primary/10 px-4 py-3 text-sm leading-6 text-on-surface-variant" role="status">
           Estamos cargando el perfil guardado para sincronizar el formulario.
         </p>
       ) : null}
       {isUnavailable ? (
-        <p className="ghost-frame rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
+        <p className="rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
           El almacenamiento del perfil no está disponible en este momento.
         </p>
       ) : null}
       {validationMessage ? (
-        <p className="ghost-frame rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
+        <p className="rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
           {validationMessage}
         </p>
       ) : null}
       {successMessage ? (
-        <p className="ghost-frame rounded-2xl bg-success/10 px-4 py-3 text-sm leading-6 text-success" role="status">
+        <p className="rounded-2xl bg-success/10 px-4 py-3 text-sm leading-6 text-success" role="status">
           {successMessage}
         </p>
       ) : null}

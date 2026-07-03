@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Button } from "@/shared/components/Button";
+import { Card } from "@/shared/components/Card";
+import { Badge } from "@/shared/components/Badge";
 import { Input } from "@/shared/components/Input";
 import { HISTORY_DETAIL_FORM_SCHEMA, type HistoryDetailFormInput } from "@/features/history/api/validation";
 import type { SavedJobAnalysis } from "@/features/analysis/schemas/job-analysis";
@@ -54,30 +56,31 @@ export function HistoryDetailEditor({ analysis, errorMessage, isLoading = false,
   const isFormDisabled = isPending || isLoading;
 
   return (
-    <form className="surface-panel space-y-5 p-6 sm:p-8" onSubmit={handleSubmit}>
+    <Card variant="flat" className="space-y-5 p-6 sm:p-8">
+      <form onSubmit={handleSubmit}>
       <div className="space-y-2">
-        <span className="label-chip">Edición</span>
+        <Badge variant="neutral" size="sm">Edición</Badge>
         <h2 className="text-2xl font-semibold tracking-[-0.02em] text-white sm:text-3xl">Renombrá y anotá este guardado</h2>
         <p className="text-base leading-7 text-on-surface-variant">{helperText}</p>
       </div>
 
       {errorMessage ? (
-        <p className="ghost-frame rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
+        <p className="rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
           {errorMessage}
         </p>
       ) : null}
       {isLoading ? (
-        <p className="ghost-frame rounded-2xl bg-primary/10 px-4 py-3 text-sm leading-6 text-on-surface-variant" role="status">
+        <p className="rounded-2xl bg-primary/10 px-4 py-3 text-sm leading-6 text-on-surface-variant" role="status">
           Estamos cargando el detalle para sincronizar la edición.
         </p>
       ) : null}
       {validationMessage ? (
-        <p className="ghost-frame rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
+        <p className="rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
           {validationMessage}
         </p>
       ) : null}
       {successMessage ? (
-        <p className="ghost-frame rounded-2xl bg-success/10 px-4 py-3 text-sm leading-6 text-success" role="status">
+        <p className="rounded-2xl bg-success/10 px-4 py-3 text-sm leading-6 text-success" role="status">
           {successMessage}
         </p>
       ) : null}
@@ -96,9 +99,10 @@ export function HistoryDetailEditor({ analysis, errorMessage, isLoading = false,
 
       <label className="space-y-2">
         <span className="text-sm font-medium uppercase tracking-[0.2em] text-on-surface-variant">Notas</span>
-        <textarea
+        <Input
+          multiline
           aria-label="Notas del guardado"
-          className="field-surface min-h-40 px-4 py-4 text-sm leading-7"
+          className="min-h-40"
           disabled={isFormDisabled}
           maxLength={2000}
           placeholder="Dejá contexto, links o recordatorios para este análisis."
@@ -113,6 +117,7 @@ export function HistoryDetailEditor({ analysis, errorMessage, isLoading = false,
           {isPending ? "Guardando..." : "Guardar cambios"}
         </Button>
       </div>
-    </form>
+      </form>
+    </Card>
   );
 }
