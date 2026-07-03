@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import { Badge } from "./Badge";
 import { Card } from "./Card";
 import { fadeUpVariants, scaleInVariants } from "./motion";
 
@@ -13,7 +14,7 @@ export function Modal({ children, onClose, title }: ModalProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <motion.div aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8" role="dialog">
+    <motion.div aria-modal="true" className="fixed inset-0 flex items-center justify-center px-4 py-8 [z-index:var(--z-modal)]" role="dialog">
       <motion.button
         aria-label="Close modal"
         className="absolute inset-0 cursor-default bg-surface-container-lowest/70 backdrop-blur-sm"
@@ -32,8 +33,8 @@ export function Modal({ children, onClose, title }: ModalProps) {
       >
         <Card className="p-6 sm:p-8">
           <div className="space-y-2">
-            <motion.span className="label-chip" variants={fadeUpVariants}>
-              {title}
+            <motion.span variants={fadeUpVariants}>
+              <Badge variant="neutral" size="sm">{title}</Badge>
             </motion.span>
           </div>
           <div className="mt-5">{children}</div>

@@ -1,4 +1,6 @@
 import { EmptyState } from "@/shared/components";
+import { Card } from "@/shared/components/Card";
+import { Badge } from "@/shared/components/Badge";
 import { useJobAnalysis } from "./hooks/useJobAnalysis";
 import { JobDescriptionForm } from "./components/JobDescriptionForm";
 import { AnalysisCard } from "./components/AnalysisCard";
@@ -52,10 +54,10 @@ export function StatePanel({
   compact?: boolean;
 }) {
   return (
-    <div className={compact ? "surface-panel flex flex-col gap-5 p-6 sm:p-8" : "surface-panel flex min-h-136 flex-col gap-6 p-6 sm:p-8"}>
+    <Card variant="flat" className={compact ? "flex flex-col gap-5 p-6 sm:p-8" : "flex min-h-136 flex-col gap-6 p-6 sm:p-8"}>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <span className="label-chip">{label}</span>
+          <Badge variant="neutral" size="sm">{label}</Badge>
           <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white">{title}</h3>
         </div>
         <span
@@ -72,7 +74,7 @@ export function StatePanel({
       </div>
 
       <div className={compact ? "flex flex-col gap-4" : "flex flex-1 flex-col justify-between gap-6"}>{children}</div>
-    </div>
+    </Card>
   );
 }
 

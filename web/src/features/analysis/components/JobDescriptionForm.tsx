@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEventHandler } from "react";
 import { Button } from "@/shared/components/Button";
+import { Badge } from "@/shared/components/Badge";
 import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisMessageTone } from "@/features/analysis/schemas/job-analysis";
 
 interface JobDescriptionFormProps {
@@ -72,12 +73,12 @@ export function JobDescriptionForm({
   return (
     <form className="grid gap-5 sm:gap-6" onSubmit={handleSubmit}>
       <div className="space-y-2">
-        <label className="label-chip" htmlFor="job-description">
+        <label className="text-xs font-medium uppercase tracking-[0.2em] text-on-surface-variant" htmlFor="job-description">
           Descripción del puesto
         </label>
         <div className="relative group">
           <div className="absolute -inset-0.5 rounded-xl bg-primary/10 opacity-25 blur transition duration-500 group-focus-within:opacity-50" />
-          <div className="field-surface relative overflow-hidden rounded-xl bg-surface-container-lowest">
+          <div className="relative overflow-hidden rounded-xl bg-surface-container-low">
             <textarea
               id="job-description"
               name="job-description"
@@ -107,10 +108,10 @@ export function JobDescriptionForm({
       <div className="rounded-xl bg-surface-container p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)] sm:p-6">
         <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-end md:gap-5">
           <div className="space-y-2">
-            <label className="label-chip" htmlFor="message-tone">
+            <label className="text-xs font-medium uppercase tracking-[0.2em] text-on-surface-variant" htmlFor="message-tone">
               Tono del mensaje
             </label>
-            <div className="field-surface overflow-hidden">
+            <div className="overflow-hidden rounded-lg bg-surface-container-low">
               <select
                 id="message-tone"
                 name="message-tone"
@@ -126,10 +127,10 @@ export function JobDescriptionForm({
           </div>
 
           <div className="space-y-2">
-            <label className="label-chip" htmlFor="github-repository-url">
+            <label className="text-xs font-medium uppercase tracking-[0.2em] text-on-surface-variant" htmlFor="github-repository-url">
               URL de GitHub (opcional)
             </label>
-            <div className="field-surface overflow-hidden">
+            <div className="overflow-hidden rounded-lg bg-surface-container-low">
               <input
                 id="github-repository-url"
                 name="github-repository-url"
@@ -154,7 +155,7 @@ export function JobDescriptionForm({
           {localError ?? errorMessage ?? " "}
         </p>
         <div className="flex flex-col items-stretch gap-1 sm:items-end">
-          <Button className="w-full px-10 py-4 font-headline text-sm tracking-wide sm:w-auto" type="submit" data-testid="analysis-submit" disabled={isPending}>
+          <Button className="w-full px-10 py-4 font-display text-sm tracking-wide sm:w-auto" type="submit" data-testid="analysis-submit" disabled={isPending}>
             <span className="material-symbols-outlined text-[18px]" aria-hidden="true" style={{ fontVariationSettings: '"FILL" 1' }}>
               bolt
             </span>

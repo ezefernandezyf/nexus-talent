@@ -1,5 +1,6 @@
 import { Button } from "@/shared/components/Button";
 import { Input } from "@/shared/components/Input";
+import { Badge } from "@/shared/components/Badge";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,14 +58,14 @@ export function SignInForm() {
               <path d="M9.5 30.9c-.6-1.6-.9-3.3-.9-5 0-1.7.3-3.4.9-5l-6.6-5.1C1.1 18.4 0 20.6 0 23c0 2.4 1.1 4.6 2.9 6.2l6.6 1.7z" fill="#FBBC05"/>
               <path d="M23 37c4.5 0 8.1-1.6 10.7-3.9 1.1-.9 2.1-2 2.8-3.2.5-.9.9-1.9 1.1-2.9.1-.9.1-1.7.1-2.6 0-1.3-.2-2.6-.6-3.8L23 37z" fill="#34A853"/>
             </svg>
-            <span className="font-headline tracking-tight text-[#0B0E14]">{isOAuthSubmitting ? "Redirigiendo..." : "Ingresar con Google"}</span>
+            <span className="font-display tracking-tight text-[#0B0E14]">{isOAuthSubmitting ? "Redirigiendo..." : "Ingresar con Google"}</span>
           </span>
         </button>
 
       </div>
 
       <div className="space-y-2">
-        <label className="label-chip" htmlFor="sign-in-email">
+        <label className="text-xs font-medium uppercase tracking-[0.2em] text-on-surface-variant" htmlFor="sign-in-email">
           Email
         </label>
         <Input id="sign-in-email" {...register("email")} type="email" autoComplete="email" placeholder="vos@empresa.com" aria-describedby="sign-in-status" data-testid="email-input" />
@@ -72,7 +73,7 @@ export function SignInForm() {
       </div>
 
       <div className="space-y-2">
-        <label className="label-chip" htmlFor="sign-in-password">
+        <label className="text-xs font-medium uppercase tracking-[0.2em] text-on-surface-variant" htmlFor="sign-in-password">
           Contraseña
         </label>
         <Input id="sign-in-password" {...register("password")} type="password" autoComplete="current-password" placeholder="Tu contraseña segura" aria-describedby="sign-in-status" data-testid="password-input" />
