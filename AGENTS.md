@@ -141,17 +141,38 @@ npx impeccable detect web/src/
 
 > **Nota P10**: El bloque `@layer components` fue eliminado de `index.css` (-204 líneas). Los layouts y páginas existentes aún referencian clases viejas como `primary-button`, `surface-panel`, etc. — esto se arregla en P11.
 
-### 📄 P11: Page Shells + UX States
-> Layouts, skeletons, empty states, error boundaries. **Sin estos, el app se siente roto.**
+### 📄 ✅ P11: Page Shells + UX States (DONE — PRs #63-#68)
+> Infraestructura de UX — ErrorBoundary, skeletons, empty states, z-index tokens. Rediseño visual real de páginas diferido a P11bis.
 
-- [ ] ErrorBoundary component (con fallback UI + retry)
-- [ ] Loading skeletons: AnalysisPage, HistoryPage, HistoryDetailPage, SettingsPage
-- [ ] Empty states: "No analysis yet" (con CTA), "No history found", "No results"
-- [ ] AppLayout redesign (sidebar/navbar/topbar con nueva identidad)
-- [ ] AuthShell redesign (sign-in, sign-up, OAuth callback pages)
-- [ ] Landing page redesign (manteniendo SEO/GEO content, nuevo diseño visual)
-- [ ] MobileDrawer + responsive navigation
-- [ ] `/impeccable critique` en cada página terminada
+- [x] ErrorBoundary component (con fallback UI + retry, per-route errorElement)
+- [x] Loading skeletons: AnalysisPage, HistoryPage, HistoryDetailPage, SettingsPage (4 page-specific)
+- [x] Empty states: "No analysis yet" (con CTA), "No history found", "No results"
+- [x] AppLayout migrated to Apex components + z-index tokens
+- [x] AuthShell redesigned (sign-in, sign-up, OAuth callback with Apex identity)
+- [x] Landing page migrated to Apex components
+- [x] MobileDrawer z-index integration
+- [x] Footer consolidated (3→1 canonical with variant prop)
+- [x] 50+ dangling CSS class references replaced
+- [x] 10 z-index tokens enforced across all components
+- [x] 352 tests, typecheck clean, lint clean
+
+> **Nota**: P11 fue migración de infraestructura. El rediseño visual real de páginas se hace en P11bis.
+
+### 🎨 P11bis: Real Page Redesign (en progreso)
+> Rediseño visual REAL de cada página desde cero. No migración — repensar layouts, jerarquía visual, y experiencia usando impeccable + taste-skill.
+
+**Skills activas**: impeccable, taste-skill/design-taste-frontend, taste-skill/high-end-visual-design, minimalist-ui, portfolio-personality
+
+- [ ] `/impeccable shape` — planificar dirección visual de cada página
+- [ ] Landing page redesign (layout nuevo, hero section, how-it-works, FAQ, CTA)
+- [ ] Auth pages redesign (sign-in, sign-up — layouts con impacto visual Apex)
+- [ ] Analysis page redesign (form + resultados con jerarquía visual clara)
+- [ ] History page redesign (lista/tabla con identidad Apex)
+- [ ] History detail page redesign (vista de detalle + editor)
+- [ ] Settings page redesign (paneles de configuración)
+- [ ] `/impeccable critique` + `/impeccable polish` en cada página
+- [ ] `/impeccable bolder` donde haga falta impacto
+- [ ] Mobile-first responsive en todas las páginas
 
 ### ✨ P12: Polish + Animation
 > Micro-interacciones, transiciones, feedback visual.
