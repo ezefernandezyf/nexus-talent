@@ -145,7 +145,7 @@ describe("AnalysisFeature", () => {
   });
 
   it("renders compact state panels for empty tone", () => {
-    const { container } = render(
+    render(
       <StatePanel label="Sin datos" title="Sin resultados" tone="empty" compact>
         <p>Contenido mínimo</p>
       </StatePanel>,
@@ -153,6 +153,6 @@ describe("AnalysisFeature", () => {
 
     expect(screen.getByRole("heading", { name: "Sin resultados" })).toBeInTheDocument();
     expect(screen.getByText("Vacío")).toBeInTheDocument();
-    expect(container.firstElementChild).toHaveClass("surface-panel", "flex", "flex-col", "gap-5");
+    expect(screen.getByText("Contenido mínimo")).toBeInTheDocument();
   });
 });

@@ -70,7 +70,7 @@ export function Tooltip({
             ref={floating.refs.setFloating}
             role="tooltip"
             className={cn(
-              "z-[60] rounded-md bg-[var(--color-surface-elevated-2)] px-2.5 py-1.5 text-xs font-body text-[var(--color-on-surface)] shadow-[var(--shadow-md)]",
+              "[z-index:var(--z-tooltip)] rounded-md bg-[var(--color-surface-elevated-2)] px-2.5 py-1.5 text-xs font-body text-[var(--color-on-surface)] shadow-[var(--shadow-md)]",
               "focus:outline-none",
               className,
             )}

@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import type { AnalysisRepository } from "@/features/analysis/api/repository";
 import { useAnalysisHistory } from "@/features/analysis";
 import { HistoryEmptyState, HistoryList, HistoryLoadingState } from "./components";
+import { Badge } from "@/shared/components/Badge";
 import { useDeleteAnalysis } from "./hooks";
 import type { AnalysisPersistenceScope } from "@/features/analysis/hooks/useAnalysisRepository";
 
@@ -56,7 +57,7 @@ export function HistoryFeature({ analysisHref = "/app/analysis", repository, sco
       ) : history.isError ? (
         <div className="rounded-xl bg-surface-container-low/40 p-6 text-center lg:p-10" role="alert">
           <div className="mx-auto max-w-xl space-y-3">
-            <span className="label-chip">No se pudo cargar el historial</span>
+            <Badge variant="neutral" size="sm">No se pudo cargar el historial</Badge>
             <p className="text-base leading-7 text-on-surface-variant">{errorMessage}</p>
           </div>
         </div>

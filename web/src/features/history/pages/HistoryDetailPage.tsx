@@ -1,7 +1,11 @@
 import type { ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FeaturePageShell, PageHeader } from "@/shared/components";
+import { Card } from "@/shared/components/Card";
+import { Badge } from "@/shared/components/Badge";
+import { cn } from "@/shared/utils/cn";
 import { AnalysisResultView } from "@/features/analysis/components/AnalysisResultView";
+import { HistoryDetailPageSkeleton } from "@/features/history/components/HistoryDetailPageSkeleton";
 import { useAnalysisRepository } from "@/features/analysis/hooks/useAnalysisRepository";
 import { useAnalysisById } from "@/features/analysis/hooks/useAnalysisById";
 import { HistoryDetailEditor } from "@/features/history/components";
@@ -13,12 +17,28 @@ import {
   getHistoryUid,
 } from "@/features/history/history-formatters";
 
+const linkBtnPrimary = cn(
+  "inline-flex items-center justify-center rounded-full font-label select-none",
+  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
+  "bg-[var(--color-brand)] text-[var(--color-on-brand)]",
+  "hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97]",
+  "h-10 px-4 text-label text-base gap-2",
+);
+
+const linkBtnSecondary = cn(
+  "inline-flex items-center justify-center rounded-full font-label select-none",
+  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
+  "bg-[var(--color-accent)] text-[var(--color-on-accent)]",
+  "hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97]",
+  "h-10 px-4 text-label text-base gap-2",
+);
+
 function DetailSection({ children, title }: { children: ReactNode; title: string }) {
   return (
-    <section className="surface-panel space-y-4 p-6 sm:p-8">
+    <Card variant="flat" className="space-y-4 p-6 sm:p-8">
       <h2 className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">{title}</h2>
       {children}
-    </section>
+    </Card>
   );
 }
 
@@ -31,7 +51,7 @@ export function HistoryDetailPage() {
   if (historyQuery.isPending) {
     return (
       <FeaturePageShell>
-        <div className="surface-panel p-6 text-on-surface-variant">Cargando el detalle guardado...</div>
+        <HistoryDetailPageSkeleton />
       </FeaturePageShell>
     );
   }
@@ -39,14 +59,14 @@ export function HistoryDetailPage() {
   if (!historyQuery.analysis) {
     return (
       <FeaturePageShell>
-        <div className="surface-panel flex flex-col gap-4 p-6 sm:p-8">
-          <span className="label-chip">Historial</span>
+        <Card variant="flat" className="flex flex-col gap-4 p-6 sm:p-8">
+          <Badge variant="neutral" size="sm">Historial</Badge>
           <h1 className="text-3xl font-semibold tracking-[-0.03em] text-white">Análisis no encontrado</h1>
           <p className="text-base leading-7 text-on-surface-variant">No encontramos ese guardado en el historial. Volvé al listado para abrir otro análisis.</p>
-          <Link className="primary-button w-fit" to="/app/history">
+          <Link className={cn(linkBtnPrimary, "w-fit")} to="/app/history">
             Volver al historial
           </Link>
-        </div>
+        </Card>
       </FeaturePageShell>
     );
   }
@@ -68,13 +88,13 @@ export function HistoryDetailPage() {
         action={
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
             <Link
-              className="secondary-button w-full justify-center sm:w-auto"
+              className={cn(linkBtnSecondary, "w-full justify-center sm:w-auto")}
               state={reworkState}
               to={{ pathname: "/app/analysis", search: `?${reworkSearch}` }}
             >
               Rework desde este guardado
             </Link>
-            <Link className="secondary-button w-full justify-center sm:w-auto" to="/app/history">
+            <Link className={cn(linkBtnSecondary, "w-full justify-center sm:w-auto")} to="/app/history">
               Volver al historial
             </Link>
           </div>
@@ -113,9 +133,9 @@ export function HistoryDetailPage() {
               {analysis.githubEnrichment.detectedStack.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {analysis.githubEnrichment.detectedStack.map((signal) => (
-                    <span key={`${signal.name}-${signal.source}`} className="tech-chip">
+                    <Badge key={`${signal.name}-${signal.source}`} variant="brand" size="sm">
                       {signal.name}
-                    </span>
+                    </Badge>
                   ))}
                 </div>
               ) : null}

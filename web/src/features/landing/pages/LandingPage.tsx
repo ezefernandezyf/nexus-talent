@@ -1,13 +1,30 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
+import { cn } from "@/shared/utils/cn";
 import { Navbar } from "@/features/landing/components/Navbar";
-import { Footer } from "@/features/landing/components/Footer";
+import { Footer } from "@/shared/components/Footer";
 import { LandingIcon } from "@/features/landing/components/LandingIcon";
 import { FAQ } from "@/features/landing/components/FAQ";
 import { MobileDrawer } from "@/shared/components/MobileDrawer";
 import { MobileMenuButton } from "@/shared/components/MobileMenuButton";
 import { fadeUpVariants } from "@/shared/components/motion";
+
+const linkBtnPrimary = cn(
+  "inline-flex items-center justify-center rounded-full font-label select-none",
+  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
+  "bg-[var(--color-brand)] text-[var(--color-on-brand)]",
+  "hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97]",
+  "h-10 px-4 text-label text-base gap-2",
+);
+
+const linkBtnSecondary = cn(
+  "inline-flex items-center justify-center rounded-full font-label select-none",
+  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
+  "bg-[var(--color-accent)] text-[var(--color-on-accent)]",
+  "hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97]",
+  "h-10 px-4 text-label text-base gap-2",
+);
 
 const publicDrawerItems = [
   { label: "Home", to: "/" },
@@ -36,10 +53,10 @@ export function LandingPage() {
         actions={
           <div className="flex items-center gap-4">
             <MobileMenuButton isOpen={isMobileMenuOpen} onClick={() => setIsMobileMenuOpen((current) => !current)} />
-            <Link className="secondary-button hidden md:inline-flex" to="/auth/sign-in">
+            <Link className={cn(linkBtnSecondary, "hidden md:inline-flex")} to="/auth/sign-in">
               Sign In
             </Link>
-            <Link className="primary-button hidden md:inline-flex" to="/auth/sign-up">
+            <Link className={cn(linkBtnPrimary, "hidden md:inline-flex")} to="/auth/sign-up">
               Get Started Free
             </Link>
           </div>
@@ -90,7 +107,7 @@ export function LandingPage() {
 
           <motion.div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center" variants={fadeUpVariants}>
             <Link
-              className="primary-button inline-flex items-center justify-center gap-2 px-8 py-4 text-base"
+              className={cn(linkBtnPrimary, "px-8 py-4 text-base")}
               to="/auth/sign-up"
             >
               Start Analyzing Now
@@ -330,7 +347,7 @@ export function LandingPage() {
             </motion.p>
             <motion.div className="mt-10" variants={fadeUpVariants}>
               <Link
-                className="primary-button inline-flex items-center justify-center gap-3 px-10 py-5 text-lg"
+                className={cn(linkBtnPrimary, "px-10 py-5 text-lg")}
                 to="/auth/sign-up"
               >
                 Start Analyzing Now
@@ -341,20 +358,20 @@ export function LandingPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer variant="landing" />
 
       <MobileDrawer
         actions={
           <div className="space-y-3">
             <Link
-              className="secondary-button w-full justify-center"
+              className={cn(linkBtnSecondary, "w-full justify-center")}
               to="/auth/sign-in"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Sign In
             </Link>
             <Link
-              className="primary-button w-full justify-center"
+              className={cn(linkBtnPrimary, "w-full justify-center")}
               to="/auth/sign-up"
               onClick={() => setIsMobileMenuOpen(false)}
             >
