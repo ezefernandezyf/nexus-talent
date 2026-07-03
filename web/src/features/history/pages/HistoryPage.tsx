@@ -5,6 +5,7 @@ import { HistoryFeature } from "..";
 import { buildHistoryExportPayload } from "@/features/history/history-export";
 import { useAnalysisRepository } from "@/features/analysis/hooks/useAnalysisRepository";
 import { FeaturePageShell, PageHeader } from "@/shared/components";
+import { Button } from "@/shared/components/Button";
 import { downloadTextFile } from "@/features/analysis/export";
 
 export function HistoryPage() {
@@ -25,12 +26,12 @@ export function HistoryPage() {
     <FeaturePageShell>
       <PageHeader
         action={
-          <button className="secondary-button flex items-center gap-2" type="button" onClick={handleExport} disabled={history.isPending}>
+          <Button variant="secondary" className="flex items-center gap-2" type="button" onClick={handleExport} disabled={history.isPending}>
             <span className="material-symbols-outlined text-sm" aria-hidden="true">
               download
             </span>
             EXPORTAR DATOS
-          </button>
+          </Button>
         }
         description="Registro local de vacantes analizadas para revisar el detalle, reabrir un guardado o exportar el historial completo."
         title="Historial de Análisis"

@@ -3,6 +3,7 @@ import { useMemo, useState, type ReactNode } from "react";
 import { Modal } from "@/shared/components/Modal";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
+import { Badge } from "@/shared/components/Badge";
 import { useAuth, AUTH_STATUS } from "@/features/auth";
 import { getOAuthProviderConfig } from "./api/oauth-config";
 import type { ProfileRepository } from "./api/profile-repository";
@@ -20,12 +21,13 @@ interface SectionHeaderProps {
 
 function StatusPill({ connected }: { connected: boolean }) {
   return (
-    <span
-      className={connected ? "label-chip bg-success/10 text-success" : "label-chip bg-on-surface/5 text-on-surface-variant"}
+    <Badge
+      variant={connected ? "success" : "neutral"}
+      size="sm"
       data-state={connected ? "connected" : "disconnected"}
     >
       {connected ? "Conectado" : "No conectado"}
-    </span>
+    </Badge>
   );
 }
 
@@ -44,7 +46,7 @@ function SectionHeader({ action, description, eyebrow, icon, title }: SectionHea
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
       <div className="space-y-3">
-        <span className="label-chip">{eyebrow}</span>
+        <Badge variant="neutral" size="sm">{eyebrow}</Badge>
         <div className="flex items-start gap-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-surface-container-lowest/80 text-primary shadow-[0_16px_40px_rgba(0,0,0,0.16)]" aria-hidden="true">
             <span className="material-symbols-outlined text-[20px]">{icon}</span>
@@ -138,7 +140,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
     return (
       <Card className="flex min-h-80 items-center justify-center p-6 text-center" tone="low">
         <div className="max-w-xl space-y-3">
-          <span className="label-chip">Configuración</span>
+          <Badge variant="neutral" size="sm">Configuración</Badge>
           <p className="text-base leading-7 text-on-surface-variant">Estamos cargando tu espacio de cuenta y conexiones.</p>
         </div>
       </Card>
@@ -149,7 +151,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
     return (
       <Card className="flex min-h-80 items-center justify-center p-6 text-center" role="alert" tone="low">
         <div className="max-w-xl space-y-3">
-          <span className="label-chip">Perfil no disponible</span>
+          <Badge variant="neutral" size="sm">Perfil no disponible</Badge>
           <p className="text-base leading-7 text-on-surface-variant">
             No hay una sesión de usuario lista para mostrar información de cuenta. Iniciá sesión para ver tus datos y preferencias.
           </p>
@@ -162,7 +164,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
     <div className="space-y-6">
       <Card className="flex flex-col gap-7 p-6 sm:gap-8 sm:p-8" tone="low">
         <SectionHeader
-          action={<span className="label-chip">Tema {theme === "dark" ? "oscuro" : "claro"}</span>}
+          action={<Badge variant="neutral" size="sm">Tema {theme === "dark" ? "oscuro" : "claro"}</Badge>}
           description="Gestioná tu identidad, conexiones de plataforma y preferencias de seguridad desde una sola vista."
           eyebrow="Cuenta y perfil"
           icon="person"
@@ -206,7 +208,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
             const isPending = accountActionPending === account.provider;
 
             return (
-              <article key={account.provider} className="ghost-frame rounded-2xl bg-surface-container-low/40 p-4 sm:p-5">
+              <article key={account.provider} className="rounded-2xl bg-surface-container-low/40 p-4 sm:p-5">
                 <div className="flex flex-col gap-4">
                   <div className="flex items-start gap-4">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-surface-container-lowest text-on-surface">
@@ -302,7 +304,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
                 <span className="text-xs font-label uppercase tracking-[0.2em] text-on-surface-variant">Confirmación</span>
                 <input
                   autoComplete="off"
-                  className="field-surface w-full px-4 py-3 text-base text-on-surface placeholder:text-on-surface-variant/60"
+                  className="w-full rounded-lg bg-surface-container-low px-4 py-3 text-base text-on-surface placeholder:text-on-surface-variant/60"
                   placeholder="eliminar cuenta"
                   value={deleteConfirmationText}
                   onChange={(event) => setDeleteConfirmationText(event.target.value)}

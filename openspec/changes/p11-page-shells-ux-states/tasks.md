@@ -51,16 +51,16 @@ Chain strategy: feature-branch-chain
 
 ## Phase 3: Dangling Class Replacements (PR 3)
 
-- [ ] 3.1 Replace `primary-button`/`secondary-button` → `<Button>` in NotFoundPage, ServerErrorPage, HistoryPage, HistoryDetailPage, AuthCallbackPage, LandingPage, PrivacyPage, EmptyState (UI-A01)
-- [ ] 3.2 Replace `surface-panel` → `<Card variant="flat">` in AnalysisFeature, AnalysisResultView, HistoryDetailPage, HistoryDetailEditor, PrivacyPage, NotFoundPage, ServerErrorPage (UI-A01, UIP-M02)
-- [ ] 3.3 Replace `label-chip` → `<Badge variant="neutral" size="sm">` across all files (UI-A01)
-- [ ] 3.4 Replace `tech-chip` → `<Badge variant="brand" size="sm">` in AnalysisResultView, HistoryDetailPage (UI-A01)
-- [ ] 3.5 Replace `field-surface` → `<Input>` or `bg-surface-container-low` in JobDescriptionForm, AnalysisResultView, HistoryDetailEditor, SettingsForm, SettingsFeature (UI-A01)
-- [ ] 3.6 Replace `ghost-frame` → `<Card variant="flat">` in HistoryDetailEditor, SettingsForm (UI-A01)
-- [ ] 3.7 Replace `font-headline` → `font-display` in SignInForm, SignUpForm, JobDescriptionForm, LandingPage (DTK-M01)
-- [ ] 3.8 Remove `ghost-border` references — Card handles borders natively (UI-A01)
-- [ ] 3.9 Replace `glass-panel` → `<Card variant="elevated">` in HeroSection (UI-A01)
-- [ ] 3.10 Update `EmptyState` — replace `primary-button` with `<Button variant="primary">` (UIP-M01, UX-04)
+- [x] 3.1 Replace `primary-button`/`secondary-button` → `<Button>` in NotFoundPage, ServerErrorPage, HistoryPage, HistoryDetailPage, AuthCallbackPage, LandingPage, PrivacyPage, EmptyState (UI-A01)
+- [x] 3.2 Replace `surface-panel` → `<Card variant="flat">` in AnalysisFeature, AnalysisResultView, HistoryDetailPage, HistoryDetailEditor, PrivacyPage, NotFoundPage, ServerErrorPage (UI-A01, UIP-M02)
+- [x] 3.3 Replace `label-chip` → `<Badge variant="neutral" size="sm">` across all files (UI-A01)
+- [x] 3.4 Replace `tech-chip` → `<Badge variant="brand" size="sm">` in AnalysisResultView, HistoryDetailPage (UI-A01)
+- [x] 3.5 Replace `field-surface` → `<Input>` or `bg-surface-container-low` in JobDescriptionForm, AnalysisResultView, HistoryDetailEditor, SettingsForm, SettingsFeature (UI-A01)
+- [x] 3.6 Replace `ghost-frame` → `<Card variant="flat">` in HistoryDetailEditor, SettingsForm (UI-A01)
+- [x] 3.7 Replace `font-headline` → `font-display` in SignInForm, SignUpForm, JobDescriptionForm, LandingPage (DTK-M01)
+- [x] 3.8 Remove `ghost-border` references — Card handles borders natively (UI-A01)
+- [x] 3.9 Replace `glass-panel` → `<Card variant="elevated">` in HeroSection (UI-A01)
+- [x] 3.10 Update `EmptyState` — replace `primary-button` with `<Button variant="primary">` (UIP-M01, UX-04)
 
 ## Phase 4: AuthShell + Landing Page (PR 4)
 

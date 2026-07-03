@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/shared/components/Button";
+import { Card } from "@/shared/components/Card";
+import { Badge } from "@/shared/components/Badge";
 import { Input } from "@/shared/components/Input";
+import { cn } from "@/shared/utils/cn";
 import { JOB_ANALYSIS_SKILL_LEVEL, type JobAnalysisGap, type JobAnalysisKeywords, type JobAnalysisResult, type JobAnalysisVacancySummary } from "@/features/analysis/schemas/job-analysis";
 import {
   buildOutreachExportPayload,
@@ -71,9 +74,9 @@ function renderChipList(values: string[]) {
   return values.length > 0 ? (
     <div className="flex flex-wrap gap-2">
       {values.map((value) => (
-        <span key={value} className="tech-chip">
+        <Badge key={value} variant="brand" size="sm">
           {value}
-        </span>
+        </Badge>
       ))}
     </div>
   ) : (
@@ -84,21 +87,21 @@ function renderChipList(values: string[]) {
 function VacancySummaryPanel({ vacancySummary }: { vacancySummary?: JobAnalysisVacancySummary }) {
   if (!vacancySummary) {
     return (
-      <div className="surface-panel space-y-5 p-6 sm:p-8">
+      <Card variant="flat" className="space-y-5 p-6 sm:p-8">
         <div>
-          <span className="label-chip">Vacancy snapshot</span>
+          <Badge variant="neutral" size="sm">Vacancy snapshot</Badge>
           <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Resumen de la vacante</h4>
         </div>
         <p className="text-sm leading-7 text-on-surface-variant">La IA no devolvió aún el bloque estructurado de la vacante.</p>
-      </div>
+      </Card>
     );
   }
 
   return (
-    <div className="surface-panel space-y-5 p-6 sm:p-8">
+    <Card variant="flat" className="space-y-5 p-6 sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <span className="label-chip">Vacancy snapshot</span>
+          <Badge variant="neutral" size="sm">Vacancy snapshot</Badge>
           <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Resumen de la vacante</h4>
         </div>
         <span className="text-xs uppercase tracking-[0.22em] text-on-surface-variant">{vacancySummary.modalityLocation}</span>
@@ -141,15 +144,15 @@ function VacancySummaryPanel({ vacancySummary }: { vacancySummary?: JobAnalysisV
           </ul>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
 
 function KeywordsPanel({ keywords }: { keywords?: JobAnalysisKeywords }) {
   return (
-    <div className="surface-panel space-y-5 p-6 sm:p-8">
+    <Card variant="flat" className="space-y-5 p-6 sm:p-8">
       <div>
-        <span className="label-chip">Keywords</span>
+        <Badge variant="neutral" size="sm">Keywords</Badge>
         <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Skills y términos para repetir</h4>
       </div>
 
@@ -175,15 +178,15 @@ function KeywordsPanel({ keywords }: { keywords?: JobAnalysisKeywords }) {
       ) : (
         <p className="text-sm leading-7 text-on-surface-variant">La IA no devolvió aún el bloque de keywords estructuradas.</p>
       )}
-    </div>
+    </Card>
   );
 }
 
 function GapsPanel({ gaps }: { gaps?: JobAnalysisGap[] }) {
   return (
-    <div className="surface-panel space-y-5 p-6 sm:p-8">
+    <Card variant="flat" className="space-y-5 p-6 sm:p-8">
       <div>
-        <span className="label-chip">Gaps</span>
+        <Badge variant="neutral" size="sm">Gaps</Badge>
         <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Posibles huecos y cómo cubrirlos</h4>
       </div>
 
@@ -203,7 +206,7 @@ function GapsPanel({ gaps }: { gaps?: JobAnalysisGap[] }) {
       ) : (
         <p className="text-sm leading-7 text-on-surface-variant">La IA no devolvió todavía los gaps sugeridos.</p>
       )}
-    </div>
+    </Card>
   );
 }
 
@@ -305,10 +308,10 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
 
   return (
     <section className="flex flex-col gap-6">
-      <div className="surface-panel space-y-5 p-6 sm:p-8">
+      <Card variant="flat" className="space-y-5 p-6 sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <span className="label-chip">Análisis validado</span>
+            <Badge variant="neutral" size="sm">Análisis validado</Badge>
             <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white sm:text-3xl">Análisis estructurado de la vacante</h3>
           </div>
           <span className="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
@@ -321,14 +324,14 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
           <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">Resumen</h4>
           <p className="text-sm leading-7 text-on-surface sm:text-base">{result.summary}</p>
         </div>
-      </div>
+      </Card>
 
       <VacancySummaryPanel vacancySummary={result.vacancySummary} />
 
-      <div className="surface-panel space-y-5 p-6 sm:p-8">
+      <Card variant="flat" className="space-y-5 p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <span className="label-chip">Skills Matrix</span>
+            <Badge variant="neutral" size="sm">Skills Matrix</Badge>
             <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Señales que vale la pena destacar</h4>
           </div>
           <div className="flex items-center gap-2">
@@ -339,23 +342,23 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
 
         <div className="flex snap-x gap-3 overflow-x-auto pb-2 pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {result.skillGroups.flatMap((group) => group.skills).map((skill) => (
-            <span key={`${skill.name}-${skill.level}`} className="tech-chip shrink-0 snap-start border border-outline-variant/10 bg-surface-container-high px-4 py-2">
+            <Badge key={`${skill.name}-${skill.level}`} variant="brand" size="sm" className="shrink-0 snap-start border border-outline-variant/10 bg-surface-container-high px-4 py-2">
               <span className="text-xs font-medium text-on-surface">{skill.name}</span>
               <span className="text-[0.66rem] uppercase tracking-[0.18em] text-on-surface-variant">{levelLabel(skill.level)}</span>
-            </span>
+            </Badge>
           ))}
         </div>
-      </div>
+      </Card>
 
       <KeywordsPanel keywords={result.keywords} />
 
       <GapsPanel gaps={result.gaps} />
 
       {result.githubEnrichment ? (
-        <div className="surface-panel space-y-5 p-6 sm:p-8">
+        <Card variant="flat" className="space-y-5 p-6 sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <span className="label-chip">GitHub enriquecido</span>
+              <Badge variant="neutral" size="sm">GitHub enriquecido</Badge>
               <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Stack observado en el repositorio</h4>
             </div>
             <a
@@ -375,26 +378,26 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
           {result.githubEnrichment.detectedStack.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {result.githubEnrichment.detectedStack.map((signal) => (
-                <span key={`${signal.name}-${signal.source}`} className="tech-chip">
+                <Badge key={`${signal.name}-${signal.source}`} variant="brand" size="sm">
                   {signal.name}
                   <span className="text-[0.66rem] uppercase tracking-[0.18em] text-on-surface-variant">{sourceLabel(signal.source)}</span>
-                </span>
+                </Badge>
               ))}
             </div>
           ) : (
             <p className="text-sm leading-7 text-on-surface-variant">No se detectaron señales claras de stack en este repositorio.</p>
           )}
-        </div>
+        </Card>
       ) : null}
 
-      <div className="surface-panel relative overflow-hidden space-y-5 p-6 sm:p-8">
+      <Card variant="flat" className="relative overflow-hidden space-y-5 p-6 sm:p-8">
         <div className="absolute right-0 top-0 p-4 opacity-25">
           <span className="text-4xl text-primary">✦</span>
         </div>
 
           <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <span className="label-chip">Message Generator</span>
+            <Badge variant="neutral" size="sm">Message Generator</Badge>
             <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Editá las dos versiones antes de copiar</h4>
           </div>
           <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">
@@ -429,10 +432,11 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
 
             <label className="space-y-2">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Mensaje</span>
-              <textarea
+              <Input
+                multiline
                 value={body}
                 onChange={(event) => setBody(event.target.value)}
-                className="field-surface min-h-40 px-4 py-4 text-sm leading-7"
+                className="min-h-40"
                 aria-label="Mensaje de contacto"
               />
             </label>
@@ -449,10 +453,11 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
 
             <label className="space-y-2">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">DM corto</span>
-              <textarea
+              <Input
+                multiline
                 value={dmBody}
                 onChange={(event) => setDmBody(event.target.value)}
-                className="field-surface min-h-40 px-4 py-4 text-sm leading-7"
+                className="min-h-40"
                 aria-label="Mensaje corto para reclutador"
               />
             </label>
@@ -469,7 +474,7 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
           <span className={feedbackTone === "error" ? "text-error" : feedbackTone === "success" ? "text-success" : ""}>{feedbackMessage}</span>
           <span className="font-mono text-xs uppercase tracking-[0.18em] text-on-surface-variant">{body.length} chars / {dmBody.length} chars</span>
         </div>
-      </div>
+      </Card>
     </section>
   );
 }
