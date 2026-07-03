@@ -14,7 +14,7 @@ export function Modal({ children, onClose, title }: ModalProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <motion.div aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8" role="dialog">
+    <motion.div aria-modal="true" className="fixed inset-0 flex items-center justify-center px-4 py-8 [z-index:var(--z-modal)]" role="dialog">
       <motion.button
         aria-label="Close modal"
         className="absolute inset-0 cursor-default bg-surface-container-lowest/70 backdrop-blur-sm"

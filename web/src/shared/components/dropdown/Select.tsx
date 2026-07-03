@@ -124,7 +124,7 @@ export function Select({
             role="listbox"
             aria-label={placeholder}
             className={cn(
-              "z-[60] min-w-[var(--anchor-width)] rounded-lg bg-[var(--color-surface-elevated-2)] py-1 shadow-[var(--shadow-lg)]",
+              "[z-index:var(--z-dropdown)] min-w-[var(--anchor-width)] rounded-lg bg-[var(--color-surface-elevated-2)] py-1 shadow-[var(--shadow-lg)]",
               "focus:outline-none",
             )}
             style={{
