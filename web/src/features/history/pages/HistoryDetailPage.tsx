@@ -5,6 +5,7 @@ import { Card } from "@/shared/components/Card";
 import { Badge } from "@/shared/components/Badge";
 import { cn } from "@/shared/utils/cn";
 import { AnalysisResultView } from "@/features/analysis/components/AnalysisResultView";
+import { HistoryDetailPageSkeleton } from "@/features/history/components/HistoryDetailPageSkeleton";
 import { useAnalysisRepository } from "@/features/analysis/hooks/useAnalysisRepository";
 import { useAnalysisById } from "@/features/analysis/hooks/useAnalysisById";
 import { HistoryDetailEditor } from "@/features/history/components";
@@ -50,7 +51,7 @@ export function HistoryDetailPage() {
   if (historyQuery.isPending) {
     return (
       <FeaturePageShell>
-        <Card variant="flat" className="p-6 text-on-surface-variant">Cargando el detalle guardado...</Card>
+        <HistoryDetailPageSkeleton />
       </FeaturePageShell>
     );
   }

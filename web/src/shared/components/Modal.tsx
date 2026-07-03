@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import { Badge } from "./Badge";
 import { Card } from "./Card";
 import { fadeUpVariants, scaleInVariants } from "./motion";
 
@@ -32,8 +33,8 @@ export function Modal({ children, onClose, title }: ModalProps) {
       >
         <Card className="p-6 sm:p-8">
           <div className="space-y-2">
-            <motion.span className="label-chip" variants={fadeUpVariants}>
-              {title}
+            <motion.span variants={fadeUpVariants}>
+              <Badge variant="neutral" size="sm">{title}</Badge>
             </motion.span>
           </div>
           <div className="mt-5">{children}</div>
