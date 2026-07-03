@@ -194,7 +194,6 @@
     color: var(--color-on-surface);
   }
 
-  /* TODO P10: remove — use text-on-surface instead */
   html[data-theme="light"] .text-white {
     color: var(--color-on-surface) !important;
   }
