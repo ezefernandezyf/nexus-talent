@@ -96,7 +96,7 @@ export function Dropdown({ trigger, items, className }: DropdownProps) {
             role="menu"
             aria-orientation="vertical"
             className={cn(
-              "z-[60] min-w-[160px] rounded-lg bg-[var(--color-surface-elevated-2)] py-1 shadow-[var(--shadow-lg)]",
+              "[z-index:var(--z-dropdown)] min-w-[160px] rounded-lg bg-[var(--color-surface-elevated-2)] py-1 shadow-[var(--shadow-lg)]",
               "focus:outline-none",
             )}
             style={{

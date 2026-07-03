@@ -64,24 +64,24 @@ Chain strategy: feature-branch-chain
 
 ## Phase 4: AuthShell + Landing Page (PR 4)
 
-- [ ] 4.1 Redesign `web/src/features/auth/components/AuthShell.tsx` — replace glass-panel/ghost-border with `<Card variant="elevated">`; brand `<Link to="/">` in Switzer; remove inline footer (AUS-01, AUS-02)
-- [ ] 4.2 Wire `<Footer variant="app">` into AuthShell (AUS-01)
-- [ ] 4.3 Verify Apex components in `web/src/features/auth/components/SignInForm.tsx` + `SignUpForm.tsx` (AUS-01)
-- [ ] 4.4 Replace button classes → `<Button>` in `web/src/features/landing/pages/LandingPage.tsx` (LAN-01, UI-M01)
-- [ ] 4.5 Migrate `web/src/features/landing/components/Navbar.tsx` to Apex — Switzer, OKLCH, routes `/auth/sign-in`, `/auth/sign-up` (LAN-01, UI-M01)
-- [ ] 4.6 Replace `surface-panel`/`ghost-frame` → `<Card>` in `web/src/features/landing/components/Cards.tsx` (LAN-01)
-- [ ] 4.7 Wire `<Footer variant="landing">` into LandingPage — preserves SEO/GEO links (LAN-01, ASH-03)
-- [ ] 4.8 Migrate `web/src/features/landing/pages/PrivacyPage.tsx` to Apex components (LAN-01)
+- [x] 4.1 Redesign `web/src/features/auth/components/AuthShell.tsx` — replace glass-panel/ghost-border with `<Card variant="elevated">`; brand `<Link to="/">` in Switzer; remove inline footer (AUS-01, AUS-02)
+- [x] 4.2 Wire `<Footer variant="app">` into AuthShell (AUS-01)
+- [x] 4.3 Verify Apex components in `web/src/features/auth/components/SignInForm.tsx` + `SignUpForm.tsx` (AUS-01)
+- [x] 4.4 Replace button classes → `<Button>` in `web/src/features/landing/pages/LandingPage.tsx` (LAN-01, UI-M01)
+- [x] 4.5 Migrate `web/src/features/landing/components/Navbar.tsx` to Apex — Switzer, OKLCH, routes `/auth/sign-in`, `/auth/sign-up` (LAN-01, UI-M01)
+- [x] 4.6 Replace `surface-panel`/`ghost-frame` → `<Card>` in `web/src/features/landing/components/Cards.tsx` (LAN-01)
+- [x] 4.7 Wire `<Footer variant="landing">` into LandingPage — preserves SEO/GEO links (LAN-01, ASH-03)
+- [x] 4.8 Migrate `web/src/features/landing/pages/PrivacyPage.tsx` to Apex components (LAN-01)
 
 ## Phase 5: Page Skeletons + Cleanup (PR 5)
 
-- [ ] 5.1 Create `web/src/features/analysis/components/AnalysisPageSkeleton.tsx` — mimics form + result card layout (UX-03)
-- [ ] 5.2 Create `web/src/features/history/components/HistoryPageSkeleton.tsx` — mimics list/table with 4-5 rows (UX-03)
-- [ ] 5.3 Create `web/src/features/history/components/HistoryDetailPageSkeleton.tsx` — mimics detail sections (UX-03)
-- [ ] 5.4 Create `web/src/features/settings/components/SettingsPageSkeleton.tsx` — mimics settings form panels (UX-03)
-- [ ] 5.5 Wire skeletons into page loading states — AnalysisPage, HistoryPage, HistoryDetailPage, SettingsPage (UX-03, UIP-M01)
-- [ ] 5.6 Delete `web/src/shared/components/LoadingSkeleton.tsx` — remove all imports (UIP-M01)
-- [ ] 5.7 Run `npx impeccable critique` on each redesigned page; fix all CRITICAL issues (LAN-02)
-- [ ] 5.8 Run `npx impeccable detect web/src/` — verify zero dangling class refs (UI-A01)
-- [ ] 5.9 Update snapshot tests for all modified components
-- [ ] 5.10 Run full suite: `pnpm test` + `pnpm run lint` + `tsc --noEmit`
+- [x] 5.1 Create `web/src/features/analysis/components/AnalysisPageSkeleton.tsx` — mimics form + result card layout (UX-03)
+- [x] 5.2 Create `web/src/features/history/components/HistoryPageSkeleton.tsx` — mimics list/table with 4-5 rows (UX-03)
+- [x] 5.3 Create `web/src/features/history/components/HistoryDetailPageSkeleton.tsx` — mimics detail sections (UX-03)
+- [x] 5.4 Create `web/src/features/settings/components/SettingsPageSkeleton.tsx` — mimics settings form panels (UX-03)
+- [x] 5.5 Wire skeletons into page loading states — AnalysisPage, HistoryPage, HistoryDetailPage, SettingsPage (UX-03, UIP-M01)
+- [x] 5.6 Delete `web/src/shared/components/LoadingSkeleton.tsx` — remove all imports (UIP-M01)
+- [x] 5.7 Run `npx impeccable critique` on each redesigned page; fix all CRITICAL issues (LAN-02)
+- [x] 5.8 Run `npx impeccable detect web/src/` — verify zero dangling class refs (UI-A01)
+- [x] 5.9 Update snapshot tests for all modified components
+- [x] 5.10 Run full suite: `pnpm test` + `pnpm run lint` + `tsc --noEmit`

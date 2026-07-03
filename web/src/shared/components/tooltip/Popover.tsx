@@ -61,7 +61,7 @@ export function Popover({
             <div
               ref={floating.refs.setFloating}
               className={cn(
-                "z-[60] min-w-[180px] rounded-lg bg-[var(--color-surface-elevated-2)] p-4 shadow-[var(--shadow-lg)]",
+                "[z-index:var(--z-tooltip)] min-w-[180px] rounded-lg bg-[var(--color-surface-elevated-2)] p-4 shadow-[var(--shadow-lg)]",
                 "focus:outline-none",
                 className,
               )}

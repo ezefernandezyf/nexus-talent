@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Card } from "@/shared/components/Card";
 import { Badge } from "@/shared/components/Badge";
+import { Footer } from "@/shared/components/Footer";
 import { cn } from "@/shared/utils/cn";
 
 const linkBtnPrimary = cn(
@@ -37,6 +38,8 @@ export default function PrivacyPage() {
           </Link>
         </div>
       </Card>
+
+      <Footer variant="landing" />
     </main>
   );
 }

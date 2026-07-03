@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "@/shared/components/Card";
+import { Footer } from "@/shared/components/Footer";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 
 const AUTH_SHELL_COPY = {
@@ -58,25 +59,27 @@ export function AuthShell({ children, mode }: AuthShellProps) {
       />
 
       <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 sm:px-8">
-        <div className="text-xl font-bold tracking-tighter text-on-surface font-headline">Nexus Talent</div>
+        <Link className="text-xl font-bold tracking-tighter text-[var(--color-brand)] font-display" to="/">
+          Nexus Talent
+        </Link>
       </header>
 
       <div className="relative z-10 flex flex-1 items-center justify-center px-6 pb-24 pt-4 sm:px-8">
         <div className="w-full max-w-md">
-          <Card className="glass-panel ghost-border rounded-xl p-8 shadow-2xl sm:p-10">
+          <Card variant="elevated" className="p-8 sm:p-10">
             <div className="mb-10 text-center">
-              <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-on-surface font-headline">{copy.title}</h1>
+              <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-on-surface font-display">{copy.title}</h1>
             </div>
 
             <div className="space-y-6">
               {errorMessage ? (
-                <div className="ghost-frame rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
+                <div className="rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
                   {errorMessage}
                 </div>
               ) : null}
 
               {!isConfigured ? (
-                <div className="ghost-frame rounded-2xl bg-warning/10 px-4 py-3 text-sm leading-6 text-warning" role="status">
+                <div className="rounded-2xl bg-warning/10 px-4 py-3 text-sm leading-6 text-warning" role="status">
                   Faltan variables de entorno. La app se mantiene en modo público hasta que configures Supabase.
                 </div>
               ) : null}
@@ -96,22 +99,7 @@ export function AuthShell({ children, mode }: AuthShellProps) {
         </div>
       </div>
 
-      <footer className="relative z-10 mt-auto flex w-full flex-col items-center justify-between gap-4 border-t border-white/5 px-8 py-6 opacity-60 sm:flex-row">
-        <div className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
-          © 2026 Nexus Talent. Engineered for Precision.
-        </div>
-        <div className="flex gap-8">
-          <a className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant transition-colors hover:text-primary" href="#">
-            Privacy Policy
-          </a>
-          <a className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant transition-colors hover:text-primary" href="#">
-            Terms
-          </a>
-          <a className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant transition-colors hover:text-primary" href="#">
-            Support
-          </a>
-        </div>
-      </footer>
+      <Footer variant="app" />
     </main>
   );
 }
