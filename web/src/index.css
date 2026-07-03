@@ -101,12 +101,15 @@
 
   /* ===== Z-index scale ===== */
   --z-base: 1;
-  --z-dropdown: 10;
-  --z-sticky: 20;
-  --z-modal-backdrop: 30;
+  --z-sidebar: 20;
+  --z-topbar: 30;
+  --z-drawer-backdrop: 35;
+  --z-drawer: 36;
+  --z-dropdown: 40;
+  --z-fab: 45;
   --z-modal: 50;
-  --z-toast: 40;
-  --z-tooltip: 60;
+  --z-toast: 60;
+  --z-tooltip: 70;
 
   /* ===== Animation ===== */
   --duration-fast: 150ms;
