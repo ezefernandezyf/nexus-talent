@@ -43,8 +43,8 @@ describe("AuthShell", () => {
       </QueryClientProvider>,
     );
 
-    // Brand link (header) + Footer brand — both render "Nexus Talent"
-    expect(screen.getAllByText(/^Nexus Talent$/)).toHaveLength(2);
+    // Brand link in the left aside panel renders "Nexus Talent"
+    expect(screen.getAllByText(/^Nexus Talent$/)).toHaveLength(1);
     expect(screen.queryByText(/help_outline/i)).not.toBeInTheDocument();
   });
 });
