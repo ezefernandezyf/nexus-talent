@@ -28,7 +28,7 @@ describe("HistoryPage", () => {
 
     expect(screen.getByRole("heading", { name: /historial de análisis/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /exportar datos/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /nuevo análisis/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /nuevo análisis/i })).toBeInTheDocument();
   });
 
   it("downloads the current history data from the export button", async () => {

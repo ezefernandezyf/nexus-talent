@@ -21,11 +21,11 @@ interface CardSubProps extends PropsWithChildren<HTMLAttributes<HTMLDivElement>>
 
 const variantStyles: Record<CardVariant, string> = {
   flat:
-    "bg-[var(--color-surface-elevated-1)] shadow-[inset_0_0_0_1px] shadow-[var(--color-on-surface)]/5",
+    "bg-[var(--color-surface-elevated-1)] border border-[var(--color-outline)]",
   elevated:
-    "bg-[var(--color-surface-elevated-2)] shadow-[var(--shadow-md)]",
+    "bg-[var(--color-surface-elevated-1)] border border-[var(--color-outline)] shadow-[var(--shadow-md)]",
   interactive:
-    "bg-[var(--color-surface-elevated-1)] shadow-[var(--shadow-sm)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-lg)] cursor-pointer transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
+    "bg-[var(--color-surface-elevated-1)] border border-[var(--color-outline)] shadow-[var(--shadow-sm)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-lg)] cursor-pointer transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
 };
 
 const paddingStyles: Record<CardPadding, string> = {
@@ -76,7 +76,7 @@ function CardBase({
   return (
     <div
       className={cn(
-        "rounded-[var(--radius-md)] flex flex-col gap-2",
+        "rounded-[var(--radius-lg)] flex flex-col gap-2",
         variantStyles[variant],
         paddingStyles[padding],
         className,

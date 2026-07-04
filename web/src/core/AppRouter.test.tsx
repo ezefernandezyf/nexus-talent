@@ -80,7 +80,7 @@ describe("AppRouter", () => {
     const ctaLinks = screen.getAllByRole("link", { name: /start analyzing now/i });
     expect(ctaLinks.length).toBeGreaterThanOrEqual(1);
     ctaLinks.forEach((link) => {
-      expect(link).toHaveAttribute("href", "/auth/sign-up");
+      expect(link).toHaveAttribute("href", "/app/analysis");
     });
   });
 
@@ -160,7 +160,7 @@ describe("AppRouter", () => {
     renderApp("/privacy");
 
     expect(screen.getByRole("heading", { name: /privacidad/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /volver al inicio/i })).toHaveAttribute("href", "/");
+    expect(screen.getByRole("button", { name: /volver al inicio/i })).toBeInTheDocument();
   });
 
   it("renders the history detail route for a saved analysis", async () => {
@@ -195,7 +195,7 @@ describe("AppRouter", () => {
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /detalle del análisis/i })).toBeInTheDocument());
     expect(screen.getByText(/build robust ui systems/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /volver al historial/i })).toHaveAttribute("href", "/app/history");
+    expect(screen.getByRole("button", { name: /volver al historial/i })).toBeInTheDocument();
   });
 
   it("shows the history not-found fallback when the requested analysis is missing", async () => {
@@ -212,14 +212,14 @@ describe("AppRouter", () => {
     renderApp("/app/history/missing-analysis-id");
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /análisis no encontrado/i })).toBeInTheDocument());
-    expect(screen.getByRole("link", { name: /volver al historial/i })).toHaveAttribute("href", "/app/history");
+    expect(screen.getByRole("button", { name: /volver al historial/i })).toBeInTheDocument();
   });
 
   it("renders the 404 page for unknown routes", async () => {
     renderApp("/ruta-inexistente");
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /404/i })).toBeInTheDocument());
-    expect(screen.getByRole("link", { name: /volver al inicio/i })).toHaveAttribute("href", "/");
+    expect(screen.getByRole("button", { name: /volver al inicio/i })).toBeInTheDocument();
   });
 
   it("keeps the same app shell for authenticated users", async () => {

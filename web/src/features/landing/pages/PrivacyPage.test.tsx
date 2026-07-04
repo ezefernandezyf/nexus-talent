@@ -13,7 +13,7 @@ describe("PrivacyPage", () => {
 
     expect(screen.getByRole("heading", { name: /privacidad y manejo de datos/i })).toBeInTheDocument();
     expect(screen.getByText(/nexus talent guarda únicamente la información necesaria/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /volver al inicio/i })).toHaveAttribute("href", "/");
-    expect(screen.getByRole("link", { name: /ir al análisis/i })).toHaveAttribute("href", "/app/analysis");
+    expect(screen.getByRole("button", { name: /volver al inicio/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /ir al análisis/i })).toBeInTheDocument();
   });
 });

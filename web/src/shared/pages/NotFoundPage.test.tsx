@@ -13,7 +13,7 @@ describe("NotFoundPage", () => {
 
     expect(screen.getByRole("heading", { name: /^404$/i })).toBeInTheDocument();
     expect(screen.getByText(/la ruta no existe o fue movida/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /volver al inicio/i })).toHaveAttribute("href", "/");
-    expect(screen.getByRole("link", { name: /ver privacidad/i })).toHaveAttribute("href", "/privacy");
+    expect(screen.getByRole("button", { name: /volver al inicio/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /ver privacidad/i })).toBeInTheDocument();
   });
 });

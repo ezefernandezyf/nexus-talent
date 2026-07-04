@@ -33,18 +33,18 @@ export type InputProps = InputAsInput | InputAsTextarea;
 // ---------------------------------------------------------------------------
 
 const baseStyles =
-  "w-full bg-[var(--color-surface-base)] text-[var(--color-on-surface)] text-body placeholder:text-[var(--color-on-surface-variant)] " +
-  "shadow-[inset_0_0_0_1px] shadow-[var(--color-on-surface)]/10 " +
-  "focus:outline-none focus:shadow-[inset_0_0_0_2px] focus:shadow-[var(--color-brand)] " +
+  "w-full bg-[var(--color-surface-elevated-1)] text-[var(--color-on-surface)] text-body placeholder:text-[var(--color-on-surface-variant)] " +
+  "border border-[var(--color-outline)] " +
+  "focus:outline-none focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)] " +
   "disabled:opacity-50 disabled:cursor-not-allowed " +
-  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]";
+  "transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]";
 
 const errorStyles =
-  "shadow-[inset_0_0_0_1.5px_var(--color-error)] focus:shadow-[inset_0_0_0_2px_var(--color-error)]";
+  "border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]";
 
-const sizeStyles = "px-4 py-3 text-sm leading-6";
-const inputRadius = "rounded-lg";
-const textareaRadius = "rounded-lg";
+const sizeStyles = "h-11 px-4 py-3 text-sm";
+const inputRadius = "rounded-md";
+const textareaRadius = "rounded-md";
 
 // ---------------------------------------------------------------------------
 // Component
@@ -101,7 +101,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
               id={inputId}
               aria-describedby={errorId}
               aria-invalid={!!error}
-              className={cn(sharedStyles, "min-h-[100px] resize-y")}
+              className={cn(sharedStyles, "min-h-32 resize-y font-sans")}
               {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)}
             />
           ) : (

@@ -3,37 +3,37 @@
 exports[`Badge snapshots > renders all badge variants in dark mode 1`] = `
 <div>
   <span
-    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-info)]/10 text-[var(--color-info)] h-6 px-2 text-[0.7rem]"
+    class="inline-flex items-center gap-1 rounded-[var(--radius-sm)] font-body font-medium bg-[var(--color-info)]/10 text-[var(--color-info)] h-6 px-2 text-[0.7rem]"
   >
     Info
   </span>
   <span
-    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-success)]/10 text-[var(--color-success)] h-6 px-2 text-[0.7rem]"
+    class="inline-flex items-center gap-1 rounded-[var(--radius-sm)] font-body font-medium bg-[var(--color-success)]/10 text-[var(--color-success)] h-6 px-2 text-[0.7rem]"
   >
     Success
   </span>
   <span
-    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-warning)]/10 text-[var(--color-warning)] h-6 px-2 text-[0.7rem]"
+    class="inline-flex items-center gap-1 rounded-[var(--radius-sm)] font-body font-medium bg-[var(--color-warning)]/10 text-[var(--color-warning)] h-6 px-2 text-[0.7rem]"
   >
     Warning
   </span>
   <span
-    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-error)]/10 text-[var(--color-error)] h-6 px-2 text-[0.7rem]"
+    class="inline-flex items-center gap-1 rounded-[var(--radius-sm)] font-body font-medium bg-[var(--color-error)]/10 text-[var(--color-error)] h-6 px-2 text-[0.7rem]"
   >
     Error
   </span>
   <span
-    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-brand)]/10 text-[var(--color-brand)] h-6 px-2 text-[0.7rem]"
+    class="inline-flex items-center gap-1 rounded-[var(--radius-sm)] font-body font-medium bg-[var(--color-brand)]/10 text-[var(--color-brand)] h-6 px-2 text-[0.7rem]"
   >
     Brand
   </span>
   <span
-    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-surface-elevated-2)] text-[var(--color-on-surface-variant)] h-6 px-2 text-[0.7rem]"
+    class="inline-flex items-center gap-1 rounded-[var(--radius-sm)] font-body font-medium bg-[var(--color-surface-elevated-2)] text-[var(--color-on-surface-variant)] h-6 px-2 text-[0.7rem]"
   >
     Neutral
   </span>
   <span
-    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-success)]/10 text-[var(--color-success)] h-6 px-2 text-[0.7rem]"
+    class="inline-flex items-center gap-1 rounded-[var(--radius-sm)] font-body font-medium bg-[var(--color-success)]/10 text-[var(--color-success)] h-6 px-2 text-[0.7rem]"
   >
     <span
       class="flex-shrink-0 text-[1em] leading-none"
@@ -53,7 +53,7 @@ exports[`Badge snapshots > renders all badge variants in dark mode 1`] = `
     Icon
   </span>
   <span
-    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] font-body font-medium bg-[var(--color-brand)]/10 text-[var(--color-brand)] h-5 px-1.5 text-[0.65rem]"
+    class="inline-flex items-center gap-1 rounded-[var(--radius-sm)] font-body font-medium bg-[var(--color-brand)]/10 text-[var(--color-brand)] h-5 px-1.5 text-[0.65rem]"
   >
     Small
   </span>
