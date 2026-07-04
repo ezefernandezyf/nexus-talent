@@ -156,23 +156,39 @@ npx impeccable detect web/src/
 - [x] 10 z-index tokens enforced across all components
 - [x] 352 tests, typecheck clean, lint clean
 
-> **Nota**: P11 fue migración de infraestructura. El rediseño visual real de páginas se hace en P11bis.
+> **Nota**: P11 fue migración de infraestructura. P11bis fue un intento de rediseño visual Apex que no gustó. P11ter reemplaza todo con el diseño que sí gustó.
 
-### 🎨 P11bis: Real Page Redesign (en progreso)
-> Rediseño visual REAL de cada página desde cero. No migración — repensar layouts, jerarquía visual, y experiencia usando impeccable + taste-skill.
+### 🎨 ✅ P11bis: Real Page Redesign — Apex (DESCARTADO)
+> Rediseño visual con Apex (Deep Teal + Warm Amber). No gustó el resultado. Reemplazado por P11ter.
 
-**Skills activas**: impeccable, taste-skill/design-taste-frontend, taste-skill/high-end-visual-design, minimalist-ui, portfolio-personality
+### 🎨 P11ter: Editorial Precision — Lovable Design Migration (en progreso)
+> Tomar el diseño generado en Lovable (editorial-lens) como REFERENCIA VISUAL y migrarlo a nuestra arquitectura. NO copy-paste — adaptar con nuestras convenciones.
 
-- [ ] `/impeccable shape` — planificar dirección visual de cada página
-- [ ] Landing page redesign (layout nuevo, hero section, how-it-works, FAQ, CTA)
-- [ ] Auth pages redesign (sign-in, sign-up — layouts con impacto visual Apex)
-- [ ] Analysis page redesign (form + resultados con jerarquía visual clara)
-- [ ] History page redesign (lista/tabla con identidad Apex)
-- [ ] History detail page redesign (vista de detalle + editor)
-- [ ] Settings page redesign (paneles de configuración)
-- [ ] `/impeccable critique` + `/impeccable polish` en cada página
-- [ ] `/impeccable bolder` donde haga falta impacto
-- [ ] Mobile-first responsive en todas las páginas
+**Referencia**: `github.com/ezefernandezyf/editorial-lens`
+**Skills activas**: taste-skill/design-taste-frontend, high-end-visual-design, minimalist-ui
+
+#### Sistema de Diseño "Editorial Precision"
+- **Paleta**: Warm off-white (#FBFBFA) + espresso text (#1A1714) + terracotta accent (#C46B4F)
+- **Tipografía**: Switzer (display) + Geist (body) + JetBrains Mono (code)
+- **Light-first** con dark mode derivado via `prefers-color-scheme`
+- **Sombras**: ultra-sutiles, cards flotan apenas (0 1px 3px rgba(0,0,0,0.04))
+- **Bordes**: 1px #EAEAEA, radius 6-12px
+- **Sin gradientes, sin glows, sin glassmorphism**
+- **Textura**: warm grain overlay al 2% (paper-like)
+
+#### Plan de Migración
+- [ ] 1. Migrar tokens de diseño a `web/src/index.css` (@theme block)
+- [ ] 2. Actualizar componentes Apex al look Editorial (Button/Card/Badge/Input — cambiar estilos, mantener API)
+- [ ] 3. Crear primitivas editoriales: `<Reveal>`, `<Eyebrow>` (scroll reveal + eyebrow label)
+- [ ] 4. Rediseñar Landing page con layout editorial (hero asimétrico, bento grid, features, FAQ, CTA)
+- [ ] 5. Rediseñar AuthShell con split layout (brand statement izq, form der)
+- [ ] 6. Rediseñar AppLayout con nav editorial (sticky top, accent active state)
+- [ ] 7. Rediseñar Analysis page con cards editoriales
+- [ ] 8. Rediseñar History list + detail con el nuevo look
+- [ ] 9. Rediseñar Settings page
+- [ ] 10. Actualizar 404 + 500 + Privacy pages
+- [ ] 11. `npx impeccable detect` — verificar 0 anti-patrones
+- [ ] 12. Tests: actualizar snapshots + unit tests
 
 ### ✨ P12: Polish + Animation
 > Micro-interacciones, transiciones, feedback visual.
