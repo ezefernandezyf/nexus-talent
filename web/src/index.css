@@ -6,7 +6,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* ===== Typography — New identity: Switzer (display) + Geist (body) ===== */
+  /* ===== Typography ===== */
   --font-sans: "Geist", "Inter", "Segoe UI", sans-serif;
   --font-display: "Switzer", "Inter", sans-serif;
   --font-heading: "Switzer", "Inter", sans-serif;
@@ -15,34 +15,36 @@
   --font-caption: "Geist", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* ===== Brand — Deep Teal ===== */
-  --color-brand: oklch(0.52 0.14 220);
-  --color-brand-container: oklch(0.44 0.12 220);
-  --color-on-brand: oklch(0.95 0.005 220);
+  /* ===== Editorial Precision Palette — Warm Monochrome + Terracotta ===== */
+  /* Brand → Terracotta accent */
+  --color-brand: #C46B4F;
+  --color-brand-container: #FDF0EB;
+  --color-on-brand: #FFFFFF;
 
-  /* ===== Backward-compat: V1.1 pages (LandingPage, AuthShell) still reference these ===== */
+  /* Backward-compat aliases */
   --color-primary: var(--color-brand);
   --color-primary-container: var(--color-brand-container);
   --color-on-primary: var(--color-on-brand);
 
-  /* ===== Accent — Warm Amber ===== */
-  --color-accent: oklch(0.72 0.14 65);
-  --color-accent-container: oklch(0.62 0.12 65);
-  --color-on-accent: oklch(0.15 0.01 65);
+  /* Accent → same as brand (single-accent system) */
+  --color-accent: #C46B4F;
+  --color-accent-container: #FDF0EB;
+  --color-on-accent: #FFFFFF;
 
-  /* ===== Surfaces — Cool-tinted (hue ~235–240) ===== */
-  --color-surface-base: oklch(0.10 0.006 240);
-  --color-surface-elevated-1: oklch(0.13 0.008 235);
-  --color-surface-elevated-2: oklch(0.16 0.01 235);
-  --color-surface-elevated-3: oklch(0.20 0.01 235);
-  --color-surface-elevated-4: oklch(0.24 0.012 235);
-  --color-surface-elevated-5: oklch(0.29 0.012 235);
+  /* Surfaces — Warm, light-first */
+  --color-surface-base: #FBFBFA;
+  --color-surface-elevated-1: #FFFFFF;
+  --color-surface-elevated-2: #F5F4F2;
+  --color-surface-elevated-3: #EEEDEA;
+  --color-surface-elevated-4: #E8E7E3;
+  --color-surface-elevated-5: #E0DFDB;
 
-  --color-on-surface: oklch(0.93 0.006 235);
-  --color-on-surface-variant: oklch(0.65 0.01 235);
-  --color-outline: oklch(0.30 0.015 235);
+  /* Text — Espresso warmth */
+  --color-on-surface: #1A1714;
+  --color-on-surface-variant: #787774;
+  --color-outline: #EAEAEA;
 
-  /* ===== Backward-compat surface aliases — PR 2 removes these ===== */
+  /* Backward-compat surface aliases */
   --color-surface: var(--color-surface-elevated-1);
   --color-surface-container-lowest: var(--color-surface-base);
   --color-surface-container-low: var(--color-surface-elevated-1);
@@ -52,22 +54,23 @@
   --color-outline-variant: var(--color-outline);
 
   /* ===== Semantic tokens ===== */
-  --color-success: oklch(0.65 0.15 150);
-  --color-warning: oklch(0.75 0.12 75);
-  --color-error: oklch(0.55 0.18 25);
-  --color-info: oklch(0.60 0.10 220);
+  --color-success: #346538;
+  --color-warning: #956400;
+  --color-error: #9F2F2D;
+  --color-info: #1F6C9F;
 
   /* ===== Fluid type scale ===== */
-  --text-display: clamp(2.5rem, 4vw + 1rem, 4.5rem);
-  --text-h1: clamp(2rem, 3vw + 0.5rem, 3.5rem);
-  --text-h2: clamp(1.5rem, 2vw + 0.25rem, 2.5rem);
-  --text-h3: clamp(1.25rem, 1.5vw + 0.25rem, 2rem);
+  --text-display: clamp(3rem, 6vw, 6rem);
+  --text-h1: clamp(2rem, 4vw, 3.5rem);
+  --text-h2: clamp(1.5rem, 3vw, 2.5rem);
+  --text-h3: clamp(1.25rem, 2vw, 1.75rem);
   --text-h4: clamp(1.1rem, 1vw + 0.25rem, 1.5rem);
   --text-h5: clamp(1rem, 0.75vw + 0.25rem, 1.25rem);
   --text-h6: clamp(0.9rem, 0.5vw + 0.3rem, 1.1rem);
   --text-body: clamp(0.875rem, 0.5vw + 0.75rem, 1rem);
   --text-caption: clamp(0.75rem, 0.25vw + 0.7rem, 0.875rem);
-  --text-label: 0.68rem;
+  --text-label: 0.75rem;
+  --text-eyebrow: 0.75rem;
 
   /* ===== Spacing ===== */
   --spacing-1: 0.25rem;
@@ -85,19 +88,19 @@
   --spacing-28: 7rem;
   --spacing-32: 8rem;
 
-  /* ===== Border radii ===== */
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.25rem;
+  /* ===== Border radii — Crisp editorial ===== */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-full: 9999px;
 
-  /* ===== Shadows ===== */
-  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.1), 0 4px 6px -4px oklch(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px oklch(0 0 0 / 0.1), 0 8px 10px -6px oklch(0 0 0 / 0.1);
-  --shadow-glow: 0 0 20px oklch(0.52 0.14 220 / 0.3);
+  /* ===== Shadows — Ultra-subtle ===== */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-md: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-xl: 0 8px 24px rgba(0,0,0,0.08);
+  --shadow-glow: none;
 
   /* ===== Z-index scale ===== */
   --z-base: 1;
@@ -112,9 +115,9 @@
   --z-tooltip: 70;
 
   /* ===== Animation ===== */
-  --duration-fast: 150ms;
-  --duration-normal: 250ms;
-  --duration-slow: 400ms;
+  --duration-fast: 200ms;
+  --duration-normal: 400ms;
+  --duration-slow: 600ms;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -123,36 +126,74 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    border-color: var(--color-outline);
   }
 
   html {
     background: var(--color-surface-base);
-    color-scheme: dark;
+    color-scheme: light;
   }
 
+  /* Dark mode — derived variant */
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) {
+      --color-surface-base: #0D0D0C;
+      --color-surface-elevated-1: #161513;
+      --color-surface-elevated-2: #1F1E1B;
+      --color-surface-elevated-3: #2A2824;
+      --color-surface-elevated-4: #34312D;
+      --color-surface-elevated-5: #3E3B36;
+      --color-on-surface: #EDECE9;
+      --color-on-surface-variant: #A8A6A2;
+      --color-outline: #2A2926;
+      --color-brand: #C46B4F;
+      --color-brand-container: #2E1D16;
+      --color-accent: #C46B4F;
+      --color-accent-container: #2E1D16;
+      --color-success: #4CAF50;
+      --color-warning: #DBA641;
+      --color-error: #E57373;
+      --color-info: #64B5F6;
+      color-scheme: dark;
+
+      /* Surface aliases */
+      --color-surface: var(--color-surface-elevated-1);
+      --color-surface-container-lowest: var(--color-surface-base);
+      --color-surface-container-low: var(--color-surface-elevated-1);
+      --color-surface-container: var(--color-surface-elevated-2);
+      --color-surface-container-high: var(--color-surface-elevated-3);
+      --color-surface-container-highest: var(--color-surface-elevated-4);
+      --color-outline-variant: var(--color-outline);
+
+      /* Brand aliases */
+      --color-primary: var(--color-brand);
+      --color-primary-container: var(--color-brand-container);
+      --color-on-primary: var(--color-on-brand);
+    }
+  }
+
+  /* Manual light theme override (data-theme="light") — resets dark tokens */
   html[data-theme="light"] {
-    background: var(--color-surface-base);
+    --color-surface-base: #FBFBFA;
+    --color-surface-elevated-1: #FFFFFF;
+    --color-surface-elevated-2: #F5F4F2;
+    --color-surface-elevated-3: #EEEDEA;
+    --color-surface-elevated-4: #E8E7E3;
+    --color-surface-elevated-5: #E0DFDB;
+    --color-on-surface: #1A1714;
+    --color-on-surface-variant: #787774;
+    --color-outline: #EAEAEA;
+    --color-brand: #C46B4F;
+    --color-brand-container: #FDF0EB;
+    --color-accent: #C46B4F;
+    --color-accent-container: #FDF0EB;
+    --color-success: #346538;
+    --color-warning: #956400;
+    --color-error: #9F2F2D;
+    --color-info: #1F6C9F;
     color-scheme: light;
-    --color-surface-base: oklch(0.99 0.003 240);
-    --color-surface-elevated-1: oklch(0.97 0.005 240);
-    --color-surface-elevated-2: oklch(0.94 0.008 240);
-    --color-surface-elevated-3: oklch(0.90 0.01 240);
-    --color-surface-elevated-4: oklch(0.86 0.012 240);
-    --color-surface-elevated-5: oklch(0.82 0.014 240);
-    --color-brand: oklch(0.35 0.14 220);
-    --color-brand-container: oklch(0.52 0.12 220);
-    --color-on-brand: oklch(0.15 0.01 220);
-    --color-accent: oklch(0.62 0.14 65);
-    --color-accent-container: oklch(0.72 0.12 65);
-    --color-on-accent: oklch(0.96 0.005 65);
-    --color-on-surface: oklch(0.15 0.008 240);
-    --color-on-surface-variant: oklch(0.45 0.01 240);
-    --color-outline: oklch(0.82 0.015 240);
-    --color-success: oklch(0.50 0.14 150);
-    --color-warning: oklch(0.60 0.12 75);
-    --color-error: oklch(0.45 0.16 25);
-    --color-info: oklch(0.45 0.12 220);
-    /* Surface aliases — for backward compat */
+
+    /* Surface aliases */
     --color-surface: var(--color-surface-elevated-1);
     --color-surface-container-lowest: var(--color-surface-base);
     --color-surface-container-low: var(--color-surface-elevated-1);
@@ -160,7 +201,8 @@
     --color-surface-container-high: var(--color-surface-elevated-3);
     --color-surface-container-highest: var(--color-surface-elevated-4);
     --color-outline-variant: var(--color-outline);
-    /* Brand aliases — for backward compat */
+
+    /* Brand aliases */
     --color-primary: var(--color-brand);
     --color-primary-container: var(--color-brand-container);
     --color-on-primary: var(--color-on-brand);
@@ -169,29 +211,23 @@
   body {
     min-height: 100vh;
     font-family: var(--font-body);
-    background:
-      radial-gradient(circle at top, color-mix(in oklch, var(--color-brand) 12%, transparent), transparent 34%),
-      linear-gradient(
-        180deg,
-        var(--color-surface-base) 0%,
-        oklch(0.12 0.01 235) 46%,
-        var(--color-surface-base) 100%
-      );
+    background: var(--color-surface-base);
     color: var(--color-on-surface);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    position: relative;
   }
 
-  html[data-theme="light"] body {
-    background:
-      radial-gradient(circle at top, color-mix(in oklch, var(--color-brand) 14%, transparent), transparent 30%),
-      linear-gradient(
-        180deg,
-        var(--color-surface-base) 0%,
-        var(--color-surface-elevated-1) 48%,
-        var(--color-surface-elevated-2) 100%
-      );
-    color: var(--color-on-surface);
+  /* Warm grain overlay — editorial paper texture */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: var(--z-tooltip);
+    opacity: 0.02;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   html[data-theme="light"] .text-white {
@@ -200,7 +236,11 @@
 
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
     text-wrap: balance;
+    color: var(--color-on-surface);
   }
 
   p, li {
@@ -231,51 +271,51 @@
   }
 
   ::selection {
-    background: color-mix(in oklch, var(--color-brand) 30%, transparent);
-    color: var(--color-on-surface);
-  }
-
-  html[data-theme="light"] ::selection {
-    background: color-mix(in oklch, var(--color-brand) 25%, transparent);
-    color: var(--color-on-surface);
+    background: var(--color-brand);
+    color: var(--color-on-brand);
   }
 }
 
 @layer utilities {
-  .deep-space-shell {
-    background-image:
-      radial-gradient(circle at 12% 12%, color-mix(in oklch, var(--color-brand) 14%, transparent), transparent 30%),
-      radial-gradient(circle at 88% 18%, color-mix(in oklch, var(--color-brand-container) 12%, transparent), transparent 24%),
-      radial-gradient(circle at 50% 100%, color-mix(in oklch, var(--color-brand) 8%, transparent), transparent 32%);
+  /* Editorial accent underline — for hero highlight words */
+  .accent-underline {
+    background: linear-gradient(
+      180deg,
+      transparent 60%,
+      color-mix(in srgb, var(--color-brand) 30%, transparent) 60%
+    );
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 0.05em;
   }
 
-  html[data-theme="light"] .deep-space-shell {
-    background-image:
-      radial-gradient(circle at 12% 12%, color-mix(in oklch, var(--color-brand-container) 18%, transparent), transparent 30%),
-      radial-gradient(circle at 88% 18%, color-mix(in oklch, var(--color-brand) 10%, transparent), transparent 24%),
-      radial-gradient(circle at 50% 100%, color-mix(in oklch, var(--color-brand) 8%, transparent), transparent 32%);
+  /* Editorial container */
+  .container-editorial {
+    width: 100%;
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
-  .glow-pulse {
-    animation: glow-pulse 2.2s ease-in-out infinite;
-  }
-
-  @keyframes glow-pulse {
-    0%,
-    100% {
-      opacity: 0.78;
-      box-shadow:
-        0 0 0 0 color-mix(in oklch, var(--color-brand) 18%, transparent),
-        0 0 12px currentColor;
+  @media (min-width: 768px) {
+    .container-editorial {
+      padding-left: 2rem;
+      padding-right: 2rem;
     }
+  }
 
-    50% {
-      opacity: 1;
-      box-shadow:
-        0 0 0 6px color-mix(in oklch, var(--color-brand) 0%, transparent),
-        0 0 18px currentColor;
+  @media (min-width: 1024px) {
+    .container-editorial {
+      padding-left: 3rem;
+      padding-right: 3rem;
     }
+  }
+
+  /* Terracotta focus ring */
+  .focus-terracotta:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-surface-base), 0 0 0 4px var(--color-brand);
   }
 }
-
-/* @layer components block removed in P10 PR 3 — all new P10 components use cn() + Tailwind classes */

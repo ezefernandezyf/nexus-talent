@@ -14,13 +14,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-[var(--color-brand)] text-[var(--color-on-brand)] hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40",
+    "bg-[var(--color-brand)] text-white hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)]",
   secondary:
-    "bg-[var(--color-accent)] text-[var(--color-on-accent)] hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]/40",
+    "border border-[var(--color-brand)] text-[var(--color-brand)] hover:bg-[var(--color-brand-container)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)]",
   ghost:
-    "bg-transparent text-[var(--color-on-surface)] hover:bg-[var(--color-surface-elevated-1)] hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-on-surface)]/20",
+    "bg-transparent text-[var(--color-on-surface)] hover:bg-[var(--color-surface-elevated-2)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-on-surface)]/20",
   danger:
-    "bg-[var(--color-error)] text-white hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-error)]/40",
+    "bg-[var(--color-error)] text-white hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-error)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)]",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -68,7 +68,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       type="button"
       disabled={isDisabled}
       className={cn(
-        "inline-flex items-center justify-center rounded-full font-label select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
+        "inline-flex items-center justify-center rounded-md font-medium select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
         "disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100",
         variantStyles[variant],
         sizeStyles[size],
