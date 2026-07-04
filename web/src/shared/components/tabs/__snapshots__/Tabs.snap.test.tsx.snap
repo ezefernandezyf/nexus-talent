@@ -6,13 +6,13 @@ exports[`Tabs snapshots > renders tabs in dark mode 1`] = `
 >
   <div
     aria-orientation="horizontal"
-    class="flex border-b border-[var(--color-on-surface)]/10"
+    class="flex border-b border-[var(--text-primary)]/10"
     role="tablist"
   >
     <button
       aria-controls="_r_0_-panel-tab1"
       aria-selected="true"
-      class="relative px-4 py-2.5 text-sm font-display font-medium transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 focus-visible:ring-inset text-[var(--color-brand)]"
+      class="relative px-4 py-2.5 text-sm font-display font-medium transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40 focus-visible:ring-inset text-[var(--accent)]"
       data-tab-value="tab1"
       id="_r_0_-tab-tab1"
       role="tab"
@@ -21,13 +21,13 @@ exports[`Tabs snapshots > renders tabs in dark mode 1`] = `
     >
       Tab 1
       <span
-        class="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[var(--color-brand)]"
+        class="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[var(--accent)]"
       />
     </button>
     <button
       aria-controls="_r_0_-panel-tab2"
       aria-selected="false"
-      class="relative px-4 py-2.5 text-sm font-display font-medium transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 focus-visible:ring-inset text-[var(--color-on-surface-variant)] hover:text-[var(--color-on-surface)]"
+      class="relative px-4 py-2.5 text-sm font-display font-medium transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40 focus-visible:ring-inset text-[var(--color-on-surface-variant)] hover:text-[var(--text-primary)]"
       data-tab-value="tab2"
       id="_r_0_-tab-tab2"
       role="tab"
@@ -40,7 +40,7 @@ exports[`Tabs snapshots > renders tabs in dark mode 1`] = `
       aria-controls="_r_0_-panel-tab3"
       aria-disabled="true"
       aria-selected="false"
-      class="relative px-4 py-2.5 text-sm font-display font-medium transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 focus-visible:ring-inset text-[var(--color-on-surface-variant)] hover:text-[var(--color-on-surface)] cursor-not-allowed opacity-40"
+      class="relative px-4 py-2.5 text-sm font-display font-medium transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40 focus-visible:ring-inset text-[var(--color-on-surface-variant)] hover:text-[var(--text-primary)] cursor-not-allowed opacity-40"
       data-tab-value="tab3"
       disabled=""
       id="_r_0_-tab-tab3"
@@ -70,7 +70,7 @@ exports[`ToggleGroup snapshots > renders toggle group in dark mode 1`] = `
 >
   <button
     aria-pressed="true"
-    class="px-3 py-1.5 text-sm font-body font-medium transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 bg-[var(--color-brand)]/10 text-[var(--color-brand)]"
+    class="px-3 py-1.5 text-sm font-body font-medium transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40 bg-[var(--accent)]/10 text-[var(--accent)]"
     role="button"
     type="button"
   >
@@ -78,7 +78,7 @@ exports[`ToggleGroup snapshots > renders toggle group in dark mode 1`] = `
   </button>
   <button
     aria-pressed="false"
-    class="px-3 py-1.5 text-sm font-body font-medium transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 text-[var(--color-on-surface-variant)] hover:text-[var(--color-on-surface)]"
+    class="px-3 py-1.5 text-sm font-body font-medium transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40 text-[var(--color-on-surface-variant)] hover:text-[var(--text-primary)]"
     role="button"
     type="button"
   >
@@ -86,7 +86,7 @@ exports[`ToggleGroup snapshots > renders toggle group in dark mode 1`] = `
   </button>
   <button
     aria-pressed="false"
-    class="px-3 py-1.5 text-sm font-body font-medium transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 text-[var(--color-on-surface-variant)] hover:text-[var(--color-on-surface)]"
+    class="px-3 py-1.5 text-sm font-body font-medium transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40 text-[var(--color-on-surface-variant)] hover:text-[var(--text-primary)]"
     role="button"
     type="button"
   >

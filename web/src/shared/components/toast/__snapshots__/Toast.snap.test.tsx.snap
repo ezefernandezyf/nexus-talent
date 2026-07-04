@@ -23,7 +23,7 @@ exports[`Toast snapshots > renders all variants in dark mode 1`] = `
       </svg>
     </span>
     <span
-      class="flex-1 text-[var(--color-on-surface)]"
+      class="flex-1 text-[var(--text-primary)]"
     >
       Success message
     </span>
@@ -66,7 +66,7 @@ exports[`Toast snapshots > renders all variants in dark mode 1`] = `
       </svg>
     </span>
     <span
-      class="flex-1 text-[var(--color-on-surface)]"
+      class="flex-1 text-[var(--text-primary)]"
     >
       Error message
     </span>
@@ -109,7 +109,7 @@ exports[`Toast snapshots > renders all variants in dark mode 1`] = `
       </svg>
     </span>
     <span
-      class="flex-1 text-[var(--color-on-surface)]"
+      class="flex-1 text-[var(--text-primary)]"
     >
       Warning message
     </span>
@@ -152,7 +152,7 @@ exports[`Toast snapshots > renders all variants in dark mode 1`] = `
       </svg>
     </span>
     <span
-      class="flex-1 text-[var(--color-on-surface)]"
+      class="flex-1 text-[var(--text-primary)]"
     >
       Info message
     </span>
