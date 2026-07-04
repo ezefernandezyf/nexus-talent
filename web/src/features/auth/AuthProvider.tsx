@@ -48,8 +48,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const registerMutation = useRegister();
   const logoutMutation = useLogout();
 
+  const isDev = import.meta.env.MODE === "development";
+
   // Sync React Query session state to Zustand status
   useEffect(() => {
+    // Dev mode: skip real auth, inject mock user so we can browse all pages
+    if (isDev) {
+      setStatus("authenticated");
+      return;
+    }
+
     if (isLoading) {
       setStatus("loading");
     } else if (sessionData) {
@@ -58,7 +66,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       // null data (explicitly cleared), error, or initial undefined → unauthenticated
       setStatus("unauthenticated");
     }
-  }, [isLoading, sessionData, setStatus]);
+  }, [isLoading, sessionData, setStatus, isDev]);
 
   // Reset auth status on unmount
   useEffect(() => {
@@ -112,8 +120,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     throw new Error("Social identity unlinking is not available in this version.");
   }
 
-  const user = sessionData?.user ?? null;
-  const isAdmin = sessionData?.isAdmin ?? false;
+  // Dev mode: inject a mock user so ProtectedRoute allows access without real auth
+  const user = isDev
+    ? { id: "dev-user", email: "dev@nexus.local", displayName: "Dev User" }
+    : (sessionData?.user ?? null);
+  const isAdmin = isDev || (sessionData?.isAdmin ?? false);
 
   const value: AuthContextValue = {
     errorMessage: null,

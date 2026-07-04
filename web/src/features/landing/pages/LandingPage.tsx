@@ -105,14 +105,6 @@ export function LandingPage() {
           <div className="grid gap-16 lg:grid-cols-12 lg:gap-8 items-center">
             {/* ── Text column — 7 cols ── */}
             <div className="lg:col-span-7">
-              <motion.div
-                initial={anim ? { opacity: 0, y: 16 } : undefined}
-                animate={anim ? { opacity: 1, y: 0 } : undefined}
-                transition={{ duration: 0.7, ease: EASE }}
-              >
-                <Eyebrow>For modern recruiters</Eyebrow>
-              </motion.div>
-
               <motion.h1
                 initial={anim ? { opacity: 0, y: 20 } : undefined}
                 animate={anim ? { opacity: 1, y: 0 } : undefined}
@@ -132,7 +124,7 @@ export function LandingPage() {
                 className="mt-8 text-lg text-[var(--color-on-surface-variant)] max-w-xl"
               >
                 Paste any JD. Get a structured breakdown of skills, keywords,
-                gaps, and outreach messages — in seconds, not hours.
+                gaps, and outreach messages: in seconds, not hours.
               </motion.p>
 
               <motion.div
@@ -174,7 +166,7 @@ export function LandingPage() {
           <div className="mt-20 grid gap-16 lg:grid-cols-2 lg:gap-24 items-start max-w-5xl mx-auto">
             <Reveal delay={0.1}>
               <p className="text-lg leading-relaxed text-[var(--color-on-surface-variant)]">
-                Every job description hides intent — what the hiring manager
+                Every job description hides intent: what the hiring manager
                 actually needs versus what HR wrote down. Nexus Talent
                 distinguishes the two. It surfaces skills, gaps, and outreach
                 angles so you can move on candidates before your competitors
@@ -214,7 +206,7 @@ export function LandingPage() {
             {/* ── Large bento cell — 2 cols x 2 rows ── */}
             <Reveal delay={0.05} className="md:col-span-2 md:row-span-2">
               <Card
-                variant="interactive"
+                variant="elevated"
                 padding="lg"
                 className="flex h-full flex-col"
               >
@@ -228,7 +220,7 @@ export function LandingPage() {
                 </div>
                 <h3 className="text-h3 mt-8">Paste the description</h3>
                 <p className="mt-4 max-w-md leading-relaxed text-[var(--color-on-surface-variant)]">
-                  Drop any job description — polished or messy, internal or
+                  Drop any job description, polished or messy, internal or
                   external. The parser normalizes it, identifies structure,
                   and prepares a clean analysis surface. No formatting
                   required.
@@ -243,7 +235,7 @@ export function LandingPage() {
             {/* ── Small stacked cell 02 ── */}
             <Reveal delay={0.15}>
               <Card
-                variant="interactive"
+                variant="elevated"
                 padding="md"
                 className="h-full"
               >
@@ -268,7 +260,7 @@ export function LandingPage() {
             {/* ── Small stacked cell 03 ── */}
             <Reveal delay={0.25}>
               <Card
-                variant="interactive"
+                variant="elevated"
                 padding="md"
                 className="h-full"
               >
@@ -313,9 +305,9 @@ export function LandingPage() {
             </div>
           </Reveal>
 
-          <div className="mt-16 grid gap-6 md:grid-cols-3 md:grid-rows-2">
-            {/* ── Hero muted card — 2 cols x 2 rows ── */}
-            <Reveal delay={0.05} className="md:col-span-2 md:row-span-2">
+          <div className="mt-16 grid gap-6 md:grid-cols-3 md:grid-rows-3">
+            {/* ── Hero muted card — 2 cols x 3 rows ── */}
+            <Reveal delay={0.05} className="md:col-span-2 md:row-span-3">
               <div
                 className="flex h-full flex-col rounded-[var(--radius-lg)] p-10"
                 style={{ backgroundColor: "#FDF0EB" }}
@@ -323,12 +315,12 @@ export function LandingPage() {
                 <Badge variant="brand" className="w-fit">
                   Flagship
                 </Badge>
-                <h3 className="text-h2 mt-8 max-w-md text-[var(--color-on-surface)]">
+                <h3 className="text-h2 mt-8 max-w-md text-[#1A1714]">
                   Skills matrix that ranks the ones that actually matter.
                 </h3>
-                <p className="mt-6 max-w-md leading-relaxed text-[var(--color-on-surface-variant)]">
+                <p className="mt-6 max-w-md leading-relaxed text-[#5C5956]">
                   Every extracted skill comes weighted by centrality to the
-                  role — so you know which requirements are non-negotiable
+                  role, so you know which requirements are non-negotiable
                   and which are wishlist. No more chasing candidates who
                   match on the wrong axes.
                 </p>
@@ -342,7 +334,7 @@ export function LandingPage() {
             {/* ── Small feature cards ── */}
             <Reveal delay={0.15}>
               <Card
-                variant="interactive"
+                variant="elevated"
                 padding="md"
                 className="h-full"
               >
@@ -353,7 +345,7 @@ export function LandingPage() {
                   Gap detection
                 </h3>
                 <p className="mt-2 text-sm text-[var(--color-on-surface-variant)]">
-                  See where a candidate falls short — before the screening
+                  See where a candidate falls short, before the screening
                   call.
                 </p>
               </Card>
@@ -361,7 +353,7 @@ export function LandingPage() {
 
             <Reveal delay={0.2}>
               <Card
-                variant="interactive"
+                variant="elevated"
                 padding="md"
                 className="h-full"
               >
@@ -379,7 +371,7 @@ export function LandingPage() {
 
             <Reveal delay={0.25}>
               <Card
-                variant="interactive"
+                variant="elevated"
                 padding="md"
                 className="h-full"
               >
@@ -399,7 +391,11 @@ export function LandingPage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ FAQ ═══ */}
-      <FAQ />
+      <section className="py-24 md:py-32">
+        <div className="container-editorial">
+          <FAQ />
+        </div>
+      </section>
 
       {/* ═══════════════════════════════════════════════════ BOTTOM CTA ═══ */}
       <section className="py-24 md:py-32">
