@@ -14,11 +14,11 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-[var(--color-brand)] text-white hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)]",
+    "bg-[var(--accent)] text-white hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)]",
   secondary:
-    "border border-[var(--color-brand)] text-[var(--color-brand)] hover:bg-[var(--color-brand-container)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)]",
+    "border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--color-brand-container)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)]",
   ghost:
-    "bg-transparent text-[var(--color-on-surface)] hover:bg-[var(--color-surface-elevated-2)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-on-surface)]/20",
+    "bg-transparent text-[var(--text-primary)] hover:bg-[var(--color-surface-elevated-2)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--text-primary)]/20",
   danger:
     "bg-[var(--color-error)] text-white hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-error)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)]",
 };

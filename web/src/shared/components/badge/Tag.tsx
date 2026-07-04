@@ -15,7 +15,7 @@ const variantStyles: Record<BadgeVariant, string> = {
   success: "bg-[var(--color-success)]/10 text-[var(--color-success)]",
   warning: "bg-[var(--color-warning)]/10 text-[var(--color-warning)]",
   error: "bg-[var(--color-error)]/10 text-[var(--color-error)]",
-  brand: "bg-[var(--color-brand)]/10 text-[var(--color-brand)]",
+  brand: "bg-[var(--accent)]/10 text-[var(--accent)]",
   neutral: "bg-[var(--color-surface-elevated-2)] text-[var(--color-on-surface-variant)]",
 };
 

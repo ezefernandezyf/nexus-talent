@@ -75,7 +75,7 @@ export function Toast({
         {iconMap[variant]}
       </span>
 
-      <span className="flex-1 text-[var(--color-on-surface)]">{message}</span>
+      <span className="flex-1 text-[var(--text-primary)]">{message}</span>
 
       <button
         type="button"

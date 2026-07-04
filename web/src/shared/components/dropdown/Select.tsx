@@ -93,10 +93,10 @@ export function Select({
         aria-labelledby={listboxId}
         onClick={handleToggle}
         className={cn(
-          "flex h-10 w-full items-center justify-between gap-2 rounded-lg bg-[var(--color-surface-base)] px-3 text-sm text-[var(--color-on-surface)]",
-          "shadow-[inset_0_0_0_1px] shadow-[var(--color-on-surface)]/10",
+          "flex h-10 w-full items-center justify-between gap-2 rounded-lg bg-[var(--color-surface-base)] px-3 text-sm text-[var(--text-primary)]",
+          "shadow-[inset_0_0_0_1px] shadow-[var(--text-primary)]/10",
           "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-          "focus:outline-none focus:shadow-[inset_0_0_0_2px] focus:shadow-[var(--color-brand)]",
+          "focus:outline-none focus:shadow-[inset_0_0_0_2px] focus:shadow-[var(--accent)]",
         )}
       >
         <span className={cn(!value && "text-[var(--color-on-surface-variant)]")}>
@@ -148,14 +148,14 @@ export function Select({
                   }}
                   className={cn(
                     "flex cursor-pointer items-center justify-between px-3 py-2 text-sm transition-colors",
-                    "text-[var(--color-on-surface)] hover:bg-[var(--color-surface-elevated-1)]",
-                    isSelected && "bg-[var(--color-brand)]/10",
+                    "text-[var(--text-primary)] hover:bg-[var(--color-surface-elevated-1)]",
+                    isSelected && "bg-[var(--accent)]/10",
                     option.disabled && "cursor-not-allowed opacity-40",
                   )}
                 >
                   <span>{option.label}</span>
                   {isSelected && (
-                    <Check size={16} weight="bold" className="text-[var(--color-brand)]" />
+                    <Check size={16} weight="bold" className="text-[var(--accent)]" />
                   )}
                 </div>
               );

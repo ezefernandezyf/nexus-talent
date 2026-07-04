@@ -21,11 +21,11 @@ interface CardSubProps extends PropsWithChildren<HTMLAttributes<HTMLDivElement>>
 
 const variantStyles: Record<CardVariant, string> = {
   flat:
-    "bg-[var(--color-surface-elevated-1)] border border-[var(--color-outline)]",
+    "bg-[var(--color-surface-elevated-1)] border border-[var(--border)]",
   elevated:
-    "bg-[var(--color-surface-elevated-1)] border border-[var(--color-outline)] shadow-[var(--shadow-md)]",
+    "bg-[var(--color-surface-elevated-1)] border border-[var(--border)] shadow-[var(--shadow-md)]",
   interactive:
-    "bg-[var(--color-surface-elevated-1)] border border-[var(--color-outline)] shadow-[var(--shadow-sm)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-lg)] cursor-pointer transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
+    "bg-[var(--color-surface-elevated-1)] border border-[var(--border)] shadow-[var(--shadow-sm)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-lg)] cursor-pointer transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
 };
 
 const paddingStyles: Record<CardPadding, string> = {
@@ -40,7 +40,7 @@ const paddingStyles: Record<CardPadding, string> = {
 
 function CardHeader({ className, children, ...props }: CardSubProps) {
   return (
-    <div className={cn("font-display text-lg font-semibold text-[var(--color-on-surface)]", className)} {...props}>
+    <div className={cn("font-display text-lg font-semibold text-[var(--text-primary)]", className)} {...props}>
       {children}
     </div>
   );

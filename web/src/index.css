@@ -16,42 +16,42 @@
   --font-mono: "JetBrains Mono", monospace;
 
   /* ===== Editorial Precision Palette — Warm Monochrome + Terracotta ===== */
-  /* Brand → Terracotta accent */
-  --color-brand: #C46B4F;
-  --color-brand-container: #FDF0EB;
-  --color-on-brand: #FFFFFF;
 
-  /* Backward-compat aliases */
-  --color-primary: var(--color-brand);
-  --color-primary-container: var(--color-brand-container);
-  --color-on-primary: var(--color-on-brand);
-
-  /* Accent → same as brand (single-accent system) */
+  /* ── New canonical tokens ── */
   --color-accent: #C46B4F;
-  --color-accent-container: #FDF0EB;
+  --color-accent-muted: #FDF0EB;
   --color-on-accent: #FFFFFF;
+  --color-text-primary: #1A1714;
+  --color-text-secondary: #787774;
+  --color-text-tertiary: #A8A6A2;
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #F5F4F2;
+  --color-background: #FBFBFA;
+  --color-border: #EAEAEA;
 
-  /* Surfaces — Warm, light-first */
-  --color-surface-base: #FBFBFA;
-  --color-surface-elevated-1: #FFFFFF;
-  --color-surface-elevated-2: #F5F4F2;
+  /* ── Backward-compat aliases (new canonical → old name) ── */
+  --color-brand: var(--color-accent);
+  --color-brand-container: var(--color-accent-muted);
+  --color-on-brand: var(--color-on-accent);
+  --color-primary: var(--color-accent);
+  --color-primary-container: var(--color-accent-muted);
+  --color-on-primary: var(--color-on-accent);
+  --color-accent-container: var(--color-accent-muted);
+  --color-on-surface: var(--color-text-primary);
+  --color-on-surface-variant: var(--color-text-secondary);
+  --color-outline: var(--color-border);
+  --color-surface-base: var(--color-background);
+  --color-surface-elevated-1: var(--color-surface);
+  --color-surface-elevated-2: var(--color-surface-muted);
   --color-surface-elevated-3: #EEEDEA;
   --color-surface-elevated-4: #E8E7E3;
   --color-surface-elevated-5: #E0DFDB;
-
-  /* Text — Espresso warmth */
-  --color-on-surface: #1A1714;
-  --color-on-surface-variant: #787774;
-  --color-outline: #EAEAEA;
-
-  /* Backward-compat surface aliases */
-  --color-surface: var(--color-surface-elevated-1);
-  --color-surface-container-lowest: var(--color-surface-base);
-  --color-surface-container-low: var(--color-surface-elevated-1);
-  --color-surface-container: var(--color-surface-elevated-2);
+  --color-surface-container-lowest: var(--color-background);
+  --color-surface-container-low: var(--color-surface);
+  --color-surface-container: var(--color-surface-muted);
   --color-surface-container-high: var(--color-surface-elevated-3);
   --color-surface-container-highest: var(--color-surface-elevated-4);
-  --color-outline-variant: var(--color-outline);
+  --color-outline-variant: var(--color-border);
 
   /* ===== Semantic tokens ===== */
   --color-success: #346538;
@@ -126,86 +126,69 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    border-color: var(--color-outline);
+    border-color: var(--color-border);
   }
 
   html {
-    background: var(--color-surface-base);
+    background: var(--color-background);
     color-scheme: light;
+
+    /* Shorthand CSS vars for direct var() access in components */
+    --accent: var(--color-accent);
+    --accent-muted: var(--color-accent-muted);
+    --text-primary: var(--color-text-primary);
+    --text-secondary: var(--color-text-secondary);
+    --text-tertiary: var(--color-text-tertiary);
+    --surface: var(--color-surface);
+    --surface-muted: var(--color-surface-muted);
+    --background: var(--color-background);
+    --border: var(--color-border);
   }
 
   /* Dark mode — derived variant */
   @media (prefers-color-scheme: dark) {
     html:not([data-theme="light"]) {
-      --color-surface-base: #0D0D0C;
-      --color-surface-elevated-1: #161513;
-      --color-surface-elevated-2: #1F1E1B;
-      --color-surface-elevated-3: #2A2824;
-      --color-surface-elevated-4: #34312D;
-      --color-surface-elevated-5: #3E3B36;
-      --color-on-surface: #EDECE9;
-      --color-on-surface-variant: #A8A6A2;
-      --color-outline: #2A2926;
-      --color-brand: #C46B4F;
-      --color-brand-container: #2E1D16;
-      --color-accent: #C46B4F;
-      --color-accent-container: #2E1D16;
+      /* New canonical tokens — dark mode overrides */
+      --color-accent-muted: #2E1D16;
+      --color-text-primary: #EDECE9;
+      --color-text-secondary: #A8A6A2;
+      --color-surface: #161513;
+      --color-surface-muted: #1F1E1B;
+      --color-background: #0D0D0C;
+      --color-border: #2A2926;
       --color-success: #4CAF50;
       --color-warning: #DBA641;
       --color-error: #E57373;
       --color-info: #64B5F6;
       color-scheme: dark;
 
-      /* Surface aliases */
-      --color-surface: var(--color-surface-elevated-1);
-      --color-surface-container-lowest: var(--color-surface-base);
-      --color-surface-container-low: var(--color-surface-elevated-1);
-      --color-surface-container: var(--color-surface-elevated-2);
-      --color-surface-container-high: var(--color-surface-elevated-3);
-      --color-surface-container-highest: var(--color-surface-elevated-4);
-      --color-outline-variant: var(--color-outline);
-
-      /* Brand aliases */
-      --color-primary: var(--color-brand);
-      --color-primary-container: var(--color-brand-container);
-      --color-on-primary: var(--color-on-brand);
+      /* Elevated surfaces — keep for container needs */
+      --color-surface-elevated-3: #2A2824;
+      --color-surface-elevated-4: #34312D;
+      --color-surface-elevated-5: #3E3B36;
     }
   }
 
   /* Manual light theme override (data-theme="light") — resets dark tokens */
   html[data-theme="light"] {
-    --color-surface-base: #FBFBFA;
-    --color-surface-elevated-1: #FFFFFF;
-    --color-surface-elevated-2: #F5F4F2;
-    --color-surface-elevated-3: #EEEDEA;
-    --color-surface-elevated-4: #E8E7E3;
-    --color-surface-elevated-5: #E0DFDB;
-    --color-on-surface: #1A1714;
-    --color-on-surface-variant: #787774;
-    --color-outline: #EAEAEA;
-    --color-brand: #C46B4F;
-    --color-brand-container: #FDF0EB;
-    --color-accent: #C46B4F;
-    --color-accent-container: #FDF0EB;
+    /* New canonical tokens — light mode reset */
+    --color-accent-muted: #FDF0EB;
+    --color-text-primary: #1A1714;
+    --color-text-secondary: #787774;
+    --color-surface: #FFFFFF;
+    --color-surface-muted: #F5F4F2;
+    --color-background: #FBFBFA;
+    --color-border: #EAEAEA;
     --color-success: #346538;
     --color-warning: #956400;
     --color-error: #9F2F2D;
     --color-info: #1F6C9F;
     color-scheme: light;
 
-    /* Surface aliases */
-    --color-surface: var(--color-surface-elevated-1);
-    --color-surface-container-lowest: var(--color-surface-base);
-    --color-surface-container-low: var(--color-surface-elevated-1);
-    --color-surface-container: var(--color-surface-elevated-2);
-    --color-surface-container-high: var(--color-surface-elevated-3);
-    --color-surface-container-highest: var(--color-surface-elevated-4);
-    --color-outline-variant: var(--color-outline);
-
-    /* Brand aliases */
-    --color-primary: var(--color-brand);
-    --color-primary-container: var(--color-brand-container);
-    --color-on-primary: var(--color-on-brand);
+    /* Elevated surfaces */
+    --color-surface-elevated-3: #EEEDEA;
+    --color-surface-elevated-4: #E8E7E3;
+    --color-surface-elevated-5: #E0DFDB;
   }
 
   body {

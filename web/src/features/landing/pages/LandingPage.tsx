@@ -28,7 +28,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 const linkBtnSecondary = cn(
   "inline-flex items-center justify-center rounded-md font-medium select-none",
   "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-  "border border-[var(--color-brand)] text-[var(--color-brand)]",
+  "border border-[var(--accent)] text-[var(--accent)]",
   "hover:bg-[var(--color-brand-container)] active:scale-[0.98]",
   "h-10 px-4 text-label text-base gap-2",
 );
@@ -36,14 +36,14 @@ const linkBtnSecondary = cn(
 const linkBtnPrimary = cn(
   "inline-flex items-center justify-center rounded-md font-medium select-none",
   "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-  "bg-[var(--color-brand)] text-white hover:opacity-90 active:scale-[0.98]",
+  "bg-[var(--accent)] text-white hover:opacity-90 active:scale-[0.98]",
   "h-10 px-4 text-label text-base gap-2",
 );
 
 const ctaOutline = cn(
   "inline-flex items-center justify-center rounded-md font-medium select-none",
   "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-  "border border-[var(--color-brand)] text-[var(--color-brand)]",
+  "border border-[var(--accent)] text-[var(--accent)]",
   "hover:bg-[var(--color-brand-container)] active:scale-[0.98]",
   "h-12 px-6 text-label text-lg gap-2.5",
 );
@@ -63,7 +63,7 @@ export function LandingPage() {
   const anim = !prefersReducedMotion;
 
   return (
-    <main className="relative bg-[var(--color-surface-base)] text-[var(--color-on-surface)]">
+    <main className="relative bg-[var(--color-surface-base)] text-[var(--text-primary)]">
       <Navbar
         brand="Nexus Talent"
         brandHref="/"
@@ -175,9 +175,9 @@ export function LandingPage() {
             </Reveal>
 
             <Reveal delay={0.2}>
-              <div className="border-l-2 border-[var(--color-brand)] pl-8">
+              <div className="border-l-2 border-[var(--accent)] pl-8">
                 <div
-                  className="font-display font-black text-[var(--color-on-surface)]"
+                  className="font-display font-black text-[var(--text-primary)]"
                   style={{ fontSize: "clamp(3rem, 5vw, 4.5rem)" }}
                 >
                   12s
@@ -211,10 +211,10 @@ export function LandingPage() {
                 className="flex h-full flex-col"
               >
                 <div className="flex items-start justify-between">
-                  <div className="font-display font-black text-6xl text-[var(--color-on-surface)]/90">
+                  <div className="font-display font-black text-6xl text-[var(--text-primary)]/90">
                     01
                   </div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-brand)]/10 text-[var(--color-brand)]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--accent)]/10 text-[var(--accent)]">
                     <ListMagnifyingGlass size={24} weight="regular" />
                   </div>
                 </div>
@@ -226,7 +226,7 @@ export function LandingPage() {
                   required.
                 </p>
                 <div className="mt-auto flex items-center gap-2 pt-10 text-xs text-[var(--color-on-surface-variant)]/60">
-                  <div className="h-1 w-1 rounded-full bg-[var(--color-brand)]" />
+                  <div className="h-1 w-1 rounded-full bg-[var(--accent)]" />
                   <span>Averages 2s parse time</span>
                 </div>
               </Card>
@@ -240,14 +240,14 @@ export function LandingPage() {
                 className="h-full"
               >
                 <div className="flex items-start justify-between">
-                  <div className="font-display font-black text-4xl text-[var(--color-on-surface)]">
+                  <div className="font-display font-black text-4xl text-[var(--text-primary)]">
                     02
                   </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-brand)]/10 text-[var(--color-brand)]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--accent)]/10 text-[var(--accent)]">
                     <Sparkle size={20} weight="regular" />
                   </div>
                 </div>
-                <h3 className="mt-6 font-display text-xl font-bold text-[var(--color-on-surface)]">
+                <h3 className="mt-6 font-display text-xl font-bold text-[var(--text-primary)]">
                   Get structured analysis
                 </h3>
                 <p className="mt-3 text-sm text-[var(--color-on-surface-variant)]">
@@ -265,14 +265,14 @@ export function LandingPage() {
                 className="h-full"
               >
                 <div className="flex items-start justify-between">
-                  <div className="font-display font-black text-4xl text-[var(--color-on-surface)]">
+                  <div className="font-display font-black text-4xl text-[var(--text-primary)]">
                     03
                   </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-brand)]/10 text-[var(--color-brand)]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--accent)]/10 text-[var(--accent)]">
                     <ChatCircleText size={20} weight="regular" />
                   </div>
                 </div>
-                <h3 className="mt-6 font-display text-xl font-bold text-[var(--color-on-surface)]">
+                <h3 className="mt-6 font-display text-xl font-bold text-[var(--text-primary)]">
                   Copy outreach messages
                 </h3>
                 <p className="mt-3 text-sm text-[var(--color-on-surface-variant)]">
@@ -338,10 +338,10 @@ export function LandingPage() {
                 padding="md"
                 className="h-full"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-brand)]/10 text-[var(--color-brand)]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--accent)]/10 text-[var(--accent)]">
                   <Target size={22} weight="regular" />
                 </div>
-                <h3 className="mt-6 font-display text-lg font-bold text-[var(--color-on-surface)]">
+                <h3 className="mt-6 font-display text-lg font-bold text-[var(--text-primary)]">
                   Gap detection
                 </h3>
                 <p className="mt-2 text-sm text-[var(--color-on-surface-variant)]">
@@ -357,10 +357,10 @@ export function LandingPage() {
                 padding="md"
                 className="h-full"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-brand)]/10 text-[var(--color-brand)]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--accent)]/10 text-[var(--accent)]">
                   <Lightning size={22} weight="regular" />
                 </div>
-                <h3 className="mt-6 font-display text-lg font-bold text-[var(--color-on-surface)]">
+                <h3 className="mt-6 font-display text-lg font-bold text-[var(--text-primary)]">
                   Instant outreach
                 </h3>
                 <p className="mt-2 text-sm text-[var(--color-on-surface-variant)]">
@@ -375,10 +375,10 @@ export function LandingPage() {
                 padding="md"
                 className="h-full"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-brand)]/10 text-[var(--color-brand)]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--accent)]/10 text-[var(--accent)]">
                   <ShieldCheck size={22} weight="regular" />
                 </div>
-                <h3 className="mt-6 font-display text-lg font-bold text-[var(--color-on-surface)]">
+                <h3 className="mt-6 font-display text-lg font-bold text-[var(--text-primary)]">
                   Private by default
                 </h3>
                 <p className="mt-2 text-sm text-[var(--color-on-surface-variant)]">
@@ -454,7 +454,7 @@ export function LandingPage() {
 function StatBlock({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <div className="font-display font-black text-3xl text-[var(--color-brand)]">
+      <div className="font-display font-black text-3xl text-[var(--accent)]">
         {value}
       </div>
       <div className="mt-1 text-xs text-[var(--color-on-surface-variant)]">
@@ -471,19 +471,19 @@ function HeroComposition() {
     <div className="relative h-full w-full">
       {/* Large off-white rectangle */}
       <div
-        className="absolute right-0 top-8 h-72 w-72 rounded-lg border border-[var(--color-outline)]"
+        className="absolute right-0 top-8 h-72 w-72 rounded-lg border border-[var(--border)]"
         style={{ backgroundColor: "#F5F4F2" }}
       />
 
       {/* Overlapping analysis card */}
       <div
-        className="absolute right-16 top-24 h-56 w-64 rounded-lg border border-[var(--color-outline)] bg-[var(--color-surface-elevated-1)] p-6"
+        className="absolute right-16 top-24 h-56 w-64 rounded-lg border border-[var(--border)] bg-[var(--color-surface-elevated-1)] p-6"
         style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}
       >
-        <div className="text-xs font-medium uppercase tracking-[0.15em] text-[var(--color-brand)]">
+        <div className="text-xs font-medium uppercase tracking-[0.15em] text-[var(--accent)]">
           Analysis
         </div>
-        <div className="mt-3 font-display text-lg font-bold leading-tight text-[var(--color-on-surface)]">
+        <div className="mt-3 font-display text-lg font-bold leading-tight text-[var(--text-primary)]">
           Senior Backend Engineer
         </div>
         <div className="mt-4 flex flex-wrap gap-1.5">
@@ -495,14 +495,14 @@ function HeroComposition() {
         </div>
         {/* Skill progress bars */}
         <div className="mt-4 space-y-1.5">
-          <div className="h-1.5 w-full rounded-full bg-[var(--color-outline)]/20">
-            <div className="h-full w-4/5 rounded-full bg-[var(--color-brand)]" />
+          <div className="h-1.5 w-full rounded-full bg-[var(--border)]/20">
+            <div className="h-full w-4/5 rounded-full bg-[var(--accent)]" />
           </div>
-          <div className="h-1.5 w-full rounded-full bg-[var(--color-outline)]/20">
-            <div className="h-full w-3/5 rounded-full bg-[var(--color-brand)]" />
+          <div className="h-1.5 w-full rounded-full bg-[var(--border)]/20">
+            <div className="h-full w-3/5 rounded-full bg-[var(--accent)]" />
           </div>
-          <div className="h-1.5 w-full rounded-full bg-[var(--color-outline)]/20">
-            <div className="h-full w-2/5 rounded-full bg-[var(--color-brand)]" />
+          <div className="h-1.5 w-full rounded-full bg-[var(--border)]/20">
+            <div className="h-full w-2/5 rounded-full bg-[var(--accent)]" />
           </div>
         </div>
       </div>
@@ -510,17 +510,17 @@ function HeroComposition() {
       {/* Brand accent circle */}
       <div
         className="absolute left-4 top-4 h-24 w-24 rounded-full"
-        style={{ backgroundColor: "var(--color-brand)" }}
+        style={{ backgroundColor: "var(--accent)" }}
       />
 
       {/* Small cream circle */}
       <div
-        className="absolute bottom-8 left-24 h-16 w-16 rounded-full border border-[var(--color-outline)]"
+        className="absolute bottom-8 left-24 h-16 w-16 rounded-full border border-[var(--border)]"
         style={{ backgroundColor: "#FDF0EB" }}
       />
 
       {/* Vertical line detail */}
-      <div className="absolute bottom-16 left-0 h-32 w-px bg-[var(--color-outline)]" />
+      <div className="absolute bottom-16 left-0 h-32 w-px bg-[var(--border)]" />
     </div>
   );
 }

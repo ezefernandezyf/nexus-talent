@@ -161,14 +161,14 @@ function DrawerBase({
             >
               {/* Header */}
               <div className="flex items-start justify-between gap-4">
-                <h2 className="font-display text-lg font-semibold text-[var(--color-on-surface)]">
+                <h2 className="font-display text-lg font-semibold text-[var(--text-primary)]">
                   {title}
                 </h2>
                 <button
                   type="button"
                   aria-label="Close drawer"
                   onClick={onClose}
-                  className="flex items-center justify-center rounded-full p-1 text-[var(--color-on-surface-variant)] transition-colors hover:bg-[var(--color-surface-elevated-1)] hover:text-[var(--color-on-surface)]"
+                  className="flex items-center justify-center rounded-full p-1 text-[var(--color-on-surface-variant)] transition-colors hover:bg-[var(--color-surface-elevated-1)] hover:text-[var(--text-primary)]"
                 >
                   <X size={18} weight="bold" />
                 </button>

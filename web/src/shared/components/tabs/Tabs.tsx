@@ -105,7 +105,7 @@ function TabsList({ className, children }: TabsListProps) {
       aria-orientation="horizontal"
       onKeyDown={handleKeyDown}
       className={cn(
-        "flex border-b border-[var(--color-on-surface)]/10",
+        "flex border-b border-[var(--text-primary)]/10",
         className,
       )}
     >
@@ -132,17 +132,17 @@ function TabsTab({ value: tabValue, children, className, disabled }: TabsTabProp
       onClick={() => onChange(tabValue)}
       className={cn(
         "relative px-4 py-2.5 text-sm font-display font-medium transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 focus-visible:ring-inset",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40 focus-visible:ring-inset",
         isSelected
-          ? "text-[var(--color-brand)]"
-          : "text-[var(--color-on-surface-variant)] hover:text-[var(--color-on-surface)]",
+          ? "text-[var(--accent)]"
+          : "text-[var(--color-on-surface-variant)] hover:text-[var(--text-primary)]",
         disabled && "cursor-not-allowed opacity-40",
         className,
       )}
     >
       {children}
       {isSelected && (
-        <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[var(--color-brand)]" />
+        <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[var(--accent)]" />
       )}
     </button>
   );

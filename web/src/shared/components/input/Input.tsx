@@ -33,9 +33,9 @@ export type InputProps = InputAsInput | InputAsTextarea;
 // ---------------------------------------------------------------------------
 
 const baseStyles =
-  "w-full bg-[var(--color-surface-elevated-1)] text-[var(--color-on-surface)] text-body placeholder:text-[var(--color-on-surface-variant)] " +
-  "border border-[var(--color-outline)] " +
-  "focus:outline-none focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)] " +
+  "w-full bg-[var(--color-surface-elevated-1)] text-[var(--text-primary)] text-body placeholder:text-[var(--color-on-surface-variant)] " +
+  "border border-[var(--border)] " +
+  "focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] " +
   "disabled:opacity-50 disabled:cursor-not-allowed " +
   "transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]";
 
@@ -82,7 +82,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
         {label && (
           <label
             htmlFor={inputId}
-            className="font-label text-sm font-medium text-[var(--color-on-surface)]"
+            className="font-label text-sm font-medium text-[var(--text-primary)]"
           >
             {label}
           </label>

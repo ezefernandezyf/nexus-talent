@@ -71,10 +71,10 @@ function ToggleGroupItem({ value: itemValue, children, className, disabled }: To
       onClick={handleClick}
       className={cn(
         "px-3 py-1.5 text-sm font-body font-medium transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40",
         isSelected
-          ? "bg-[var(--color-brand)]/10 text-[var(--color-brand)]"
-          : "text-[var(--color-on-surface-variant)] hover:text-[var(--color-on-surface)]",
+          ? "bg-[var(--accent)]/10 text-[var(--accent)]"
+          : "text-[var(--color-on-surface-variant)] hover:text-[var(--text-primary)]",
         disabled && "cursor-not-allowed opacity-40",
         className,
       )}

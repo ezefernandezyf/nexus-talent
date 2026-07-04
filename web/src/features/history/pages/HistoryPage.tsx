@@ -42,7 +42,7 @@ export function HistoryPage() {
 
       <Button
         aria-label="Nuevo análisis"
-        className="fixed bottom-5 right-5 z-[var(--z-fab)] flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-brand)] text-white shadow-md transition-all hover:opacity-90 active:scale-95 sm:bottom-8 sm:right-8 sm:h-14 sm:w-14"
+        className="fixed bottom-5 right-5 z-[var(--z-fab)] flex h-12 w-12 items-center justify-center rounded-full bg-[var(--accent)] text-white shadow-md transition-all hover:opacity-90 active:scale-95 sm:bottom-8 sm:right-8 sm:h-14 sm:w-14"
         type="button"
         onClick={() => navigate("/app/analysis")}
       >

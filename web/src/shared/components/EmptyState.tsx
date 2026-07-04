@@ -5,7 +5,7 @@ import { cn } from "@/shared/utils/cn";
 const linkBtnPrimary = cn(
   "inline-flex items-center justify-center rounded-full font-label select-none",
   "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-  "bg-[var(--color-brand)] text-[var(--color-on-brand)]",
+  "bg-[var(--accent)] text-[var(--color-on-brand)]",
   "hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97]",
   "h-10 px-4 text-label text-base gap-2",
 );

@@ -58,7 +58,7 @@ export function AuthShell({ children, mode }: AuthShellProps) {
         {/* Brand */}
         <Link
           to="/"
-          className="font-display text-lg font-bold tracking-tight text-[var(--color-on-surface)] no-underline"
+          className="font-display text-lg font-bold tracking-tight text-[var(--text-primary)] no-underline"
         >
           Nexus Talent
         </Link>
@@ -97,7 +97,7 @@ export function AuthShell({ children, mode }: AuthShellProps) {
       {/* ===== Right panel — Auth form (7 cols) ===== */}
       <main className="flex items-center justify-center p-6 sm:p-8 lg:col-span-7 lg:p-12">
         <div className="w-full max-w-md">
-          <div className="rounded-lg border border-[var(--color-outline)] bg-[var(--color-surface)] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:p-10">
+          <div className="rounded-lg border border-[var(--border)] bg-[var(--color-surface)] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:p-10">
             {/* Title */}
             <h2 className="font-display text-h2">{copy.title}</h2>
 
@@ -132,7 +132,7 @@ export function AuthShell({ children, mode }: AuthShellProps) {
             </div>
 
             {/* Action link */}
-            <div className="mt-8 border-t border-[var(--color-outline)] pt-6 text-center">
+            <div className="mt-8 border-t border-[var(--border)] pt-6 text-center">
               <p className="text-sm leading-6 text-[var(--color-on-surface-variant)]">
                 {copy.actionPrompt}{" "}
                 <Link

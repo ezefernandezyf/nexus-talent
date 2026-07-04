@@ -46,7 +46,7 @@ export function HistoryDetailPage() {
       <FeaturePageShell>
         <Card variant="flat" className="flex flex-col gap-4 p-6 sm:p-8">
           <Badge variant="neutral" size="sm">Historial</Badge>
-          <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[var(--color-on-surface)]">Análisis no encontrado</h1>
+          <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[var(--text-primary)]">Análisis no encontrado</h1>
           <p className="text-base leading-7 text-on-surface-variant">No encontramos ese guardado en el historial. Volvé al listado para abrir otro análisis.</p>
           <Button className="w-fit" variant="primary" type="button" onClick={() => navigate("/app/history")}>
             Volver al historial
@@ -118,7 +118,7 @@ export function HistoryDetailPage() {
           <DetailSection title="GitHub">
             <div className="space-y-3 text-sm leading-7 text-on-surface-variant">
               <p>
-                Repositorio: <a className="text-[var(--color-brand)] transition-colors hover:opacity-80" href={analysis.githubEnrichment.repositoryUrl} rel="noreferrer" target="_blank">{analysis.githubEnrichment.repositoryName}</a>
+                Repositorio: <a className="text-[var(--accent)] transition-colors hover:opacity-80" href={analysis.githubEnrichment.repositoryUrl} rel="noreferrer" target="_blank">{analysis.githubEnrichment.repositoryName}</a>
               </p>
               <p>{analysis.githubEnrichment.warningMessage ?? "El enriquecimiento de GitHub se resolvió sin advertencias."}</p>
               {analysis.githubEnrichment.detectedStack.length > 0 ? (

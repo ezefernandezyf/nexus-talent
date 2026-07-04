@@ -113,7 +113,7 @@ export function Dropdown({ trigger, items, className }: DropdownProps) {
                 onClick={() => handleSelect(index)}
                 className={cn(
                   "flex cursor-pointer items-center gap-2 px-3 py-2 text-sm transition-colors",
-                  "text-[var(--color-on-surface)] hover:bg-[var(--color-surface-elevated-1)]",
+                  "text-[var(--text-primary)] hover:bg-[var(--color-surface-elevated-1)]",
                   item.disabled && "cursor-not-allowed opacity-40",
                 )}
               >
