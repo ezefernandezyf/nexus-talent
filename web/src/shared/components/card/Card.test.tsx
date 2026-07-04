@@ -8,15 +8,14 @@ describe("Card", () => {
     expect(screen.getByText("Card content")).toBeInTheDocument();
   });
 
-  it("renders with flat, elevated, and interactive variants", () => {
-    const variants = ["flat", "elevated", "interactive"] as const;
-    for (const variant of variants) {
-      const { unmount } = render(
-        <Card variant={variant}>{variant}</Card>,
-      );
-      expect(screen.getByText(variant)).toBeInTheDocument();
-      unmount();
-    }
+  it("renders with muted background when muted is true", () => {
+    render(<Card muted>Muted card</Card>);
+    expect(screen.getByText("Muted card")).toBeInTheDocument();
+  });
+
+  it("renders as interactive when interactive is true", () => {
+    render(<Card interactive>Interactive card</Card>);
+    expect(screen.getByText("Interactive card")).toBeInTheDocument();
   });
 
   it("renders with sm, md, and lg padding", () => {
@@ -30,7 +29,7 @@ describe("Card", () => {
     }
   });
 
-  it("renders Card.Header with its children", () => {
+  it("renders Card.Header with its children (deprecated)", () => {
     render(
       <Card>
         <Card.Header>Header content</Card.Header>
@@ -39,7 +38,7 @@ describe("Card", () => {
     expect(screen.getByText("Header content")).toBeInTheDocument();
   });
 
-  it("renders Card.Body with its children", () => {
+  it("renders Card.Body with its children (deprecated)", () => {
     render(
       <Card>
         <Card.Body>Body content</Card.Body>
@@ -48,25 +47,12 @@ describe("Card", () => {
     expect(screen.getByText("Body content")).toBeInTheDocument();
   });
 
-  it("renders Card.Footer with its children", () => {
+  it("renders Card.Footer with its children (deprecated)", () => {
     render(
       <Card>
         <Card.Footer>Footer content</Card.Footer>
       </Card>,
     );
     expect(screen.getByText("Footer content")).toBeInTheDocument();
-  });
-
-  it("renders header, body, and footer together", () => {
-    render(
-      <Card>
-        <Card.Header>Title</Card.Header>
-        <Card.Body>Description</Card.Body>
-        <Card.Footer>Actions</Card.Footer>
-      </Card>,
-    );
-    expect(screen.getByText("Title")).toBeInTheDocument();
-    expect(screen.getByText("Description")).toBeInTheDocument();
-    expect(screen.getByText("Actions")).toBeInTheDocument();
   });
 });

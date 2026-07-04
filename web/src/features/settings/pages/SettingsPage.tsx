@@ -36,7 +36,7 @@ export function SettingsPage() {
       <PageHeader
         action={
           <div className="flex flex-wrap items-center gap-3">
-            <Button variant="secondary" onClick={toggleTheme} type="button">
+            <Button variant="outline" onClick={toggleTheme} type="button">
               <span className="material-symbols-outlined text-sm" aria-hidden="true">
                 {theme === "dark" ? "light_mode" : "dark_mode"}
               </span>

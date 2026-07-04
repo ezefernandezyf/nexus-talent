@@ -211,7 +211,7 @@ function AppLayoutContent() {
                   </Link>
                 ))
               ) : (
-                <Card variant="flat" padding="sm" className="text-sm leading-6 text-on-surface-variant">
+                <Card padding="sm" className="text-sm leading-6 text-on-surface-variant">
                   Aún no hay análisis guardados.
                 </Card>
               )}

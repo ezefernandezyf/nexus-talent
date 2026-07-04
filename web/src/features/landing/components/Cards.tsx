@@ -12,7 +12,7 @@ export function HeroMetricCard({ label, value }: { label: string; value: string 
 
 export function HeroFeatureCard({ title, copy, icon }: { title: string; copy: string; icon: string }) {
   return (
-    <Card variant="flat" className="flex flex-col justify-between gap-5 p-5">
+    <Card className="flex flex-col justify-between gap-5 p-5">
       <div className="flex items-start justify-between gap-4">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary shadow-[inset_0_0_0_1px_rgba(142,213,255,0.14)]">
           <LandingIcon aria-hidden="true" className="h-6 w-6 text-primary" name={icon as never} />

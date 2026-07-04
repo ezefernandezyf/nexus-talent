@@ -74,7 +74,7 @@ function renderChipList(values: string[]) {
   return values.length > 0 ? (
     <div className="flex flex-wrap gap-2">
       {values.map((value) => (
-        <Badge key={value} variant="brand" size="sm">
+        <Badge key={value}>
           {value}
         </Badge>
       ))}
@@ -87,9 +87,9 @@ function renderChipList(values: string[]) {
 function VacancySummaryPanel({ vacancySummary }: { vacancySummary?: JobAnalysisVacancySummary }) {
   if (!vacancySummary) {
     return (
-      <Card variant="flat" className="space-y-5 p-6 sm:p-8">
+      <Card className="space-y-5 p-6 sm:p-8">
         <div>
-          <Badge variant="neutral" size="sm">Vacancy snapshot</Badge>
+          <Badge>Vacancy snapshot</Badge>
           <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Resumen de la vacante</h4>
         </div>
         <p className="text-sm leading-7 text-on-surface-variant">La IA no devolvió aún el bloque estructurado de la vacante.</p>
@@ -98,10 +98,10 @@ function VacancySummaryPanel({ vacancySummary }: { vacancySummary?: JobAnalysisV
   }
 
   return (
-    <Card variant="flat" className="space-y-5 p-6 sm:p-8">
+    <Card className="space-y-5 p-6 sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <Badge variant="neutral" size="sm">Vacancy snapshot</Badge>
+          <Badge>Vacancy snapshot</Badge>
           <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Resumen de la vacante</h4>
         </div>
         <span className="text-xs uppercase tracking-[0.22em] text-on-surface-variant">{vacancySummary.modalityLocation}</span>
@@ -150,9 +150,9 @@ function VacancySummaryPanel({ vacancySummary }: { vacancySummary?: JobAnalysisV
 
 function KeywordsPanel({ keywords }: { keywords?: JobAnalysisKeywords }) {
   return (
-    <Card variant="flat" className="space-y-5 p-6 sm:p-8">
+    <Card className="space-y-5 p-6 sm:p-8">
       <div>
-        <Badge variant="neutral" size="sm">Keywords</Badge>
+        <Badge>Keywords</Badge>
         <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Skills y términos para repetir</h4>
       </div>
 
@@ -184,9 +184,9 @@ function KeywordsPanel({ keywords }: { keywords?: JobAnalysisKeywords }) {
 
 function GapsPanel({ gaps }: { gaps?: JobAnalysisGap[] }) {
   return (
-    <Card variant="flat" className="space-y-5 p-6 sm:p-8">
+    <Card className="space-y-5 p-6 sm:p-8">
       <div>
-        <Badge variant="neutral" size="sm">Gaps</Badge>
+        <Badge>Gaps</Badge>
         <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Posibles huecos y cómo cubrirlos</h4>
       </div>
 
@@ -308,10 +308,10 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
 
   return (
     <section className="flex flex-col gap-6">
-      <Card variant="flat" className="space-y-5 p-6 sm:p-8">
+      <Card className="space-y-5 p-6 sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <Badge variant="neutral" size="sm">Análisis validado</Badge>
+            <Badge>Análisis validado</Badge>
             <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white sm:text-3xl">Análisis estructurado de la vacante</h3>
           </div>
           <span className="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
@@ -328,10 +328,10 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
 
       <VacancySummaryPanel vacancySummary={result.vacancySummary} />
 
-      <Card variant="flat" className="space-y-5 p-6 sm:p-8">
+      <Card className="space-y-5 p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <Badge variant="neutral" size="sm">Skills Matrix</Badge>
+            <Badge>Skills Matrix</Badge>
             <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Señales que vale la pena destacar</h4>
           </div>
           <div className="flex items-center gap-2">
@@ -342,7 +342,7 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
 
         <div className="flex snap-x gap-3 overflow-x-auto pb-2 pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {result.skillGroups.flatMap((group) => group.skills).map((skill) => (
-            <Badge key={`${skill.name}-${skill.level}`} variant="brand" size="sm" className="shrink-0 snap-start border border-outline-variant/10 bg-surface-container-high px-4 py-2">
+            <Badge key={`${skill.name}-${skill.level}`} className="shrink-0 snap-start border border-outline-variant/10 bg-surface-container-high px-4 py-2">
               <span className="text-xs font-medium text-on-surface">{skill.name}</span>
               <span className="text-[0.66rem] uppercase tracking-[0.18em] text-on-surface-variant">{levelLabel(skill.level)}</span>
             </Badge>
@@ -355,10 +355,10 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
       <GapsPanel gaps={result.gaps} />
 
       {result.githubEnrichment ? (
-        <Card variant="flat" className="space-y-5 p-6 sm:p-8">
+        <Card className="space-y-5 p-6 sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <Badge variant="neutral" size="sm">GitHub enriquecido</Badge>
+              <Badge>GitHub enriquecido</Badge>
               <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Stack observado en el repositorio</h4>
             </div>
             <a
@@ -378,7 +378,7 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
           {result.githubEnrichment.detectedStack.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {result.githubEnrichment.detectedStack.map((signal) => (
-                <Badge key={`${signal.name}-${signal.source}`} variant="brand" size="sm">
+                <Badge key={`${signal.name}-${signal.source}`}>
                   {signal.name}
                   <span className="text-[0.66rem] uppercase tracking-[0.18em] text-on-surface-variant">{sourceLabel(signal.source)}</span>
                 </Badge>
@@ -390,24 +390,24 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
         </Card>
       ) : null}
 
-      <Card variant="flat" className="relative overflow-hidden space-y-5 p-6 sm:p-8">
+      <Card className="relative overflow-hidden space-y-5 p-6 sm:p-8">
         <div className="absolute right-0 top-0 p-4 opacity-25">
           <span className="text-4xl text-primary">✦</span>
         </div>
 
           <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <Badge variant="neutral" size="sm">Message Generator</Badge>
+            <Badge>Message Generator</Badge>
             <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Editá las dos versiones antes de copiar</h4>
           </div>
           <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">
-            <Button className="w-full sm:w-auto" variant="secondary" type="button" onClick={handleOpenEmailDraft}>
+            <Button className="w-full sm:w-auto" variant="outline" type="button" onClick={handleOpenEmailDraft}>
               Abrir email
             </Button>
-            <Button className="w-full sm:w-auto" variant="secondary" type="button" onClick={handleDownloadMarkdown}>
+            <Button className="w-full sm:w-auto" variant="outline" type="button" onClick={handleDownloadMarkdown}>
               Descargar Markdown
             </Button>
-            <Button className="w-full sm:w-auto" variant="secondary" type="button" onClick={handleDownloadJson}>
+            <Button className="w-full sm:w-auto" variant="outline" type="button" onClick={handleDownloadJson}>
               Descargar JSON
             </Button>
             <Button className="w-full sm:w-auto" type="button" onClick={handleCopy}>
@@ -463,7 +463,7 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
             </label>
 
             <div className="flex flex-wrap items-center gap-3">
-              <Button type="button" variant="secondary" onClick={handleCopyDm}>
+              <Button type="button" variant="outline" onClick={handleCopyDm}>
                 Copiar DM corto
               </Button>
             </div>

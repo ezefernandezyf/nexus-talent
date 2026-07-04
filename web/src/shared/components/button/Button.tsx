@@ -1,85 +1,66 @@
-import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { forwardRef, type ButtonHTMLAttributes } from "react";
 import { cn } from "@/shared/utils/cn";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+export type ButtonVariant = "filled" | "outline" | "ghost";
 export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  loading?: boolean;
-  iconPrefix?: ReactNode;
-  iconSuffix?: ReactNode;
 }
 
-const variantStyles: Record<ButtonVariant, string> = {
-  primary:
-    "bg-[var(--accent)] text-white hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)]",
-  secondary:
-    "border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--color-brand-container)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)]",
-  ghost:
-    "bg-transparent text-[var(--text-primary)] hover:bg-[var(--color-surface-elevated-2)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--text-primary)]/20",
-  danger:
-    "bg-[var(--color-error)] text-white hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-error)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)]",
-};
+// ---------------------------------------------------------------------------
+// Styles
+// ---------------------------------------------------------------------------
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "h-8 px-3 text-label text-sm gap-1.5",
-  md: "h-10 px-4 text-label text-base gap-2",
-  lg: "h-12 px-6 text-label text-lg gap-2.5",
+  sm: "h-9 px-4 text-sm",
+  md: "h-11 px-5 text-sm",
+  lg: "h-12 px-6 text-base",
 };
 
-const Spinner = () => (
-  <svg
-    className="animate-spin h-4 w-4"
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    aria-label="Loading"
-  >
-    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-    <path
-      className="opacity-75"
-      fill="currentColor"
-      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-    />
-  </svg>
-);
+const variantStyles: Record<ButtonVariant, string> = {
+  filled:
+    "bg-[var(--accent)] text-white hover:opacity-90 active:scale-[0.98]",
+  outline:
+    "border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent-muted)]",
+  ghost:
+    "text-text-primary hover:bg-surface-muted",
+};
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
     className,
-    variant = "primary",
+    variant = "filled",
     size = "md",
-    loading = false,
-    disabled,
-    iconPrefix,
-    iconSuffix,
     children,
     ...props
   },
   ref,
 ) {
-  const isDisabled = disabled || loading;
-
   return (
     <button
       ref={ref}
       type="button"
-      disabled={isDisabled}
       className={cn(
-        "inline-flex items-center justify-center rounded-md font-medium select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-        "disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100",
-        variantStyles[variant],
+        "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "disabled:opacity-50 disabled:pointer-events-none",
         sizeStyles[size],
+        variantStyles[variant],
         className,
       )}
       {...props}
     >
-      {loading && <Spinner />}
-      {!loading && iconPrefix}
       {children}
-      {!loading && iconSuffix}
     </button>
   );
 });

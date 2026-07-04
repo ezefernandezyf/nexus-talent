@@ -8,17 +8,17 @@ describe("Card snapshot", () => {
 
     const { container } = render(
       <div>
-        <Card variant="flat" padding="sm">
+        <Card padding="sm">
           <Card.Header>Flat Header</Card.Header>
           <Card.Body>Flat body content with more text.</Card.Body>
           <Card.Footer>Flat footer</Card.Footer>
         </Card>
-        <Card variant="elevated" padding="md">
-          <Card.Header>Elevated Header</Card.Header>
-          <Card.Body>Elevated body content.</Card.Body>
-          <Card.Footer>Elevated footer</Card.Footer>
+        <Card muted padding="md">
+          <Card.Header>Muted Header</Card.Header>
+          <Card.Body>Muted body content.</Card.Body>
+          <Card.Footer>Muted footer</Card.Footer>
         </Card>
-        <Card variant="interactive" padding="lg">
+        <Card interactive padding="lg">
           <Card.Header>Interactive Header</Card.Header>
           <Card.Body>Interactive body content.</Card.Body>
           <Card.Footer>Interactive footer</Card.Footer>

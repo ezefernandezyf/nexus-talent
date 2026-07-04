@@ -44,7 +44,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, State> {
           <p className="max-w-md text-lg leading-relaxed text-on-surface-variant">
             {this.state.error?.message || "Ha ocurrido un error inesperado."}
           </p>
-          <Button variant="primary" onClick={this.handleRetry}>
+          <Button variant="filled" onClick={this.handleRetry}>
             Reintentar
           </Button>
         </div>

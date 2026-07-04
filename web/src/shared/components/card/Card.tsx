@@ -1,15 +1,17 @@
-import { type HTMLAttributes, type PropsWithChildren } from "react";
+import { type HTMLAttributes, type PropsWithChildren, type ReactNode } from "react";
 import { cn } from "@/shared/utils/cn";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type CardVariant = "flat" | "elevated" | "interactive";
 export type CardPadding = "sm" | "md" | "lg";
 
 export interface CardProps extends PropsWithChildren<HTMLAttributes<HTMLDivElement>> {
-  variant?: CardVariant;
+  /** Whether the card is interactive (hover lift + deeper shadow) */
+  interactive?: boolean;
+  /** Whether the card uses the accent-muted background */
+  muted?: boolean;
   padding?: CardPadding;
 }
 
@@ -19,15 +21,6 @@ interface CardSubProps extends PropsWithChildren<HTMLAttributes<HTMLDivElement>>
 // Styles
 // ---------------------------------------------------------------------------
 
-const variantStyles: Record<CardVariant, string> = {
-  flat:
-    "bg-[var(--color-surface-elevated-1)] border border-[var(--border)]",
-  elevated:
-    "bg-[var(--color-surface-elevated-1)] border border-[var(--border)] shadow-[var(--shadow-md)]",
-  interactive:
-    "bg-[var(--color-surface-elevated-1)] border border-[var(--border)] shadow-[var(--shadow-sm)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-lg)] cursor-pointer transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-};
-
 const paddingStyles: Record<CardPadding, string> = {
   sm: "p-3",
   md: "p-4",
@@ -35,25 +28,35 @@ const paddingStyles: Record<CardPadding, string> = {
 };
 
 // ---------------------------------------------------------------------------
-// Sub-components
+// Sub-components — deprecated, kept as re-exports for backward compat
 // ---------------------------------------------------------------------------
 
+/**
+ * @deprecated Card sub-components are deprecated. Use plain divs with
+ * appropriate typography classes instead. Will be removed in a future PR.
+ */
 function CardHeader({ className, children, ...props }: CardSubProps) {
   return (
-    <div className={cn("font-display text-lg font-semibold text-[var(--text-primary)]", className)} {...props}>
+    <div className={cn("font-display text-lg font-semibold text-text-primary", className)} {...props}>
       {children}
     </div>
   );
 }
 
+/**
+ * @deprecated Card sub-components are deprecated. Will be removed in a future PR.
+ */
 function CardBody({ className, children, ...props }: CardSubProps) {
   return (
-    <div className={cn("text-body text-[var(--color-on-surface-variant)]", className)} {...props}>
+    <div className={cn("text-body text-text-secondary", className)} {...props}>
       {children}
     </div>
   );
 }
 
+/**
+ * @deprecated Card sub-components are deprecated. Will be removed in a future PR.
+ */
 function CardFooter({ className, children, ...props }: CardSubProps) {
   return (
     <div className={cn("flex items-center gap-2 pt-2", className)} {...props}>
@@ -68,16 +71,19 @@ function CardFooter({ className, children, ...props }: CardSubProps) {
 
 function CardBase({
   className,
-  variant = "flat",
-  padding = "md",
+  interactive = false,
+  muted = false,
+  padding = "lg",
   children,
   ...props
 }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-[var(--radius-lg)] flex flex-col gap-2",
-        variantStyles[variant],
+        "rounded-lg border border-border bg-surface transition-all duration-200",
+        "shadow-[0_1px_3px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.02)]",
+        muted && "bg-[var(--accent-muted)]",
+        interactive && "hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] cursor-pointer",
         paddingStyles[padding],
         className,
       )}

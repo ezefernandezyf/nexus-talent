@@ -70,7 +70,7 @@ export function SettingsForm({
             {initials}
           </div>
           <div className="space-y-2">
-            <Badge variant="neutral" size="sm">Perfil</Badge>
+            <Badge>Perfil</Badge>
             <h3 className="text-xl font-semibold tracking-[-0.02em] text-white">Actualizá tu perfil sin salir del panel.</h3>
             <p className="text-sm leading-6 text-on-surface-variant">El nombre visible sigue siendo editable y la ubicación se conserva como referencia del perfil.</p>
           </div>

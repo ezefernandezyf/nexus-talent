@@ -8,14 +8,12 @@ describe("Button snapshot", () => {
 
     const { container } = render(
       <div>
-        <Button variant="primary">Primary</Button>
-        <Button variant="secondary">Secondary</Button>
+        <Button variant="filled">Filled</Button>
+        <Button variant="outline">Outline</Button>
         <Button variant="ghost">Ghost</Button>
-        <Button variant="danger">Danger</Button>
-        <Button variant="primary" size="sm">Small</Button>
-        <Button variant="primary" size="lg">Large</Button>
-        <Button variant="primary" loading>Loading</Button>
-        <Button variant="primary" disabled>Disabled</Button>
+        <Button variant="filled">Small</Button>
+        <Button variant="filled" size="lg">Large</Button>
+        <Button variant="filled" disabled>Disabled</Button>
       </div>,
     );
 

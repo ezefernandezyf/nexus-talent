@@ -74,7 +74,7 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
           className="w-full opacity-100 transition-opacity focus:opacity-100 focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40 sm:w-auto lg:opacity-0 lg:group-hover:opacity-100"
           disabled={isDeleting}
           type="button"
-          variant="secondary"
+          variant="outline"
           onClick={() => onDelete(analysis.id)}
         >
           {isDeleting ? "..." : "Eliminar"}

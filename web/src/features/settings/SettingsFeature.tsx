@@ -23,7 +23,7 @@ function StatusPill({ connected }: { connected: boolean }) {
   return (
     <Badge
       variant={connected ? "success" : "neutral"}
-      size="sm"
+     
       data-state={connected ? "connected" : "disconnected"}
     >
       {connected ? "Conectado" : "No conectado"}
@@ -46,7 +46,7 @@ function SectionHeader({ action, description, eyebrow, icon, title }: SectionHea
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
       <div className="space-y-3">
-        <Badge variant="neutral" size="sm">{eyebrow}</Badge>
+        <Badge>{eyebrow}</Badge>
         <div className="flex items-start gap-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-surface-container-lowest/80 text-primary shadow-[0_16px_40px_rgba(0,0,0,0.16)]" aria-hidden="true">
             <span className="material-symbols-outlined text-[20px]">{icon}</span>
@@ -140,7 +140,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
     return (
       <Card className="flex min-h-80 items-center justify-center p-6 text-center" tone="low">
         <div className="max-w-xl space-y-3">
-          <Badge variant="neutral" size="sm">Configuración</Badge>
+          <Badge>Configuración</Badge>
           <p className="text-base leading-7 text-on-surface-variant">Estamos cargando tu espacio de cuenta y conexiones.</p>
         </div>
       </Card>
@@ -151,7 +151,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
     return (
       <Card className="flex min-h-80 items-center justify-center p-6 text-center" role="alert" tone="low">
         <div className="max-w-xl space-y-3">
-          <Badge variant="neutral" size="sm">Perfil no disponible</Badge>
+          <Badge>Perfil no disponible</Badge>
           <p className="text-base leading-7 text-on-surface-variant">
             No hay una sesión de usuario lista para mostrar información de cuenta. Iniciá sesión para ver tus datos y preferencias.
           </p>
@@ -164,7 +164,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
     <div className="space-y-6">
       <Card className="flex flex-col gap-7 p-6 sm:gap-8 sm:p-8" tone="low">
         <SectionHeader
-          action={<Badge variant="neutral" size="sm">Tema {theme === "dark" ? "oscuro" : "claro"}</Badge>}
+          action={<Badge>Tema {theme === "dark" ? "oscuro" : "claro"}</Badge>}
           description="Gestioná tu identidad, conexiones de plataforma y preferencias de seguridad desde una sola vista."
           eyebrow="Cuenta y perfil"
           icon="person"
@@ -231,7 +231,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
                     <Button
                       className={account.connected ? "text-error" : ""}
                       disabled={isPending}
-                      variant="secondary"
+                      variant="outline"
                       onClick={async () => {
                         try {
                           if (account.connected) {
@@ -286,7 +286,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
               </p>
             ) : null}
           </div>
-          <Button className="whitespace-nowrap text-error" variant="secondary" type="button" onClick={openDeleteModal}>
+          <Button className="whitespace-nowrap text-error" variant="outline" type="button" onClick={openDeleteModal}>
             Eliminar cuenta
           </Button>
         </div>
@@ -312,7 +312,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
               </label>
 
               <div className="flex flex-wrap items-center justify-end gap-3">
-                <Button disabled={deleteAccountPending} variant="secondary" type="button" onClick={closeDeleteModal}>
+                <Button disabled={deleteAccountPending} variant="outline" type="button" onClick={closeDeleteModal}>
                   Cancelar
                 </Button>
                 <Button

@@ -68,7 +68,7 @@ export function AnalysisPage() {
 
       <section className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3">
         {INFO_ITEMS.map((item) => (
-          <Card key={item.title} variant="flat" padding="lg" className="gap-4">
+          <Card key={item.title} padding="lg" className="gap-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--color-brand-container)] text-[var(--accent)]">
               <span className="material-symbols-outlined text-[24px]" aria-hidden="true">
                 {item.icon}

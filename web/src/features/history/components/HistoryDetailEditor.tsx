@@ -56,10 +56,10 @@ export function HistoryDetailEditor({ analysis, errorMessage, isLoading = false,
   const isFormDisabled = isPending || isLoading;
 
   return (
-    <Card variant="flat" className="space-y-5 p-6 sm:p-8">
+    <Card className="space-y-5 p-6 sm:p-8">
       <form onSubmit={handleSubmit}>
       <div className="space-y-2">
-        <Badge variant="neutral" size="sm">Edición</Badge>
+        <Badge>Edición</Badge>
         <h2 className="text-2xl font-semibold tracking-[-0.02em] text-white sm:text-3xl">Renombrá y anotá este guardado</h2>
         <p className="text-base leading-7 text-on-surface-variant">{helperText}</p>
       </div>

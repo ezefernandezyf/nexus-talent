@@ -19,7 +19,7 @@ import {
 
 function DetailSection({ children, title }: { children: ReactNode; title: string }) {
   return (
-    <Card variant="flat" className="space-y-4 p-6 sm:p-8">
+    <Card className="space-y-4 p-6 sm:p-8">
       <h2 className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">{title}</h2>
       {children}
     </Card>
@@ -44,11 +44,11 @@ export function HistoryDetailPage() {
   if (!historyQuery.analysis) {
     return (
       <FeaturePageShell>
-        <Card variant="flat" className="flex flex-col gap-4 p-6 sm:p-8">
-          <Badge variant="neutral" size="sm">Historial</Badge>
+        <Card className="flex flex-col gap-4 p-6 sm:p-8">
+          <Badge>Historial</Badge>
           <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[var(--text-primary)]">Análisis no encontrado</h1>
           <p className="text-base leading-7 text-on-surface-variant">No encontramos ese guardado en el historial. Volvé al listado para abrir otro análisis.</p>
-          <Button className="w-fit" variant="primary" type="button" onClick={() => navigate("/app/history")}>
+          <Button className="w-fit" variant="filled" type="button" onClick={() => navigate("/app/history")}>
             Volver al historial
           </Button>
         </Card>
@@ -74,7 +74,7 @@ export function HistoryDetailPage() {
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
             <Button
               className="w-full justify-center sm:w-auto"
-              variant="secondary"
+              variant="outline"
               type="button"
               onClick={() => navigate(`/app/analysis?${reworkSearch}`, { state: reworkState })}
             >
@@ -82,7 +82,7 @@ export function HistoryDetailPage() {
             </Button>
             <Button
               className="w-full justify-center sm:w-auto"
-              variant="secondary"
+              variant="outline"
               type="button"
               onClick={() => navigate("/app/history")}
             >
@@ -124,7 +124,7 @@ export function HistoryDetailPage() {
               {analysis.githubEnrichment.detectedStack.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {analysis.githubEnrichment.detectedStack.map((signal) => (
-                    <Badge key={`${signal.name}-${signal.source}`} variant="brand" size="sm">
+                    <Badge key={`${signal.name}-${signal.source}`}>
                       {signal.name}
                     </Badge>
                   ))}

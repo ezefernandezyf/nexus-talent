@@ -206,7 +206,7 @@ export function LandingPage() {
             {/* ── Large bento cell — 2 cols x 2 rows ── */}
             <Reveal delay={0.05} className="md:col-span-2 md:row-span-2">
               <Card
-                variant="elevated"
+               
                 padding="lg"
                 className="flex h-full flex-col"
               >
@@ -235,7 +235,7 @@ export function LandingPage() {
             {/* ── Small stacked cell 02 ── */}
             <Reveal delay={0.15}>
               <Card
-                variant="elevated"
+               
                 padding="md"
                 className="h-full"
               >
@@ -260,7 +260,7 @@ export function LandingPage() {
             {/* ── Small stacked cell 03 ── */}
             <Reveal delay={0.25}>
               <Card
-                variant="elevated"
+               
                 padding="md"
                 className="h-full"
               >
@@ -312,7 +312,7 @@ export function LandingPage() {
                 className="flex h-full flex-col rounded-[var(--radius-lg)] p-10"
                 style={{ backgroundColor: "#FDF0EB" }}
               >
-                <Badge variant="brand" className="w-fit">
+                <Badge className="w-fit">
                   Flagship
                 </Badge>
                 <h3 className="text-h2 mt-8 max-w-md text-[#1A1714]">
@@ -334,7 +334,7 @@ export function LandingPage() {
             {/* ── Small feature cards ── */}
             <Reveal delay={0.15}>
               <Card
-                variant="elevated"
+               
                 padding="md"
                 className="h-full"
               >
@@ -353,7 +353,7 @@ export function LandingPage() {
 
             <Reveal delay={0.2}>
               <Card
-                variant="elevated"
+               
                 padding="md"
                 className="h-full"
               >
@@ -371,7 +371,7 @@ export function LandingPage() {
 
             <Reveal delay={0.25}>
               <Card
-                variant="elevated"
+               
                 padding="md"
                 className="h-full"
               >
@@ -488,7 +488,7 @@ function HeroComposition() {
         </div>
         <div className="mt-4 flex flex-wrap gap-1.5">
           {["Go", "PostgreSQL", "AWS", "K8s"].map((s) => (
-            <Badge key={s} variant="brand" size="sm">
+            <Badge key={s}>
               {s}
             </Badge>
           ))}

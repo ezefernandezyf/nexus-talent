@@ -34,7 +34,7 @@ export function Modal({ children, onClose, title }: ModalProps) {
         <Card className="p-6 sm:p-8">
           <div className="space-y-2">
             <motion.span variants={fadeUpVariants}>
-              <Badge variant="neutral" size="sm">{title}</Badge>
+              <Badge>{title}</Badge>
             </motion.span>
           </div>
           <div className="mt-5">{children}</div>

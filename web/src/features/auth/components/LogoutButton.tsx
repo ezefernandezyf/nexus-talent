@@ -24,7 +24,7 @@ export function LogoutButton({ className }: LogoutButtonProps) {
   }
 
   return (
-    <Button variant="secondary" className={className} data-testid="logout-button" onClick={handleClick} disabled={isPending}>
+    <Button variant="outline" className={className} data-testid="logout-button" onClick={handleClick} disabled={isPending}>
       {isPending ? "Cerrando..." : "Cerrar sesión"}
     </Button>
   );

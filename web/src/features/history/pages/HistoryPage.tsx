@@ -27,7 +27,7 @@ export function HistoryPage() {
     <FeaturePageShell>
       <PageHeader
         action={
-          <Button variant="secondary" className="flex items-center gap-2" type="button" onClick={handleExport} disabled={history.isPending}>
+          <Button variant="outline" className="flex items-center gap-2" type="button" onClick={handleExport} disabled={history.isPending}>
             <span className="material-symbols-outlined text-sm" aria-hidden="true">
               download
             </span>

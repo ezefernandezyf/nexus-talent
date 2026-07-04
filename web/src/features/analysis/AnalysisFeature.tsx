@@ -54,10 +54,10 @@ export function StatePanel({
   compact?: boolean;
 }) {
   return (
-    <Card variant="flat" className={compact ? "flex flex-col gap-5 p-6 sm:p-8" : "flex min-h-136 flex-col gap-6 p-6 sm:p-8"}>
+    <Card className={compact ? "flex flex-col gap-5 p-6 sm:p-8" : "flex min-h-136 flex-col gap-6 p-6 sm:p-8"}>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <Badge variant="neutral" size="sm">{label}</Badge>
+          <Badge>{label}</Badge>
           <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white">{title}</h3>
         </div>
         <span

@@ -57,7 +57,7 @@ export function HistoryFeature({ analysisHref = "/app/analysis", repository, sco
       ) : history.isError ? (
         <div className="rounded-xl bg-surface-container-low/40 p-6 text-center lg:p-10" role="alert">
           <div className="mx-auto max-w-xl space-y-3">
-            <Badge variant="neutral" size="sm">No se pudo cargar el historial</Badge>
+            <Badge>No se pudo cargar el historial</Badge>
             <p className="text-base leading-7 text-on-surface-variant">{errorMessage}</p>
           </div>
         </div>

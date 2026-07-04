@@ -34,7 +34,7 @@ export function RouteErrorFallback({ fallbackRoute = "/" }: RouteErrorFallbackPr
         {errorMessage}
       </p>
       <div className="flex items-center gap-4">
-        <Button variant="primary" onClick={handleRetry}>
+        <Button variant="filled" onClick={handleRetry}>
           Reintentar
         </Button>
         <Link
