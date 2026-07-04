@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAnalysisHistory } from "@/features/analysis";
 import { HistoryFeature } from "..";
 import { buildHistoryExportPayload } from "@/features/history/history-export";
@@ -10,6 +10,7 @@ import { downloadTextFile } from "@/features/analysis/export";
 
 export function HistoryPage() {
   const { repository, scope } = useAnalysisRepository();
+  const navigate = useNavigate();
   const history = useAnalysisHistory({ repository, scope });
 
   const handleExport = useCallback(() => {
@@ -39,15 +40,16 @@ export function HistoryPage() {
 
       <HistoryFeature repository={repository} scope={scope} />
 
-      <Link
+      <Button
         aria-label="Nuevo análisis"
-        className="fixed bottom-5 right-5 z-[var(--z-fab)] flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-primary to-primary-container text-on-primary shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95 sm:bottom-8 sm:right-8 sm:h-14 sm:w-14"
-        to="/app/analysis"
+        className="fixed bottom-5 right-5 z-[var(--z-fab)] flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-brand)] text-white shadow-md transition-all hover:opacity-90 active:scale-95 sm:bottom-8 sm:right-8 sm:h-14 sm:w-14"
+        type="button"
+        onClick={() => navigate("/app/analysis")}
       >
         <span className="material-symbols-outlined text-2xl" aria-hidden="true">
           add
         </span>
-      </Link>
+      </Button>
     </FeaturePageShell>
   );
 }

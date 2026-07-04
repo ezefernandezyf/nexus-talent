@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FeaturePageShell, PageHeader } from "@/shared/components";
+import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { Badge } from "@/shared/components/Badge";
-import { cn } from "@/shared/utils/cn";
 import { AnalysisResultView } from "@/features/analysis/components/AnalysisResultView";
 import { HistoryDetailPageSkeleton } from "@/features/history/components/HistoryDetailPageSkeleton";
 import { useAnalysisRepository } from "@/features/analysis/hooks/useAnalysisRepository";
@@ -17,22 +17,6 @@ import {
   getHistoryUid,
 } from "@/features/history/history-formatters";
 
-const linkBtnPrimary = cn(
-  "inline-flex items-center justify-center rounded-full font-label select-none",
-  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-  "bg-[var(--color-brand)] text-[var(--color-on-brand)]",
-  "hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97]",
-  "h-10 px-4 text-label text-base gap-2",
-);
-
-const linkBtnSecondary = cn(
-  "inline-flex items-center justify-center rounded-full font-label select-none",
-  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-  "bg-[var(--color-accent)] text-[var(--color-on-accent)]",
-  "hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97]",
-  "h-10 px-4 text-label text-base gap-2",
-);
-
 function DetailSection({ children, title }: { children: ReactNode; title: string }) {
   return (
     <Card variant="flat" className="space-y-4 p-6 sm:p-8">
@@ -45,6 +29,7 @@ function DetailSection({ children, title }: { children: ReactNode; title: string
 export function HistoryDetailPage() {
   const { analysisId } = useParams<{ analysisId: string }>();
   const { repository, scope } = useAnalysisRepository();
+  const navigate = useNavigate();
   const historyQuery = useAnalysisById(analysisId, { repository, scope });
   const updateMutation = useUpdateAnalysis({ repository, scope });
 
@@ -61,11 +46,11 @@ export function HistoryDetailPage() {
       <FeaturePageShell>
         <Card variant="flat" className="flex flex-col gap-4 p-6 sm:p-8">
           <Badge variant="neutral" size="sm">Historial</Badge>
-          <h1 className="text-3xl font-semibold tracking-[-0.03em] text-white">Análisis no encontrado</h1>
+          <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[var(--color-on-surface)]">Análisis no encontrado</h1>
           <p className="text-base leading-7 text-on-surface-variant">No encontramos ese guardado en el historial. Volvé al listado para abrir otro análisis.</p>
-          <Link className={cn(linkBtnPrimary, "w-fit")} to="/app/history">
+          <Button className="w-fit" variant="primary" type="button" onClick={() => navigate("/app/history")}>
             Volver al historial
-          </Link>
+          </Button>
         </Card>
       </FeaturePageShell>
     );
@@ -87,16 +72,22 @@ export function HistoryDetailPage() {
       <PageHeader
         action={
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
-            <Link
-              className={cn(linkBtnSecondary, "w-full justify-center sm:w-auto")}
-              state={reworkState}
-              to={{ pathname: "/app/analysis", search: `?${reworkSearch}` }}
+            <Button
+              className="w-full justify-center sm:w-auto"
+              variant="secondary"
+              type="button"
+              onClick={() => navigate(`/app/analysis?${reworkSearch}`, { state: reworkState })}
             >
               Rework desde este guardado
-            </Link>
-            <Link className={cn(linkBtnSecondary, "w-full justify-center sm:w-auto")} to="/app/history">
+            </Button>
+            <Button
+              className="w-full justify-center sm:w-auto"
+              variant="secondary"
+              type="button"
+              onClick={() => navigate("/app/history")}
+            >
               Volver al historial
-            </Link>
+            </Button>
           </div>
         }
         description={`${displayLabel} · ${roleLabel} · ${formatHistoryCardDate(analysis.createdAt)} · ${uidLabel}`}
@@ -127,7 +118,7 @@ export function HistoryDetailPage() {
           <DetailSection title="GitHub">
             <div className="space-y-3 text-sm leading-7 text-on-surface-variant">
               <p>
-                Repositorio: <a className="text-primary transition-colors hover:opacity-80" href={analysis.githubEnrichment.repositoryUrl} rel="noreferrer" target="_blank">{analysis.githubEnrichment.repositoryName}</a>
+                Repositorio: <a className="text-[var(--color-brand)] transition-colors hover:opacity-80" href={analysis.githubEnrichment.repositoryUrl} rel="noreferrer" target="_blank">{analysis.githubEnrichment.repositoryName}</a>
               </p>
               <p>{analysis.githubEnrichment.warningMessage ?? "El enriquecimiento de GitHub se resolvió sin advertencias."}</p>
               {analysis.githubEnrichment.detectedStack.length > 0 ? (

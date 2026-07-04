@@ -80,10 +80,7 @@ describe("HistoryDetailPage", () => {
     renderHistoryDetailPage();
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /detalle del análisis/i })).toBeInTheDocument());
-    expect(screen.getByRole("link", { name: /rework desde este guardado/i })).toHaveAttribute(
-      "href",
-      "/app/analysis?sourceHistoryId=550e8400-e29b-41d4-a716-446655440000",
-    );
+    expect(screen.getByRole("button", { name: /rework desde este guardado/i })).toBeInTheDocument();
     expect(screen.getByText(/resumen de la vacante/i)).toBeInTheDocument();
     expect(screen.getByText(/skills y términos para repetir/i)).toBeInTheDocument();
     expect(screen.getByText(/posibles huecos y cómo cubrirlos/i)).toBeInTheDocument();
@@ -113,7 +110,7 @@ describe("HistoryDetailPage", () => {
     renderHistoryDetailPage("/app/history/missing-id");
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /análisis no encontrado/i })).toBeInTheDocument());
-    expect(screen.getByRole("link", { name: /volver al historial/i })).toHaveAttribute("href", "/app/history");
+    expect(screen.getByRole("button", { name: /volver al historial/i })).toBeInTheDocument();
   });
 
   it("keeps the draft visible when saving fails", async () => {

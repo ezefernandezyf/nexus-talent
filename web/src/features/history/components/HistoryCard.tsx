@@ -31,7 +31,7 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
     >
       <Link
         aria-label={`Abrir detalle de ${companyLabel}`}
-        className="absolute inset-0 z-0 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+        className="absolute inset-0 z-0 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40"
         to={`/app/history/${analysis.id}`}
       >
         <span className="sr-only">Abrir detalle</span>
@@ -39,7 +39,7 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
 
       <div className="flex min-w-0 items-start gap-4 lg:col-span-4 lg:items-center">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-outline-variant/20 bg-surface-container-lowest">
-          <span className="material-symbols-outlined text-primary" aria-hidden="true">
+          <span className="material-symbols-outlined text-[var(--color-brand)]" aria-hidden="true">
             {iconName}
           </span>
         </div>
@@ -47,7 +47,7 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
           <p id={`history-title-${analysis.id}`} className="truncate text-sm font-semibold text-on-surface" title={companyLabel}>
             {companyLabel}
           </p>
-          <p className="truncate font-label text-[10px] tracking-widest text-primary/70" title={uidLabel}>
+          <p className="truncate font-label text-[10px] tracking-widest text-[var(--color-brand)]/70" title={uidLabel}>
             {uidLabel}
           </p>
         </div>
@@ -71,7 +71,7 @@ export function HistoryCard({ analysis, iconName, isDeleting = false, onDelete }
       <div className="relative z-10 flex justify-start lg:col-span-2 lg:justify-end">
         <Button
           aria-label={`Eliminar ${companyLabel}`}
-          className="w-full opacity-100 transition-opacity focus:opacity-100 focus-visible:ring-2 focus-visible:ring-primary/40 sm:w-auto lg:opacity-0 lg:group-hover:opacity-100"
+          className="w-full opacity-100 transition-opacity focus:opacity-100 focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 sm:w-auto lg:opacity-0 lg:group-hover:opacity-100"
           disabled={isDeleting}
           type="button"
           variant="secondary"
