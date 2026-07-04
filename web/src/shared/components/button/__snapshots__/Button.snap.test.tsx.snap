@@ -3,43 +3,43 @@
 exports[`Button snapshot > renders all variants in dark mode 1`] = `
 <div>
   <button
-    class="inline-flex items-center justify-center rounded-full font-label select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-brand)] hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 h-10 px-4 text-label text-base gap-2"
+    class="inline-flex items-center justify-center rounded-md font-medium select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-brand)] hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)] h-10 px-4 text-label text-base gap-2"
     type="button"
   >
     Primary
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-full font-label select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-accent)] hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]/40 h-10 px-4 text-label text-base gap-2"
+    class="inline-flex items-center justify-center rounded-md font-medium select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 border border-[var(--color-brand)] hover:bg-[var(--color-brand-container)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)] h-10 px-4 text-label text-base gap-2"
     type="button"
   >
     Secondary
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-full font-label select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-transparent hover:bg-[var(--color-surface-elevated-1)] hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-on-surface)]/20 h-10 px-4 text-label text-base gap-2"
+    class="inline-flex items-center justify-center rounded-md font-medium select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-transparent hover:bg-[var(--color-surface-elevated-2)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-on-surface)]/20 h-10 px-4 text-label text-base gap-2"
     type="button"
   >
     Ghost
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-full font-label select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-error)] hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-error)]/40 h-10 px-4 text-label text-base gap-2"
+    class="inline-flex items-center justify-center rounded-md font-medium select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-error)] hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-error)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)] h-10 px-4 text-label text-base gap-2"
     type="button"
   >
     Danger
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-full font-label select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-brand)] hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 h-8 px-3 text-label text-sm gap-1.5"
+    class="inline-flex items-center justify-center rounded-md font-medium select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-brand)] hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)] h-8 px-3 text-label text-sm gap-1.5"
     type="button"
   >
     Small
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-full font-label select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-brand)] hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 h-12 px-6 text-label text-lg gap-2.5"
+    class="inline-flex items-center justify-center rounded-md font-medium select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-brand)] hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)] h-12 px-6 text-label text-lg gap-2.5"
     type="button"
   >
     Large
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-full font-label select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-brand)] hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 h-10 px-4 text-label text-base gap-2"
+    class="inline-flex items-center justify-center rounded-md font-medium select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-brand)] hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)] h-10 px-4 text-label text-base gap-2"
     disabled=""
     type="button"
   >
@@ -67,7 +67,7 @@ exports[`Button snapshot > renders all variants in dark mode 1`] = `
     Loading
   </button>
   <button
-    class="inline-flex items-center justify-center rounded-full font-label select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-brand)] hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/40 h-10 px-4 text-label text-base gap-2"
+    class="inline-flex items-center justify-center rounded-md font-medium select-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 disabled:active:scale-100 bg-[var(--color-brand)] hover:opacity-90 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-base)] h-10 px-4 text-label text-base gap-2"
     disabled=""
     type="button"
   >

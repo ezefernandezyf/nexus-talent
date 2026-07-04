@@ -16,7 +16,7 @@ exports[`Input snapshot > renders all states in dark mode 1`] = `
     >
       <input
         aria-invalid="false"
-        class="w-full bg-[var(--color-surface-base)] text-body placeholder:text-[var(--color-on-surface-variant)] shadow-[inset_0_0_0_1px] shadow-[var(--color-on-surface)]/10 focus:outline-none focus:shadow-[inset_0_0_0_2px] focus:shadow-[var(--color-brand)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] px-4 py-3 text-sm leading-6 rounded-lg"
+        class="w-full bg-[var(--color-surface-elevated-1)] text-body placeholder:text-[var(--color-on-surface-variant)] border border-[var(--color-outline)] focus:outline-none focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] h-11 px-4 py-3 text-sm rounded-md"
         id="_r_0_"
         placeholder="Type here..."
       />
@@ -37,7 +37,7 @@ exports[`Input snapshot > renders all states in dark mode 1`] = `
       <input
         aria-describedby="_r_1_-error"
         aria-invalid="true"
-        class="w-full bg-[var(--color-surface-base)] text-body placeholder:text-[var(--color-on-surface-variant)] shadow-[var(--color-on-surface)]/10 focus:outline-none focus:shadow-[var(--color-brand)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] shadow-[inset_0_0_0_1.5px_var(--color-error)] focus:shadow-[inset_0_0_0_2px_var(--color-error)] px-4 py-3 text-sm leading-6 rounded-lg"
+        class="w-full bg-[var(--color-surface-elevated-1)] text-body placeholder:text-[var(--color-on-surface-variant)] border focus:outline-none focus:ring-1 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)] h-11 px-4 py-3 text-sm rounded-md"
         id="_r_1_"
       />
     </div>
@@ -63,7 +63,7 @@ exports[`Input snapshot > renders all states in dark mode 1`] = `
     >
       <input
         aria-invalid="false"
-        class="w-full bg-[var(--color-surface-base)] text-body placeholder:text-[var(--color-on-surface-variant)] shadow-[inset_0_0_0_1px] shadow-[var(--color-on-surface)]/10 focus:outline-none focus:shadow-[inset_0_0_0_2px] focus:shadow-[var(--color-brand)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] px-4 py-3 text-sm leading-6 rounded-lg"
+        class="w-full bg-[var(--color-surface-elevated-1)] text-body placeholder:text-[var(--color-on-surface-variant)] border border-[var(--color-outline)] focus:outline-none focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] h-11 px-4 py-3 text-sm rounded-md"
         disabled=""
         id="_r_2_"
         value="Can't edit"
@@ -84,7 +84,7 @@ exports[`Input snapshot > renders all states in dark mode 1`] = `
     >
       <textarea
         aria-invalid="false"
-        class="w-full bg-[var(--color-surface-base)] text-body placeholder:text-[var(--color-on-surface-variant)] shadow-[inset_0_0_0_1px] shadow-[var(--color-on-surface)]/10 focus:outline-none focus:shadow-[inset_0_0_0_2px] focus:shadow-[var(--color-brand)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] px-4 py-3 text-sm leading-6 rounded-lg min-h-[100px] resize-y"
+        class="w-full bg-[var(--color-surface-elevated-1)] text-body placeholder:text-[var(--color-on-surface-variant)] border border-[var(--color-outline)] focus:outline-none focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)] h-11 px-4 py-3 text-sm rounded-md min-h-32 resize-y font-sans"
         id="_r_3_"
         placeholder="Write more..."
       />
