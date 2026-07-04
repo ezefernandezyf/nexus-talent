@@ -161,7 +161,7 @@ npx impeccable detect web/src/
 ### 🎨 ✅ P11bis: Real Page Redesign — Apex (DESCARTADO)
 > Rediseño visual con Apex (Deep Teal + Warm Amber). No gustó el resultado. Reemplazado por P11ter.
 
-### 🎨 P11ter: Editorial Precision — Lovable Design Migration (en progreso)
+### 🎨 ✅ P11ter: Editorial Precision — Lovable Design Migration (DONE)
 > Tomar el diseño generado en Lovable (editorial-lens) como REFERENCIA VISUAL y migrarlo a nuestra arquitectura. NO copy-paste — adaptar con nuestras convenciones.
 
 **Referencia**: `github.com/ezefernandezyf/editorial-lens`
@@ -177,18 +177,62 @@ npx impeccable detect web/src/
 - **Textura**: warm grain overlay al 2% (paper-like)
 
 #### Plan de Migración
-- [ ] 1. Migrar tokens de diseño a `web/src/index.css` (@theme block)
-- [ ] 2. Actualizar componentes Apex al look Editorial (Button/Card/Badge/Input — cambiar estilos, mantener API)
-- [ ] 3. Crear primitivas editoriales: `<Reveal>`, `<Eyebrow>` (scroll reveal + eyebrow label)
-- [ ] 4. Rediseñar Landing page con layout editorial (hero asimétrico, bento grid, features, FAQ, CTA)
-- [ ] 5. Rediseñar AuthShell con split layout (brand statement izq, form der)
-- [ ] 6. Rediseñar AppLayout con nav editorial (sticky top, accent active state)
-- [ ] 7. Rediseñar Analysis page con cards editoriales
-- [ ] 8. Rediseñar History list + detail con el nuevo look
-- [ ] 9. Rediseñar Settings page
-- [ ] 10. Actualizar 404 + 500 + Privacy pages
-- [ ] 11. `npx impeccable detect` — verificar 0 anti-patrones
-- [ ] 12. Tests: actualizar snapshots + unit tests
+- [x] 1. Migrar tokens de diseño a `web/src/index.css` (@theme block)
+- [x] 2. Actualizar componentes Apex al look Editorial (Button/Card/Badge/Input — cambiar estilos, mantener API)
+- [x] 3. Crear primitivas editoriales: `<Reveal>`, `<Eyebrow>` (scroll reveal + eyebrow label)
+- [x] 4. Rediseñar Landing page con layout editorial (hero asimétrico, bento grid, features, FAQ, CTA)
+- [x] 5. Rediseñar AuthShell con split layout (brand statement izq, form der)
+- [x] 6. Rediseñar AppLayout con nav editorial (sticky top, accent active state)
+- [x] 7. Rediseñar Analysis page con cards editoriales
+- [x] 8. Rediseñar History list + detail con el nuevo look
+- [x] 9. Rediseñar Settings page
+- [x] 10. Actualizar 404 + 500 + Privacy pages
+- [x] 11. `npx impeccable detect` — verificar 0 anti-patrones
+- [x] 12. Tests: actualizar snapshots + unit tests
+
+> **Nota**: P11ter fue una adaptación visual — funcionó bien pero no es pixel-perfect contra el Lovable reference. P11quater cierra las brechas restantes.
+
+### 🎯 P11quater: Lovable Pixel-Perfect Alignment (FASE SDD COMPLETA)
+> Réplica fiel del diseño Lovable (`editorial-lens`) sobre nuestra arquitectura real. Esto NO es "inspiración" — es alineación exacta de layout, spacing, tipografía, colores y estructura de cada página.
+
+**Referencia**: `github.com/ezefernandezyf/editorial-lens` — clonado en `/tmp/editorial-lens`
+**SDD**: Ciclo completo (`sdd-new`) con explore → propose → specs → design → tasks → apply → verify
+**Skills activas**: taste-skill/design-taste-frontend, high-end-visual-design, minimalist-ui
+
+#### Brechas a cerrar (Lovable vs nuestro P11ter)
+
+| Área | Gap actual | Target Lovable |
+|------|-----------|----------------|
+| **Tokens CSS** | `--color-brand`, `--color-on-surface` | Alinear con `--accent`, `--text-primary/secondary/tertiary`, agregar `--accent-muted` |
+| **Button** | `variant="primary/secondary/ghost"` | API Lovable: `variant="filled/outline/ghost"`, sizes `sm/md/lg` |
+| **Card** | `variant="flat/elevated/interactive"` | API Lovable: `interactive?: boolean`, `muted?: boolean` |
+| **Textarea** | Estilos diferentes | Mismos estilos que Lovable (focus ring, padding, font) |
+| **Label** | No tenemos primitiva | Label primitiva con `text-sm font-medium mb-2` |
+| **Landing Hero** | Outline link, blur derecha | Button filled terracotta, blur izquierda |
+| **Landing Manifiesto** | Sin fondo | Radial gradient background |
+| **Landing Features** | Fondo `elevated-1/50`, flagship `#FDF0EB` | `bg-surface-muted` sección, `bg-accent-muted` flagship |
+| **Landing FAQ** | Contenido + estilos distintos | FAQ Lovable: contenido, Plus/Minus icons, texto grande, max-w-4xl |
+| **Landing CTA** | Sin fondo + outline link | `bg-surface-muted` + Button filled |
+| **Auth Shell** | Split 5/7 | Grid 12-col: sidebar brand+stat (5 cols) + form (7 cols) |
+| **Analysis** | Layout funcional | Layout editorial con numbered sections, estados UX |
+| **History** | Layout diferente | Cards interactivas con ArrowRight |
+| **Settings** | Layout diferente | Secciones numeradas (01, 02, 03) |
+| **Footer** | Footer genérico | MarketingFooter específico de Lovable |
+
+#### Estrategia de PRs (2 PRs)
+
+| PR | Alcance | Archivos estimados |
+|----|---------|-------------------|
+| **PR 1: Primitives + Tokens** | Alinear tokens CSS, Button, Card, Badge, Input, Textarea, Label con la API de Lovable | `index.css`, `Button.tsx`, `Card.tsx`, `Badge.tsx`, `Input.tsx`, `Textarea.tsx`, `Label.tsx` (nuevo) |
+| **PR 2: Pages + Layouts** | Landing (hero, manifesto, how-it-works, features, FAQ, CTA), AuthShell, Analysis, History, Settings, Footer | `LandingPage.tsx`, `AuthShell.tsx`, `AnalysisPage.tsx`, `HistoryPage.tsx`, `HistoryDetailPage.tsx`, `SettingsPage.tsx`, `FAQ.tsx`, `Footer.tsx` |
+
+#### Lo que NO se toca
+- Lógica de negocio (API calls, hooks, stores, React Query)
+- Server, Prisma, contratos Zod
+- Auth real (JWT, cookies)
+- MobileDrawer
+- 404/500/Privacy pages (ya están bien)
+- Tests de lógica (solo snapshots se actualizan)
 
 ### ✨ P12: Polish + Animation
 > Micro-interacciones, transiciones, feedback visual.
