@@ -25,10 +25,10 @@ const appNavItems: AppNavItem[] = [
 
 function getNavLinkClassName({ isActive }: { isActive: boolean }) {
   return cn(
-    "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-colors font-display",
+    "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 font-display",
     isActive
-      ? "bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
-      : "text-on-surface-variant hover:bg-surface-container-high/60 hover:text-white",
+      ? "bg-[var(--color-brand-container)] text-[var(--color-brand)]"
+      : "text-[var(--color-on-surface-variant)] hover:text-[var(--color-on-surface)] hover:bg-[var(--color-surface-elevated-2)]",
   );
 }
 
@@ -100,7 +100,7 @@ function AppLayoutContent() {
       />
 
       <div className="relative mx-auto flex min-h-screen w-full flex-col gap-6 px-4 py-4 sm:px-6 lg:px-8">
-        <header className="fixed left-0 top-0 flex h-16 w-full items-center justify-between bg-surface-container-low px-6 [z-index:var(--z-topbar)]">
+        <header className="fixed left-0 top-0 flex h-16 w-full items-center justify-between border-b border-[var(--color-outline)] bg-[var(--color-surface-elevated-1)]/85 backdrop-blur-sm px-6 [z-index:var(--z-topbar)]">
           <div className="flex items-center gap-8">
             <Link className="font-display text-xl font-bold tracking-tight text-on-surface transition-opacity hover:opacity-90" to="/">
               Nexus Talent
