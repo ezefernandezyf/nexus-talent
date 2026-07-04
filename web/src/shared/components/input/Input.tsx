@@ -33,16 +33,16 @@ export type InputProps = InputAsInput | InputAsTextarea;
 // ---------------------------------------------------------------------------
 
 const baseStyles =
-  "w-full bg-[var(--color-surface-elevated-1)] text-[var(--text-primary)] text-body placeholder:text-[var(--color-on-surface-variant)] " +
-  "border border-[var(--border)] " +
+  "w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary " +
+  "border border-border " +
   "focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] " +
   "disabled:opacity-50 disabled:cursor-not-allowed " +
-  "transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]";
+  "transition-colors duration-200";
 
 const errorStyles =
   "border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]";
 
-const sizeStyles = "h-11 px-4 py-3 text-sm";
+const sizeStyles = "h-11 px-4 py-3";
 const inputRadius = "rounded-md";
 const textareaRadius = "rounded-md";
 
@@ -82,7 +82,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
         {label && (
           <label
             htmlFor={inputId}
-            className="font-label text-sm font-medium text-[var(--text-primary)]"
+            className="text-sm font-medium text-text-primary"
           >
             {label}
           </label>
@@ -90,7 +90,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
 
         <div className="relative">
           {iconPrefix && (
-            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-on-surface-variant)]">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">
               {iconPrefix}
             </span>
           )}
@@ -116,7 +116,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
           )}
 
           {iconSuffix && (
-            <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-on-surface-variant)]">
+            <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary">
               {iconSuffix}
             </span>
           )}
