@@ -248,69 +248,69 @@
   }
 }
 
+/* ===== Typography utilities — top-level, full editorial definitions ===== */
+@utility text-display {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(3rem, 6vw, 6rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+@utility text-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+@utility text-h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+@utility text-h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+@utility text-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(0.875rem, 0.5vw + 0.75rem, 1rem);
+  letter-spacing: normal;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  max-width: 65ch;
+}
+
+@utility text-caption {
+  font-family: var(--font-caption);
+  font-weight: 400;
+  font-size: clamp(0.75rem, 0.25vw + 0.7rem, 0.875rem);
+  letter-spacing: normal;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+@utility text-eyebrow {
+  font-family: var(--font-caption);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
 @layer utilities {
-  /* ===== Typography utilities — full editorial definitions ===== */
-  @utility text-display {
-    font-family: var(--font-display);
-    font-weight: 900;
-    font-size: clamp(3rem, 6vw, 6rem);
-    letter-spacing: -0.03em;
-    line-height: 1.05;
-  }
-
-  @utility text-h1 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-  }
-
-  @utility text-h2 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(1.5rem, 3vw, 2.5rem);
-    letter-spacing: -0.025em;
-    line-height: 1.15;
-  }
-
-  @utility text-h3 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(1.25rem, 2vw, 1.75rem);
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
-
-  @utility text-body {
-    font-family: var(--font-body);
-    font-weight: 400;
-    font-size: clamp(0.875rem, 0.5vw + 0.75rem, 1rem);
-    letter-spacing: normal;
-    line-height: 1.6;
-    color: var(--color-text-primary);
-    max-width: 65ch;
-  }
-
-  @utility text-caption {
-    font-family: var(--font-caption);
-    font-weight: 400;
-    font-size: clamp(0.75rem, 0.25vw + 0.7rem, 0.875rem);
-    letter-spacing: normal;
-    line-height: 1.5;
-    color: var(--color-text-secondary);
-  }
-
-  @utility text-eyebrow {
-    font-family: var(--font-caption);
-    font-weight: 500;
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    line-height: 1.5;
-    text-transform: uppercase;
-    color: var(--color-text-secondary);
-  }
-
   /* Editorial accent underline — solid 3px line at bottom */
   .accent-underline {
     background-image: linear-gradient(var(--accent), var(--accent));
