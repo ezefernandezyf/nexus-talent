@@ -3,6 +3,7 @@ import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { Badge } from "@/shared/components/Badge";
 import { Input } from "@/shared/components/Input";
+import { Label } from "@/shared/components/label/Label";
 import { cn } from "@/shared/utils/cn";
 import { JOB_ANALYSIS_SKILL_LEVEL, type JobAnalysisGap, type JobAnalysisKeywords, type JobAnalysisResult, type JobAnalysisVacancySummary } from "@/features/analysis/schemas/job-analysis";
 import {
@@ -30,6 +31,12 @@ function levelLabel(level: string) {
   }
 
   return "Adyacente";
+}
+
+function levelWeight(level: string): number {
+  if (level === JOB_ANALYSIS_SKILL_LEVEL.CORE) return 100;
+  if (level === JOB_ANALYSIS_SKILL_LEVEL.STRONG) return 66;
+  return 33;
 }
 
 function sourceLabel(source: string) {
@@ -80,139 +87,172 @@ function renderChipList(values: string[]) {
       ))}
     </div>
   ) : (
-    <p className="text-sm leading-7 text-on-surface-variant">No hay datos para mostrar todavía.</p>
+    <p className="text-sm leading-7 text-text-secondary">No hay datos para mostrar todavía.</p>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Section number component
+// ---------------------------------------------------------------------------
+
+function SectionNumber({ num }: { num: string }) {
+  return (
+    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-accent-muted font-display font-black text-lg text-accent">
+      {num}
+    </span>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 01 — Summary / Vacancy panel
+// ---------------------------------------------------------------------------
 
 function VacancySummaryPanel({ vacancySummary }: { vacancySummary?: JobAnalysisVacancySummary }) {
   if (!vacancySummary) {
     return (
-      <Card className="space-y-5 p-6 sm:p-8">
-        <div>
-          <Badge>Vacancy snapshot</Badge>
-          <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Resumen de la vacante</h4>
-        </div>
-        <p className="text-sm leading-7 text-on-surface-variant">La IA no devolvió aún el bloque estructurado de la vacante.</p>
-      </Card>
+      <div className="space-y-4">
+        <p className="text-sm leading-7 text-text-secondary">La IA no devolvió aún el bloque estructurado de la vacante.</p>
+      </div>
     );
   }
 
   return (
-    <Card className="space-y-5 p-6 sm:p-8">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <Badge>Vacancy snapshot</Badge>
-          <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Resumen de la vacante</h4>
-        </div>
-        <span className="text-xs uppercase tracking-[0.22em] text-on-surface-variant">{vacancySummary.modalityLocation}</span>
-      </div>
-
+    <div className="space-y-4">
       <div className="grid gap-4 md:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-2xl bg-surface-container-lowest/70 p-4 sm:p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Rol + seniority</p>
-          <p className="mt-2 text-base leading-7 text-on-surface">{vacancySummary.role} · {vacancySummary.seniority}</p>
+        <div className="rounded-lg bg-surface-muted p-4">
+          <p className="text-eyebrow">Rol + seniority</p>
+          <p className="mt-2 text-base leading-7 text-text-primary">{vacancySummary.role} · {vacancySummary.seniority}</p>
         </div>
-        <div className="rounded-2xl bg-surface-container-lowest/70 p-4 sm:p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Modalidad / ubicación</p>
-          <p className="mt-2 text-base leading-7 text-on-surface">{vacancySummary.modalityLocation}</p>
+        <div className="rounded-lg bg-surface-muted p-4">
+          <p className="text-eyebrow">Modalidad / ubicación</p>
+          <p className="mt-2 text-base leading-7 text-text-primary">{vacancySummary.modalityLocation}</p>
         </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="space-y-3 rounded-2xl bg-surface-container-lowest/70 p-4 sm:p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Top 5 responsabilidades</p>
-          <ul className="space-y-2 text-sm leading-7 text-on-surface-variant">
+        <div className="space-y-3 rounded-lg bg-surface-muted p-4">
+          <p className="text-eyebrow">Top 5 responsabilidades</p>
+          <ul className="space-y-2 text-sm leading-7 text-text-secondary">
             {vacancySummary.responsibilities.map((item) => (
               <li key={item}>• {item}</li>
             ))}
           </ul>
         </div>
-        <div className="space-y-3 rounded-2xl bg-surface-container-lowest/70 p-4 sm:p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Must-have</p>
-          <ul className="space-y-2 text-sm leading-7 text-on-surface-variant">
+        <div className="space-y-3 rounded-lg bg-surface-muted p-4">
+          <p className="text-eyebrow">Must-have</p>
+          <ul className="space-y-2 text-sm leading-7 text-text-secondary">
             {vacancySummary.mustHave.map((item) => (
               <li key={item}>• {item}</li>
             ))}
           </ul>
         </div>
-        <div className="space-y-3 rounded-2xl bg-surface-container-lowest/70 p-4 sm:p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Nice-to-have</p>
-          <ul className="space-y-2 text-sm leading-7 text-on-surface-variant">
+        <div className="space-y-3 rounded-lg bg-surface-muted p-4">
+          <p className="text-eyebrow">Nice-to-have</p>
+          <ul className="space-y-2 text-sm leading-7 text-text-secondary">
             {vacancySummary.niceToHave.map((item) => (
               <li key={item}>• {item}</li>
             ))}
           </ul>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
 
+// ---------------------------------------------------------------------------
+// 03 — Keywords panel
+// ---------------------------------------------------------------------------
+
 function KeywordsPanel({ keywords }: { keywords?: JobAnalysisKeywords }) {
   return (
-    <Card className="space-y-5 p-6 sm:p-8">
-      <div>
-        <Badge>Keywords</Badge>
-        <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Skills y términos para repetir</h4>
-      </div>
-
+    <div className="space-y-4">
       {keywords ? (
         <div className="space-y-4">
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Hard skills / tecnologías</p>
+            <p className="text-eyebrow">Hard skills / tecnologías</p>
             {renderChipList(keywords.hardSkills)}
           </div>
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Soft skills</p>
+            <p className="text-eyebrow">Soft skills</p>
             {renderChipList(keywords.softSkills)}
           </div>
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Dominio / negocio</p>
+            <p className="text-eyebrow">Dominio / negocio</p>
             {renderChipList(keywords.domainKeywords)}
           </div>
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">ATS exactos</p>
+            <p className="text-eyebrow">ATS exactos</p>
             {renderChipList(keywords.atsTerms)}
           </div>
         </div>
       ) : (
-        <p className="text-sm leading-7 text-on-surface-variant">La IA no devolvió aún el bloque de keywords estructuradas.</p>
+        <p className="text-sm leading-7 text-text-secondary">La IA no devolvió aún el bloque de keywords estructuradas.</p>
       )}
-    </Card>
+    </div>
   );
 }
 
+// ---------------------------------------------------------------------------
+// 04 — Gaps panel
+// ---------------------------------------------------------------------------
+
 function GapsPanel({ gaps }: { gaps?: JobAnalysisGap[] }) {
   return (
-    <Card className="space-y-5 p-6 sm:p-8">
-      <div>
-        <Badge>Gaps</Badge>
-        <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Posibles huecos y cómo cubrirlos</h4>
-      </div>
-
+    <div className="space-y-4">
       {gaps ? (
         <div className="grid gap-4 md:grid-cols-3">
           {gaps.map((gap) => (
-            <article key={gap.gap} className="rounded-2xl bg-surface-container-lowest/70 p-4 sm:p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Gap</p>
-              <p className="mt-2 text-sm leading-7 text-on-surface">{gap.gap}</p>
-              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Cómo cubrirlo</p>
-              <p className="mt-2 text-sm leading-7 text-on-surface-variant">{gap.mitigation}</p>
-              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Cómo enmarcarlo</p>
-              <p className="mt-2 text-sm leading-7 text-on-surface-variant">{gap.framing}</p>
+            <article key={gap.gap} className="rounded-lg bg-surface-muted p-4">
+              <p className="text-eyebrow">Gap</p>
+              <p className="mt-2 text-sm leading-7 text-text-primary">{gap.gap}</p>
+              <p className="mt-4 text-eyebrow">Cómo cubrirlo</p>
+              <p className="mt-2 text-sm leading-7 text-text-secondary">{gap.mitigation}</p>
+              <p className="mt-4 text-eyebrow">Cómo enmarcarlo</p>
+              <p className="mt-2 text-sm leading-7 text-text-secondary">{gap.framing}</p>
             </article>
           ))}
         </div>
       ) : (
-        <p className="text-sm leading-7 text-on-surface-variant">La IA no devolvió todavía los gaps sugeridos.</p>
+        <p className="text-sm leading-7 text-text-secondary">La IA no devolvió todavía los gaps sugeridos.</p>
       )}
-    </Card>
+    </div>
   );
 }
+
+// ---------------------------------------------------------------------------
+// 02 — Skills progress bar
+// ---------------------------------------------------------------------------
+
+function SkillProgressBar({ name, level }: { name: string; level: string }) {
+  const weight = levelWeight(level);
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-medium text-text-primary">{name}</span>
+        <span className="font-mono text-xs text-text-secondary">{weight}</span>
+      </div>
+      <div className="h-2 w-full rounded-full bg-surface-muted">
+        <div
+          className="h-full rounded-full bg-accent transition-all duration-500"
+          style={{ width: `${weight}%` }}
+        />
+      </div>
+      <p className="text-xs text-text-secondary">{levelLabel(level)}</p>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Default clipboard
+// ---------------------------------------------------------------------------
 
 const defaultCopyToClipboard = async (value: string) => {
   await navigator.clipboard.writeText(value);
 };
+
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
 
 export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClipboard }: AnalysisResultViewProps) {
   const recruiterMessages = getRecruiterMessageVariants(result);
@@ -306,173 +346,198 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
     setFeedbackMessage("Se descargó el outreach en JSON.");
   }
 
+  const allSkills = result.skillGroups.flatMap((group) => group.skills);
+  const groupedSkills = result.skillGroups;
+
   return (
     <section className="flex flex-col gap-6">
-      <Card className="space-y-5 p-6 sm:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <Badge>Análisis validado</Badge>
-            <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white sm:text-3xl">Análisis estructurado de la vacante</h3>
+      {/* 01 Summary */}
+      <Card className="space-y-6">
+        <div className="flex items-start gap-4">
+          <SectionNumber num="01" />
+          <div className="flex-1">
+            <h3 className="text-h3 text-text-primary">Summary</h3>
           </div>
-          <span className="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
-            <span className="status-dot glow-pulse bg-success text-success" aria-hidden="true" />
-            Listo
-          </span>
         </div>
 
-        <div className="space-y-3">
-          <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">Resumen</h4>
-          <p className="text-sm leading-7 text-on-surface sm:text-base">{result.summary}</p>
-        </div>
+        <p className="text-body text-text-primary">{result.summary}</p>
+
+        <VacancySummaryPanel vacancySummary={result.vacancySummary} />
       </Card>
 
-      <VacancySummaryPanel vacancySummary={result.vacancySummary} />
-
-      <Card className="space-y-5 p-6 sm:p-8">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <Badge>Skills Matrix</Badge>
-            <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Señales que vale la pena destacar</h4>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="status-dot glow-pulse bg-primary text-primary" aria-hidden="true" />
-            <span className="text-xs uppercase tracking-[0.22em] text-primary/80">Verified</span>
+      {/* 02 Skills Matrix */}
+      <Card className="space-y-6">
+        <div className="flex items-start gap-4">
+          <SectionNumber num="02" />
+          <div className="flex-1">
+            <h3 className="text-h3 text-text-primary">Skills Matrix</h3>
           </div>
         </div>
 
-        <div className="flex snap-x gap-3 overflow-x-auto pb-2 pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {result.skillGroups.flatMap((group) => group.skills).map((skill) => (
-            <Badge key={`${skill.name}-${skill.level}`} className="shrink-0 snap-start border border-outline-variant/10 bg-surface-container-high px-4 py-2">
-              <span className="text-xs font-medium text-on-surface">{skill.name}</span>
-              <span className="text-[0.66rem] uppercase tracking-[0.18em] text-on-surface-variant">{levelLabel(skill.level)}</span>
-            </Badge>
+        <div className="space-y-5">
+          {groupedSkills.map((group) => (
+            <div key={group.category} className="space-y-3">
+              <p className="text-sm font-semibold text-text-primary">{group.category}</p>
+              <div className="space-y-4">
+                {group.skills.map((skill) => (
+                  <SkillProgressBar key={`${skill.name}-${skill.level}`} name={skill.name} level={skill.level} />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
+
+        {/* GitHub enrichment — inside Skills Matrix as it relates to technical signals */}
+        {result.githubEnrichment ? (
+          <div className="space-y-4 rounded-lg bg-surface-muted p-4">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <p className="text-sm font-semibold text-text-primary">Stack observado en el repositorio</p>
+              <a
+                href={result.githubEnrichment.repositoryUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm text-text-secondary transition-colors hover:text-text-primary"
+              >
+                {result.githubEnrichment.repositoryName}
+              </a>
+            </div>
+
+            {result.githubEnrichment.warningMessage ? (
+              <p className="rounded-md bg-warning/10 px-4 py-3 text-sm leading-7 text-warning">{result.githubEnrichment.warningMessage}</p>
+            ) : null}
+
+            {result.githubEnrichment.detectedStack.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {result.githubEnrichment.detectedStack.map((signal) => (
+                  <Badge key={`${signal.name}-${signal.source}`}>
+                    {signal.name}
+                    <span className="text-[0.66rem] uppercase tracking-[0.18em] text-text-secondary">{sourceLabel(signal.source)}</span>
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm leading-7 text-text-secondary">No se detectaron señales claras de stack en este repositorio.</p>
+            )}
+          </div>
+        ) : null}
       </Card>
 
-      <KeywordsPanel keywords={result.keywords} />
-
-      <GapsPanel gaps={result.gaps} />
-
-      {result.githubEnrichment ? (
-        <Card className="space-y-5 p-6 sm:p-8">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <Badge>GitHub enriquecido</Badge>
-              <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Stack observado en el repositorio</h4>
-            </div>
-            <a
-              href={result.githubEnrichment.repositoryUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="text-xs uppercase tracking-[0.22em] text-on-surface-variant transition-colors hover:text-white"
-            >
-              {result.githubEnrichment.repositoryName}
-            </a>
-          </div>
-
-          {result.githubEnrichment.warningMessage ? (
-            <p className="rounded-2xl bg-warning/10 px-4 py-3 text-sm leading-7 text-warning">{result.githubEnrichment.warningMessage}</p>
-          ) : null}
-
-          {result.githubEnrichment.detectedStack.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {result.githubEnrichment.detectedStack.map((signal) => (
-                <Badge key={`${signal.name}-${signal.source}`}>
-                  {signal.name}
-                  <span className="text-[0.66rem] uppercase tracking-[0.18em] text-on-surface-variant">{sourceLabel(signal.source)}</span>
-                </Badge>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm leading-7 text-on-surface-variant">No se detectaron señales claras de stack en este repositorio.</p>
-          )}
-        </Card>
-      ) : null}
-
-      <Card className="relative overflow-hidden space-y-5 p-6 sm:p-8">
-        <div className="absolute right-0 top-0 p-4 opacity-25">
-          <span className="text-4xl text-primary">✦</span>
-        </div>
-
-          <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <Badge>Message Generator</Badge>
-            <h4 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">Editá las dos versiones antes de copiar</h4>
-          </div>
-          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">
-            <Button className="w-full sm:w-auto" variant="outline" type="button" onClick={handleOpenEmailDraft}>
-              Abrir email
-            </Button>
-            <Button className="w-full sm:w-auto" variant="outline" type="button" onClick={handleDownloadMarkdown}>
-              Descargar Markdown
-            </Button>
-            <Button className="w-full sm:w-auto" variant="outline" type="button" onClick={handleDownloadJson}>
-              Descargar JSON
-            </Button>
-            <Button className="w-full sm:w-auto" type="button" onClick={handleCopy}>
-              Copiar mensaje
-            </Button>
+      {/* 03 Keywords */}
+      <Card className="space-y-6">
+        <div className="flex items-start gap-4">
+          <SectionNumber num="03" />
+          <div className="flex-1">
+            <h3 className="text-h3 text-text-primary">Keywords</h3>
           </div>
         </div>
 
+        <KeywordsPanel keywords={result.keywords} />
+      </Card>
+
+      {/* 04 Gaps & Watch-outs */}
+      <Card className="space-y-6">
+        <div className="flex items-start gap-4">
+          <SectionNumber num="04" />
+          <div className="flex-1">
+            <h3 className="text-h3 text-text-primary">Gaps &amp; Watch-outs</h3>
+          </div>
+        </div>
+
+        <GapsPanel gaps={result.gaps} />
+      </Card>
+
+      {/* 05 Outreach Draft */}
+      <Card className="space-y-6">
+        <div className="flex items-start gap-4">
+          <SectionNumber num="05" />
+          <div className="flex-1">
+            <h3 className="text-h3 text-text-primary">Outreach Draft</h3>
+          </div>
+        </div>
+
+        {/* Mono-font preview block */}
+        <div className="rounded-lg bg-surface-muted p-4 font-mono text-sm leading-relaxed text-text-primary whitespace-pre-wrap">
+          {formatOutreachCopy(subject, body)}
+        </div>
+
+        {/* Copy + regenerate actions */}
+        <div className="flex flex-wrap items-center gap-3">
+          <Button type="button" onClick={handleCopy}>
+            Copiar mensaje
+          </Button>
+          <Button type="button" variant="outline" onClick={handleCopyDm}>
+            Copiar DM corto
+          </Button>
+        </div>
+
+        {/* Dual editor */}
         <div className="grid gap-4 lg:grid-cols-2">
-          <div className="space-y-4 rounded-2xl bg-surface-container-lowest p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]">
+          <div className="space-y-4 rounded-lg bg-surface-muted p-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Versión A</p>
-                <p className="mt-2 text-sm leading-7 text-on-surface-variant">Email / LinkedIn, 120–180 palabras.</p>
+                <p className="text-sm font-medium text-text-primary">Versión A</p>
+                <p className="mt-1 text-sm text-text-secondary">Email / LinkedIn, 120-180 palabras.</p>
               </div>
-              <span className="text-xs uppercase tracking-[0.22em] text-on-surface-variant">{countWords(body)} palabras</span>
+              <span className="text-sm text-text-secondary">{countWords(body)} palabras</span>
             </div>
-            <label className="space-y-2">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Asunto</span>
-              <Input value={subject} onChange={(event) => setSubject(event.target.value)} aria-label="Asunto del mensaje" />
-            </label>
-
-            <label className="space-y-2">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Mensaje</span>
+            <div className="space-y-2">
+              <Label htmlFor="outreach-subject">Asunto</Label>
+              <Input id="outreach-subject" value={subject} onChange={(event) => setSubject(event.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="outreach-body">Mensaje</Label>
               <Input
+                id="outreach-body"
                 multiline
                 value={body}
                 onChange={(event) => setBody(event.target.value)}
                 className="min-h-40"
-                aria-label="Mensaje de contacto"
               />
-            </label>
+            </div>
           </div>
 
-          <div className="space-y-4 rounded-2xl bg-surface-container-lowest p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]">
+          <div className="space-y-4 rounded-lg bg-surface-muted p-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">Versión B</p>
-                <p className="mt-2 text-sm leading-7 text-on-surface-variant">DM corto, hasta 600 caracteres.</p>
+                <p className="text-sm font-medium text-text-primary">Versión B</p>
+                <p className="mt-1 text-sm text-text-secondary">DM corto, hasta 600 caracteres.</p>
               </div>
-              <span className="text-xs uppercase tracking-[0.22em] text-on-surface-variant">{dmBody.length}/600</span>
+              <span className="text-sm text-text-secondary">{dmBody.length}/600</span>
             </div>
-
-            <label className="space-y-2">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface-variant">DM corto</span>
+            <div className="space-y-2">
+              <Label htmlFor="outreach-dm">DM corto</Label>
               <Input
+                id="outreach-dm"
                 multiline
                 value={dmBody}
                 onChange={(event) => setDmBody(event.target.value)}
                 className="min-h-40"
-                aria-label="Mensaje corto para reclutador"
               />
-            </label>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <Button type="button" variant="outline" onClick={handleCopyDm}>
-                Copiar DM corto
-              </Button>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-3 text-sm text-on-surface-variant" aria-live="polite">
-          <span className={feedbackTone === "error" ? "text-error" : feedbackTone === "success" ? "text-success" : ""}>{feedbackMessage}</span>
-          <span className="font-mono text-xs uppercase tracking-[0.18em] text-on-surface-variant">{body.length} chars / {dmBody.length} chars</span>
+        {/* Action buttons */}
+        <div className="flex flex-wrap items-center gap-3">
+          <Button type="button" variant="outline" onClick={handleOpenEmailDraft}>
+            Abrir email
+          </Button>
+          <Button type="button" variant="outline" onClick={handleDownloadMarkdown}>
+            Descargar Markdown
+          </Button>
+          <Button type="button" variant="outline" onClick={handleDownloadJson}>
+            Descargar JSON
+          </Button>
+        </div>
+
+        {/* Feedback */}
+        <div className="flex items-center justify-between gap-3 text-sm" aria-live="polite">
+          <span className={cn(
+            feedbackTone === "error" ? "text-error" : feedbackTone === "success" ? "text-success" : "text-text-secondary"
+          )}>
+            {feedbackMessage}
+          </span>
+          <span className="font-mono text-xs text-text-secondary">{body.length} chars / {dmBody.length} chars</span>
         </div>
       </Card>
     </section>

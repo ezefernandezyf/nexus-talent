@@ -1,6 +1,4 @@
-import { EmptyState } from "@/shared/components";
 import { Card } from "@/shared/components/Card";
-import { Badge } from "@/shared/components/Badge";
 import { useJobAnalysis } from "./hooks/useJobAnalysis";
 import { JobDescriptionForm } from "./components/JobDescriptionForm";
 import { AnalysisCard } from "./components/AnalysisCard";
@@ -17,63 +15,61 @@ interface AnalysisFeatureProps {
 
 function LoadingState() {
   return (
-    <StatePanel label="Procesando" title="El análisis está en marcha" tone="loading">
-      <div className="space-y-4">
-        <div className="h-8 w-3/4 rounded-full bg-surface-bright animate-pulse" />
-        <div className="h-5 w-full rounded-full bg-surface-bright/80 animate-pulse" />
-        <div className="h-5 w-5/6 rounded-full bg-surface-bright/80 animate-pulse" />
-      </div>
-      <div className="rounded-2xl bg-surface-container-lowest/80 p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]">
-        <p className="text-sm leading-7 text-on-surface-variant">
-          El analizador determinista está dando forma ahora al resumen, a los grupos de señales y al borrador del mensaje.
-        </p>
-      </div>
-    </StatePanel>
+    <div aria-label="Cargando análisis" className="animate-pulse space-y-6" role="status">
+      {/* 5 numbered result section skeletons */}
+      {[1, 2, 3, 4, 5].map((section) => (
+        <div key={section} className="rounded-lg border border-border bg-surface p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+          <div className="flex items-start gap-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-surface-muted">
+              <div className="h-5 w-5 rounded bg-surface-muted/60" />
+            </div>
+            <div className="flex-1 space-y-3">
+              <div className="h-6 w-48 rounded bg-surface-muted" />
+              <div className="h-4 w-3/4 rounded bg-surface-muted/60" />
+              <div className="h-4 w-1/2 rounded bg-surface-muted/60" />
+              <div className="h-4 w-5/6 rounded bg-surface-muted/40" />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 
 function ErrorState({ message }: { message: string }) {
   return (
-    <StatePanel label="El análisis falló" title="No se pudo completar la lectura" tone="error">
-      <p className="text-base leading-7 text-on-surface-variant">{message}</p>
-    </StatePanel>
+    <Card className="p-8">
+      <div className="flex flex-col items-center gap-4 text-center">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-error/10">
+          <span className="material-symbols-outlined text-2xl text-error" aria-hidden="true">
+            error_outline
+          </span>
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-h3 text-text-primary">El análisis falló</h3>
+          <p className="text-body text-text-secondary">{message}</p>
+        </div>
+      </div>
+    </Card>
   );
 }
 
-export function StatePanel({
-  children,
-  label,
-  title,
-  tone,
-  compact = false,
-}: {
-  children: React.ReactNode;
-  label: string;
-  title: string;
-  tone: "loading" | "empty" | "error";
-  compact?: boolean;
-}) {
+function EmptyStateView() {
   return (
-    <Card className={compact ? "flex flex-col gap-5 p-6 sm:p-8" : "flex min-h-136 flex-col gap-6 p-6 sm:p-8"}>
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <Badge>{label}</Badge>
-          <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white">{title}</h3>
+    <Card className="p-8">
+      <div className="flex flex-col items-center gap-4 text-center">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-muted">
+          <span className="material-symbols-outlined text-2xl text-accent" aria-hidden="true">
+            description
+          </span>
         </div>
-        <span
-          className={
-            tone === "error"
-              ? "rounded-full bg-error/10 px-3 py-1 text-xs font-medium text-error"
-              : tone === "loading"
-                ? "rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
-                : "rounded-full bg-surface-container-high/70 px-3 py-1 text-xs font-medium text-on-surface-variant"
-          }
-        >
-          {tone === "loading" ? "En curso" : tone === "error" ? "Revisar" : "Vacío"}
-        </span>
+        <div className="space-y-2">
+          <h3 className="text-h3 text-text-primary">No hay análisis todavía</h3>
+          <p className="text-body text-text-secondary">
+            Pegá una descripción del puesto para obtener un análisis completo.
+          </p>
+        </div>
       </div>
-
-      <div className={compact ? "flex flex-col gap-4" : "flex flex-1 flex-col justify-between gap-6"}>{children}</div>
     </Card>
   );
 }
@@ -100,10 +96,7 @@ export function AnalysisFeature({ initialGithubRepositoryUrl, initialJobDescript
       ) : analysis.data ? (
         <AnalysisCard result={analysis.data} />
       ) : analysis.isIdle ? (
-        <EmptyState
-          title="No hay análisis todavía"
-          description="Pegá una descripción del puesto para obtener un análisis completo."
-        />
+        <EmptyStateView />
       ) : null}
     </section>
   );

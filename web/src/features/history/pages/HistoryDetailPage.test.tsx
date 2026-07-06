@@ -81,10 +81,11 @@ describe("HistoryDetailPage", () => {
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /detalle del análisis/i })).toBeInTheDocument());
     expect(screen.getByRole("button", { name: /rework desde este guardado/i })).toBeInTheDocument();
-    expect(screen.getByText(/resumen de la vacante/i)).toBeInTheDocument();
-    expect(screen.getByText(/skills y términos para repetir/i)).toBeInTheDocument();
-    expect(screen.getByText(/posibles huecos y cómo cubrirlos/i)).toBeInTheDocument();
-    expect(screen.getByText(/editá las dos versiones antes de copiar/i)).toBeInTheDocument();
+    expect(screen.getByText("Summary")).toBeInTheDocument();
+    expect(screen.getByText("Skills Matrix")).toBeInTheDocument();
+    expect(screen.getByText("Keywords")).toBeInTheDocument();
+    expect(screen.getByText("Gaps & Watch-outs")).toBeInTheDocument();
+    expect(screen.getByText("Outreach Draft")).toBeInTheDocument();
     expect(
       screen.getAllByRole("link", { name: "nexus-talent" }).some((link) =>
         link.getAttribute("href") === "https://github.com/ezefernandezyf/nexus-talent",
