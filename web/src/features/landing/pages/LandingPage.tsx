@@ -49,9 +49,9 @@ const ctaOutline = cn(
 );
 
 const publicDrawerItems = [
-  { label: "Home", to: "/" },
-  { label: "Analysis", to: "/app/analysis" },
-  { label: "History", to: "/app/history" },
+  { label: "Inicio", to: "/" },
+  { label: "Análisis", to: "/app/analysis" },
+  { label: "Historial", to: "/app/history" },
 ] as const;
 
 // ── Component ──
@@ -77,13 +77,13 @@ export function LandingPage() {
               className={cn(linkBtnSecondary, "hidden md:inline-flex")}
               to="/auth/sign-in"
             >
-              Sign In
+              Iniciar sesión
             </Link>
             <Link
               className={cn(linkBtnPrimary, "hidden md:inline-flex")}
               to="/auth/sign-up"
             >
-              Get Started Free
+              Empieza gratis
             </Link>
           </div>
         }
@@ -111,10 +111,10 @@ export function LandingPage() {
                 transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
                 className="text-display mt-6"
               >
-                Transform job descriptions
+                Transforma descripciones de trabajo
                 <br />
-                into{" "}
-                <span className="accent-underline">actionable insights</span>.
+                en{" "}
+                <span className="accent-underline">información procesable</span>.
               </motion.h1>
 
               <motion.p
@@ -123,8 +123,8 @@ export function LandingPage() {
                 transition={{ duration: 0.8, ease: EASE, delay: 0.2 }}
                 className="mt-8 text-lg text-[var(--color-on-surface-variant)] max-w-xl"
               >
-                Paste any JD. Get a structured breakdown of skills, keywords,
-                gaps, and outreach messages: in seconds, not hours.
+                Pega cualquier descripción de trabajo. Obtén un desglose estructurado de habilidades, palabras clave,
+                brechas y mensajes de contacto: en segundos, no en horas.
               </motion.p>
 
               <motion.div
@@ -134,7 +134,7 @@ export function LandingPage() {
                 className="mt-10"
               >
                 <Link className={ctaOutline} to="/app/analysis">
-                  Start Analyzing <ArrowRight size={18} weight="regular" />
+                  Empieza a analizar <ArrowRight size={18} weight="regular" />
                 </Link>
               </motion.div>
             </div>
@@ -159,18 +159,18 @@ export function LandingPage() {
         <div className="container-editorial">
           <Reveal>
             <h2 className="text-h1 text-center max-w-5xl mx-auto">
-              Recruiting is signal detection.
+              El recruiting es detección de señales.
             </h2>
           </Reveal>
 
           <div className="mt-20 grid gap-16 lg:grid-cols-2 lg:gap-24 items-start max-w-5xl mx-auto">
             <Reveal delay={0.1}>
               <p className="text-lg leading-relaxed text-[var(--color-on-surface-variant)]">
-                Every job description hides intent: what the hiring manager
-                actually needs versus what HR wrote down. Nexus Talent
-                distinguishes the two. It surfaces skills, gaps, and outreach
-                angles so you can move on candidates before your competitors
-                have finished reading.
+                Cada descripción de trabajo esconde una intención: lo que el hiring manager
+                realmente necesita versus lo que Recursos Humanos escribió. Nexus Talent
+                distingue ambas. Revela habilidades, brechas y ángulos de contacto
+                para que puedas avanzar sobre candidatos antes de que tus competidores
+                terminen de leer.
               </p>
             </Reveal>
 
@@ -183,8 +183,8 @@ export function LandingPage() {
                   12s
                 </div>
                 <div className="mt-3 text-caption max-w-xs text-[var(--color-on-surface-variant)]">
-                  Average time to a full structured analysis, from paste to
-                  exportable outreach.
+                  Tiempo promedio para un análisis estructurado completo, desde pegar
+                  hasta un contacto exportable.
                 </div>
               </div>
             </Reveal>
@@ -196,9 +196,9 @@ export function LandingPage() {
       <section id="how" className="py-24 md:py-32">
         <div className="container-editorial">
           <Reveal>
-            <Eyebrow>The workflow</Eyebrow>
+            <Eyebrow>El flujo de trabajo</Eyebrow>
             <h2 className="text-h1 mt-4 max-w-2xl">
-              Three moves. Every candidate.
+              Tres pasos. Cada candidato.
             </h2>
           </Reveal>
 
@@ -218,16 +218,16 @@ export function LandingPage() {
                     <ListMagnifyingGlass size={24} weight="regular" />
                   </div>
                 </div>
-                <h3 className="text-h3 mt-8">Paste the description</h3>
+                <h3 className="text-h3 mt-8">Pega la descripción</h3>
                 <p className="mt-4 max-w-md leading-relaxed text-[var(--color-on-surface-variant)]">
-                  Drop any job description, polished or messy, internal or
-                  external. The parser normalizes it, identifies structure,
-                  and prepares a clean analysis surface. No formatting
-                  required.
+                  Pega cualquier descripción de trabajo, pulida o desordenada, interna o
+                  externa. El parser la normaliza, identifica la estructura
+                  y prepara una superficie de análisis limpia. Sin necesidad
+                  de formato.
                 </p>
                 <div className="mt-auto flex items-center gap-2 pt-10 text-xs text-[var(--color-on-surface-variant)]/60">
                   <div className="h-1 w-1 rounded-full bg-[var(--accent)]" />
-                  <span>Averages 2s parse time</span>
+                  <span>Promedia 2s de parseo</span>
                 </div>
               </Card>
             </Reveal>
@@ -248,11 +248,11 @@ export function LandingPage() {
                   </div>
                 </div>
                 <h3 className="mt-6 font-display text-xl font-bold text-[var(--text-primary)]">
-                  Get structured analysis
+                  Obtén análisis estructurado
                 </h3>
                 <p className="mt-3 text-sm text-[var(--color-on-surface-variant)]">
-                  Skills matrix, keywords, and gaps rendered as scannable
-                  cards.
+                  Matriz de habilidades, palabras clave y brechas presentadas como
+                  tarjetas escaneables.
                 </p>
               </Card>
             </Reveal>
@@ -273,10 +273,10 @@ export function LandingPage() {
                   </div>
                 </div>
                 <h3 className="mt-6 font-display text-xl font-bold text-[var(--text-primary)]">
-                  Copy outreach messages
+                  Copia mensajes de contacto
                 </h3>
                 <p className="mt-3 text-sm text-[var(--color-on-surface-variant)]">
-                  Personalized opener drafts ready for LinkedIn or email.
+                  Borradores personalizados listos para LinkedIn o correo electrónico.
                 </p>
               </Card>
             </Reveal>
@@ -293,14 +293,14 @@ export function LandingPage() {
           <Reveal>
             <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
               <div>
-                <Eyebrow>Capabilities</Eyebrow>
+                <Eyebrow>Capacidades</Eyebrow>
                 <h2 className="text-h1 mt-4 max-w-xl">
-                  Built for depth, not decoration.
+                  Construido para profundidad, no decoración.
                 </h2>
               </div>
               <p className="max-w-sm text-[var(--color-on-surface-variant)]">
-                Every feature earns its place. No dashboards you'll never
-                open, no metrics that don't move.
+                Cada funcionalidad se gana su lugar. Sin paneles que nunca
+                abrirás, sin métricas que no se mueven.
               </p>
             </div>
           </Reveal>
@@ -313,20 +313,20 @@ export function LandingPage() {
                 style={{ backgroundColor: "#FDF0EB" }}
               >
                 <Badge className="w-fit">
-                  Flagship
+                  Insignia
                 </Badge>
                 <h3 className="text-h2 mt-8 max-w-md text-[#1A1714]">
-                  Skills matrix that ranks the ones that actually matter.
+                  Matriz de habilidades que clasifica las que realmente importan.
                 </h3>
                 <p className="mt-6 max-w-md leading-relaxed text-[#5C5956]">
-                  Every extracted skill comes weighted by centrality to the
-                  role, so you know which requirements are non-negotiable
-                  and which are wishlist. No more chasing candidates who
-                  match on the wrong axes.
+                  Cada habilidad extraída viene ponderada por su centralidad en el
+                  rol, para que sepas qué requisitos son innegociables
+                  y cuáles son deseables. No más perseguir candidatos que
+                  coinciden en los ejes equivocados.
                 </p>
                 <div className="mt-auto flex items-center gap-8 pt-10">
-                  <StatBlock value="94%" label="Extraction accuracy" />
-                  <StatBlock value="20+" label="Skill dimensions" />
+                  <StatBlock value="94%" label="Precisión de extracción" />
+                  <StatBlock value="20+" label="Dimensiones de habilidad" />
                 </div>
               </div>
             </Reveal>
@@ -342,11 +342,11 @@ export function LandingPage() {
                   <Target size={22} weight="regular" />
                 </div>
                 <h3 className="mt-6 font-display text-lg font-bold text-[var(--text-primary)]">
-                  Gap detection
+                  Detección de brechas
                 </h3>
                 <p className="mt-2 text-sm text-[var(--color-on-surface-variant)]">
-                  See where a candidate falls short, before the screening
-                  call.
+                  Ve dónde un candidato se queda corto, antes de la llamada
+                  de preselección.
                 </p>
               </Card>
             </Reveal>
@@ -361,10 +361,10 @@ export function LandingPage() {
                   <Lightning size={22} weight="regular" />
                 </div>
                 <h3 className="mt-6 font-display text-lg font-bold text-[var(--text-primary)]">
-                  Instant outreach
+                  Contacto instantáneo
                 </h3>
                 <p className="mt-2 text-sm text-[var(--color-on-surface-variant)]">
-                  Ready-to-send drafts, tuned to the role and the candidate.
+                  Borradores listos para enviar, ajustados al rol y al candidato.
                 </p>
               </Card>
             </Reveal>
@@ -379,10 +379,10 @@ export function LandingPage() {
                   <ShieldCheck size={22} weight="regular" />
                 </div>
                 <h3 className="mt-6 font-display text-lg font-bold text-[var(--text-primary)]">
-                  Private by default
+                  Privado por defecto
                 </h3>
                 <p className="mt-2 text-sm text-[var(--color-on-surface-variant)]">
-                  Job descriptions never train models. Analyses stay yours.
+                  Las descripciones de trabajo nunca entrenan modelos. Los análisis se quedan contigo.
                 </p>
               </Card>
             </Reveal>
@@ -402,18 +402,18 @@ export function LandingPage() {
         <div className="container-editorial text-center">
           <Reveal>
             <h2 className="text-display mx-auto max-w-3xl">
-              Ready to stop guessing?
+              ¿Listo para dejar de adivinar?
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <div className="mt-10">
               <Link className={ctaOutline} to="/app/analysis">
-                Start Analyzing Now{" "}
+                Empieza a analizar ahora{" "}
                 <ArrowRight size={18} weight="regular" />
               </Link>
             </div>
             <div className="mt-4 text-caption text-[var(--color-on-surface-variant)]">
-              Free, no credit card required.
+              Gratis, sin necesidad de tarjeta de crédito.
             </div>
           </Reveal>
         </div>
@@ -429,14 +429,14 @@ export function LandingPage() {
               to="/auth/sign-in"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Sign In
+              Iniciar sesión
             </Link>
             <Link
               className={cn(linkBtnPrimary, "w-full justify-center")}
               to="/auth/sign-up"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Get Started Free
+              Empieza gratis
             </Link>
           </div>
         }

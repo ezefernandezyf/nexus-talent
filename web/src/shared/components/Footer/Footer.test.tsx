@@ -13,7 +13,7 @@ describe("Footer", () => {
 
     expect(screen.getByText("Nexus Talent")).toBeInTheDocument();
     expect(screen.getByText(/© 2026/i)).toBeInTheDocument();
-    expect(screen.getByText(/built for the machine era/i)).toBeInTheDocument();
+    expect(screen.getByText(/construido para la era de las máquinas/i)).toBeInTheDocument();
   });
 
   it("renders Privacy, GitHub, and Contact links", () => {
@@ -23,8 +23,8 @@ describe("Footer", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("link", { name: /privacy/i })).toHaveAttribute("href", "/privacy");
+    expect(screen.getByRole("link", { name: /privacidad/i })).toHaveAttribute("href", "/privacy");
     expect(screen.getByRole("link", { name: /github/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /contact/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /contacto/i })).toBeInTheDocument();
   });
 });

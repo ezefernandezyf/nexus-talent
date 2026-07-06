@@ -17,6 +17,10 @@
 
   /* ===== Editorial Precision Palette — Warm Monochrome + Terracotta ===== */
 
+  /* ── Base colors (required by Tailwind utilities like text-white, bg-black) ── */
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+
   /* ── New canonical tokens ── */
   --color-accent: #C46B4F;
   --color-accent-muted: #FDF0EB;

@@ -18,7 +18,7 @@ exports[`Footer snapshot > renders consistently 1`] = `
       <div
         class="text-sm text-text-secondary"
       >
-        © 2026 Nexus Talent. Built for the machine era.
+        © 2026 Nexus Talent. Construido para la era de las máquinas.
       </div>
     </div>
     <div
@@ -28,11 +28,11 @@ exports[`Footer snapshot > renders consistently 1`] = `
         class="transition-colors hover:text-text-primary"
         href="/privacy"
       >
-        Privacy
+        Privacidad
       </a>
       <a
         class="transition-colors hover:text-text-primary"
-        href="https://github.com/nexustalent"
+        href="https://github.com/ezefernandezyf/nexus-talent"
         rel="noopener noreferrer"
         target="_blank"
       >
@@ -42,7 +42,7 @@ exports[`Footer snapshot > renders consistently 1`] = `
         class="transition-colors hover:text-text-primary"
         href="mailto:hello@nexustalent.dev"
       >
-        Contact
+        Contacto
       </a>
     </div>
   </div>

@@ -53,7 +53,7 @@ export function AnalysisPage() {
         description="Optimiza tu perfil para la vacante deseada utilizando nuestro motor de inteligencia artificial. GitHub es el único enriquecimiento automatizado; LinkedIn queda como referencia manual por restricciones de la plataforma."
         title={
           <span className="font-display">
-            <span className="text-[var(--accent)]">Nuevo</span> Análisis de Reclutamiento
+            Análisis de Reclutamiento
           </span>
         }
       />

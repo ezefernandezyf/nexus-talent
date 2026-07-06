@@ -36,7 +36,7 @@ interface SettingsFeatureProps {
 }
 
 export function SettingsFeature({ repository }: SettingsFeatureProps) {
-  const { status, user, isConfigured } = useAuth();
+  const { status, user, isConfigured, signOut } = useAuth();
   const { theme } = useTheme();
   const {
     accountActionError,
@@ -180,8 +180,8 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
           <Button variant="outline" type="button">
             Exportar datos
           </Button>
-          <Button variant="ghost" type="button">
-            Sign out
+          <Button variant="ghost" type="button" onClick={() => signOut()}>
+            Cerrar sesión
           </Button>
         </div>
 

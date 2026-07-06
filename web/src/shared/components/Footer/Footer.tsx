@@ -17,17 +17,17 @@ export function Footer({ className }: FooterProps) {
         <div className="space-y-2">
           <div className="font-display text-lg font-black text-text-primary">Nexus Talent</div>
           <div className="text-sm text-text-secondary">
-            © 2026 Nexus Talent. Built for the machine era.
+            © 2026 Nexus Talent. Construido para la era de las máquinas.
           </div>
         </div>
 
         <div className="flex flex-col gap-4 text-sm text-text-secondary md:flex-row md:gap-8">
           <Link className="transition-colors hover:text-text-primary" to="/privacy">
-            Privacy
+            Privacidad
           </Link>
           <a
             className="transition-colors hover:text-text-primary"
-            href="https://github.com/nexustalent"
+            href="https://github.com/ezefernandezyf/nexus-talent"
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -37,7 +37,7 @@ export function Footer({ className }: FooterProps) {
             className="transition-colors hover:text-text-primary"
             href="mailto:hello@nexustalent.dev"
           >
-            Contact
+            Contacto
           </a>
         </div>
       </div>
