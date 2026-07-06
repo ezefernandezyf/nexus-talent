@@ -16,7 +16,7 @@ exports[`Input snapshot > renders all states in dark mode 1`] = `
     >
       <input
         aria-invalid="false"
-        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border border-border focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 h-11 px-4 py-3 rounded-md"
+        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border border-border focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 h-11 px-4 rounded-md"
         id="_r_0_"
         placeholder="Type here..."
       />
@@ -37,7 +37,7 @@ exports[`Input snapshot > renders all states in dark mode 1`] = `
       <input
         aria-describedby="_r_1_-error"
         aria-invalid="true"
-        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border focus:outline-none focus:ring-1 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)] h-11 px-4 py-3 rounded-md"
+        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border focus:outline-none focus:ring-1 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)] h-11 px-4 rounded-md"
         id="_r_1_"
       />
     </div>
@@ -63,7 +63,7 @@ exports[`Input snapshot > renders all states in dark mode 1`] = `
     >
       <input
         aria-invalid="false"
-        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border border-border focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 h-11 px-4 py-3 rounded-md"
+        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border border-border focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 h-11 px-4 rounded-md"
         disabled=""
         id="_r_2_"
         value="Can't edit"
@@ -84,7 +84,7 @@ exports[`Input snapshot > renders all states in dark mode 1`] = `
     >
       <textarea
         aria-invalid="false"
-        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border border-border focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 h-11 px-4 py-3 rounded-md min-h-32 resize-y font-sans"
+        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border border-border focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 h-11 px-4 rounded-md min-h-32 resize-y font-sans"
         id="_r_3_"
         placeholder="Write more..."
       />

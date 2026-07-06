@@ -42,7 +42,7 @@ const baseStyles =
 const errorStyles =
   "border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]";
 
-const sizeStyles = "h-11 px-4 py-3";
+const sizeStyles = "h-11 px-4";
 const inputRadius = "rounded-md";
 const textareaRadius = "rounded-md";
 
