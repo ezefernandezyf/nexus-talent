@@ -1,6 +1,6 @@
 # Nexus Talent — Agent Context
 
-> AI-assisted precision recruiting app. Transform a job description into a structured summary, skills matrix, and recruiter-winning outreach.
+> AI-assisted job application copilot. Transform a job description into a structured summary, skills matrix, and personalized outreach messages.
 
 ## Stack
 - **Frontend**: React 19 + TypeScript + Vite + Tailwind 4 + React Router 7
@@ -24,7 +24,7 @@
 - **Database**: Prisma with Supabase PostgreSQL
 - **Auth**: Custom HS256 JWT in httpOnly cookies (inmune a XSS), email/password + Google OAuth
 - **AI Proxy**: Server-side Groq calls — client sends only the JD, API key stays on the server
-- **Design System**: "Apex" — Deep Teal + Warm Amber OKLCH palette, Switzer (display) + Geist (body), dark-first with light parity, anti-convergence via portfolio-personality
+- **Design System**: "Editorial Precision" — Warm Monochrome + Terracotta (#C46B4F), light-first
 
 ### Flujo de Datos Obligatorio
 ```
@@ -82,225 +82,52 @@ npx impeccable detect web/src/
 ```
 
 ## Key Files
+- `web/src/index.css` — design tokens (Editorial Precision), @utility typography, Tailwind 4 theme
+- `web/src/shared/components/` — all shared components (Button, Card, Badge, Input, Label, Textarea, Modal, Drawer, Dropdown, Select, Tabs, ToggleGroup, Toast, Tooltip, Popover, Eyebrow, Reveal)
+- `web/src/shared/layouts/AppLayout.tsx` — app shell with sticky header, horizontal nav
+- `web/src/shared/components/Footer/Footer.tsx` — marketing footer
+- `web/src/features/landing/pages/LandingPage.tsx` — landing page (editorial design, Spanish)
+- `web/src/features/auth/components/AuthShell.tsx` — auth pages shell
+- `web/src/features/analysis/components/AnalysisResultView.tsx` — 5-section numbered analysis
+- `web/src/features/history/components/HistoryList.tsx` — history with pagination
+- `web/src/features/settings/SettingsFeature.tsx` — 3-card settings (Account/Appearance/Data)
 - `server/prisma/schema.prisma` — data model
-- `server/prisma.config.ts` — Prisma 7 datasource config (env DATABASE_URL)
 - `server/src/infra/app.ts` — Express app + route wiring
-- `server/src/infra/prisma.ts` — Prisma singleton
-- `server/src/infra/http.ts` — Custom JWT sign/verify (HS256)
-- `server/src/infra/rate-limiter.ts` — In-memory rate limiter
-- `server/src/auth/auth.middleware.ts` — JWT cookie → req.userId
-- `server/src/auth/auth.service.ts` — register, login, getUserById
-- `server/src/auth/auth.controller.ts` — HTTP handlers for auth routes
-- `server/src/auth/auth.router.ts` — Auth route wiring
-- `shared/contracts/` — Zod schemas + DTOs shared front/back
-- `web/src/core/api-client.ts` — Axios instance + API functions
-- `web/src/core/router.tsx` — React Router config
-- `web/vite.config.ts` — Vite + Tailwind plugin + API proxy to :3001
-- `web/src/auth/auth-store.ts` — Zustand store (session + status)
-- `web/src/auth/auth-guard.tsx` — ProtectedRoute + PublicRoute
-- `vercel.json` — Vercel deploy config (monorepo pnpm workspace filter)
+- `shared/contracts/` — Zod schemas + DTOs
 
-> V1.1 released. Tag: `v1.1` | Deploy: Vercel + Render + Supabase
+## Completed Phases (V1.2)
 
----
-## V1.2 — Redesign & UX Excellence
+### P9-P10: Design System Foundation + Core Components
+Design tokens, 12 component families (Button, Card, Input, Modal, Badge, Toast, Dropdown, Tabs, Tooltip, Skeleton), 345 tests.
 
-> **Filosofía**: Rehacer el frontend desde cero con un design system sólido, usando Impeccable (anti-slop + 23 comandos) y taste-skill (dirección visual + anti-repetición).
+### P11: Page Shells + UX States
+ErrorBoundary, loading skeletons, empty states, z-index tokens, AppLayout migration.
 
-### 🎨 ✅ P9: Design System Foundation (DONE — PRs #55 + #57)
-> Setup de herramientas + DESIGN.md + tokens globales. **Sin componentes nuevos todavía — solo base.**
+### P11ter: Editorial Precision Migration
+Migrated visual design from Lovable reference (editorial-lens). Warm monochrome palette + terracotta accent, Switzer + Geist fonts, light-first with dark mode.
 
-**Skills activas**: impeccable, taste-skill/design-taste-frontend, taste-skill/minimalist-ui
+### P11quater: Pixel-Perfect Alignment
+Full SDD cycle: 4 stacked PRs achieving pixel-perfect alignment with editorial-lens reference. @utility typography, sticky header layout, 5-section analysis cards, 3-card settings, Spanish landing page, 341 tests.
 
-- [x] `/impeccable init` — generar PRODUCT.md + DESIGN.md con la identidad del proyecto
-- [x] Definir paleta de colores final (OKLCH, dark-first, con taste-skill guidance) → "Apex": Deep Teal + Warm Amber
-- [x] Definir escala tipográfica (fuentes display + body, sin Inter/Arial) → Switzer + Geist
-- [x] Definir spacing scale + radii + shadows (con impeccable anti-pattern checks)
-- [x] CSS reset + custom properties globales (`:root` variables)
-- [x] Audit de componentes existentes con taste-skill/redesign-existing-projects
-- [x] `npx impeccable detect web/src/` — limpiar anti-patrones detectados
+## 🔲 P11quin: UX Quality & Copy Alignment (ACTIVE)
 
-### 🧱 ✅ P10: Core Components Redesign (DONE — PRs #59 + #62 + #58)
-> **Desde cero.** 12 familias de componentes con Apex design system. 345 tests, build limpio.
+> Fixes de UX y copy para alinear la app con su público real: personas buscando trabajo, no reclutadores.
 
-**Skills activas**: taste-skill/design-taste-frontend, taste-skill/high-end-visual-design, impeccable
+- [ ] Output copy: cambiar tono de "reclutador evaluando candidatos" a "postulante preparándose para aplicar"
+- [ ] Logout confirmation modal: "¿Estás seguro de que querés cerrar sesión?"
+- [ ] Google OAuth status en Settings: mostrar correctamente estado de vinculación
+- [ ] Landing button "Empieza gratis": arreglar visibilidad del texto en light mode
+- [ ] AGENTS.md cleanup (este documento)
 
-- [x] Fixear errores de lint preexistentes en `server/src/history/history.service.ts`
-- [x] Button (variants: primary, secondary, ghost, danger, sizes)
-- [x] Input + Textarea (con estados: focus, error, disabled, with icon)
-- [x] Card + Card variants (flat, elevated, interactive)
-- [x] Modal + Drawer (con backdrop + focus trap + animation)
-- [x] Badge + Tag + Status indicators
-- [x] Toast / Notification + toast provider (Zustand store)
-- [x] Dropdown / Select / Menu
-- [x] Tabs + Toggle Group
-- [x] Tooltip + Popover (custom Portal for FloatingPortal bug)
-- [x] Skeleton loader primitives (base para P11)
-- [x] `/impeccable audit` cada batch de componentes
-- [x] Tests unitarios (Vitest) + snapshots para cada componente (345 total)
-
-> **Nota P10**: El bloque `@layer components` fue eliminado de `index.css` (-204 líneas). Los layouts y páginas existentes aún referencian clases viejas como `primary-button`, `surface-panel`, etc. — esto se arregla en P11.
-
-### 📄 ✅ P11: Page Shells + UX States (DONE — PRs #63-#68)
-> Infraestructura de UX — ErrorBoundary, skeletons, empty states, z-index tokens. Rediseño visual real de páginas diferido a P11bis.
-
-- [x] ErrorBoundary component (con fallback UI + retry, per-route errorElement)
-- [x] Loading skeletons: AnalysisPage, HistoryPage, HistoryDetailPage, SettingsPage (4 page-specific)
-- [x] Empty states: "No analysis yet" (con CTA), "No history found", "No results"
-- [x] AppLayout migrated to Apex components + z-index tokens
-- [x] AuthShell redesigned (sign-in, sign-up, OAuth callback with Apex identity)
-- [x] Landing page migrated to Apex components
-- [x] MobileDrawer z-index integration
-- [x] Footer consolidated (3→1 canonical with variant prop)
-- [x] 50+ dangling CSS class references replaced
-- [x] 10 z-index tokens enforced across all components
-- [x] 352 tests, typecheck clean, lint clean
-
-> **Nota**: P11 fue migración de infraestructura. P11bis fue un intento de rediseño visual Apex que no gustó. P11ter reemplaza todo con el diseño que sí gustó.
-
-### 🎨 ✅ P11bis: Real Page Redesign — Apex (DESCARTADO)
-> Rediseño visual con Apex (Deep Teal + Warm Amber). No gustó el resultado. Reemplazado por P11ter.
-
-### 🎨 ✅ P11ter: Editorial Precision — Lovable Design Migration (DONE)
-> Tomar el diseño generado en Lovable (editorial-lens) como REFERENCIA VISUAL y migrarlo a nuestra arquitectura. NO copy-paste — adaptar con nuestras convenciones.
-
-**Referencia**: `github.com/ezefernandezyf/editorial-lens`
-**Skills activas**: taste-skill/design-taste-frontend, high-end-visual-design, minimalist-ui
-
-#### Sistema de Diseño "Editorial Precision"
-- **Paleta**: Warm off-white (#FBFBFA) + espresso text (#1A1714) + terracotta accent (#C46B4F)
-- **Tipografía**: Switzer (display) + Geist (body) + JetBrains Mono (code)
-- **Light-first** con dark mode derivado via `prefers-color-scheme`
-- **Sombras**: ultra-sutiles, cards flotan apenas (0 1px 3px rgba(0,0,0,0.04))
-- **Bordes**: 1px #EAEAEA, radius 6-12px
-- **Sin gradientes, sin glows, sin glassmorphism**
-- **Textura**: warm grain overlay al 2% (paper-like)
-
-#### Plan de Migración
-- [x] 1. Migrar tokens de diseño a `web/src/index.css` (@theme block)
-- [x] 2. Actualizar componentes Apex al look Editorial (Button/Card/Badge/Input — cambiar estilos, mantener API)
-- [x] 3. Crear primitivas editoriales: `<Reveal>`, `<Eyebrow>` (scroll reveal + eyebrow label)
-- [x] 4. Rediseñar Landing page con layout editorial (hero asimétrico, bento grid, features, FAQ, CTA)
-- [x] 5. Rediseñar AuthShell con split layout (brand statement izq, form der)
-- [x] 6. Rediseñar AppLayout con nav editorial (sticky top, accent active state)
-- [x] 7. Rediseñar Analysis page con cards editoriales
-- [x] 8. Rediseñar History list + detail con el nuevo look
-- [x] 9. Rediseñar Settings page
-- [x] 10. Actualizar 404 + 500 + Privacy pages
-- [x] 11. `npx impeccable detect` — verificar 0 anti-patrones
-- [x] 12. Tests: actualizar snapshots + unit tests
-
-> **Nota**: P11ter fue una adaptación visual — funcionó bien pero no es pixel-perfect contra el Lovable reference. P11quater cierra las brechas restantes.
-
-### 🎯 P11quater: Lovable Pixel-Perfect Alignment (FASE SDD COMPLETA)
-> Réplica fiel del diseño Lovable (`editorial-lens`) sobre nuestra arquitectura real. Esto NO es "inspiración" — es alineación exacta de layout, spacing, tipografía, colores y estructura de cada página.
-
-**Referencia**: `github.com/ezefernandezyf/editorial-lens` — clonado en `/tmp/editorial-lens`
-**SDD**: Ciclo completo (`sdd-new`) con explore → propose → specs → design → tasks → apply → verify
-**Skills activas**: taste-skill/design-taste-frontend, high-end-visual-design, minimalist-ui
-
-#### Brechas a cerrar (Lovable vs nuestro P11ter)
-
-| Área | Gap actual | Target Lovable |
-|------|-----------|----------------|
-| **Tokens CSS** | `--color-brand`, `--color-on-surface` | Alinear con `--accent`, `--text-primary/secondary/tertiary`, agregar `--accent-muted` |
-| **Button** | `variant="primary/secondary/ghost"` | API Lovable: `variant="filled/outline/ghost"`, sizes `sm/md/lg` |
-| **Card** | `variant="flat/elevated/interactive"` | API Lovable: `interactive?: boolean`, `muted?: boolean` |
-| **Textarea** | Estilos diferentes | Mismos estilos que Lovable (focus ring, padding, font) |
-| **Label** | No tenemos primitiva | Label primitiva con `text-sm font-medium mb-2` |
-| **Landing Hero** | Outline link, blur derecha | Button filled terracotta, blur izquierda |
-| **Landing Manifiesto** | Sin fondo | Radial gradient background |
-| **Landing Features** | Fondo `elevated-1/50`, flagship `#FDF0EB` | `bg-surface-muted` sección, `bg-accent-muted` flagship |
-| **Landing FAQ** | Contenido + estilos distintos | FAQ Lovable: contenido, Plus/Minus icons, texto grande, max-w-4xl |
-| **Landing CTA** | Sin fondo + outline link | `bg-surface-muted` + Button filled |
-| **Auth Shell** | Split 5/7 | Grid 12-col: sidebar brand+stat (5 cols) + form (7 cols) |
-| **Analysis** | Layout funcional | Layout editorial con numbered sections, estados UX |
-| **History** | Layout diferente | Cards interactivas con ArrowRight |
-| **Settings** | Layout diferente | Secciones numeradas (01, 02, 03) |
-| **Footer** | Footer genérico | MarketingFooter específico de Lovable |
-
-#### Estrategia de PRs (2 PRs)
-
-| PR | Alcance | Archivos estimados |
-|----|---------|-------------------|
-| **PR 1: Primitives + Tokens** | Alinear tokens CSS, Button, Card, Badge, Input, Textarea, Label con la API de Lovable | `index.css`, `Button.tsx`, `Card.tsx`, `Badge.tsx`, `Input.tsx`, `Textarea.tsx`, `Label.tsx` (nuevo) |
-| **PR 2: Pages + Layouts** | Landing (hero, manifesto, how-it-works, features, FAQ, CTA), AuthShell, Analysis, History, Settings, Footer | `LandingPage.tsx`, `AuthShell.tsx`, `AnalysisPage.tsx`, `HistoryPage.tsx`, `HistoryDetailPage.tsx`, `SettingsPage.tsx`, `FAQ.tsx`, `Footer.tsx` |
-
-#### Lo que NO se toca
-- Lógica de negocio (API calls, hooks, stores, React Query)
-- Server, Prisma, contratos Zod
-- Auth real (JWT, cookies)
-- MobileDrawer
-- 404/500/Privacy pages (ya están bien)
-- Tests de lógica (solo snapshots se actualizan)
+## Future Phases
 
 ### ✨ P12: Polish + Animation
-> Micro-interacciones, transiciones, feedback visual.
-
-**Skills activas**: taste-skill/high-end-visual-design, impeccable (animate, polish, delight)
-
-- [ ] Page transitions (route changes con framer-motion)
-- [ ] Hover + focus states en todos los componentes interactivos
-- [ ] Loading → Success → Error state transitions
-- [ ] Skeleton → Content reveal animation
-- [ ] Toast enter/exit animations
-- [ ] Modal/Drawer open/close con spring physics
-- [ ] Scroll-triggered reveals (landing page)
-- [ ] `/impeccable animate` review
-- [ ] `/impeccable polish` final pass
-
 ### 🚀 P13: Performance + Lighthouse
-> Core Web Vitals, bundle size, SEO técnico.
-
-- [ ] Fixear E2E port conflict (detectado en verify de P9)
-- [ ] Lighthouse 90+ mobile (Performance, Accessibility, Best Practices, SEO)
-- [ ] Bundle analysis (`vite build --debug`) — split chunks grandes
-- [ ] Dynamic imports + lazy loading de páginas y componentes pesados
-- [ ] Image optimization (WebP/AVIF, lazy loading, responsive sizes)
-- [ ] Font loading strategy (font-display: swap, subset, preload)
-- [ ] CSS purge / unused style removal
-- [ ] `npx impeccable detect` — limpiar issues restantes
-- [ ] Google Search Console: submit sitemap (manual)
-
----
-## V1.2.1 — User Profiles + Brand Authority
-
 ### 👤 P14: User Profiles
-- [ ] PUT /api/profile — skills, experiencia, rol, resume, linkedin, github
-- [ ] Profile UI — formulario con validación Zod + React Hook Form
-- [ ] Prompt enrichment — Groq usa datos del perfil en outreach messages
-- [ ] Profile picture / avatar upload (opcional, Cloudinary o similar)
-
 ### ⚙️ P15: Settings Backend
-- [ ] CRUD endpoints: GET/PUT /api/settings
-- [ ] Settings UI — theme, notifications, account preferences
-- [ ] Rate limit settings: configuración por usuario
-
-### 🌐 P16: GEO Brand Building (async, paralelo al dev)
-> Semana 3-4 del GEO audit. La mayoría es manual, no código.
-
-- [ ] sameAs links en Organization schema (GEO)
-- [ ] Crear/claim LinkedIn company page (GEO CRITICAL)
-- [ ] Product Hunt launch prep (GEO CRITICAL)
-- [ ] Crunchbase company profile
-- [ ] Poblar GitHub org con README + docs
-- [ ] Registrar en G2 y Capterra
-- [ ] Blog content: 2-3 artículos SSR-rendered
-- [ ] YouTube demo video (2-3 min)
-- [ ] Re-run GEO audit — target: 50-60/100
-
----
-## V1.2.2 — CV Generator
-
+### 🌐 P16: GEO Brand Building
 ### 📝 P17: CV Generator
-- [ ] POST /api/cv/generate — JD + perfil → CV (Groq + template system)
-- [ ] CV preview UI (live rendering, no export todavía)
-- [ ] Templates: tech, business, creative (por seniority/industria)
-- [ ] PDF export (puppeteer o similar en server)
-- [ ] HTML export (download .html standalone)
-- [ ] CV history — guardar y reutilizar CVs generados
 
----
 ## V1.2 Skills Instaladas
 
 Skills locales en `.opencode/skills/` y `.agents/skills/` que deben priorizarse:
