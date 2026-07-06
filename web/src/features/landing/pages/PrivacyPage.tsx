@@ -25,7 +25,7 @@ export default function PrivacyPage() {
         </div>
       </Card>
 
-      <Footer variant="landing" />
+      <Footer />
     </main>
   );
 }

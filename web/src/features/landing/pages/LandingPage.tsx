@@ -419,7 +419,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <Footer variant="landing" />
+      <Footer />
 
       <MobileDrawer
         actions={

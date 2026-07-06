@@ -4,21 +4,13 @@ import { describe, expect, it } from "vitest";
 import { Footer } from "./Footer";
 
 describe("Footer snapshot", () => {
-  it("renders both variants consistently", () => {
-    const { container: appContainer } = render(
+  it("renders consistently", () => {
+    const { container } = render(
       <MemoryRouter>
-        <Footer variant="app" />
+        <Footer />
       </MemoryRouter>,
     );
 
-    expect(appContainer.firstChild).toMatchSnapshot();
-
-    const { container: landingContainer } = render(
-      <MemoryRouter>
-        <Footer variant="landing" />
-      </MemoryRouter>,
-    );
-
-    expect(landingContainer.firstChild).toMatchSnapshot();
+    expect(container.firstChild).toMatchSnapshot();
   });
 });

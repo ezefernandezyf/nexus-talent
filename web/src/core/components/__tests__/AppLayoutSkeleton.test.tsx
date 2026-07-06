@@ -25,7 +25,7 @@ describe("AppLayoutSkeleton", () => {
     const skeletonDiv = container.firstChild as HTMLElement;
     expect(skeletonDiv).toBeInTheDocument();
 
-    // Verify all three layout sections exist: header, sidebar, content
+    // Verify layout sections exist: header, content, footer
     const animatedElements = container.querySelectorAll(".animate-pulse");
     expect(animatedElements.length).toBeGreaterThanOrEqual(1);
   });
