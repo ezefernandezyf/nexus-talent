@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import type { AnalysisRepository } from "@/features/analysis/api/repository";
 import { useAnalysisHistory } from "@/features/analysis";
 import { HistoryEmptyState, HistoryList, HistoryLoadingState } from "./components";
-import { useDeleteAnalysis } from "./hooks";
+import { Badge } from "@/shared/components/Badge";
 import type { AnalysisPersistenceScope } from "@/features/analysis/hooks/useAnalysisRepository";
 
 interface HistoryFeatureProps {
@@ -28,7 +28,6 @@ export function HistoryFeature({ analysisHref = "/app/analysis", repository, sco
     scope,
     page: { page: currentPage, limit: PAGE_SIZE },
   });
-  const deleteMutation = useDeleteAnalysis({ repository, scope });
   const errorMessage = getHistoryErrorMessage(history.error);
   const totalPages = Math.max(1, Math.ceil(history.total / PAGE_SIZE));
 
@@ -39,25 +38,15 @@ export function HistoryFeature({ analysisHref = "/app/analysis", repository, sco
     [],
   );
 
-  function handleDelete(analysisId: string) {
-    deleteMutation.deleteAnalysis(analysisId);
-  }
-
   return (
-    <section className="flex flex-col gap-3">
-      {deleteMutation.error ? (
-        <p className="text-sm leading-6 text-error" role="alert">
-          {deleteMutation.error.message}
-        </p>
-      ) : null}
-
+    <section className="flex flex-col gap-6">
       {history.isPending ? (
         <HistoryLoadingState />
       ) : history.isError ? (
-        <div className="rounded-xl bg-surface-container-low/40 p-6 text-center lg:p-10" role="alert">
+        <div className="rounded-lg border border-border bg-surface p-8 text-center" role="alert">
           <div className="mx-auto max-w-xl space-y-3">
-            <span className="label-chip">No se pudo cargar el historial</span>
-            <p className="text-base leading-7 text-on-surface-variant">{errorMessage}</p>
+            <Badge>No se pudo cargar el historial</Badge>
+            <p className="text-body text-text-secondary">{errorMessage}</p>
           </div>
         </div>
       ) : history.analyses.length === 0 ? (
@@ -66,8 +55,6 @@ export function HistoryFeature({ analysisHref = "/app/analysis", repository, sco
         <HistoryList
           analyses={history.analyses}
           currentPage={currentPage}
-          isDeletingId={deleteMutation.isPending ? deleteMutation.variables ?? null : null}
-          onDelete={handleDelete}
           onPageChange={handlePageChange}
           totalPages={totalPages}
         />

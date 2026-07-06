@@ -94,10 +94,10 @@ export async function saveAnalysis(userId: string, payload: SaveAnalysisPayload)
       jobDescription,
       summary: result.summary,
       vacancySummary: JSON.stringify(result.vacancySummary),
-      skillGroups: result.skillGroups as object,
-      keywords: result.keywords as object,
-      gaps: result.gaps as object,
-      recruiterMessages: result.recruiterMessages ?? Prisma.DbNull,
+      skillGroups: result.skillGroups as Prisma.InputJsonValue,
+      keywords: result.keywords as Prisma.InputJsonValue,
+      gaps: result.gaps as Prisma.InputJsonValue,
+      recruiterMessages: (result.recruiterMessages as Prisma.InputJsonValue | null) ?? Prisma.DbNull,
       outreachMessage:
         typeof result.outreachMessage === "object"
           ? JSON.stringify(result.outreachMessage)

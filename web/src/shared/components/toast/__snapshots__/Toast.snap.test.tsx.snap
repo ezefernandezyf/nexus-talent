@@ -1,0 +1,178 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Toast snapshots > renders all variants in dark mode 1`] = `
+<div>
+  <div
+    class="pointer-events-auto flex items-center gap-3 rounded-[var(--radius-md)] border px-4 py-3 shadow-[var(--shadow-md)] text-sm font-medium bg-[var(--color-success)]/10 border-[var(--color-success)]/30 text-[var(--color-success)]"
+    role="status"
+    style="opacity: 0; transform: translateY(-12px) scale(0.96);"
+  >
+    <span
+      class="flex items-center justify-center rounded-full p-1 bg-[var(--color-success)]/15"
+    >
+      <svg
+        fill="currentColor"
+        height="18"
+        viewBox="0 0 256 256"
+        width="18"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm45.66,85.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z"
+        />
+      </svg>
+    </span>
+    <span
+      class="flex-1 text-[var(--text-primary)]"
+    >
+      Success message
+    </span>
+    <button
+      aria-label="Dismiss"
+      class="flex items-center justify-center rounded-full p-1 text-[var(--color-on-surface-variant)] opacity-60 transition-opacity hover:opacity-100"
+      type="button"
+    >
+      <svg
+        fill="currentColor"
+        height="14"
+        viewBox="0 0 256 256"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M208.49,191.51a12,12,0,0,1-17,17L128,145,64.49,208.49a12,12,0,0,1-17-17L111,128,47.51,64.49a12,12,0,0,1,17-17L128,111l63.51-63.52a12,12,0,0,1,17,17L145,128Z"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="pointer-events-auto flex items-center gap-3 rounded-[var(--radius-md)] border px-4 py-3 shadow-[var(--shadow-md)] text-sm font-medium bg-[var(--color-error)]/10 border-[var(--color-error)]/30 text-[var(--color-error)]"
+    role="status"
+    style="opacity: 0; transform: translateY(-12px) scale(0.96);"
+  >
+    <span
+      class="flex items-center justify-center rounded-full p-1 bg-[var(--color-error)]/15"
+    >
+      <svg
+        fill="currentColor"
+        height="18"
+        viewBox="0 0 256 256"
+        width="18"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm-8,56a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm8,104a12,12,0,1,1,12-12A12,12,0,0,1,128,184Z"
+        />
+      </svg>
+    </span>
+    <span
+      class="flex-1 text-[var(--text-primary)]"
+    >
+      Error message
+    </span>
+    <button
+      aria-label="Dismiss"
+      class="flex items-center justify-center rounded-full p-1 text-[var(--color-on-surface-variant)] opacity-60 transition-opacity hover:opacity-100"
+      type="button"
+    >
+      <svg
+        fill="currentColor"
+        height="14"
+        viewBox="0 0 256 256"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M208.49,191.51a12,12,0,0,1-17,17L128,145,64.49,208.49a12,12,0,0,1-17-17L111,128,47.51,64.49a12,12,0,0,1,17-17L128,111l63.51-63.52a12,12,0,0,1,17,17L145,128Z"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="pointer-events-auto flex items-center gap-3 rounded-[var(--radius-md)] border px-4 py-3 shadow-[var(--shadow-md)] text-sm font-medium bg-[var(--color-warning)]/10 border-[var(--color-warning)]/30 text-[var(--color-warning)]"
+    role="status"
+    style="opacity: 0; transform: translateY(-12px) scale(0.96);"
+  >
+    <span
+      class="flex items-center justify-center rounded-full p-1 bg-[var(--color-warning)]/15"
+    >
+      <svg
+        fill="currentColor"
+        height="18"
+        viewBox="0 0 256 256"
+        width="18"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"
+        />
+      </svg>
+    </span>
+    <span
+      class="flex-1 text-[var(--text-primary)]"
+    >
+      Warning message
+    </span>
+    <button
+      aria-label="Dismiss"
+      class="flex items-center justify-center rounded-full p-1 text-[var(--color-on-surface-variant)] opacity-60 transition-opacity hover:opacity-100"
+      type="button"
+    >
+      <svg
+        fill="currentColor"
+        height="14"
+        viewBox="0 0 256 256"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M208.49,191.51a12,12,0,0,1-17,17L128,145,64.49,208.49a12,12,0,0,1-17-17L111,128,47.51,64.49a12,12,0,0,1,17-17L128,111l63.51-63.52a12,12,0,0,1,17,17L145,128Z"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="pointer-events-auto flex items-center gap-3 rounded-[var(--radius-md)] border px-4 py-3 shadow-[var(--shadow-md)] text-sm font-medium bg-[var(--color-info)]/10 border-[var(--color-info)]/30 text-[var(--color-info)]"
+    role="status"
+    style="opacity: 0; transform: translateY(-12px) scale(0.96);"
+  >
+    <span
+      class="flex items-center justify-center rounded-full p-1 bg-[var(--color-info)]/15"
+    >
+      <svg
+        fill="currentColor"
+        height="18"
+        viewBox="0 0 256 256"
+        width="18"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm-4,48a12,12,0,1,1-12,12A12,12,0,0,1,124,72Zm12,112a16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40a8,8,0,0,1,0,16Z"
+        />
+      </svg>
+    </span>
+    <span
+      class="flex-1 text-[var(--text-primary)]"
+    >
+      Info message
+    </span>
+    <button
+      aria-label="Dismiss"
+      class="flex items-center justify-center rounded-full p-1 text-[var(--color-on-surface-variant)] opacity-60 transition-opacity hover:opacity-100"
+      type="button"
+    >
+      <svg
+        fill="currentColor"
+        height="14"
+        viewBox="0 0 256 256"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M208.49,191.51a12,12,0,0,1-17,17L128,145,64.49,208.49a12,12,0,0,1-17-17L111,128,47.51,64.49a12,12,0,0,1,17-17L128,111l63.51-63.52a12,12,0,0,1,17,17L145,128Z"
+        />
+      </svg>
+    </button>
+  </div>
+</div>
+`;

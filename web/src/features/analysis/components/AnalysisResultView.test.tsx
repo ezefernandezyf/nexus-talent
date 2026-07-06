@@ -33,11 +33,11 @@ describe("AnalysisResultView", () => {
       />,
     );
 
-    await user.clear(screen.getByLabelText(/asunto del mensaje/i));
-    await user.type(screen.getByLabelText(/asunto del mensaje/i), "Interés en el puesto senior");
+    await user.clear(screen.getByLabelText(/asunto/i));
+    await user.type(screen.getByLabelText(/asunto/i), "Interés en el puesto senior");
 
-    await user.clear(screen.getByLabelText(/mensaje de contacto/i));
-    fireEvent.change(screen.getByLabelText(/mensaje de contacto/i), {
+    await user.clear(screen.getByLabelText(/mensaje/i));
+    fireEvent.change(screen.getByLabelText(/mensaje/i), {
       target: {
         value: "Hola equipo,\n\nRevisé la vacante y quiero conversar.\n\nSaludos,\n[Your Name]",
       },
@@ -103,7 +103,7 @@ describe("AnalysisResultView", () => {
     expect(screen.getByText(/se descargó el outreach en json/i)).toBeInTheDocument();
   });
 
-  it("renders the structured vacancy sections and copies the short DM version", async () => {
+  it("renders the structured sections and copies the short DM version", async () => {
     const user = userEvent.setup();
     const copyToClipboard = vi.fn().mockResolvedValue(undefined);
 
@@ -114,9 +114,11 @@ describe("AnalysisResultView", () => {
       />,
     );
 
-    expect(screen.getByText(/Resumen de la vacante/i)).toBeInTheDocument();
-    expect(screen.getByText(/Skills y términos para repetir/i)).toBeInTheDocument();
-    expect(screen.getByText(/Posibles huecos y cómo cubrirlos/i)).toBeInTheDocument();
+    expect(screen.getByText("Summary")).toBeInTheDocument();
+    expect(screen.getByText("Skills Matrix")).toBeInTheDocument();
+    expect(screen.getByText("Keywords")).toBeInTheDocument();
+    expect(screen.getByText("Gaps & Watch-outs")).toBeInTheDocument();
+    expect(screen.getByText("Outreach Draft")).toBeInTheDocument();
     expect(screen.getByText(/Versión A/i)).toBeInTheDocument();
     expect(screen.getByText(/Versión B/i)).toBeInTheDocument();
 
@@ -142,11 +144,11 @@ describe("AnalysisResultView", () => {
       />,
     );
 
-    expect(screen.getByText(/GitHub enriquecido/i)).toBeInTheDocument();
     expect(screen.getByText(/Stack observado en el repositorio/i)).toBeInTheDocument();
     expect(getAllByText("TypeScript").length).toBeGreaterThan(0);
     expect(screen.getByRole("link", { name: /ezefernandezyf\/nexus-talent/i })).toBeInTheDocument();
   });
+
   it("falls back to the default GitHub label for unknown enrichment sources", () => {
     render(
       <AnalysisResultView
@@ -160,7 +162,7 @@ describe("AnalysisResultView", () => {
       />,
     );
 
-    expect(screen.getByText(/GitHub enriquecido/i)).toBeInTheDocument();
+    expect(screen.getByText(/Stack observado en el repositorio/i)).toBeInTheDocument();
     expect(screen.getByText("GitHub")).toBeInTheDocument();
   });
 
@@ -210,9 +212,7 @@ describe("AnalysisResultView", () => {
 
     expect(screen.getByText("Architecture")).toBeInTheDocument();
     expect(screen.getByText(/Descripción/i)).toBeInTheDocument();
-
-    const topicSignal = screen.getAllByText("React").find((element) => element.closest(".tech-chip")?.textContent?.includes("Topics"));
-    expect(topicSignal).toBeDefined();
+    expect(screen.getAllByText("React").length).toBeGreaterThan(0);
     expect(screen.getByText(/Topics/i)).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /descargar markdown/i }));

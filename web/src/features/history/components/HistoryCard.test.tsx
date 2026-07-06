@@ -1,8 +1,7 @@
 import { MemoryRouter } from "react-router-dom";
 import { render, screen, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import type { SavedJobAnalysis } from "@/features/analysis/schemas/job-analysis";
-import { getHistoryUid } from "@/features/history/history-formatters";
 import { HistoryCard } from "./HistoryCard";
 
 const analysis: SavedJobAnalysis = {
@@ -37,54 +36,22 @@ const analysis: SavedJobAnalysis = {
 };
 
 describe("HistoryCard", () => {
-  it("renders the title fallback, summary snippet and keeps the title bounded", () => {
-    const onDelete = vi.fn();
-    const longDisplayName = "Frontend Engineer Principal con responsabilidad de plataforma y observabilidad";
-
+  it("renders the title and date", () => {
     render(
       <MemoryRouter>
-        <HistoryCard
-          analysis={{
-            ...analysis,
-            displayName: longDisplayName,
-          }}
-          iconName="apartment"
-          onDelete={onDelete}
-        />
+        <HistoryCard analysis={analysis} />
       </MemoryRouter>,
     );
 
-    const row = screen.getByRole("listitem", { name: longDisplayName });
-
-    expect(within(row).getByText(longDisplayName)).toHaveClass("truncate");
-    expect(within(row).getByText(getHistoryUid(analysis))).toBeInTheDocument();
-    expect(within(row).getByText("React, testing and TypeScript")).toBeInTheDocument();
-    expect(within(row).getByText(/lead the product frontend strategy with strong react/i)).toBeInTheDocument();
-    expect(within(row).getByText(/5 abr 2026/i)).toBeInTheDocument();
+    expect(screen.getByText(/frontend engineer/i)).toBeInTheDocument();
+    expect(screen.getByText(/5 abr 2026/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /abrir detalle de frontend engineer/i })).toHaveAttribute(
       "href",
       `/app/history/${analysis.id}`,
     );
-    expect(screen.queryByText(/%/)).not.toBeInTheDocument();
-  });
-
-  it("delegates delete actions to the provided callback", async () => {
-    const onDelete = vi.fn();
-
-    render(
-      <MemoryRouter>
-        <HistoryCard analysis={analysis} iconName="apartment" onDelete={onDelete} />
-      </MemoryRouter>,
-    );
-
-    await screen.getByRole("button", { name: /eliminar frontend engineer/i }).click();
-
-    expect(onDelete).toHaveBeenCalledWith(analysis.id);
   });
 
   it("prefers the persisted display name when available", () => {
-    const onDelete = vi.fn();
-
     render(
       <MemoryRouter>
         <HistoryCard
@@ -92,13 +59,11 @@ describe("HistoryCard", () => {
             ...analysis,
             displayName: "Frontend Lead",
           }}
-          iconName="apartment"
-          onDelete={onDelete}
         />
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("listitem", { name: "Frontend Lead" })).toBeInTheDocument();
+    expect(screen.getByText("Frontend Lead")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /abrir detalle de frontend lead/i })).toHaveAttribute(
       "href",
       `/app/history/${analysis.id}`,

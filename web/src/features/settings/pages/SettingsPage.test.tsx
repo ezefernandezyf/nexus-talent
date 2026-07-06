@@ -51,7 +51,8 @@ describe("SettingsPage", () => {
     useAuthStatus.setState({ status: "loading" });
     const { ui } = createRenderer();
     render(ui);
-    expect(screen.queryByRole("heading", { name: "Configuración" })).not.toBeInTheDocument();
+    // Eyebrow and heading should not be in the document during loading
+    expect(screen.queryByText("Settings")).not.toBeInTheDocument();
   });
 
   it("renders the user-facing settings shell and top-level actions", async () => {
@@ -77,11 +78,14 @@ describe("SettingsPage", () => {
 
     render(ui);
 
-    await waitFor(() => expect(screen.getByRole("heading", { name: "Configuración" })).toBeInTheDocument());
-    expect(screen.getByRole("button", { name: /tema claro/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /exportar datos/i })).toBeInTheDocument();
-    expect(screen.getByText(/información de la cuenta/i)).toBeInTheDocument();
-    expect(screen.getByText(/cuentas vinculadas/i)).toBeInTheDocument();
-    expect(screen.getByText(/zona de peligro/i )).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText("Settings")).toBeInTheDocument());
+    expect(screen.getByText("Configuración")).toBeInTheDocument();
+    // 3 numbered cards should be present
+    expect(screen.getByText("01")).toBeInTheDocument();
+    expect(screen.getByText("02")).toBeInTheDocument();
+    expect(screen.getByText("03")).toBeInTheDocument();
+    expect(screen.getByText("Account")).toBeInTheDocument();
+    expect(screen.getByText("Appearance")).toBeInTheDocument();
+    expect(screen.getByText("Data")).toBeInTheDocument();
   });
 });

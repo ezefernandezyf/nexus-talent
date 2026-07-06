@@ -1,0 +1,43 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Button snapshot > renders all variants in dark mode 1`] = `
+<div>
+  <button
+    class="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:pointer-events-none h-11 px-5 text-sm bg-[var(--accent)] text-white hover:opacity-90 active:scale-[0.98]"
+    type="button"
+  >
+    Filled
+  </button>
+  <button
+    class="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:pointer-events-none h-11 px-5 text-sm border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent-muted)]"
+    type="button"
+  >
+    Outline
+  </button>
+  <button
+    class="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:pointer-events-none h-11 px-5 text-sm text-text-primary hover:bg-surface-muted"
+    type="button"
+  >
+    Ghost
+  </button>
+  <button
+    class="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:pointer-events-none h-11 px-5 text-sm bg-[var(--accent)] text-white hover:opacity-90 active:scale-[0.98]"
+    type="button"
+  >
+    Small
+  </button>
+  <button
+    class="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:pointer-events-none h-12 px-6 text-base bg-[var(--accent)] text-white hover:opacity-90 active:scale-[0.98]"
+    type="button"
+  >
+    Large
+  </button>
+  <button
+    class="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:pointer-events-none h-11 px-5 text-sm bg-[var(--accent)] text-white hover:opacity-90 active:scale-[0.98]"
+    disabled=""
+    type="button"
+  >
+    Disabled
+  </button>
+</div>
+`;

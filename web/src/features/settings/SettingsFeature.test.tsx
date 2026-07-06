@@ -75,17 +75,25 @@ describe("SettingsFeature", () => {
   it("renders the settings sections with reference-like hierarchy", async () => {
     renderSettingsFeature();
 
-    await waitFor(() => expect(screen.getByText(/información de la cuenta/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/gestioná tu identidad/i)).toBeInTheDocument());
 
-    expect(screen.getByText(/cuentas vinculadas/i)).toBeInTheDocument();
-    expect(screen.getByText(/zona de peligro/i)).toBeInTheDocument();
+    // 3 numbered cards exist
+    expect(screen.getByText("01")).toBeInTheDocument();
+    expect(screen.getByText("02")).toBeInTheDocument();
+    expect(screen.getByText("03")).toBeInTheDocument();
+
+    expect(screen.getByText("Account")).toBeInTheDocument();
+    expect(screen.getByText("Appearance")).toBeInTheDocument();
+    expect(screen.getByText("Data")).toBeInTheDocument();
+
+    // Email and name fields
     expect(screen.getByLabelText(/email/i)).toHaveValue("analyst@nexustalent.dev");
     expect(screen.getByLabelText(/nombre visible/i)).toHaveValue("Marcus Sterling");
-    // Location data is not available with the new auth system (removed Supabase user_metadata)
     expect(screen.getByRole("button", { name: /guardar cambios/i })).toBeInTheDocument();
-    expect(screen.queryByText("GitHub")).not.toBeInTheDocument();
-    expect(within(screen.getByText("Google").closest("article") as HTMLElement).getByText(/no conectado/i)).toBeInTheDocument();
-    expect(within(screen.getByText("Google").closest("article") as HTMLElement).getByRole("button", { name: /vincular/i })).toBeEnabled();
+
+    // Export and sign out buttons
+    expect(screen.getByRole("button", { name: /exportar datos/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /cerrar sesión/i })).toBeInTheDocument();
   });
 
   it("keeps the profile form editable after a save failure", async () => {
@@ -159,9 +167,14 @@ describe("SettingsFeature", () => {
   });
 
   it("shows linked accounts as interactive", async () => {
+    const user = userEvent.setup();
     renderSettingsFeature();
 
+    // Expand the OAuth section in Card 03
     await waitFor(() => expect(screen.getByText(/cuentas vinculadas/i)).toBeInTheDocument());
+    await user.click(screen.getByText(/cuentas vinculadas/i));
+
+    await waitFor(() => expect(screen.getByText("Google")).toBeInTheDocument());
     const googleCard = screen.getByText("Google").closest("article") as HTMLElement;
     expect(within(googleCard).getByRole("button", { name: /vincular/i })).toBeEnabled();
     expect(within(googleCard).getByText(/no conectado/i)).toBeInTheDocument();
@@ -170,7 +183,7 @@ describe("SettingsFeature", () => {
   it("reflects the shared theme state in the account summary", async () => {
     renderSettingsFeature();
 
-    await waitFor(() => expect(screen.getByText(/tema oscuro/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/oscuro/i)).toBeInTheDocument());
     expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
   });
 });

@@ -1,0 +1,98 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Badge snapshots > renders badges in dark mode 1`] = `
+<div>
+  <span
+    class="inline-flex items-center rounded-[6px] bg-[var(--accent-muted)] px-2.5 py-1 text-xs font-medium text-[var(--accent)]"
+  >
+    Default
+  </span>
+  <span
+    class="inline-flex items-center rounded-[6px] bg-[var(--accent-muted)] px-2.5 py-1 font-medium text-[var(--accent)] text-xs"
+  >
+    Styled Badge
+  </span>
+</div>
+`;
+
+exports[`Badge snapshots > renders status indicators in dark mode 1`] = `
+<div>
+  <span
+    class="inline-flex items-center gap-1.5 font-body text-xs font-medium text-[var(--color-success)]"
+  >
+    <span
+      aria-hidden="true"
+      class="h-1.5 w-1.5 rounded-full bg-[var(--color-success)]"
+    />
+    Online
+  </span>
+  <span
+    class="inline-flex items-center gap-1.5 font-body text-xs font-medium text-[var(--color-error)]"
+  >
+    <span
+      aria-hidden="true"
+      class="h-1.5 w-1.5 rounded-full bg-[var(--color-error)]"
+    />
+    Offline
+  </span>
+  <span
+    class="inline-flex items-center gap-1.5 font-body text-xs font-medium text-[var(--color-warning)]"
+  >
+    <span
+      aria-hidden="true"
+      class="h-1.5 w-1.5 rounded-full bg-[var(--color-warning)]"
+    />
+    Away
+  </span>
+  <span
+    class="inline-flex items-center gap-1.5 font-body text-xs font-medium text-[var(--color-info)]"
+  >
+    <span
+      aria-hidden="true"
+      class="h-1.5 w-1.5 rounded-full bg-[var(--color-info)]"
+    />
+    Pending
+  </span>
+  <span
+    class="inline-flex items-center gap-1.5 font-body text-xs font-medium"
+  >
+    <span
+      aria-hidden="true"
+      class="h-1.5 w-1.5 rounded-full"
+    />
+    Draft
+  </span>
+</div>
+`;
+
+exports[`Badge snapshots > renders tags in dark mode 1`] = `
+<div>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] px-2 py-0.5 text-[0.7rem] font-body font-medium bg-[var(--color-surface-elevated-2)] text-[var(--color-on-surface-variant)]"
+  >
+    React
+  </span>
+  <span
+    class="inline-flex items-center gap-1 rounded-[var(--radius-full)] px-2 py-0.5 text-[0.7rem] font-body font-medium bg-[var(--color-info)]/10 text-[var(--color-info)]"
+  >
+    Dismiss
+    <button
+      aria-label="Remove"
+      class="ml-0.5 flex items-center justify-center rounded-full p-0.5 opacity-60 transition-opacity hover:opacity-100"
+      type="button"
+    >
+      <svg
+        fill="currentColor"
+        height="10"
+        viewBox="0 0 256 256"
+        width="10"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M208.49,191.51a12,12,0,0,1-17,17L128,145,64.49,208.49a12,12,0,0,1-17-17L111,128,47.51,64.49a12,12,0,0,1,17-17L128,111l63.51-63.52a12,12,0,0,1,17,17L145,128Z"
+        />
+      </svg>
+    </button>
+  </span>
+</div>
+`;

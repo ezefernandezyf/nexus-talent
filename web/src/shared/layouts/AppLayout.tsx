@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { Footer } from "@/features/landing/components/Footer";
+import { cn } from "@/shared/utils/cn";
+import { Footer } from "@/shared/components/Footer";
 import { MobileDrawer } from "@/shared/components/MobileDrawer";
 import { MobileMenuButton } from "@/shared/components/MobileMenuButton";
 import { LogoutButton, AUTH_STATUS, useAuth } from "@/features/auth";
-import { useAnalysisHistory } from "@/features/analysis";
-import { getHistoryCardTitle } from "@/features/history/history-formatters";
 import { ThemeProvider, useTheme } from "@/core/theme";
 
 type AppNavItem = {
@@ -21,10 +20,12 @@ const appNavItems: AppNavItem[] = [
 ];
 
 function getNavLinkClassName({ isActive }: { isActive: boolean }) {
-  return [
-    "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-colors",
-    isActive ? "bg-surface-container-high text-white" : "text-on-surface-variant hover:bg-surface-container-high/60 hover:text-white",
-  ].join(" ");
+  return cn(
+    "rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200",
+    isActive
+      ? "bg-accent-muted text-accent"
+      : "text-text-secondary hover:text-text-primary hover:bg-surface-muted",
+  );
 }
 
 export function AppLayout() {
@@ -40,63 +41,52 @@ function AppLayoutContent() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  const history = useAnalysisHistory();
-  const sessionLabel = status === AUTH_STATUS.AUTHENTICATED ? user?.email ?? "Sesión activa" : status === AUTH_STATUS.LOADING ? "Verificando acceso" : "Modo público";
-  const recentAnalyses = history.analyses.slice(0, 3);
   const isAuthenticated = status === AUTH_STATUS.AUTHENTICATED;
   const visibleNavItems = appNavItems.filter((item) => !item.requiresAuth || isAuthenticated);
 
-  const mobileDrawerActions =
-    isAuthenticated ? (
-      <div className="space-y-3">
-        <div className="rounded-2xl bg-surface-container-lowest/50 px-4 py-3 text-sm leading-6 text-on-surface-variant">{sessionLabel}</div>
-        <div onClick={() => setIsMobileMenuOpen(false)}>
-          <LogoutButton className="w-full justify-center" />
-        </div>
-      </div>
-    ) : status === AUTH_STATUS.LOADING ? (
-      <div className="rounded-2xl bg-surface-container-lowest/50 px-4 py-3 text-sm leading-6 text-on-surface-variant">Verificando acceso</div>
-    ) : (
-      <div className="space-y-3">
-        <Link className="secondary-button w-full justify-center" to="/auth/sign-in" onClick={() => setIsMobileMenuOpen(false)}>
-          Iniciar sesión
-        </Link>
-        <div className="rounded-2xl bg-surface-container-lowest/50 px-4 py-3 text-sm leading-6 text-on-surface-variant">Modo público activo</div>
-      </div>
-    );
-
   return (
-    <main className="deep-space-shell relative min-h-screen overflow-hidden bg-surface-container-lowest text-on-surface">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-40"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px)",
-          backgroundSize: "96px 96px",
-          maskImage: "linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.15) 60%, transparent)",
-        }}
-      />
-
-      <div className="relative mx-auto flex min-h-screen w-full flex-col gap-6 px-4 py-4 sm:px-6 lg:px-8">
-        <header className="fixed left-0 top-0 z-30 flex h-16 w-full items-center justify-between bg-surface-container-low px-6">
-          <div className="flex items-center gap-8">
-            <Link className="font-display text-xl font-bold tracking-tight text-on-surface transition-opacity hover:opacity-90" to="/">
+    <div className="relative min-h-screen bg-background text-text-primary">
+      <header className="sticky top-0 z-50 border-b border-border bg-surface/85 backdrop-blur-sm">
+        <div className="container-editorial flex h-16 items-center justify-between">
+          <div className="flex items-center gap-6">
+            <Link
+              className="font-display text-xl font-bold tracking-tight text-text-primary transition-opacity hover:opacity-90"
+              to="/"
+            >
               Nexus Talent
             </Link>
-            <div className="hidden items-center gap-6 md:flex" aria-label="App primary navigation">
+            <nav className="hidden items-center gap-1 md:flex" aria-label="App primary navigation">
               {visibleNavItems.map((item) => (
                 <NavLink key={item.to} className={getNavLinkClassName} to={item.to}>
                   {item.label}
                 </NavLink>
               ))}
-            </div>
+            </nav>
           </div>
 
           <div className="flex items-center gap-3">
+            <Link
+              className={cn(
+                "inline-flex items-center justify-center gap-2 rounded-md font-medium select-none",
+                "transition-all duration-200",
+                "bg-[var(--accent)] text-white hover:opacity-90 active:scale-[0.98]",
+                "h-9 px-4 text-sm",
+                "hidden md:inline-flex",
+              )}
+              to="/app/analysis"
+            >
+              Nuevo análisis
+            </Link>
+
             <MobileMenuButton isOpen={isMobileMenuOpen} onClick={() => setIsMobileMenuOpen((current) => !current)} />
+
             {!isAuthenticated ? (
-              <Link className="secondary-button hidden md:inline-flex" to="/auth/sign-in">
+              <Link
+                className={cn(
+                  "hidden rounded-md px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary hover:bg-surface-muted md:inline-flex",
+                )}
+                to="/auth/sign-in"
+              >
                 Iniciar sesión
               </Link>
             ) : (
@@ -106,14 +96,11 @@ function AppLayoutContent() {
                   aria-expanded={isDesktopMenuOpen}
                   aria-haspopup="menu"
                   aria-label={isDesktopMenuOpen ? "Cerrar acciones de cuenta" : "Abrir acciones de cuenta"}
-                  className="flex items-center gap-3 rounded-2xl bg-surface-container-high/70 px-4 py-3 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-white"
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary hover:bg-surface-muted"
                   type="button"
                   onClick={() => setIsDesktopMenuOpen((current) => !current)}
                 >
-                  <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
-                    account_circle
-                  </span>
-                  <span className="max-w-40 truncate">{user?.email ?? "Cuenta"}</span>
+                  <span className="max-w-32 truncate">{user?.email ?? "Cuenta"}</span>
                   <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
                     expand_more
                   </span>
@@ -122,15 +109,15 @@ function AppLayoutContent() {
                 {isDesktopMenuOpen ? (
                   <div
                     aria-label="Acciones de cuenta"
-                    className="absolute right-0 top-full z-40 mt-3 w-72 rounded-3xl bg-surface-container-high p-3 shadow-2xl shadow-black/30 ring-1 ring-white/5"
+                    className="absolute right-0 top-full mt-2 w-64 rounded-lg border border-border bg-surface p-2 shadow-lg [z-index:var(--z-dropdown)]"
                     id="desktop-account-menu"
                   >
-                    <div className="rounded-2xl bg-surface-container-lowest/70 px-4 py-3 text-sm leading-6 text-on-surface-variant">
-                      {user?.email ?? sessionLabel}
+                    <div className="rounded-md px-3 py-2 text-sm leading-6 text-text-secondary">
+                      {user?.email ?? "Sesión activa"}
                     </div>
-                    <div className="mt-3 space-y-2">
+                    <div className="mt-1 space-y-1">
                       <Link
-                        className="secondary-button w-full justify-center"
+                        className="flex w-full items-center rounded-md px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary hover:bg-surface-muted"
                         to="/app/settings"
                         onClick={() => setIsDesktopMenuOpen(false)}
                       >
@@ -144,76 +131,62 @@ function AppLayoutContent() {
                 ) : null}
               </div>
             )}
-            <div className="hidden items-center gap-4 md:flex">
-              <button
-                aria-label={theme === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro"}
-                className="material-symbols-outlined rounded-full p-2 text-on-surface-variant transition-colors hover:text-primary"
-                type="button"
-                onClick={toggleTheme}
-              >
+
+            <button
+              aria-label={theme === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro"}
+              className="hidden rounded-md p-2 text-text-secondary transition-colors hover:text-text-primary hover:bg-surface-muted md:inline-flex"
+              type="button"
+              onClick={toggleTheme}
+            >
+              <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
                 {theme === "dark" ? "light_mode" : "dark_mode"}
-              </button>
-            </div>
-          </div>
-        </header>
-
-        <div className="flex flex-1 gap-6 pt-16">
-          <aside className="fixed left-0 top-16 hidden h-[calc(100vh-64px)] w-64 flex-col gap-5 bg-surface-container-lowest p-4 lg:flex">
-            <div className="mb-4 px-2">
-              <h2 className="mb-1 text-sm font-semibold uppercase tracking-widest text-on-surface opacity-50">Mis Postulaciones</h2>
-              <p className="text-[10px] uppercase tracking-[0.28em] text-on-surface/40">Historial Reciente</p>
-            </div>
-
-            <Link className="primary-button mb-2 justify-center text-center" to="/app/analysis">
-              <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
-                add
               </span>
-              NUEVO ANÁLISIS
-            </Link>
-
-            <div className="custom-scrollbar flex flex-1 flex-col gap-2 overflow-y-auto pr-2">
-              {recentAnalyses.length > 0 ? (
-                recentAnalyses.map((analysis) => (
-                  <Link
-                    key={analysis.id}
-                    className="rounded-lg bg-surface-container-low/40 p-3 text-left text-on-surface-variant transition-colors hover:bg-surface-container focus-visible:bg-surface-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-                    to={`/app/history/${analysis.id}`}
-                    aria-label={`Abrir detalle de ${getHistoryCardTitle(analysis)}`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="material-symbols-outlined text-sm" aria-hidden="true">
-                        history
-                      </span>
-                      <span className="truncate font-label text-xs">{getHistoryCardTitle(analysis)}</span>
-                    </div>
-                    <p className="ml-7 mt-1 text-[10px] text-on-surface/40">{new Date(analysis.createdAt).toLocaleDateString("es-AR", { day: "2-digit", month: "short" })}</p>
-                  </Link>
-                ))
-              ) : (
-                <div className="rounded-lg bg-surface-container-low/40 p-3 text-sm leading-6 text-on-surface-variant">
-                  Aún no hay análisis guardados.
-                </div>
-              )}
-            </div>
-
-            <div className="mt-auto space-y-1 border-t border-outline-variant/15 pt-4">
-              {visibleNavItems.map((item) => (
-                <NavLink key={item.to} className={getNavLinkClassName} to={item.to}>
-                  {item.label}
-                </NavLink>
-              ))}
-            </div>
-          </aside>
-
-          <div className="flex min-w-0 flex-1 flex-col gap-6 lg:ml-64">
-            <Outlet />
+            </button>
           </div>
         </div>
+      </header>
 
-        <Footer />
-      </div>
+      <main className="container-editorial py-12 md:py-16">
+        <Outlet />
+      </main>
 
-      <MobileDrawer actions={mobileDrawerActions} heading="Nexus Talent" isOpen={isMobileMenuOpen} items={visibleNavItems} onClose={() => setIsMobileMenuOpen(false)} />
-    </main>
+      <Footer />
+
+      <MobileDrawer
+        actions={
+          isAuthenticated ? (
+            <div className="space-y-3">
+              <div className="rounded-md px-4 py-3 text-sm leading-6 text-text-secondary">
+                {user?.email ?? "Sesión activa"}
+              </div>
+              <div onClick={() => setIsMobileMenuOpen(false)}>
+                <LogoutButton className="w-full justify-center" />
+              </div>
+            </div>
+          ) : status === AUTH_STATUS.LOADING ? (
+            <div className="rounded-md px-4 py-3 text-sm leading-6 text-text-secondary">
+              Verificando acceso
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <Link
+                className="flex w-full items-center justify-center rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                to="/auth/sign-in"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Iniciar sesión
+              </Link>
+              <div className="rounded-md px-4 py-3 text-sm leading-6 text-text-secondary">
+                Modo público activo
+              </div>
+            </div>
+          )
+        }
+        heading="Nexus Talent"
+        isOpen={isMobileMenuOpen}
+        items={visibleNavItems}
+        onClose={() => setIsMobileMenuOpen(false)}
+      />
+    </div>
   );
 }

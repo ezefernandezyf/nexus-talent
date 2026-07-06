@@ -1,0 +1,50 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Footer snapshot > renders consistently 1`] = `
+<footer
+  class="border-t border-border bg-surface py-12"
+>
+  <div
+    class="container-editorial flex flex-col items-start justify-between gap-6 md:flex-row md:items-center"
+  >
+    <div
+      class="space-y-2"
+    >
+      <div
+        class="font-display text-lg font-black text-text-primary"
+      >
+        Nexus Talent
+      </div>
+      <div
+        class="text-sm text-text-secondary"
+      >
+        © 2026 Nexus Talent. Construido para la era de las máquinas.
+      </div>
+    </div>
+    <div
+      class="flex flex-col gap-4 text-sm text-text-secondary md:flex-row md:gap-8"
+    >
+      <a
+        class="transition-colors hover:text-text-primary"
+        href="/privacy"
+      >
+        Privacidad
+      </a>
+      <a
+        class="transition-colors hover:text-text-primary"
+        href="https://github.com/ezefernandezyf/nexus-talent"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        GitHub
+      </a>
+      <a
+        class="transition-colors hover:text-text-primary"
+        href="mailto:hello@nexustalent.dev"
+      >
+        Contacto
+      </a>
+    </div>
+  </div>
+</footer>
+`;

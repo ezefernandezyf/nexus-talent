@@ -4,15 +4,13 @@ import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import axios from "axios";
-import { ANALYSIS_HISTORY_STORAGE_KEY } from "@/features/analysis/api/repository";
 import { useAuthStatus } from "@/features/auth/store/auth-status";
-import { createSavedAnalysis } from "@/test/factories/analysis";
 import { AppLayout } from "./AppLayout";
 import { AuthProvider } from "@/features/auth";
 import { createTestQueryClient } from "@/test/mocks/query-client";
 
 // ---------------------------------------------------------------------------
-// Axios mock - hooks now use HTTP repo instead of localStorage
+// Axios mock
 // ---------------------------------------------------------------------------
 
 const mockAxiosInstance = vi.hoisted(() => ({
@@ -61,27 +59,14 @@ describe("AppLayout", () => {
     mockAxiosInstance.patch.mockReset();
     mockAxiosInstance.delete.mockReset();
 
-    // Default axios mock: empty analysis list for sidebar
     mockAxiosInstance.get.mockResolvedValue({ data: { items: [], total: 0 } });
   });
 
   it("renders the shared shell and outlet content for public users", async () => {
     const queryClient = createTestQueryClient();
 
-    // Pre-seed: no session, unauthenticated
     queryClient.setQueryData(["auth", "session"], null);
     useAuthStatus.setState({ status: "unauthenticated" });
-
-    const user = userEvent.setup();
-    const savedAnalysis = createSavedAnalysis({
-      id: "550e8400-e29b-41d4-a716-446655440000",
-      jobDescription: "Frontend Lead\nBuild resilient interfaces",
-    });
-
-    localStorage.setItem(ANALYSIS_HISTORY_STORAGE_KEY, JSON.stringify([savedAnalysis]));
-
-    // Configure axios to return the saved analysis in the sidebar
-    mockAxiosInstance.get.mockResolvedValue({ data: { items: [savedAnalysis], total: 1 } });
 
     renderAppLayout(queryClient);
 
@@ -91,28 +76,17 @@ describe("AppLayout", () => {
     expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /historial/i })).toHaveAttribute("href", "/app/history");
     expect(within(screen.getByLabelText(/app primary navigation/i)).queryByRole("link", { name: /settings/i })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /nuevo análisis/i })).toHaveAttribute("href", "/app/analysis");
-    expect(screen.queryByText("© 2026 Nexus Talent - Precision Recruiting Layer")).not.toBeInTheDocument();
-    await waitFor(() =>
-      expect(screen.getByRole("link", { name: /abrir detalle de frontend lead/i })).toHaveAttribute(
-        "href",
-        "/app/history/550e8400-e29b-41d4-a716-446655440000",
-      ),
-    );
 
-    await user.click(screen.getByRole("button", { name: /abrir menú/i }));
+    await userEvent.setup().click(screen.getByRole("button", { name: /abrir menú/i }));
     const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });
     expect(within(drawer).getByRole("link", { name: "Análisis" })).toHaveAttribute("href", "/app/analysis");
     expect(within(drawer).queryByRole("link", { name: "Settings" })).not.toBeInTheDocument();
-
-    await user.click(within(drawer).getByRole("link", { name: "Historial" }));
-    expect(screen.queryByRole("dialog", { name: "Nexus Talent" })).not.toBeInTheDocument();
   });
 
   it("renders the authenticated shell copy for signed-in users", async () => {
     const queryClient = createTestQueryClient();
     const user = userEvent.setup();
 
-    // Pre-seed: authenticated session
     queryClient.setQueryData(["auth", "session"], {
       user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "analyst@nexustalent.dev", displayName: null },
       isAdmin: false,
@@ -135,7 +109,6 @@ describe("AppLayout", () => {
     const queryClient = createTestQueryClient();
     const user = userEvent.setup();
 
-    // Pre-seed: authenticated session
     queryClient.setQueryData(["auth", "session"], {
       user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "analyst@nexustalent.dev", displayName: null },
       isAdmin: false,
@@ -157,7 +130,6 @@ describe("AppLayout", () => {
 
     localStorage.clear();
 
-    // Pre-seed: no session
     queryClient.setQueryData(["auth", "session"], null);
     useAuthStatus.setState({ status: "unauthenticated" });
 

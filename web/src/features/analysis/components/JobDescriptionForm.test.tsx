@@ -67,9 +67,7 @@ describe("JobDescriptionForm", () => {
     render(<JobDescriptionForm isPending={false} onSubmit={onSubmit} />);
 
     expect(screen.getByLabelText(/tono del mensaje/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/tono del mensaje/i).closest(".field-surface")).toBeInTheDocument();
-    expect(screen.getByLabelText(/url de github/i).closest(".field-surface")).toBeInTheDocument();
-    expect(screen.getByText(/ctrl\+v/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/url de github/i)).toBeInTheDocument();
 
     await user.type(screen.getByLabelText(/descripción del puesto/i), "Ingeniero React senior con TypeScript");
     await user.click(screen.getByRole("button", { name: /analizar con ia/i }));

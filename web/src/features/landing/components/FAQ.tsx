@@ -8,29 +8,29 @@ interface FAQItem {
 
 const faqItems: FAQItem[] = [
   {
-    question: "What does Nexus Talent actually do?",
+    question: "¿Qué hace exactamente Nexus Talent?",
     answer:
-      "Paste any job description and get a structured analysis back: a role summary, a skills matrix showing what's core vs. nice-to-have, keyword extraction for ATS optimization, gaps you might have with advice on how to frame them, and ready-to-edit outreach messages for recruiters and hiring managers.",
+      "Pega cualquier descripción de trabajo y recibe un análisis estructurado: un resumen del rol, una matriz de habilidades que muestra lo esencial vs. lo deseable, extracción de palabras clave para optimización ATS, brechas que puedas tener con consejos sobre cómo abordarlas, y mensajes de contacto listos para editar para reclutadores y hiring managers.",
   },
   {
-    question: "What AI model powers the analysis?",
+    question: "¿Qué modelo de IA impulsa el análisis?",
     answer:
-      "Analysis runs through Groq's API on our server. Your job description text is sent securely, processed, and the structured result comes back. We never expose API keys to the browser.",
+      "El análisis se ejecuta a través de la API de Groq en nuestro servidor. El texto de tu descripción de trabajo se envía de forma segura, se procesa y el resultado estructurado regresa. Nunca exponemos claves de API al navegador.",
   },
   {
-    question: "What happens to my data?",
+    question: "¿Qué sucede con mis datos?",
     answer:
-      "Your job descriptions and analysis results are saved to your account on a PostgreSQL database. We don't share, sell, or train on your data. Session auth uses httpOnly cookies, immune to XSS.",
+      "Tus descripciones de trabajo y resultados de análisis se guardan en tu cuenta en una base de datos PostgreSQL. No compartimos, vendemos ni entrenamos con tus datos. La autenticación de sesión usa cookies httpOnly, inmunes a XSS.",
   },
   {
-    question: "Can I save my analyses?",
+    question: "¿Puedo guardar mis análisis?",
     answer:
-      "Yes. Every analysis saves automatically to your history. You can revisit, rename, add notes, or delete any analysis. Your history is stored server-side, so it survives browser clears and device switches.",
+      "Sí. Cada análisis se guarda automáticamente en tu historial. Puedes revisitar, renombrar, agregar notas o eliminar cualquier análisis. Tu historial se almacena en el servidor, por lo que sobrevive a limpiezas del navegador y cambios de dispositivo.",
   },
   {
-    question: "Is Nexus Talent free?",
+    question: "¿Nexus Talent es gratuito?",
     answer:
-      "Yes, it's free to use. No credit card required. Create an account and start analyzing job descriptions immediately.",
+      "Sí, es gratuito. No requiere tarjeta de crédito. Crea una cuenta y empieza a analizar descripciones de trabajo de inmediato.",
   },
 ];
 
@@ -113,7 +113,7 @@ export function FAQ({ className }: FAQProps) {
   return (
     <section aria-labelledby="faq-heading" className={cn("w-full", className)} id="faq">
       <h2 id="faq-heading" className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary">
-        Frequently Asked Questions
+        Preguntas Frecuentes
       </h2>
       <div className="mt-8 space-y-0">
         {faqItems.map((item, index) => (

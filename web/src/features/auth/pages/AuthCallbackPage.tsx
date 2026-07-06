@@ -1,9 +1,27 @@
 import { useEffect } from "react";
 import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { Card } from "@/shared/components/Card";
+import { Badge } from "@/shared/components/Badge";
+import { cn } from "@/shared/utils/cn";
 import { AUTH_STATUS } from "@/features/auth/store/auth-status";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useSession } from "@/features/auth/api/useSession";
+
+const linkBtnPrimary = cn(
+  "inline-flex items-center justify-center rounded-full font-label select-none",
+  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
+  "bg-[var(--accent)] text-[var(--color-on-brand)]",
+  "hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97]",
+  "h-10 px-4 text-label text-base gap-2",
+);
+
+const linkBtnSecondary = cn(
+  "inline-flex items-center justify-center rounded-full font-label select-none",
+  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
+  "bg-[var(--color-accent)] text-[var(--color-on-accent)]",
+  "hover:brightness-105 hover:-translate-y-0.5 active:scale-[0.97]",
+  "h-10 px-4 text-label text-base gap-2",
+);
 
 function getCallbackErrorMessage(searchParams: URLSearchParams) {
   const queryError = searchParams.get("error_description") ?? searchParams.get("error");
@@ -34,16 +52,16 @@ export default function AuthCallbackPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-surface-container-lowest px-5 py-8 text-on-surface">
       <Card className="flex w-full max-w-xl flex-col gap-4 p-6 sm:p-8">
-        <span className="label-chip">Acceso social</span>
+        <Badge>Acceso social</Badge>
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-[-0.02em] text-white sm:text-3xl">Estamos terminando de validar tu sesión</h1>
           <p className="text-sm leading-7 text-on-surface-variant">{callbackErrorMessage}</p>
         </div>
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link className="primary-button" to="/auth/sign-in">
+          <Link className={linkBtnPrimary} to="/auth/sign-in">
             Volver a ingresar
           </Link>
-          <Link className="secondary-button" to="/auth/sign-up">
+          <Link className={linkBtnSecondary} to="/auth/sign-up">
             Crear cuenta
           </Link>
         </div>

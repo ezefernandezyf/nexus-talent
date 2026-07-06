@@ -1,7 +1,10 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { Card } from "@/shared/components/Card";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+
+// ---------------------------------------------------------------------------
+// Copy — Editorial Precision preserves all existing text, adds accentWord
+// ---------------------------------------------------------------------------
 
 const AUTH_SHELL_COPY = {
   "sign-in": {
@@ -12,6 +15,7 @@ const AUTH_SHELL_COPY = {
     heading: "Volvé al panel seguro y seguí con tu flujo.",
     stats: ["Rutas protegidas", "Sesión con JWT", "Historial sincronizado"],
     title: "Iniciá sesión",
+    accentWord: "panel",
   },
   "sign-up": {
     actionHref: "/auth/sign-in",
@@ -21,97 +25,127 @@ const AUTH_SHELL_COPY = {
     heading: "Creá tu acceso y empezá con sesión segura desde el primer día.",
     stats: ["Email/password", "Sesión con JWT", "Sin migración de historia"],
     title: "Crear cuenta",
+    accentWord: "acceso",
   },
 } as const;
 
 type AuthShellMode = keyof typeof AUTH_SHELL_COPY;
+
+// ---------------------------------------------------------------------------
+// Props
+// ---------------------------------------------------------------------------
 
 interface AuthShellProps {
   children: ReactNode;
   mode: AuthShellMode;
 }
 
+// ---------------------------------------------------------------------------
+// AuthShell — Editorial Precision split layout
+// ---------------------------------------------------------------------------
+
 export function AuthShell({ children, mode }: AuthShellProps) {
   const copy = AUTH_SHELL_COPY[mode];
   const { errorMessage, isConfigured } = useAuth();
 
+  const parts = copy.heading.split(copy.accentWord);
+  const [primaryStat, ...secondaryStats] = copy.stats;
+
   return (
-    <main className="relative flex min-h-screen flex-col overflow-hidden bg-surface-container-lowest text-on-surface">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--color-primary) 14%, transparent), transparent 28%), radial-gradient(circle at 82% 14%, color-mix(in oklch, var(--color-accent) 10%, transparent), transparent 22%), radial-gradient(circle at 50% 100%, color-mix(in oklch, var(--color-primary-container) 8%, transparent), transparent 28%)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-35"
-        style={{
-          backgroundImage:
-            "linear-gradient(color-mix(in oklch, var(--color-primary) 3%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklch, var(--color-primary) 3%, transparent) 1px, transparent 1px)",
-          backgroundSize: "84px 84px",
-          maskImage:
-            "linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.18) 58%, transparent)",
-        }}
-      />
+    <div className="grid min-h-screen bg-[var(--color-surface-base)] lg:grid-cols-12">
+      {/* ===== Left panel — Brand statement (5 cols) ===== */}
+      <aside className="flex min-h-[40vh] flex-col justify-between bg-surface-muted p-6 sm:p-10 lg:col-span-5 lg:min-h-screen lg:p-16">
+        {/* Brand */}
+        <Link
+          to="/"
+          className="font-display text-lg font-bold tracking-tight text-text-primary no-underline"
+        >
+          Nexus Talent
+        </Link>
 
-      <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 sm:px-8">
-        <div className="text-xl font-bold tracking-tighter text-on-surface font-headline">Nexus Talent</div>
-      </header>
+        {/* Editorial statement */}
+        <div className="max-w-md">
+          <p className="text-eyebrow">
+            {copy.eyebrow}
+          </p>
 
-      <div className="relative z-10 flex flex-1 items-center justify-center px-6 pb-24 pt-4 sm:px-8">
+          <h1 className="mt-3 font-display text-xl font-semibold leading-tight tracking-tighter sm:mt-6 sm:text-[clamp(1.75rem,2.5vw+0.5rem,2.5rem)] sm:font-bold lg:text-h1 lg:leading-[1.1]">
+            {parts[0]}
+            <span className="accent-underline">{copy.accentWord}</span>
+            {parts[1]}
+          </h1>
+
+          {/* Stat block — desktop only */}
+          <div className="mt-10 hidden border-l-2 border-[var(--color-accent)] pl-6 sm:mt-14 sm:block">
+            <p className="font-display text-2xl font-black lg:text-3xl">
+              {primaryStat}
+            </p>
+            {secondaryStats.length > 0 && (
+              <p className="mt-2 max-w-xs text-sm text-[var(--color-on-surface-variant)]">
+                {secondaryStats.join(" · ")}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Copyright — desktop only */}
+        <p className="hidden text-sm text-[var(--color-on-surface-variant)] sm:block">
+          © 2026 Nexus Talent
+        </p>
+      </aside>
+
+      {/* ===== Right panel — Auth form (7 cols) ===== */}
+      <main className="flex items-center justify-center p-6 sm:p-8 lg:col-span-7 lg:p-12">
         <div className="w-full max-w-md">
-          <Card className="glass-panel ghost-border rounded-xl p-8 shadow-2xl sm:p-10">
-            <div className="mb-10 text-center">
-              <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-on-surface font-headline">{copy.title}</h1>
-            </div>
+          <div className="rounded-lg border border-[var(--border)] bg-[var(--color-surface)] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:p-10">
+            {/* Title */}
+            <h2 className="font-display text-h2">{copy.title}</h2>
 
-            <div className="space-y-6">
-              {errorMessage ? (
-                <div className="ghost-frame rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
-                  {errorMessage}
-                </div>
-              ) : null}
-
-              {!isConfigured ? (
-                <div className="ghost-frame rounded-2xl bg-warning/10 px-4 py-3 text-sm leading-6 text-warning" role="status">
-                  Faltan variables de entorno. La app se mantiene en modo público hasta que configures Supabase.
-                </div>
-              ) : null}
-
-              <div>{children}</div>
-
-              <div className="pt-2 text-center">
-                <p className="text-sm leading-6 text-on-surface-variant">
-                  {copy.actionPrompt}{" "}
-                  <Link className="text-primary hover:underline" to={copy.actionHref}>
-                    {copy.actionLabel}
-                  </Link>
-                </p>
+            {/* Error message */}
+            {errorMessage ? (
+              <div
+                className="mt-6 rounded-lg bg-[var(--color-error)]/10 px-4 py-3 text-sm leading-6 text-[var(--color-error)]"
+                role="alert"
+              >
+                {errorMessage}
               </div>
-            </div>
-          </Card>
-        </div>
-      </div>
+            ) : null}
 
-      <footer className="relative z-10 mt-auto flex w-full flex-col items-center justify-between gap-4 border-t border-white/5 px-8 py-6 opacity-60 sm:flex-row">
-        <div className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
-          © 2026 Nexus Talent. Engineered for Precision.
+            {/* Setup warning */}
+            {!isConfigured ? (
+              <div
+                className="mt-6 rounded-lg bg-[var(--color-warning)]/10 px-4 py-3 text-sm leading-6 text-[var(--color-warning)]"
+                role="status"
+              >
+                Faltan variables de entorno. La app se mantiene en modo público
+                hasta que configures Supabase.
+              </div>
+            ) : null}
+
+            {/* Auth form */}
+            <div
+              className={
+                errorMessage || !isConfigured ? "mt-6 space-y-5" : "mt-8 space-y-5"
+              }
+            >
+              {children}
+            </div>
+
+            {/* Action link */}
+            <div className="mt-8 border-t border-[var(--border)] pt-6 text-center">
+              <p className="text-sm leading-6 text-[var(--color-on-surface-variant)]">
+                {copy.actionPrompt}{" "}
+                <Link
+                  to={copy.actionHref}
+                  className="font-medium text-[var(--color-accent)] no-underline hover:underline"
+                >
+                  {copy.actionLabel}
+                </Link>
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="flex gap-8">
-          <a className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant transition-colors hover:text-primary" href="#">
-            Privacy Policy
-          </a>
-          <a className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant transition-colors hover:text-primary" href="#">
-            Terms
-          </a>
-          <a className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant transition-colors hover:text-primary" href="#">
-            Support
-          </a>
-        </div>
-      </footer>
-    </main>
+      </main>
+    </div>
   );
 }

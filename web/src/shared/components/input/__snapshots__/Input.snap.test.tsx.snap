@@ -1,0 +1,94 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Input snapshot > renders all states in dark mode 1`] = `
+<div>
+  <div
+    class="flex flex-col gap-1.5"
+  >
+    <label
+      class="text-sm font-medium text-text-primary"
+      for="_r_0_"
+    >
+      Default
+    </label>
+    <div
+      class="relative"
+    >
+      <input
+        aria-invalid="false"
+        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border border-border focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 h-11 px-4 rounded-md"
+        id="_r_0_"
+        placeholder="Type here..."
+      />
+    </div>
+  </div>
+  <div
+    class="flex flex-col gap-1.5"
+  >
+    <label
+      class="text-sm font-medium text-text-primary"
+      for="_r_1_"
+    >
+      With Error
+    </label>
+    <div
+      class="relative"
+    >
+      <input
+        aria-describedby="_r_1_-error"
+        aria-invalid="true"
+        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border focus:outline-none focus:ring-1 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)] h-11 px-4 rounded-md"
+        id="_r_1_"
+      />
+    </div>
+    <p
+      class="text-sm text-[var(--color-error)]"
+      id="_r_1_-error"
+      role="alert"
+    >
+      Something went wrong
+    </p>
+  </div>
+  <div
+    class="flex flex-col gap-1.5"
+  >
+    <label
+      class="text-sm font-medium text-text-primary"
+      for="_r_2_"
+    >
+      Disabled
+    </label>
+    <div
+      class="relative"
+    >
+      <input
+        aria-invalid="false"
+        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border border-border focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 h-11 px-4 rounded-md"
+        disabled=""
+        id="_r_2_"
+        value="Can't edit"
+      />
+    </div>
+  </div>
+  <div
+    class="flex flex-col gap-1.5"
+  >
+    <label
+      class="text-sm font-medium text-text-primary"
+      for="_r_3_"
+    >
+      Textarea
+    </label>
+    <div
+      class="relative"
+    >
+      <textarea
+        aria-invalid="false"
+        class="w-full bg-surface text-text-primary text-sm placeholder:text-text-tertiary border border-border focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 h-11 px-4 rounded-md min-h-32 resize-y font-sans"
+        id="_r_3_"
+        placeholder="Write more..."
+      />
+    </div>
+  </div>
+</div>
+`;

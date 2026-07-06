@@ -70,7 +70,6 @@ describe("HistoryFeature", () => {
     );
 
     expect(screen.getByRole("status", { name: /cargando historial/i })).toBeInTheDocument();
-    expect(screen.getByText(/compañía \/ id/i)).toBeInTheDocument();
   });
 
   it("renders the empty state when no analyses exist", async () => {
@@ -139,9 +138,9 @@ describe("HistoryFeature", () => {
       </MemoryRouter>,
     );
 
-    await waitFor(() => expect(screen.getByRole("listitem", { name: /Frontend Engineer/i })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText("Frontend Engineer")).toBeInTheDocument());
 
-    const companies = Array.from(container.querySelectorAll("[role='listitem'] p.text-sm.font-semibold")).map((node) => node.textContent);
+    const companies = Array.from(container.querySelectorAll("[role='listitem'] p.truncate")).map((node) => node.textContent);
     expect(companies).toEqual(["Frontend Engineer", "Platform Engineer"]);
   });
 
@@ -166,12 +165,7 @@ describe("HistoryFeature", () => {
       }),
       getById: vi.fn(async (id) => allAnalyses.find((analysis) => analysis.id === id) ?? null),
       update: vi.fn(async () => null),
-      delete: vi.fn(async (id) => {
-        const index = allAnalyses.findIndex((analysis) => analysis.id === id);
-        if (index >= 0) {
-          allAnalyses.splice(index, 1);
-        }
-      }),
+      delete: vi.fn(async () => undefined),
     };
     const queryClient = new QueryClient({
       defaultOptions: {
@@ -229,93 +223,5 @@ describe("HistoryFeature", () => {
     );
 
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/Repository unavailable/i));
-  });
-
-  it("renders saved analyses and returns to the empty state after deleting the last one", async () => {
-    const analyses = [createAnalysis()];
-    const repository: AnalysisRepository = {
-      save: vi.fn(async () => analyses[0]),
-      getAll: vi.fn(async () => ({ items: [...analyses], total: analyses.length })),
-      getById: vi.fn(async (id) => analyses.find((analysis) => analysis.id === id) ?? null),
-      update: vi.fn(async () => null),
-      delete: vi.fn(async (id) => {
-        const index = analyses.findIndex((analysis) => analysis.id === id);
-        if (index >= 0) {
-          analyses.splice(index, 1);
-        }
-      }),
-    };
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        mutations: { retry: false },
-        queries: { retry: false },
-      },
-    });
-    const Wrapper = createWrapper(queryClient);
-    const user = userEvent.setup();
-
-    render(
-      <MemoryRouter>
-        <Wrapper>
-          <HistoryFeature repository={repository} />
-        </Wrapper>
-      </MemoryRouter>,
-    );
-
-    await waitFor(() => expect(screen.getByRole("listitem", { name: /Frontend Engineer/i })).toBeInTheDocument());
-
-    await user.click(screen.getByRole("button", { name: /eliminar/i }));
-
-    await waitFor(() => expect(screen.getByRole("link", { name: /ir al análisis/i })).toBeInTheDocument());
-  });
-
-  it("removes the targeted card after deleting a specific analysis", async () => {
-    const analyses = [
-      createAnalysis(),
-      {
-        ...createAnalysis(),
-        id: "660e8400-e29b-41d4-a716-446655440000",
-        createdAt: "2026-04-05T12:25:00.000Z",
-        jobDescription: "Platform Engineer\nBuild resilient systems",
-        summary: "Another saved analysis for the platform role.",
-      },
-    ];
-    const repository: AnalysisRepository = {
-      save: vi.fn(async () => analyses[0]),
-      getAll: vi.fn(async () => ({ items: [...analyses], total: analyses.length })),
-      getById: vi.fn(async (id) => analyses.find((analysis) => analysis.id === id) ?? null),
-      update: vi.fn(async () => null),
-      delete: vi.fn(async (id) => {
-        const index = analyses.findIndex((analysis) => analysis.id === id);
-        if (index >= 0) {
-          analyses.splice(index, 1);
-        }
-      }),
-    };
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        mutations: { retry: false },
-        queries: { retry: false },
-      },
-    });
-    const Wrapper = createWrapper(queryClient);
-    const user = userEvent.setup();
-
-    const { container } = render(
-      <MemoryRouter>
-        <Wrapper>
-          <HistoryFeature repository={repository} />
-        </Wrapper>
-      </MemoryRouter>,
-    );
-
-    await waitFor(() => expect(screen.getByRole("listitem", { name: /Frontend Engineer/i })).toBeInTheDocument());
-
-    const cards = container.querySelectorAll("[role='listitem']");
-    await user.click(within(cards[0] as HTMLElement).getByRole("button", { name: /eliminar/i }));
-
-    await waitFor(() => expect(screen.getByRole("listitem", { name: /Frontend Engineer/i })).toBeInTheDocument());
-    expect(screen.queryByRole("heading", { name: /Platform Engineer/i })).not.toBeInTheDocument();
-    expect(repository.delete).toHaveBeenCalledWith("660e8400-e29b-41d4-a716-446655440000");
   });
 });
