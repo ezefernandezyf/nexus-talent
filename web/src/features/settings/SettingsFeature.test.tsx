@@ -93,7 +93,7 @@ describe("SettingsFeature", () => {
 
     // Export and sign out buttons
     expect(screen.getByRole("button", { name: /exportar datos/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /sign out/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /cerrar sesión/i })).toBeInTheDocument();
   });
 
   it("keeps the profile form editable after a save failure", async () => {

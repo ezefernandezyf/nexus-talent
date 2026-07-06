@@ -89,7 +89,7 @@ export function HistoryDetailPage() {
         className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors"
       >
         <ArrowLeft size={16} weight="regular" />
-        Back to history
+        Volver al historial
       </Link>
 
       {/* Detail meta */}

@@ -69,15 +69,15 @@ describe("AppRouter", () => {
   it("renders the public landing page at the root path", () => {
     renderApp("/");
 
-    expect(screen.getByRole("heading", { name: /transform job descriptions into actionable insights/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /transforma descripciones de trabajo en información procesable/i })).toBeInTheDocument();
 
-    const signInLinks = screen.getAllByRole("link", { name: /^sign in$/i });
+    const signInLinks = screen.getAllByRole("link", { name: /^iniciar sesión$/i });
     expect(signInLinks.length).toBeGreaterThanOrEqual(1);
     signInLinks.forEach((link) => {
       expect(link).toHaveAttribute("href", "/auth/sign-in");
     });
 
-    const ctaLinks = screen.getAllByRole("link", { name: /start analyzing now/i });
+    const ctaLinks = screen.getAllByRole("link", { name: /empieza a analizar/i });
     expect(ctaLinks.length).toBeGreaterThanOrEqual(1);
     ctaLinks.forEach((link) => {
       expect(link).toHaveAttribute("href", "/app/analysis");
@@ -104,7 +104,7 @@ describe("AppRouter", () => {
       </QueryClientProvider>,
     );
 
-    expect(screen.getByRole("heading", { name: /nuevo análisis de reclutamiento/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /análisis de reclutamiento/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /iniciar sesión/i })).toHaveAttribute("href", "/auth/sign-in");
   });
 
@@ -153,7 +153,7 @@ describe("AppRouter", () => {
       isAdmin: false,
     });
 
-    await waitFor(() => expect(screen.getByRole("heading", { name: /nuevo análisis de reclutamiento/i })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("heading", { name: /análisis de reclutamiento/i })).toBeInTheDocument());
   });
 
   it("renders the privacy page", () => {
@@ -195,7 +195,7 @@ describe("AppRouter", () => {
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /detalle del análisis/i })).toBeInTheDocument());
     expect(screen.getByText(/build robust ui systems/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /back to history/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /volver al historial/i })).toBeInTheDocument();
   });
 
   it("shows the history not-found fallback when the requested analysis is missing", async () => {
@@ -228,7 +228,7 @@ describe("AppRouter", () => {
       isAdmin: false,
     });
 
-    await waitFor(() => expect(screen.getByRole("heading", { name: /nuevo análisis de reclutamiento/i })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("heading", { name: /análisis de reclutamiento/i })).toBeInTheDocument());
     expect(screen.getByText("ana@empresa.com")).toBeInTheDocument();
   });
 });

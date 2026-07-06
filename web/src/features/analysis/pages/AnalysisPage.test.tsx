@@ -32,7 +32,7 @@ describe("AnalysisPage", () => {
       </QueryClientProvider>,
     );
 
-    expect(screen.getByRole("heading", { name: /nuevo análisis de reclutamiento/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /análisis de reclutamiento/i })).toBeInTheDocument();
     expect(screen.getByText(/keywords/i)).toBeInTheDocument();
     expect(screen.getByText(/drafting/i)).toBeInTheDocument();
     expect(screen.getByText(/gap analysis/i)).toBeInTheDocument();
