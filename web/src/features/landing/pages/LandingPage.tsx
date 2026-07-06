@@ -36,7 +36,7 @@ const linkBtnSecondary = cn(
 const linkBtnPrimary = cn(
   "inline-flex items-center justify-center rounded-md font-medium select-none",
   "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-  "bg-[var(--accent)] text-white hover:opacity-90 active:scale-[0.98]",
+  "bg-[var(--accent)] text-[#ffffff] hover:opacity-90 active:scale-[0.98]",
   "h-10 px-4 text-label text-base gap-2",
 );
 
@@ -166,11 +166,10 @@ export function LandingPage() {
           <div className="mt-20 grid gap-16 lg:grid-cols-2 lg:gap-24 items-start max-w-5xl mx-auto">
             <Reveal delay={0.1}>
               <p className="text-lg leading-relaxed text-[var(--color-on-surface-variant)]">
-                Cada descripción de trabajo esconde una intención: lo que el hiring manager
-                realmente necesita versus lo que Recursos Humanos escribió. Nexus Talent
-                distingue ambas. Revela habilidades, brechas y ángulos de contacto
-                para que puedas avanzar sobre candidatos antes de que tus competidores
-                terminen de leer.
+                Cada descripción de trabajo esconde lo que realmente importa: qué skills
+                priorizar, qué palabras clave usar, y cómo armar tu mensaje. Nexus Talent
+                lee entre líneas por vos. Revela habilidades, brechas y ángulos de contacto
+                para que puedas postularte sabiendo exactamente qué decir, antes que nadie.
               </p>
             </Reveal>
 
@@ -184,7 +183,7 @@ export function LandingPage() {
                 </div>
                 <div className="mt-3 text-caption max-w-xs text-[var(--color-on-surface-variant)]">
                   Tiempo promedio para un análisis estructurado completo, desde pegar
-                  hasta un contacto exportable.
+                  la descripción hasta tener mensajes listos para enviar.
                 </div>
               </div>
             </Reveal>
@@ -198,7 +197,7 @@ export function LandingPage() {
           <Reveal>
             <Eyebrow>El flujo de trabajo</Eyebrow>
             <h2 className="text-h1 mt-4 max-w-2xl">
-              Tres pasos. Cada candidato.
+              Tres pasos. Cada oportunidad.
             </h2>
           </Reveal>
 
@@ -321,8 +320,7 @@ export function LandingPage() {
                 <p className="mt-6 max-w-md leading-relaxed text-[#5C5956]">
                   Cada habilidad extraída viene ponderada por su centralidad en el
                   rol, para que sepas qué requisitos son innegociables
-                  y cuáles son deseables. No más perseguir candidatos que
-                  coinciden en los ejes equivocados.
+                  y cuáles son diferenciales. Sin perder tiempo en lo que no suma.
                 </p>
                 <div className="mt-auto flex items-center gap-8 pt-10">
                   <StatBlock value="94%" label="Precisión de extracción" />
@@ -345,8 +343,8 @@ export function LandingPage() {
                   Detección de brechas
                 </h3>
                 <p className="mt-2 text-sm text-[var(--color-on-surface-variant)]">
-                  Ve dónde un candidato se queda corto, antes de la llamada
-                  de preselección.
+                  Ve dónde tus habilidades hacen match y dónde hay que reforzar,
+                  antes de mandar el CV.
                 </p>
               </Card>
             </Reveal>
@@ -364,7 +362,8 @@ export function LandingPage() {
                   Contacto instantáneo
                 </h3>
                 <p className="mt-2 text-sm text-[var(--color-on-surface-variant)]">
-                  Borradores listos para enviar, ajustados al rol y al candidato.
+                  Mensajes listos para copiar y pegar, con el tono justo para cada
+                  postulación.
                 </p>
               </Card>
             </Reveal>
