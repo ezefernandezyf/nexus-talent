@@ -7,29 +7,10 @@ import { Badge } from "@/shared/components/Badge";
 import { useAuth, AUTH_STATUS } from "@/features/auth";
 import { getOAuthProviderConfig } from "./api/oauth-config";
 import type { ProfileRepository } from "./api/profile-repository";
-import { getDisplayName, getLinkedAccounts, getLocation } from "./settings-export";
+import { getDisplayName, getLinkedAccounts } from "./settings-export";
 import { SettingsForm } from "./components/SettingsForm";
 import { useSettings } from "./hooks/useSettings";
-
-interface SectionHeaderProps {
-  eyebrow: string;
-  icon: string;
-  title: string;
-  description: string;
-  action?: ReactNode;
-}
-
-function StatusPill({ connected }: { connected: boolean }) {
-  return (
-    <Badge
-      variant={connected ? "success" : "neutral"}
-     
-      data-state={connected ? "connected" : "disconnected"}
-    >
-      {connected ? "Conectado" : "No conectado"}
-    </Badge>
-  );
-}
+import { useTheme } from "@/core/theme";
 
 function ProviderIcon({ provider }: { provider: "google" }) {
   return (
@@ -42,23 +23,11 @@ function ProviderIcon({ provider }: { provider: "google" }) {
   );
 }
 
-function SectionHeader({ action, description, eyebrow, icon, title }: SectionHeaderProps) {
+function StatusPill({ connected }: { connected: boolean }) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-      <div className="space-y-3">
-        <Badge>{eyebrow}</Badge>
-        <div className="flex items-start gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-surface-container-lowest/80 text-primary shadow-[0_16px_40px_rgba(0,0,0,0.16)]" aria-hidden="true">
-            <span className="material-symbols-outlined text-[20px]">{icon}</span>
-          </span>
-          <div className="space-y-2">
-            <h2 className="text-2xl font-semibold tracking-[-0.02em] text-white sm:text-[2rem]">{title}</h2>
-            <p className="max-w-2xl text-base leading-7 text-on-surface-variant">{description}</p>
-          </div>
-        </div>
-      </div>
-      {action ? <div className="pt-1 sm:pt-0">{action}</div> : null}
-    </div>
+    <Badge variant={connected ? "success" : "neutral"} data-state={connected ? "connected" : "disconnected"}>
+      {connected ? "Conectado" : "No conectado"}
+    </Badge>
   );
 }
 
@@ -68,6 +37,7 @@ interface SettingsFeatureProps {
 
 export function SettingsFeature({ repository }: SettingsFeatureProps) {
   const { status, user, isConfigured } = useAuth();
+  const { theme } = useTheme();
   const {
     accountActionError,
     accountActionPending,
@@ -86,27 +56,21 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
     saveProfileError,
     saveProfilePending,
     saveProfileSuccess,
-    theme,
   } = useSettings({ repository });
   const [isDeletePromptOpen, setIsDeletePromptOpen] = useState(false);
   const [deleteConfirmationText, setDeleteConfirmationText] = useState("");
+  const [showOAuthSection, setShowOAuthSection] = useState(false);
 
   const linkedAccounts = useMemo(() => getLinkedAccounts(user), [user]);
   const displayName = profile?.display_name ?? getDisplayName(user);
-  const location = getLocation(user) ?? "Sin ubicación registrada";
-  const profileLoadErrorMessage = useMemo(() => {
-    if (profileError instanceof Error) {
-      return profileError.message;
-    }
 
+  const profileLoadErrorMessage = useMemo(() => {
+    if (profileError instanceof Error) return profileError.message;
     return null;
   }, [profileError]);
 
   const saveProfileErrorMessage = useMemo(() => {
-    if (saveProfileError instanceof Error) {
-      return saveProfileError.message;
-    }
-
+    if (saveProfileError instanceof Error) return saveProfileError.message;
     return null;
   }, [saveProfileError]);
 
@@ -115,10 +79,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
   }, [accountActionError]);
 
   const deleteAccountErrorMessage = useMemo(() => {
-    if (deleteAccountError instanceof Error) {
-      return deleteAccountError.message;
-    }
-
+    if (deleteAccountError instanceof Error) return deleteAccountError.message;
     return null;
   }, [deleteAccountError]);
 
@@ -138,10 +99,10 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
 
   if (status === AUTH_STATUS.LOADING) {
     return (
-      <Card className="flex min-h-80 items-center justify-center p-6 text-center" tone="low">
+      <Card className="flex min-h-80 items-center justify-center p-6 text-center">
         <div className="max-w-xl space-y-3">
           <Badge>Configuración</Badge>
-          <p className="text-base leading-7 text-on-surface-variant">Estamos cargando tu espacio de cuenta y conexiones.</p>
+          <p className="text-body text-text-secondary">Estamos cargando tu espacio de cuenta y conexiones.</p>
         </div>
       </Card>
     );
@@ -149,10 +110,10 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
 
   if (!isConfigured || !user) {
     return (
-      <Card className="flex min-h-80 items-center justify-center p-6 text-center" role="alert" tone="low">
+      <Card className="flex min-h-80 items-center justify-center p-6 text-center" role="alert">
         <div className="max-w-xl space-y-3">
           <Badge>Perfil no disponible</Badge>
-          <p className="text-base leading-7 text-on-surface-variant">
+          <p className="text-body text-text-secondary">
             No hay una sesión de usuario lista para mostrar información de cuenta. Iniciá sesión para ver tus datos y preferencias.
           </p>
         </div>
@@ -162,149 +123,179 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
 
   return (
     <div className="space-y-6">
-      <Card className="flex flex-col gap-7 p-6 sm:gap-8 sm:p-8" tone="low">
-        <SectionHeader
-          action={<Badge>Tema {theme === "dark" ? "oscuro" : "claro"}</Badge>}
-          description="Gestioná tu identidad, conexiones de plataforma y preferencias de seguridad desde una sola vista."
-          eyebrow="Cuenta y perfil"
-          icon="person"
-          title="Información de la cuenta"
-        />
+      {/* ═══ 01 Account ═══ */}
+      <Card>
+        <div className="font-display font-black text-4xl text-text-primary/90">01</div>
+        <h2 className="text-h3 mt-2">Account</h2>
+        <p className="text-body text-text-secondary mt-1">
+          Gestioná tu identidad y datos de perfil desde una sola vista.
+        </p>
 
-        <SettingsForm
-          displayName={displayName}
-          email={user.email ?? "Sin correo"}
-          errorMessage={profileLoadErrorMessage ?? saveProfileErrorMessage}
-          isLoading={profileLoading && !profile}
-          isPending={saveProfilePending}
-          isUnavailable={Boolean(profileLoadErrorMessage)}
-          location={location}
-          successMessage={saveProfileSuccess ? "Perfil guardado correctamente." : null}
-          onSubmit={async (payload) => {
-            try {
-              await saveProfile({
-                displayName: payload.displayName,
-                email: user.email ?? "",
-                userId: user.id,
-              });
-            } catch {
-              // Error state is handled by the hook; avoid unhandled rejections.
-            }
-          }}
-        />
-      </Card>
-
-      <Card className="flex flex-col gap-7 p-6 sm:gap-8 sm:p-8" tone="low">
-        <SectionHeader
-          description="Gestioná tus conexiones sociales desde acá. Mostramos solo los proveedores que usás para iniciar sesión."
-          eyebrow="Cuentas vinculadas"
-          icon="link"
-          title="Conexiones de plataforma"
-        />
-
-        <div className="grid gap-4 md:grid-cols-2">
-          {linkedAccounts.map((account) => {
-            const providerConfig = getOAuthProviderConfig(account.provider);
-            const isPending = accountActionPending === account.provider;
-
-            return (
-              <article key={account.provider} className="rounded-2xl bg-surface-container-low/40 p-4 sm:p-5">
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-surface-container-lowest text-on-surface">
-                      <ProviderIcon provider={account.provider} />
-                    </div>
-                    <div className="min-w-0 flex-1 space-y-1">
-                      <div className="flex flex-wrap items-start justify-between gap-3">
-                        <div>
-                          <p className="text-base font-semibold text-on-surface">{providerConfig.label}</p>
-                          <p className="text-sm leading-6 text-on-surface-variant">
-                            {account.connected ? "Cuenta conectada a esta sesión." : "Conectá este proveedor para habilitar el vínculo."}
-                          </p>
-                        </div>
-                        <StatusPill connected={account.connected} />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-xs uppercase tracking-[0.18em] text-on-surface-variant">{account.connected ? "Vinculación activa" : "Sin vínculo"}</p>
-                    <Button
-                      className={account.connected ? "text-error" : ""}
-                      disabled={isPending}
-                      variant="outline"
-                      onClick={async () => {
-                        try {
-                          if (account.connected) {
-                            await disconnectAccount(account.provider);
-                            return;
-                          }
-
-                          await connectAccount(account.provider);
-                        } catch {
-                          // The hook owns the error state; keep the card interactive.
-                        }
-                      }}
-                    >
-                      {isPending
-                          ? account.connected
-                            ? "Desvinculando..."
-                            : "Vinculando..."
-                          : account.connected
-                            ? "Desvincular"
-                            : "Vincular"}
-                    </Button>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
+        <div className="mt-6">
+          <SettingsForm
+            displayName={displayName}
+            email={user.email ?? "Sin correo"}
+            errorMessage={profileLoadErrorMessage ?? saveProfileErrorMessage}
+            isLoading={profileLoading && !profile}
+            isPending={saveProfilePending}
+            isUnavailable={Boolean(profileLoadErrorMessage)}
+            successMessage={saveProfileSuccess ? "Perfil guardado correctamente." : null}
+            onSubmit={async (payload) => {
+              try {
+                await saveProfile({
+                  displayName: payload.displayName,
+                  email: user.email ?? "",
+                  userId: user.id,
+                });
+              } catch {
+                // Error state is handled by the hook; avoid unhandled rejections.
+              }
+            }}
+          />
         </div>
-
-        {accountActionErrorMessage ? (
-          <p className="rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
-            {accountActionErrorMessage}
-          </p>
-        ) : null}
       </Card>
 
-      <Card className="flex flex-col gap-6 p-6 sm:p-8" tone="lowest">
-        <SectionHeader
-          description="La eliminación pide una confirmación escrita para evitar borrados accidentales."
-          eyebrow="Zona de peligro"
-          icon="warning"
-          title="Eliminar cuenta"
-        />
+      {/* ═══ 02 Appearance ═══ */}
+      <Card>
+        <div className="font-display font-black text-4xl text-text-primary/90">02</div>
+        <h2 className="text-h3 mt-2">Appearance</h2>
+        <p className="text-body text-text-secondary mt-1">
+          El tema sigue la configuración del sistema automáticamente. No es necesario cambiarlo manualmente — se adapta solo.
+        </p>
+        <div className="mt-4 flex items-center gap-2">
+          <span className="text-sm text-text-secondary">Tema actual:</span>
+          <Badge>{theme === "dark" ? "oscuro" : "claro"}</Badge>
+        </div>
+      </Card>
 
-        <div className="flex flex-col gap-5 rounded-2xl bg-surface-container-lowest/70 p-5 sm:p-6 md:flex-row md:items-center md:justify-between">
-          <div className="max-w-2xl space-y-3">
-            <p className="text-sm leading-6 text-on-surface-variant">
-              Esta acción borra tu cuenta y la información asociada. Vas a tener que escribir la frase exacta para habilitar la confirmación.
-            </p>
-            {deleteAccountErrorMessage ? (
-              <p className="rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
-                {deleteAccountErrorMessage}
-              </p>
-            ) : null}
-          </div>
-          <Button className="whitespace-nowrap text-error" variant="outline" type="button" onClick={openDeleteModal}>
-            Eliminar cuenta
+      {/* ═══ 03 Data ═══ */}
+      <Card>
+        <div className="font-display font-black text-4xl text-text-primary/90">03</div>
+        <h2 className="text-h3 mt-2">Data</h2>
+        <p className="text-body text-text-secondary mt-1">
+          Exportá tu información o gestioná conexiones y cuenta.
+        </p>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Button variant="outline" type="button">
+            Exportar datos
+          </Button>
+          <Button variant="ghost" type="button">
+            Sign out
           </Button>
         </div>
+
+        {/* OAuth linking — expandable section */}
+        {identityLinkingAvailable && linkedAccounts.length > 0 && (
+          <div className="mt-6 border-t border-border pt-6">
+            <button
+              type="button"
+              onClick={() => setShowOAuthSection(!showOAuthSection)}
+              className="flex items-center gap-2 text-sm font-medium text-text-primary hover:text-accent transition-colors"
+            >
+              <span className={`transition-transform duration-200 ${showOAuthSection ? "rotate-90" : ""}`}>&#9654;</span>
+              Cuentas vinculadas ({linkedAccounts.length})
+            </button>
+
+            {showOAuthSection && (
+              <div className="mt-4 space-y-4">
+                {linkedAccounts.map((account) => {
+                  const providerConfig = getOAuthProviderConfig(account.provider);
+                  const isPending = accountActionPending === account.provider;
+
+                  return (
+                    <article key={account.provider} className="flex items-start justify-between gap-4 rounded-md border border-border bg-surface-muted p-4">
+                      <div className="flex items-start gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-surface">
+                          <ProviderIcon provider={account.provider} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-text-primary">{providerConfig.label}</p>
+                          <p className="text-xs text-text-secondary mt-0.5">
+                            {account.connected
+                              ? "Cuenta conectada a esta sesión."
+                              : "Conectá este proveedor para habilitar el vínculo."}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <StatusPill connected={account.connected} />
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          disabled={isPending}
+                          onClick={async () => {
+                            try {
+                              if (account.connected) {
+                                await disconnectAccount(account.provider);
+                              } else {
+                                await connectAccount(account.provider);
+                              }
+                            } catch {
+                              // The hook owns the error state
+                            }
+                          }}
+                        >
+                          {isPending
+                            ? account.connected
+                              ? "Desvinculando..."
+                              : "Vinculando..."
+                            : account.connected
+                              ? "Desvincular"
+                              : "Vincular"}
+                        </Button>
+                      </div>
+                    </article>
+                  );
+                })}
+
+                {accountActionErrorMessage ? (
+                  <p className="rounded-lg bg-[var(--color-error)]/10 px-4 py-3 text-sm leading-6 text-[var(--color-error)]" role="alert">
+                    {accountActionErrorMessage}
+                  </p>
+                ) : null}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Delete account section */}
+        {accountDeletionAvailable && (
+          <div className="mt-6 border-t border-border pt-6">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="max-w-xl">
+                <p className="text-sm font-medium text-text-primary">Eliminar cuenta</p>
+                <p className="text-xs text-text-secondary mt-1">
+                  Esta acción borra tu cuenta y la información asociada. Vas a tener que escribir la frase exacta para habilitar la confirmación.
+                </p>
+                {deleteAccountErrorMessage ? (
+                  <p className="mt-2 rounded-lg bg-[var(--color-error)]/10 px-4 py-3 text-sm leading-6 text-[var(--color-error)]" role="alert">
+                    {deleteAccountErrorMessage}
+                  </p>
+                ) : null}
+              </div>
+              <Button className="whitespace-nowrap shrink-0" variant="outline" type="button" onClick={openDeleteModal}>
+                Eliminar cuenta
+              </Button>
+            </div>
+          </div>
+        )}
       </Card>
 
+      {/* Delete account confirmation modal */}
       <AnimatePresence>
         {isDeletePromptOpen ? (
           <Modal onClose={closeDeleteModal} title="Eliminar cuenta">
             <div className="space-y-5">
-              <p className="text-sm leading-7 text-on-surface-variant">
-                Si seguís, tu cuenta y los datos vinculados se eliminarán permanentemente. Escribí <span className="font-semibold text-on-surface">eliminar cuenta</span> para confirmar.
+              <p className="text-sm leading-7 text-text-secondary">
+                Si seguís, tu cuenta y los datos vinculados se eliminarán permanentemente. Escribí <span className="font-semibold text-text-primary">eliminar cuenta</span> para confirmar.
               </p>
 
               <label className="block space-y-2">
-                <span className="text-xs font-label uppercase tracking-[0.2em] text-on-surface-variant">Confirmación</span>
+                <span className="text-xs font-medium uppercase tracking-[0.2em] text-text-secondary">Confirmación</span>
                 <input
                   autoComplete="off"
-                  className="w-full rounded-lg bg-surface-container-low px-4 py-3 text-base text-on-surface placeholder:text-on-surface-variant/60"
+                  className="w-full rounded-md border border-border bg-surface px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]"
                   placeholder="eliminar cuenta"
                   value={deleteConfirmationText}
                   onChange={(event) => setDeleteConfirmationText(event.target.value)}

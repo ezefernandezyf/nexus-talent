@@ -206,7 +206,7 @@ export function LandingPage() {
             {/* ── Large bento cell — 2 cols x 2 rows ── */}
             <Reveal delay={0.05} className="md:col-span-2 md:row-span-2">
               <Card
-               
+                interactive
                 padding="lg"
                 className="flex h-full flex-col"
               >
@@ -235,7 +235,7 @@ export function LandingPage() {
             {/* ── Small stacked cell 02 ── */}
             <Reveal delay={0.15}>
               <Card
-               
+                interactive
                 padding="md"
                 className="h-full"
               >
@@ -260,7 +260,7 @@ export function LandingPage() {
             {/* ── Small stacked cell 03 ── */}
             <Reveal delay={0.25}>
               <Card
-               
+                interactive
                 padding="md"
                 className="h-full"
               >
@@ -287,7 +287,7 @@ export function LandingPage() {
       {/* ════════════════════════════════════════════════════════ FEATURES ═══ */}
       <section
         id="features"
-        className="py-24 md:py-32 bg-[var(--color-surface-elevated-1)]/50"
+        className="py-24 md:py-32 bg-surface/50"
       >
         <div className="container-editorial">
           <Reveal>
@@ -334,7 +334,7 @@ export function LandingPage() {
             {/* ── Small feature cards ── */}
             <Reveal delay={0.15}>
               <Card
-               
+                interactive
                 padding="md"
                 className="h-full"
               >
@@ -353,7 +353,7 @@ export function LandingPage() {
 
             <Reveal delay={0.2}>
               <Card
-               
+                interactive
                 padding="md"
                 className="h-full"
               >
@@ -371,7 +371,7 @@ export function LandingPage() {
 
             <Reveal delay={0.25}>
               <Card
-               
+                interactive
                 padding="md"
                 className="h-full"
               >
@@ -477,10 +477,10 @@ function HeroComposition() {
 
       {/* Overlapping analysis card */}
       <div
-        className="absolute right-16 top-24 h-56 w-64 rounded-lg border border-[var(--border)] bg-[var(--color-surface-elevated-1)] p-6"
+        className="absolute right-16 top-24 h-56 w-64 rounded-lg border border-border bg-surface p-6"
         style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}
       >
-        <div className="text-xs font-medium uppercase tracking-[0.15em] text-[var(--accent)]">
+        <div className="text-eyebrow">
           Analysis
         </div>
         <div className="mt-3 font-display text-lg font-bold leading-tight text-[var(--text-primary)]">
@@ -495,13 +495,13 @@ function HeroComposition() {
         </div>
         {/* Skill progress bars */}
         <div className="mt-4 space-y-1.5">
-          <div className="h-1.5 w-full rounded-full bg-[var(--border)]/20">
+          <div className="h-1.5 w-full rounded-full bg-surface-muted">
             <div className="h-full w-4/5 rounded-full bg-[var(--accent)]" />
           </div>
-          <div className="h-1.5 w-full rounded-full bg-[var(--border)]/20">
+          <div className="h-1.5 w-full rounded-full bg-surface-muted">
             <div className="h-full w-3/5 rounded-full bg-[var(--accent)]" />
           </div>
-          <div className="h-1.5 w-full rounded-full bg-[var(--border)]/20">
+          <div className="h-1.5 w-full rounded-full bg-surface-muted">
             <div className="h-full w-2/5 rounded-full bg-[var(--accent)]" />
           </div>
         </div>

@@ -54,18 +54,18 @@ export function AuthShell({ children, mode }: AuthShellProps) {
   return (
     <div className="grid min-h-screen bg-[var(--color-surface-base)] lg:grid-cols-12">
       {/* ===== Left panel — Brand statement (5 cols) ===== */}
-      <aside className="flex min-h-[40vh] flex-col justify-between bg-[var(--color-surface-elevated-2)] p-6 sm:p-10 lg:col-span-5 lg:min-h-screen lg:p-16">
+      <aside className="flex min-h-[40vh] flex-col justify-between bg-surface-muted p-6 sm:p-10 lg:col-span-5 lg:min-h-screen lg:p-16">
         {/* Brand */}
         <Link
           to="/"
-          className="font-display text-lg font-bold tracking-tight text-[var(--text-primary)] no-underline"
+          className="font-display text-lg font-bold tracking-tight text-text-primary no-underline"
         >
           Nexus Talent
         </Link>
 
         {/* Editorial statement */}
         <div className="max-w-md">
-          <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--color-accent)]">
+          <p className="text-eyebrow">
             {copy.eyebrow}
           </p>
 

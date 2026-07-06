@@ -26,7 +26,6 @@ describe("SettingsForm", () => {
       <SettingsForm
         displayName="Marcus Sterling"
         email="analyst@nexustalent.dev"
-        location="San Francisco, CA"
         isPending
         onSubmit={vi.fn()}
       />,
@@ -34,7 +33,6 @@ describe("SettingsForm", () => {
 
     expect(screen.getByLabelText(/email/i)).toHaveValue("analyst@nexustalent.dev");
     expect(screen.getByLabelText(/email/i)).toHaveAttribute("readonly");
-    expect(screen.getByText(/san francisco, ca/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /guardando/i })).toBeDisabled();
   });
 

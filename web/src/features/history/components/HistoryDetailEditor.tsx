@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
-import { Badge } from "@/shared/components/Badge";
+import { Label } from "@/shared/components/label/Label";
 import { Input } from "@/shared/components/Input";
 import { HISTORY_DETAIL_FORM_SCHEMA, type HistoryDetailFormInput } from "@/features/history/api/validation";
 import type { SavedJobAnalysis } from "@/features/analysis/schemas/job-analysis";
@@ -56,67 +56,70 @@ export function HistoryDetailEditor({ analysis, errorMessage, isLoading = false,
   const isFormDisabled = isPending || isLoading;
 
   return (
-    <Card className="space-y-5 p-6 sm:p-8">
-      <form onSubmit={handleSubmit}>
-      <div className="space-y-2">
-        <Badge>Edición</Badge>
-        <h2 className="text-2xl font-semibold tracking-[-0.02em] text-white sm:text-3xl">Renombrá y anotá este guardado</h2>
-        <p className="text-base leading-7 text-on-surface-variant">{helperText}</p>
-      </div>
+    <Card className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <p className="text-body text-text-secondary">{helperText}</p>
 
-      {errorMessage ? (
-        <p className="rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
-          {errorMessage}
-        </p>
-      ) : null}
-      {isLoading ? (
-        <p className="rounded-2xl bg-primary/10 px-4 py-3 text-sm leading-6 text-on-surface-variant" role="status">
-          Estamos cargando el detalle para sincronizar la edición.
-        </p>
-      ) : null}
-      {validationMessage ? (
-        <p className="rounded-2xl bg-error/10 px-4 py-3 text-sm leading-6 text-error" role="alert">
-          {validationMessage}
-        </p>
-      ) : null}
-      {successMessage ? (
-        <p className="rounded-2xl bg-success/10 px-4 py-3 text-sm leading-6 text-success" role="status">
-          {successMessage}
-        </p>
-      ) : null}
+        {errorMessage ? (
+          <p className="rounded-lg bg-[var(--color-error)]/10 px-4 py-3 text-sm leading-6 text-[var(--color-error)]" role="alert">
+            {errorMessage}
+          </p>
+        ) : null}
 
-      <label className="space-y-2">
-        <span className="text-sm font-medium uppercase tracking-[0.2em] text-on-surface-variant">Nombre visible</span>
-        <Input
-          aria-label="Nombre visible del guardado"
-          disabled={isFormDisabled}
-          maxLength={120}
-          placeholder={getHistoryCardTitle(analysis)}
-          value={draftDisplayName}
-          onChange={(event) => setDraftDisplayName(event.target.value)}
-        />
-      </label>
+        {isLoading ? (
+          <p className="rounded-lg bg-[var(--accent)]/10 px-4 py-3 text-sm leading-6 text-text-secondary" role="status">
+            Estamos cargando el detalle para sincronizar la edición.
+          </p>
+        ) : null}
 
-      <label className="space-y-2">
-        <span className="text-sm font-medium uppercase tracking-[0.2em] text-on-surface-variant">Notas</span>
-        <Input
-          multiline
-          aria-label="Notas del guardado"
-          className="min-h-40"
-          disabled={isFormDisabled}
-          maxLength={2000}
-          placeholder="Dejá contexto, links o recordatorios para este análisis."
-          value={draftNotes}
-          onChange={(event) => setDraftNotes(event.target.value)}
-        />
-      </label>
+        {validationMessage ? (
+          <p className="rounded-lg bg-[var(--color-error)]/10 px-4 py-3 text-sm leading-6 text-[var(--color-error)]" role="alert">
+            {validationMessage}
+          </p>
+        ) : null}
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm leading-6 text-on-surface-variant">El score visible sigue siendo derivado. Solo se guardan los metadatos editables.</p>
-        <Button className="w-full sm:w-auto" disabled={isFormDisabled} type="submit">
-          {isPending ? "Guardando..." : "Guardar cambios"}
-        </Button>
-      </div>
+        {successMessage ? (
+          <p className="rounded-lg bg-[var(--color-success)]/10 px-4 py-3 text-sm leading-6 text-[var(--color-success)]" role="status">
+            {successMessage}
+          </p>
+        ) : null}
+
+        <div className="space-y-2">
+          <Label htmlFor="detail-title">Nombre visible</Label>
+          <Input
+            id="detail-title"
+            aria-label="Nombre visible del guardado"
+            disabled={isFormDisabled}
+            maxLength={120}
+            placeholder={getHistoryCardTitle(analysis)}
+            value={draftDisplayName}
+            onChange={(event) => setDraftDisplayName(event.target.value)}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="detail-notes">Notas</Label>
+          <Input
+            multiline
+            id="detail-notes"
+            aria-label="Notas del guardado"
+            className="min-h-40"
+            disabled={isFormDisabled}
+            maxLength={2000}
+            placeholder="Dejá contexto, links o recordatorios para este análisis."
+            value={draftNotes}
+            onChange={(event) => setDraftNotes(event.target.value)}
+          />
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm leading-6 text-text-secondary">
+            El score visible sigue siendo derivado. Solo se guardan los metadatos editables.
+          </p>
+          <Button className="w-full sm:w-auto" disabled={isFormDisabled} type="submit">
+            {isPending ? "Guardando..." : "Guardar cambios"}
+          </Button>
+        </div>
       </form>
     </Card>
   );

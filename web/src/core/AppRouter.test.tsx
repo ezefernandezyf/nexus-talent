@@ -129,7 +129,7 @@ describe("AppRouter", () => {
       isAdmin: false,
     });
 
-    await waitFor(() => expect(screen.getByRole("heading", { name: /configuración/i })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("heading", { name: /settings/i })).toBeInTheDocument());
     expect(screen.getByRole("button", { name: /exportar datos/i })).toBeInTheDocument();
   });
 
@@ -195,7 +195,7 @@ describe("AppRouter", () => {
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /detalle del análisis/i })).toBeInTheDocument());
     expect(screen.getByText(/build robust ui systems/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /volver al historial/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /back to history/i })).toBeInTheDocument();
   });
 
   it("shows the history not-found fallback when the requested analysis is missing", async () => {
@@ -212,7 +212,7 @@ describe("AppRouter", () => {
     renderApp("/app/history/missing-analysis-id");
 
     await waitFor(() => expect(screen.getByRole("heading", { name: /análisis no encontrado/i })).toBeInTheDocument());
-    expect(screen.getByRole("button", { name: /volver al historial/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /volver al historial/i })).toBeInTheDocument();
   });
 
   it("renders the 404 page for unknown routes", async () => {

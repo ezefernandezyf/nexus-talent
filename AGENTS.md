@@ -336,3 +336,47 @@ Skills locales en `.opencode/skills/` y `.agents/skills/` que deben priorizarse:
 - La creación de carpetas, archivos y código corresponde a la fase de implementación (`sdd-apply`).
 - Los sub-agentes **no deben** crear ramas ni hacer commits por su cuenta. Son ejecutores de fases.
 - **Regla de Hierro**: Toda decisión se toma antes de escribir código. No hay implementación sin spec y diseño aprobados.
+
+---
+## Pixel-Perfect Reference Alignment
+
+> Guía para verificar que cada página implementada coincide visualmente con la referencia de Lovable (`editorial-lens`).
+
+### Las 4 Capas de Verificación (en orden)
+
+| Capa | Qué verifica | Cómo verificarlo |
+|------|-------------|------------------|
+| **1. Tokens** | Valores de color, tipografía, spacing | DevTools computed styles contra `index.css` variables |
+| **2. Primitives** | Card, Button, Input, Badge, Label | Side-by-side con referencia, mismo padding/radius/font |
+| **3. Layout** | Espaciado entre secciones, alineación, proporciones | Screenshot overlay o DevTools layout inspector |
+| **4. Pages** | Composición completa de cada página | Side-by-side navegando ambas apps |
+
+### Acceptance Criteria
+
+Pixel-perfect significa:
+
+- [ ] **Color values match**: cada token CSS resuelve al mismo valor hex/OKLCH que la referencia
+- [ ] **Spacing matches**: padding, margin, gap entre elementos es idéntico
+- [ ] **Typography matches**: font-family, weight, size (clamp), letter-spacing, line-height
+- [ ] **Border-radius / shadow match**: mismos valores de radio y sombra
+- [ ] **Layout proportions match**: mismos anchos relativos, alturas, distribuciones de grid
+- [ ] **Interactive states match**: hover, focus, active tienen los mismos efectos
+- [ ] **Section order matches**: mismos componentes en el mismo orden de arriba a abajo
+- [ ] **Component composition matches**: cada componente usa los mismos sub-componentes internos en el mismo orden
+
+### Lo Que Pixel-Perfect NO Significa
+
+| Exclusión | Razón |
+|-----------|-------|
+| **File structure** | Mantenemos folder-per-component de Nexus Talent |
+| **API / props** | Mantenemos nuestra API de componentes (Button variant, Card padding, etc.) |
+| **Content / copy** | El contenido sigue siendo español. Las etiquetas y copy son nuestros. |
+| **Business logic** | Hooks, stores, queries, Zod schemas — intactos |
+
+### Verification Tools
+
+1. **Manual side-by-side**: abrir la app y la referencia (editorial-lens) en ventanas lado a lado
+2. **DevTools computed-style comparison**: seleccionar el mismo elemento en ambas y comparar valores computados
+3. **Screenshot overlay**: tomar screenshot de la referencia, superponer con la implementación al 50% de opacidad
+4. **Token audit script**: `grep -r 'text-on-surface\|bg-surface-container\|surface-elevated' web/src/` — debe devolver 0 matches
+5. **Anti-pattern detection**: `npx impeccable detect web/src/` — 0 nuevos anti-patrones por PR
