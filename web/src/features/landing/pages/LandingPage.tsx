@@ -25,27 +25,18 @@ import { MobileMenuButton } from "@/shared/components/MobileMenuButton";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-const linkBtnSecondary = cn(
+const linkFilled = cn(
   "inline-flex items-center justify-center rounded-md font-medium select-none",
-  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-  "border border-[var(--accent)] text-[var(--accent)]",
-  "hover:bg-[var(--color-brand-container)] active:scale-[0.98]",
-  "h-10 px-4 text-label text-base gap-2",
+  "transition-all duration-200",
+  "bg-[var(--accent)] text-white hover:opacity-90 active:scale-[0.98]",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2",
 );
 
-const linkBtnPrimary = cn(
+const linkOutline = cn(
   "inline-flex items-center justify-center rounded-md font-medium select-none",
-  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-  "bg-[var(--accent)] text-[#ffffff] hover:opacity-90 active:scale-[0.98]",
-  "h-10 px-4 text-label text-base gap-2",
-);
-
-const ctaOutline = cn(
-  "inline-flex items-center justify-center rounded-md font-medium select-none",
-  "transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-expo)]",
-  "border border-[var(--accent)] text-[var(--accent)]",
-  "hover:bg-[var(--color-brand-container)] active:scale-[0.98]",
-  "h-12 px-6 text-label text-lg gap-2.5",
+  "transition-all duration-200",
+  "border border-border text-[var(--text-primary)] hover:bg-[var(--accent-muted)]",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2",
 );
 
 const publicDrawerItems = [
@@ -74,13 +65,13 @@ export function LandingPage() {
               onClick={() => setIsMobileMenuOpen((c) => !c)}
             />
             <Link
-              className={cn(linkBtnSecondary, "hidden md:inline-flex")}
+              className={cn(linkOutline, "h-10 px-4 text-label text-base gap-2", "hidden md:inline-flex")}
               to="/auth/sign-in"
             >
               Iniciar sesión
             </Link>
             <Link
-              className={cn(linkBtnPrimary, "hidden md:inline-flex")}
+              className={cn(linkFilled, "h-10 px-4 text-label text-base gap-2", "hidden md:inline-flex")}
               to="/auth/sign-up"
             >
               Empieza gratis
@@ -133,7 +124,7 @@ export function LandingPage() {
                 transition={{ duration: 0.8, ease: EASE, delay: 0.3 }}
                 className="mt-10"
               >
-                <Link className={ctaOutline} to="/app/analysis">
+                <Link className={cn(linkOutline, "h-12 px-6 text-label text-lg gap-2.5")} to="/app/analysis">
                   Empieza a analizar <ArrowRight size={18} weight="regular" />
                 </Link>
               </motion.div>
@@ -406,7 +397,7 @@ export function LandingPage() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="mt-10">
-              <Link className={ctaOutline} to="/app/analysis">
+              <Link className={cn(linkOutline, "h-12 px-6 text-label text-lg gap-2.5")} to="/app/analysis">
                 Empieza a analizar ahora{" "}
                 <ArrowRight size={18} weight="regular" />
               </Link>
@@ -424,14 +415,14 @@ export function LandingPage() {
         actions={
           <div className="space-y-3">
             <Link
-              className={cn(linkBtnSecondary, "w-full justify-center")}
+              className={cn(linkOutline, "h-10 px-4 text-label text-base gap-2", "w-full justify-center")}
               to="/auth/sign-in"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Iniciar sesión
             </Link>
             <Link
-              className={cn(linkBtnPrimary, "w-full justify-center")}
+              className={cn(linkFilled, "h-10 px-4 text-label text-base gap-2", "w-full justify-center")}
               to="/auth/sign-up"
               onClick={() => setIsMobileMenuOpen(false)}
             >
