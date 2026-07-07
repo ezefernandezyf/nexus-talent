@@ -109,15 +109,31 @@ Migrated visual design from Lovable reference (editorial-lens). Warm monochrome 
 ### P11quater: Pixel-Perfect Alignment
 Full SDD cycle: 4 stacked PRs achieving pixel-perfect alignment with editorial-lens reference. @utility typography, sticky header layout, 5-section analysis cards, 3-card settings, Spanish landing page, 341 tests.
 
-## ✅ P11quin: UX Quality & Copy Alignment (DONE)
+## ⚠️ P11quin: UX Quality & Copy Alignment (BUILD PASSED, RUNTIME BUGS)
 
-> Fixes de UX y copy para alinear la app con su público real: personas buscando trabajo, no reclutadores.
+> Fixes aplicados pero con bugs en runtime. Reemplazado por P12.
 
-- [x] Output copy: cambiar tono de "reclutador evaluando candidatos" a "postulante preparándose para aplicar"
-- [x] Logout confirmation modal: "¿Estás seguro de que querés cerrar sesión?"
-- [x] OAuth section hidden in Settings (deferred to P15 — full identity linking needs Prisma migration + new endpoints + OAuth flow changes)
-- [x] Landing buttons WCAG fix: text uses `text-[var(--text-primary)]` (≥17:1 contrast)
-- [x] AGENTS.md cleanup (este documento)
+- [x] Output copy prompt reescrito en server
+- [x] Logout confirmation modal agregado
+- [x] OAuth section hidden
+- [x] Landing buttons WCAG fix
+- [x] AGENTS.md cleanup
+- [ ] **RUNTIME**: AI output sigue sonando a reclutador
+- [ ] **RUNTIME**: Landing button texto invisible
+- [ ] **RUNTIME**: Navbar logout no funciona (Modal + dropdown colisionan)
+- [ ] **RUNTIME**: Settings nombre/email update → 404
+- [ ] **RUNTIME**: Settings "Exportar datos" sin handler
+
+## 🔲 P12: Runtime Bug Fixes & Verification (ACTIVE)
+
+> Arreglar bugs de runtime que P11quin no resolvió. **Verificar con `pnpm run dev` antes de mergear.**
+
+- [ ] AI output: verificar que el prompt rewrite efectivamente cambie el tono del output
+- [ ] Landing button: diagnosticar por qué el texto sigue invisible (Tailwind v4 `text-white` / `--color-white` en runtime)
+- [ ] Navbar logout: fix Modal que se cierra junto con el dropdown (renderizar Modal fuera del dropdown)
+- [ ] Settings update: agregar endpoint PUT /api/profile o fixear el 404
+- [ ] Settings export: agregar onClick handler al botón "Exportar datos"
+- [ ] **HARD GATE**: `pnpm run dev` + test manual de cada fix antes de merge
 
 ## Future Phases
 
