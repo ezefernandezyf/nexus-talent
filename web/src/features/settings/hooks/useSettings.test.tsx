@@ -158,7 +158,7 @@ describe("useSettings", () => {
     const { result } = renderHook(() => useSettings({ repository: repository as never }), { wrapper });
 
     await waitFor(() => expect(result.current.status).toBe("authenticated"));
-    expect(result.current.identityLinkingAvailable).toBe(true);
+    expect(result.current.identityLinkingAvailable).toBe(false);
 
     // linkIdentity now throws - identity linking is deprecated
     await expect(result.current.connectAccount("google")).rejects.toThrow(

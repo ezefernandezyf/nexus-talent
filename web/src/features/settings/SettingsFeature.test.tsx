@@ -1,6 +1,6 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AuthProvider } from "@/features/auth";
@@ -166,18 +166,13 @@ describe("SettingsFeature", () => {
     expect(screen.getByRole("button", { name: /eliminar cuenta/i })).toBeEnabled();
   });
 
-  it("shows linked accounts as interactive", async () => {
-    const user = userEvent.setup();
+  it("does not show linked accounts section (OAuth deferred)", async () => {
     renderSettingsFeature();
 
-    // Expand the OAuth section in Card 03
-    await waitFor(() => expect(screen.getByText(/cuentas vinculadas/i)).toBeInTheDocument());
-    await user.click(screen.getByText(/cuentas vinculadas/i));
+    await waitFor(() => expect(screen.getByText(/gestioná tu identidad/i)).toBeInTheDocument());
 
-    await waitFor(() => expect(screen.getByText("Google")).toBeInTheDocument());
-    const googleCard = screen.getByText("Google").closest("article") as HTMLElement;
-    expect(within(googleCard).getByRole("button", { name: /vincular/i })).toBeEnabled();
-    expect(within(googleCard).getByText(/no conectado/i)).toBeInTheDocument();
+    // OAuth section is hidden — ACCOUNT_LINKING_AVAILABLE = false
+    expect(screen.queryByText(/cuentas vinculadas/i)).not.toBeInTheDocument();
   });
 
   it("reflects the shared theme state in the account summary", async () => {
