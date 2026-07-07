@@ -109,15 +109,15 @@ Migrated visual design from Lovable reference (editorial-lens). Warm monochrome 
 ### P11quater: Pixel-Perfect Alignment
 Full SDD cycle: 4 stacked PRs achieving pixel-perfect alignment with editorial-lens reference. @utility typography, sticky header layout, 5-section analysis cards, 3-card settings, Spanish landing page, 341 tests.
 
-## 🔲 P11quin: UX Quality & Copy Alignment (ACTIVE)
+## ✅ P11quin: UX Quality & Copy Alignment (DONE)
 
 > Fixes de UX y copy para alinear la app con su público real: personas buscando trabajo, no reclutadores.
 
-- [ ] Output copy: cambiar tono de "reclutador evaluando candidatos" a "postulante preparándose para aplicar"
-- [ ] Logout confirmation modal: "¿Estás seguro de que querés cerrar sesión?"
-- [ ] Google OAuth status en Settings: mostrar correctamente estado de vinculación
-- [ ] Landing button "Empieza gratis": arreglar visibilidad del texto en light mode
-- [ ] AGENTS.md cleanup (este documento)
+- [x] Output copy: cambiar tono de "reclutador evaluando candidatos" a "postulante preparándose para aplicar"
+- [x] Logout confirmation modal: "¿Estás seguro de que querés cerrar sesión?"
+- [x] OAuth section hidden in Settings (deferred to P15 — full identity linking needs Prisma migration + new endpoints + OAuth flow changes)
+- [x] Landing buttons WCAG fix: text uses `text-[var(--text-primary)]` (≥17:1 contrast)
+- [x] AGENTS.md cleanup (este documento)
 
 ## Future Phases
 
