@@ -301,7 +301,7 @@ export const GROQ_JOB_ANALYSIS_JSON_SCHEMA = {
       items: { type: "string" },
     },
   },
-  required: ["summary", "vacancySummary", "skillGroups", "keywords", "gaps", "outreachMessage", "recruiterMessages"],
+  required: ["summary", "vacancySummary", "skillGroups", "keywords", "gaps", "outreachMessage", "recruiterMessages", "applicantSummary", "candidateOutreach", "applicationTips"],
 } as const;
 
 // ============================================================================
