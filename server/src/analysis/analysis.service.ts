@@ -85,7 +85,7 @@ Formato exacto requerido:
 }
 
 Instrucciones adicionales:
-- summary: lectura ejecutiva breve y clara orientada a recruiting.
+- summary: para lectura ejecutiva breve y clara.
 - vacancySummary: bullets sobre el rol, seniority, modalidad/ubicacion, top 5 responsabilidades y must-have vs nice-to-have.
 - skillGroups: minimo 3 categorias con skills marcadas como core, strong o adjacent.
 - keywords: separa hard skills, soft skills, dominio/negocio y terminos ATS exactos.
