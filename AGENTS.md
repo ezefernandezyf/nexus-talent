@@ -109,40 +109,91 @@ Migrated visual design from Lovable reference (editorial-lens). Warm monochrome 
 ### P11quater: Pixel-Perfect Alignment
 Full SDD cycle: 4 stacked PRs achieving pixel-perfect alignment with editorial-lens reference. @utility typography, sticky header layout, 5-section analysis cards, 3-card settings, Spanish landing page, 341 tests.
 
-## ⚠️ P11quin: UX Quality & Copy Alignment (BUILD PASSED, RUNTIME BUGS)
+## ⚠️ P11quin: UX Quality & Copy Alignment (BUILD PASSED — 5 runtime bugs pendientes)
 
-> Fixes aplicados pero con bugs en runtime. Reemplazado por P12.
+> Prompt y componentes aplicados pero con bugs en runtime. Los 5 fixes son el foco ACTUAL.
 
 - [x] Output copy prompt reescrito en server
 - [x] Logout confirmation modal agregado
 - [x] OAuth section hidden
 - [x] Landing buttons WCAG fix
 - [x] AGENTS.md cleanup
-- [ ] **RUNTIME**: AI output sigue sonando a reclutador
-- [ ] **RUNTIME**: Landing button texto invisible
-- [ ] **RUNTIME**: Navbar logout no funciona (Modal + dropdown colisionan)
-- [ ] **RUNTIME**: Settings nombre/email update → 404
-- [ ] **RUNTIME**: Settings "Exportar datos" sin handler
+- [ ] **Bug 1**: AI output sigue sonando a reclutador — `applicantSummary` no está en `required` del Groq schema
+- [ ] **Bug 2**: Landing "Empieza gratis" texto invisible — regla global `a { color: var(--color-brand) }` pisa `text-white`
+- [ ] **Bug 3**: Navbar logout no funciona — Modal muere al cerrar dropdown (event bubbling)
+- [ ] **Bug 4**: Settings nombre/email update → 404 — router `/profile` tiene solo un endpoint de test
+- [ ] **Bug 5**: Settings "Exportar datos" sin handler — botón sin onClick
+- [ ] **HARD GATE**: verificar con `pnpm run dev` ANTES de mergear a main
 
-## 🔲 P12: Runtime Bug Fixes & Verification (ACTIVE)
-
-> Arreglar bugs de runtime que P11quin no resolvió. **Verificar con `pnpm run dev` antes de mergear.**
-
-- [ ] AI output: verificar que el prompt rewrite efectivamente cambie el tono del output
-- [ ] Landing button: diagnosticar por qué el texto sigue invisible (Tailwind v4 `text-white` / `--color-white` en runtime)
-- [ ] Navbar logout: fix Modal que se cierra junto con el dropdown (renderizar Modal fuera del dropdown)
-- [ ] Settings update: agregar endpoint PUT /api/profile o fixear el 404
-- [ ] Settings export: agregar onClick handler al botón "Exportar datos"
-- [ ] **HARD GATE**: `pnpm run dev` + test manual de cada fix antes de merge
-
+---
 ## Future Phases
 
 ### ✨ P12: Polish + Animation
+> Micro-interacciones, transiciones, feedback visual.
+
+**Skills activas**: taste-skill/high-end-visual-design, impeccable (animate, polish, delight)
+
+- [ ] Page transitions (route changes con framer-motion)
+- [ ] Hover + focus states en todos los componentes interactivos
+- [ ] Loading → Success → Error state transitions
+- [ ] Skeleton → Content reveal animation
+- [ ] Toast enter/exit animations
+- [ ] Modal/Drawer open/close con spring physics
+- [ ] Scroll-triggered reveals (landing page)
+- [ ] `/impeccable animate` review
+- [ ] `/impeccable polish` final pass
+
 ### 🚀 P13: Performance + Lighthouse
+> Core Web Vitals, bundle size, SEO técnico.
+
+- [ ] Fixear E2E port conflict (detectado en verify de P9)
+- [ ] Lighthouse 90+ mobile (Performance, Accessibility, Best Practices, SEO)
+- [ ] Bundle analysis (`vite build --debug`) — split chunks grandes
+- [ ] Dynamic imports + lazy loading de páginas y componentes pesados
+- [ ] Image optimization (WebP/AVIF, lazy loading, responsive sizes)
+- [ ] Font loading strategy (font-display: swap, subset, preload)
+- [ ] CSS purge / unused style removal
+- [ ] `npx impeccable detect` — limpiar issues restantes
+- [ ] Google Search Console: submit sitemap (manual)
+
+---
+## V1.2.1 — User Profiles + Brand Authority
+
 ### 👤 P14: User Profiles
+- [ ] PUT /api/profile — skills, experiencia, rol, resume, linkedin, github
+- [ ] Profile UI — formulario con validación Zod + React Hook Form
+- [ ] Prompt enrichment — Groq usa datos del perfil en outreach messages
+- [ ] Profile picture / avatar upload (opcional, Cloudinary o similar)
+
 ### ⚙️ P15: Settings Backend
-### 🌐 P16: GEO Brand Building
+- [ ] CRUD endpoints: GET/PUT /api/settings
+- [ ] Settings UI — theme, notifications, account preferences
+- [ ] OAuth identity linking (deferred from P11quin)
+- [ ] Rate limit settings: configuración por usuario
+
+### 🌐 P16: GEO Brand Building (async, paralelo al dev)
+> Semana 3-4 del GEO audit. La mayoría es manual, no código.
+
+- [ ] sameAs links en Organization schema (GEO)
+- [ ] Crear/claim LinkedIn company page (GEO CRITICAL)
+- [ ] Product Hunt launch prep (GEO CRITICAL)
+- [ ] Crunchbase company profile
+- [ ] Poblar GitHub org con README + docs
+- [ ] Registrar en G2 y Capterra
+- [ ] Blog content: 2-3 artículos SSR-rendered
+- [ ] YouTube demo video (2-3 min)
+- [ ] Re-run GEO audit — target: 50-60/100
+
+---
+## V1.2.2 — CV Generator
+
 ### 📝 P17: CV Generator
+- [ ] POST /api/cv/generate — JD + perfil → CV (Groq + template system)
+- [ ] CV preview UI (live rendering, no export todavía)
+- [ ] Templates: tech, business, creative (por seniority/industria)
+- [ ] PDF export (puppeteer o similar en server)
+- [ ] HTML export (download .html standalone)
+- [ ] CV history — guardar y reutilizar CVs generados
 
 ## V1.2 Skills Instaladas
 
