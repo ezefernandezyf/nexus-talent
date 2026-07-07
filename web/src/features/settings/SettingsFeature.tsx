@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { Badge } from "@/shared/components/Badge";
 import { useAuth, AUTH_STATUS } from "@/features/auth";
+import { LogoutButton } from "@/features/auth/components/LogoutButton";
 import { getOAuthProviderConfig } from "./api/oauth-config";
 import type { ProfileRepository } from "./api/profile-repository";
 import { getDisplayName, getLinkedAccounts } from "./settings-export";
@@ -36,7 +37,7 @@ interface SettingsFeatureProps {
 }
 
 export function SettingsFeature({ repository }: SettingsFeatureProps) {
-  const { status, user, isConfigured, signOut } = useAuth();
+  const { status, user, isConfigured } = useAuth();
   const { theme } = useTheme();
   const {
     accountActionError,
@@ -180,9 +181,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
           <Button variant="outline" type="button">
             Exportar datos
           </Button>
-          <Button variant="ghost" type="button" onClick={() => signOut()}>
-            Cerrar sesión
-          </Button>
+          <LogoutButton variant="ghost" />
         </div>
 
         {/* OAuth linking — expandable section */}
