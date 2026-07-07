@@ -77,9 +77,9 @@ export function HistoryDetailPage() {
   const uidLabel = getHistoryUid(analysis);
   const reworkSearch = new URLSearchParams({ sourceHistoryId: analysis.id }).toString();
   const vacancy = analysis.vacancySummary;
-  const summary = analysis.summary;
+  const summary = analysis.applicantSummary ?? analysis.summary;
   const keywords = analysis.keywords;
-  const outreach = analysis.outreachMessage;
+  const outreach = analysis.candidateOutreach ?? analysis.outreachMessage;
 
   return (
     <FeaturePageShell>
@@ -121,8 +121,11 @@ export function HistoryDetailPage() {
         {/* 01 Summary */}
         {vacancy || summary ? (
           <ResultCard number="01" title="Summary">
+            {summary ? (
+              <p>{summary}</p>
+            ) : null}
             {vacancy ? (
-              <div className="space-y-4">
+              <div className="mt-4 space-y-4">
                 <div className="grid gap-2 sm:grid-cols-3">
                   <div>
                     <span className="text-caption font-semibold">Rol</span>
@@ -149,9 +152,19 @@ export function HistoryDetailPage() {
                 )}
               </div>
             ) : null}
-            {summary && !vacancy ? (
-              <p>{summary}</p>
-            ) : null}
+            {analysis.applicationTips && analysis.applicationTips.length > 0 && (
+              <details className="mt-4 group">
+                <summary className="cursor-pointer text-sm font-semibold text-text-primary select-none list-none flex items-center gap-2">
+                  <span className="transition-transform duration-200 group-open:rotate-90 text-xs text-text-secondary">▶</span>
+                  Tips para tu postulación
+                </summary>
+                <ul className="mt-2 space-y-1 pl-5 list-disc text-sm leading-7 text-text-secondary">
+                  {analysis.applicationTips.map((tip, i) => (
+                    <li key={i}>{tip}</li>
+                  ))}
+                </ul>
+              </details>
+            )}
           </ResultCard>
         ) : null}
 

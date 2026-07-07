@@ -155,6 +155,9 @@ export const JOB_ANALYSIS_RESULT_SCHEMA = z.object({
   gaps: z.array(JOB_ANALYSIS_GAP_SCHEMA).min(1, { error: "Se requiere al menos un gap." }).optional(),
   outreachMessage: JOB_ANALYSIS_OUTREACH_SCHEMA,
   recruiterMessages: JOB_ANALYSIS_RECRUITER_MESSAGES_SCHEMA.optional(),
+  applicantSummary: z.string().optional(),
+  candidateOutreach: JOB_ANALYSIS_OUTREACH_SCHEMA.optional(),
+  applicationTips: z.array(z.string()).optional(),
   githubEnrichment: JOB_ANALYSIS_GITHUB_ENRICHMENT_SCHEMA.optional(),
 }).strict();
 

@@ -38,7 +38,7 @@ function buildGroqMessages(input: AnalysisRequestDTO): GroqChatMessage[] {
   return [
     {
       role: "system",
-      content: `Eres un analizador de vacantes. Responde UNICAMENTE con un objeto JSON valido, sin markdown, sin explicaciones. El JSON debe tener exactamente estas claves: summary, vacancySummary, skillGroups, keywords, gaps, outreachMessage, recruiterMessages.
+      content: `Sos un asistente para personas que buscan trabajo. Tu trabajo es ayudar a un postulante a entender una descripcion de puesto y prepararse para aplicar. Responde UNICAMENTE con un objeto JSON valido, sin markdown, sin explicaciones. El JSON debe tener estas claves: summary, vacancySummary, skillGroups, keywords, gaps, outreachMessage, recruiterMessages, applicantSummary, candidateOutreach, applicationTips.
 
 Formato exacto requerido:
 {
@@ -75,7 +75,13 @@ Formato exacto requerido:
     "dmShort": {
       "body": "string"
     }
-  }
+  },
+  "applicantSummary": "string",
+  "candidateOutreach": {
+    "subject": "string",
+    "body": "string"
+  },
+  "applicationTips": ["string"]
 }
 
 Instrucciones adicionales:
@@ -87,6 +93,9 @@ Instrucciones adicionales:
 - outreachMessage: version lista para email/LinkedIn, 120-180 palabras, tono profesional y humano.
 - recruiterMessages.emailLinkedIn: subject + body completos.
 - recruiterMessages.dmShort: version corta maximo 600 caracteres.
+- applicantSummary: lectura ejecutiva orientada A LA PERSONA QUE SE POSTULA. Explica por que este puesto le conviene, que puede ganar, y que espera la empresa. Usa "vos" (no "el candidato"). Maximo 80 palabras.
+- candidateOutreach: borrador de mensaje DE CONTACTO que la persona postulante copia y envia al reclutador. subject + body. 120-180 palabras. Tono profesional en primera persona ("Hola, vi la busqueda de X...").
+- applicationTips: exactamente 5 tips accionables para preparar la postulacion. Array de strings. Cosas como: adaptar CV para keywords, preparar portfolio, investigar la empresa, preguntas para entrevista, etc.
 - ${toneInstruction}
 - No uses placeholders ni texto generico. Responde en espanol.`,
     },

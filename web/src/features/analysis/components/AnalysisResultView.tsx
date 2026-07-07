@@ -68,7 +68,8 @@ function truncateToMaxChars(value: string, maxLength: number) {
 }
 
 function getRecruiterMessageVariants(result: JobAnalysisResult) {
-  const emailLinkedIn = result.recruiterMessages?.emailLinkedIn ?? result.outreachMessage;
+  const outreach = result.candidateOutreach ?? result.outreachMessage;
+  const emailLinkedIn = result.recruiterMessages?.emailLinkedIn ?? outreach;
   const dmShort = result.recruiterMessages?.dmShort.body || truncateToMaxChars(emailLinkedIn.body.replace(/\n+/g, " "), 600);
 
   return {
@@ -360,7 +361,21 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
           </div>
         </div>
 
-        <p className="text-body text-text-primary">{result.summary}</p>
+        <p className="text-body text-text-primary">{result.applicantSummary ?? result.summary}</p>
+
+        {result.applicationTips && result.applicationTips.length > 0 && (
+          <details className="group rounded-lg bg-surface-muted p-4">
+            <summary className="cursor-pointer text-sm font-semibold text-text-primary select-none list-none flex items-center gap-2">
+              <span className="transition-transform duration-200 group-open:rotate-90 text-xs text-text-secondary">▶</span>
+              Tips para tu postulación
+            </summary>
+            <ul className="mt-3 space-y-2 pl-5 list-disc text-sm leading-7 text-text-secondary">
+              {result.applicationTips.map((tip, i) => (
+                <li key={i}>{tip}</li>
+              ))}
+            </ul>
+          </details>
+        )}
 
         <VacancySummaryPanel vacancySummary={result.vacancySummary} />
       </Card>

@@ -109,6 +109,17 @@ export const analysisResponseSchema = z.object({
       body: z.string(),
     })
     .optional(),
+  /** Applicant-facing executive summary. Uses "vos" tone. */
+  applicantSummary: z.string().optional(),
+  /** Draft message the applicant copies and sends to the recruiter. */
+  candidateOutreach: z
+    .object({
+      subject: z.string(),
+      body: z.string(),
+    })
+    .optional(),
+  /** Exactly 5 actionable tips for preparing the application. */
+  applicationTips: z.array(z.string()).optional(),
   matchIndex: z.number().optional(),
   jobDescription: z.string().optional(),
   displayName: z.string().optional(),
@@ -274,6 +285,20 @@ export const GROQ_JOB_ANALYSIS_JSON_SCHEMA = {
         },
       },
       required: ["emailLinkedIn", "dmShort"],
+    },
+    applicantSummary: { type: "string" },
+    candidateOutreach: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        subject: { type: "string" },
+        body: { type: "string" },
+      },
+      required: ["subject", "body"],
+    },
+    applicationTips: {
+      type: "array",
+      items: { type: "string" },
     },
   },
   required: ["summary", "vacancySummary", "skillGroups", "keywords", "gaps", "outreachMessage", "recruiterMessages"],
