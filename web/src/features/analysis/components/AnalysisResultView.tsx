@@ -67,14 +67,13 @@ function truncateToMaxChars(value: string, maxLength: number) {
   return `${value.slice(0, maxLength - 1).trimEnd()}…`;
 }
 
-function getRecruiterMessageVariants(result: JobAnalysisResult) {
-  const outreach = result.candidateOutreach ?? result.outreachMessage;
-  const emailLinkedIn = result.recruiterMessages?.emailLinkedIn ?? outreach;
-  const dmShort = result.recruiterMessages?.dmShort.body || truncateToMaxChars(emailLinkedIn.body.replace(/\n+/g, " "), 600);
+function getOutreachVariants(result: JobAnalysisResult) {
+  const primary = result.candidateOutreach ?? result.outreachMessage;
+  const dmShort = result.recruiterMessages?.dmShort.body || truncateToMaxChars(primary.body.replace(/\n+/g, " "), 600);
 
   return {
     dmShort,
-    emailLinkedIn,
+    emailLinkedIn: primary,
   };
 }
 
@@ -256,10 +255,10 @@ const defaultCopyToClipboard = async (value: string) => {
 // ---------------------------------------------------------------------------
 
 export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClipboard }: AnalysisResultViewProps) {
-  const recruiterMessages = getRecruiterMessageVariants(result);
-  const [subject, setSubject] = useState(recruiterMessages.emailLinkedIn.subject);
-  const [body, setBody] = useState(recruiterMessages.emailLinkedIn.body);
-  const [dmBody, setDmBody] = useState(recruiterMessages.dmShort);
+  const outreachVariants = getOutreachVariants(result);
+  const [subject, setSubject] = useState(outreachVariants.emailLinkedIn.subject);
+  const [body, setBody] = useState(outreachVariants.emailLinkedIn.body);
+  const [dmBody, setDmBody] = useState(outreachVariants.dmShort);
   const [feedbackMessage, setFeedbackMessage] = useState("La acción de copiar siempre usa el último texto editado.");
   const [feedbackTone, setFeedbackTone] = useState<"idle" | "success" | "error">("idle");
 
