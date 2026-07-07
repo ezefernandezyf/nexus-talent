@@ -8,7 +8,7 @@ import { useAuth, AUTH_STATUS } from "@/features/auth";
 import { LogoutButton } from "@/features/auth/components/LogoutButton";
 import { getOAuthProviderConfig } from "./api/oauth-config";
 import type { ProfileRepository } from "./api/profile-repository";
-import { getDisplayName, getLinkedAccounts } from "./settings-export";
+import { buildSettingsExportPayload, getDisplayName, getLinkedAccounts } from "./settings-export";
 import { SettingsForm } from "./components/SettingsForm";
 import { useSettings } from "./hooks/useSettings";
 import { useTheme } from "@/core/theme";
@@ -98,6 +98,17 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
     setIsDeletePromptOpen(false);
   }
 
+  function handleExport() {
+    const { content, filename } = buildSettingsExportPayload({ session: user, theme, user });
+    const blob = new Blob([content], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = filename;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
   if (status === AUTH_STATUS.LOADING) {
     return (
       <Card className="flex min-h-80 items-center justify-center p-6 text-center">
@@ -178,7 +189,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
         </p>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button variant="outline" type="button">
+          <Button variant="outline" type="button" onClick={handleExport}>
             Exportar datos
           </Button>
           <LogoutButton variant="ghost" />

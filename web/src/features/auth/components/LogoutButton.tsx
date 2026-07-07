@@ -35,7 +35,7 @@ export function LogoutButton({ className, variant = "outline", onConfirm }: Logo
         variant={variant}
         className={className}
         data-testid="logout-button"
-        onClick={() => setIsConfirmOpen(true)}
+        onClick={(e) => { e.stopPropagation(); setIsConfirmOpen(true); }}
         disabled={isPending}
       >
         {isPending ? "Cerrando..." : "Cerrar sesión"}
