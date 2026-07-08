@@ -6,6 +6,7 @@ import {
   flip,
   shift,
 } from "@floating-ui/react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/shared/utils/cn";
 import { Portal } from "@/shared/components/_internal/portal";
 import { useEscapeKey } from "@/shared/components/_internal/useEscapeKey";
@@ -23,8 +24,14 @@ export interface DropdownProps {
   className?: string;
 }
 
+const dropdownVariants = {
+  hidden: { opacity: 0, scaleY: 0.95 },
+  visible: { opacity: 1, scaleY: 1 },
+};
+
 export function Dropdown({ trigger, items, className }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const generatedId = useId();
@@ -85,47 +92,55 @@ export function Dropdown({ trigger, items, className }: DropdownProps) {
       </div>
 
       {/* Menu */}
-      {isOpen && (
-        <Portal>
-          <div
-            ref={(node) => {
-              menuRef.current = node;
-              floating.refs.setFloating(node);
-            }}
-            id={menuId}
-            role="menu"
-            aria-orientation="vertical"
-            className={cn(
-              "[z-index:var(--z-dropdown)] min-w-[160px] rounded-lg bg-[var(--color-surface-elevated-2)] py-1 shadow-[var(--shadow-lg)]",
-              "focus:outline-none",
-            )}
-            style={{
-              position: "absolute",
-              left: floating.x ?? 0,
-              top: floating.y ?? 0,
-            }}
-          >
-            {items.map((item, index) => (
-              <div
-                key={item.label}
-                role="menuitem"
-                aria-disabled={item.disabled}
-                onClick={() => handleSelect(index)}
-                className={cn(
-                  "flex cursor-pointer items-center gap-2 px-3 py-2 text-sm transition-colors",
-                  "text-[var(--text-primary)] hover:bg-[var(--color-surface-elevated-1)]",
-                  item.disabled && "cursor-not-allowed opacity-40",
-                )}
-              >
-                {item.icon && (
-                  <span className="text-[var(--color-on-surface-variant)]">{item.icon}</span>
-                )}
-                {item.label}
-              </div>
-            ))}
-          </div>
-        </Portal>
-      )}
+      <Portal>
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              ref={(node) => {
+                menuRef.current = node;
+                floating.refs.setFloating(node);
+              }}
+              id={menuId}
+              role="menu"
+              aria-orientation="vertical"
+              className={cn(
+                "[z-index:var(--z-dropdown)] min-w-[160px] rounded-lg bg-[var(--color-surface-elevated-2)] py-1 shadow-[var(--shadow-lg)]",
+                "focus:outline-none",
+              )}
+              style={{
+                position: "absolute",
+                left: floating.x ?? 0,
+                top: floating.y ?? 0,
+                transformOrigin: "top center",
+              }}
+              variants={dropdownVariants}
+              initial={prefersReducedMotion ? false : "hidden"}
+              animate={prefersReducedMotion ? undefined : "visible"}
+              exit={prefersReducedMotion ? undefined : { opacity: 0, scaleY: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              {items.map((item, index) => (
+                <div
+                  key={item.label}
+                  role="menuitem"
+                  aria-disabled={item.disabled}
+                  onClick={() => handleSelect(index)}
+                  className={cn(
+                    "flex cursor-pointer items-center gap-2 px-3 py-2 text-sm transition-colors",
+                    "text-[var(--text-primary)] hover:bg-[var(--color-surface-elevated-1)]",
+                    item.disabled && "cursor-not-allowed opacity-40",
+                  )}
+                >
+                  {item.icon && (
+                    <span className="text-[var(--color-on-surface-variant)]">{item.icon}</span>
+                  )}
+                  {item.label}
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Portal>
     </div>
   );
 }

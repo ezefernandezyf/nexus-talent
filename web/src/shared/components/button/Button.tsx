@@ -1,5 +1,7 @@
 import { forwardRef, type ButtonHTMLAttributes } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/shared/utils/cn";
+import { springTransition } from "../motion";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -42,12 +44,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     variant = "filled",
     size = "md",
     children,
+    style,
     ...props
   },
   ref,
 ) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
-    <button
+    <motion.button
       ref={ref}
       type="button"
       className={cn(
@@ -58,9 +63,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         variantStyles[variant],
         className,
       )}
+      whileHover={prefersReducedMotion ? undefined : { scale: 1.02 }}
+      whileTap={prefersReducedMotion ? undefined : { scale: 0.97 }}
+      transition={springTransition}
+      style={style}
       {...props}
     >
       {children}
-    </button>
+    </motion.button>
   );
 });
