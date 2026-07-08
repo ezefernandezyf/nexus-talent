@@ -8,8 +8,10 @@ import { AppError } from "../infra/error-handler.js";
 
 export async function list(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const items = await historyService.getAll(req.userId!);
-    res.status(200).json({ items, total: items.length });
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 10));
+    const result = await historyService.getAllPaginated(req.userId!, page, limit);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }

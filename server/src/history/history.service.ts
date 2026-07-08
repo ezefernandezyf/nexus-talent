@@ -30,6 +30,29 @@ export async function getAll(userId: string) {
 }
 
 /**
+ * Paginated list of analyses owned by the user.
+ * Returns { items, total } for the frontend pagination.
+ */
+export async function getAllPaginated(userId: string, page: number, limit: number) {
+  const skip = (page - 1) * limit;
+
+  const [rows, total] = await Promise.all([
+    prisma.analysis.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+    }),
+    prisma.analysis.count({ where: { userId } }),
+  ]);
+
+  return {
+    items: rows.map(deserialize),
+    total,
+  };
+}
+
+/**
  * Get a single analysis by id, scoped to userId.
  * Throws 404 if not found or not owned by the user.
  */
