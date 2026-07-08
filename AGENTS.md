@@ -44,15 +44,17 @@ Groq API -> Response IA -> Zod validation -> Response al frontend -> Render
 - Cero sobreingeniería. Cero complejidad sin justificación explícita. "Clear over clever."
 
 ## Git Workflow (STRICT — zero exceptions)
-1. **Develop branch**: `develop` is the integration branch for V1.2. All feature branches merge here.
-2. **Feature branches**: EVERY task starts on a new branch from `develop`
-3. **Branch naming**: `feat/short-name`, `fix/short-name`, `chore/short-name`
-4. **Atomic commits**: one logical change layer per commit, conventional format
-5. **Push + PR + Merge**: push branch, create PR to `develop`, squash-merge
-6. **V1.2 Release**: `develop` → PR to `main` when all phases are done
-7. **Clean working tree**: no untracked files, no WIP before PR
-8. **Lint before push**: `pnpm run lint && pnpm run format` must pass
-9. **Tests before merge**: `pnpm test` (server + web) must pass
+1. **Develop branch**: `develop` is the integration branch. ALL feature branches merge here first.
+2. **Main branch**: `main` is the stable release. Only merge from `develop` when completing a milestone (multiple phases done).
+3. **Feature branches**: EVERY task starts on a new branch from `develop`
+4. **Branch naming**: `feat/short-name`, `fix/short-name`, `chore/short-name`
+5. **Atomic commits**: one logical change layer per commit, conventional format
+6. **PR to develop first**: push branch, create PR to `develop`, squash-merge
+7. **Main on milestone**: `develop` → PR to `main` when a stage is complete
+8. **Clean working tree**: no untracked files, no WIP before PR
+9. **Lint before push**: `pnpm run lint && pnpm run format` must pass
+10. **Tests before merge**: `pnpm test` (server + web) must pass
+11. **HARD GATE**: `pnpm run dev` + manual smoke test before merging to main
 
 ## How to Run
 ```bash
