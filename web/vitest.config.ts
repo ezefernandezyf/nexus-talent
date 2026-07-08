@@ -1,7 +1,6 @@
 import { resolve } from "node:path";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   resolve: {
@@ -13,10 +12,17 @@ export default defineConfig({
       "@/test": resolve(__dirname, "src/test"),
     },
   },
-  plugins: [react(), tailwindcss()],
+  plugins: [react()],
   test: {
     environment: "jsdom",
     globals: true,
+    pool: "forks",
+    poolOptions: {
+      forks: {
+        maxForks: 4,
+        minForks: 1,
+      },
+    },
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
     testTimeout: 15_000,
