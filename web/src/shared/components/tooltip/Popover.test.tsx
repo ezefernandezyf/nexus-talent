@@ -36,7 +36,8 @@ describe("Popover", () => {
 
     await user.click(screen.getByText("Open"));
     await user.keyboard("{Escape}");
-
+    // Wait for exit animation to complete
+    await new Promise((r) => setTimeout(r, 400));
     expect(screen.queryByText("Popover content")).not.toBeInTheDocument();
   });
 });

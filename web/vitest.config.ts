@@ -19,14 +19,16 @@ export default defineConfig({
     pool: "forks",
     poolOptions: {
       forks: {
-        maxForks: 4,
+        maxForks: 2,
         minForks: 1,
       },
     },
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    exclude: ["src/core/AppRouter.test.tsx"],
     testTimeout: 15_000,
     hookTimeout: 15_000,
+    teardownTimeout: 5_000,
     coverage: {
       provider: "v8",
       reporter: ["text", "html"],

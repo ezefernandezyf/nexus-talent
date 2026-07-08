@@ -42,8 +42,8 @@ describe("Tooltip", () => {
 
     await user.unhover(screen.getByText("Hover me"));
 
-    // Wait for close delay to pass
-    await new Promise((r) => setTimeout(r, 300));
+    // Wait for close delay + exit animation to pass
+    await new Promise((r) => setTimeout(r, 500));
     expect(screen.queryByText("Tooltip content")).not.toBeInTheDocument();
   });
 });
