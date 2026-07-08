@@ -17,6 +17,7 @@ jobs:
   validate-web:
     name: Web (frontend)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Check out repository
@@ -45,6 +46,7 @@ jobs:
   validate-server:
     name: Server (backend)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     services:
       postgres:
