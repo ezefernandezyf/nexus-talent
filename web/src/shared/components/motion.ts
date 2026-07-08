@@ -5,6 +5,13 @@ export const uiTransition: Transition = {
   ease: [0.22, 1, 0.36, 1],
 };
 
+export const springTransition: Transition = {
+  type: "spring",
+  stiffness: 400,
+  damping: 25,
+  mass: 0.8,
+};
+
 export const fadeUpVariants: Variants = {
   hidden: {
     opacity: 0,
