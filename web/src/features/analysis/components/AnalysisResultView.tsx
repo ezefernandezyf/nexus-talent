@@ -69,7 +69,7 @@ function truncateToMaxChars(value: string, maxLength: number) {
 
 function getOutreachVariants(result: JobAnalysisResult) {
   const primary = result.candidateOutreach ?? result.outreachMessage;
-  const dmShort = result.recruiterMessages?.dmShort.body || truncateToMaxChars(primary.body.replace(/\n+/g, " "), 600);
+  const dmShort = truncateToMaxChars(primary.body.replace(/\n+/g, " "), 600);
 
   return {
     dmShort,
@@ -263,11 +263,11 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
   const [feedbackTone, setFeedbackTone] = useState<"idle" | "success" | "error">("idle");
 
   useEffect(() => {
-    const nextRecruiterMessages = getRecruiterMessageVariants(result);
+    const nextOutreach = getOutreachVariants(result);
 
-    setSubject(nextRecruiterMessages.emailLinkedIn.subject);
-    setBody(nextRecruiterMessages.emailLinkedIn.body);
-    setDmBody(nextRecruiterMessages.dmShort);
+    setSubject(nextOutreach.emailLinkedIn.subject);
+    setBody(nextOutreach.emailLinkedIn.body);
+    setDmBody(nextOutreach.dmShort);
     setFeedbackMessage("La acción de copiar siempre usa el último texto editado.");
     setFeedbackTone("idle");
   }, [result]);
