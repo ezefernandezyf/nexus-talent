@@ -1,3 +1,4 @@
+import { AnimatedMount } from "@/shared/components/AnimatedMount";
 import { Card } from "@/shared/components/Card";
 import { useJobAnalysis } from "./hooks/useJobAnalysis";
 import { JobDescriptionForm } from "./components/JobDescriptionForm";
@@ -74,6 +75,13 @@ function EmptyStateView() {
   );
 }
 
+function getAnimationKey(analysis: ReturnType<typeof useJobAnalysis>): string {
+  if (analysis.isPending) return "loading";
+  if (analysis.isError) return "error";
+  if (analysis.data) return "content";
+  return "idle";
+}
+
 export function AnalysisFeature({ initialGithubRepositoryUrl, initialJobDescription, initialPrefillKey, repository, scope }: AnalysisFeatureProps) {
   const analysis = useJobAnalysis({ repository, scope });
   const errorMessage = analysis.error instanceof Error ? analysis.error.message : "No se pudo completar el análisis.";
@@ -89,15 +97,19 @@ export function AnalysisFeature({ initialGithubRepositoryUrl, initialJobDescript
         onSubmit={analysis.submitAnalysis}
       />
 
-      {analysis.isPending ? (
-        <LoadingState />
-      ) : analysis.isError ? (
-        <ErrorState message={errorMessage} />
-      ) : analysis.data ? (
-        <AnalysisCard result={analysis.data} />
-      ) : analysis.isIdle ? (
-        <EmptyStateView />
-      ) : null}
+      <div className="min-h-[400px]">
+        <AnimatedMount key={getAnimationKey(analysis)}>
+          {analysis.isPending ? (
+            <LoadingState />
+          ) : analysis.isError ? (
+            <ErrorState message={errorMessage} />
+          ) : analysis.data ? (
+            <AnalysisCard result={analysis.data} />
+          ) : analysis.isIdle ? (
+            <EmptyStateView />
+          ) : null}
+        </AnimatedMount>
+      </div>
     </section>
   );
 }
