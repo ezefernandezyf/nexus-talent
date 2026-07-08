@@ -5,7 +5,7 @@ import {
   useEffect,
   useRef,
 } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X } from "@phosphor-icons/react";
 import { cn } from "@/shared/utils/cn";
 import { useFocusTrap } from "@/shared/components/_internal/useFocusTrap";
@@ -106,6 +106,7 @@ function DrawerBase({
   className,
 }: DrawerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useFocusTrap(containerRef, open);
   useEscapeKey(useCallback(() => { if (open) onClose(); }, [open, onClose]));
@@ -130,15 +131,17 @@ function DrawerBase({
         {open && (
           <motion.div
             className="fixed inset-0 [z-index:var(--z-modal)]"
-            initial="hidden"
-            animate="visible"
-            exit="exit"
+            initial={prefersReducedMotion ? false : "hidden"}
+            animate={prefersReducedMotion ? undefined : "visible"}
+            exit={prefersReducedMotion ? undefined : "exit"}
           >
             {/* Backdrop */}
             <motion.div
               data-testid="drawer-backdrop"
               className="absolute inset-0 cursor-default bg-black/50 backdrop-blur-md"
               variants={backdropVariants}
+              initial={prefersReducedMotion ? false : undefined}
+              animate={prefersReducedMotion ? undefined : undefined}
               transition={{ duration: 0.2 }}
               onClick={onClose}
             />
@@ -157,6 +160,8 @@ function DrawerBase({
                 className,
               )}
               variants={variants}
+              initial={prefersReducedMotion ? false : undefined}
+              animate={prefersReducedMotion ? undefined : undefined}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
