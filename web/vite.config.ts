@@ -65,6 +65,16 @@ export default defineConfig({
     },
   },
   plugins: [react(), tailwindcss(), ssrPlugin()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "framer-motion": ["framer-motion"],
+          "phosphor-icons": ["@phosphor-icons/react"],
+        },
+      },
+    },
+  },
   server: {
     proxy: {
       "/api": {

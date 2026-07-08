@@ -5,6 +5,17 @@
 
 @import "tailwindcss";
 
+@layer base {
+  @font-face {
+    font-family: "Geist";
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Switzer";
+    font-display: swap;
+  }
+}
+
 @theme {
   /* ===== Typography ===== */
   --font-sans: "Geist", "Inter", "Segoe UI", sans-serif;

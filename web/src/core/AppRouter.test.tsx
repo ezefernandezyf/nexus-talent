@@ -66,10 +66,10 @@ describe("AppRouter", () => {
     mockAxiosInstance.get.mockResolvedValue({ data: { items: [], total: 0 } });
   });
 
-  it("renders the public landing page at the root path", () => {
+  it("renders the public landing page at the root path", async () => {
     renderApp("/");
 
-    expect(screen.getByRole("heading", { name: /transforma descripciones de trabajo en información procesable/i })).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole("heading", { name: /transforma descripciones de trabajo en información procesable/i })).toBeInTheDocument());
 
     const signInLinks = screen.getAllByRole("link", { name: /^iniciar sesión$/i });
     expect(signInLinks.length).toBeGreaterThanOrEqual(1);
@@ -156,10 +156,10 @@ describe("AppRouter", () => {
     await waitFor(() => expect(screen.getByRole("heading", { name: /análisis de reclutamiento/i })).toBeInTheDocument());
   });
 
-  it("renders the privacy page", () => {
+  it("renders the privacy page", async () => {
     renderApp("/privacy");
 
-    expect(screen.getByRole("heading", { name: /privacidad/i })).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole("heading", { name: /privacidad/i })).toBeInTheDocument());
     expect(screen.getByRole("button", { name: /volver al inicio/i })).toBeInTheDocument();
   });
 
