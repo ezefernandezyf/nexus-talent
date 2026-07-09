@@ -44,13 +44,13 @@ Chain strategy: stacked-to-main (PR 1 → develop, PR 2 stacks on PR 1)
 
 ### Group 3: Frontend (Profile Editor) — PR 2
 
-- [ ] 3.1 **Extend frontend validation schemas** — `web/src/features/settings/api/validation.ts`: add 7 new fields matching shared contracts shape (snake_case for record, camelCase for form). ~20 lines modified.
-- [ ] 3.2 **Update profile repository types** — `web/src/features/settings/api/profile-repository.ts`: `ProfileRecord` gains 7 snake_case fields. `save()` sends all fields (Zod strips undefined). `ProfileSaveInput` extended. ~15 lines modified.
-- [ ] 3.3 **Create ProfileEditorCard component** — `web/src/features/settings/components/ProfileEditorCard.tsx`: RHF form with `zodResolver(profileUpdateSchema)`. 7 inputs in 2-column grid (role + exp, skills + location, linkedin, github, resume). Skeleton loading state. Error banner. Toast on success. ~180 lines.
-- [ ] 3.4 **Wire 4th card into SettingsFeature** — `web/src/features/settings/SettingsFeature.tsx`: add `ProfileEditorCard` after card 03 (Data). Pass profile, loading, and save handler from `useSettings`. ~25 lines modified.
-- [ ] 3.5 **Update useSettings hook types** — `web/src/features/settings/hooks/useSettings.ts`: hook signature unchanged — types flow from repository. Verify `saveProfile` signature accepts new fields. ~5 lines modified.
-- [ ] 3.6 **ProfileEditorCard tests** — `web/src/features/settings/components/ProfileEditorCard.test.tsx`: renders 7 inputs; skeleton on loading; values on populated; Zod rejection before API call; button shows "Guardando..."; error toast. ~100 lines.
-- [ ] 3.7 **Update SettingsFeature tests** — `web/src/features/settings/SettingsFeature.test.tsx`: verify 4th card renders ("Perfil Profesional"), existing 3 cards unchanged. ~10 lines modified.
+- [x] 3.1 **Extend frontend validation schemas** — `web/src/features/settings/api/validation.ts`: add 7 new fields matching shared contracts shape (snake_case for record, camelCase for form). ~20 lines modified.
+- [x] 3.2 **Update profile repository types** — `web/src/features/settings/api/profile-repository.ts`: `ProfileRecord` gains 7 snake_case fields. `save()` sends all fields (Zod strips undefined). `ProfileSaveInput` extended. ~15 lines modified.
+- [x] 3.3 **Create ProfileEditorCard component** — `web/src/features/settings/components/ProfileEditorCard.tsx`: RHF form with `zodResolver(profileUpdateSchema)`. 7 inputs in 2-column grid (role + exp, skills + location, linkedin, github, resume). Skeleton loading state. Error banner. Toast on success. ~180 lines.
+- [x] 3.4 **Wire 4th card into SettingsFeature** — `web/src/features/settings/SettingsFeature.tsx`: add `ProfileEditorCard` after card 03 (Data). Pass profile, loading, and save handler from `useSettings`. ~25 lines modified.
+- [x] 3.5 **Update useSettings hook types** — `web/src/features/settings/hooks/useSettings.ts`: hook signature unchanged — types flow from repository. Verify `saveProfile` signature accepts new fields. ~5 lines modified.
+- [x] 3.6 **ProfileEditorCard tests** — `web/src/features/settings/components/ProfileEditorCard.test.tsx`: renders 7 inputs; skeleton on loading; values on populated; Zod rejection before API call; button shows "Guardando..."; error toast. ~100 lines.
+- [x] 3.7 **Update SettingsFeature tests** — `web/src/features/settings/SettingsFeature.test.tsx`: verify 4th card renders ("Perfil Profesional"), existing 3 cards unchanged. ~10 lines modified.
 
 ## Implementation Order
 
