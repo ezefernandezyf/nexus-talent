@@ -28,7 +28,7 @@
 
 ### Requirement: profileUpdateSchema
 
-`profileUpdateSchema` MUST validate the PUT `/api/profile` body. All 7 fields MUST be optional. URL fields MUST be valid URLs when non-empty. `skills` MUST be a non-empty string when provided.
+`profileUpdateSchema` MUST validate the PUT `/api/profile` body. All fields MUST be optional. URL fields MUST be valid URLs when non-empty. Text fields (skills, experienceLevel, roleTitle, displayName, location) MUST transform empty strings (`""`) to `undefined` so the server writes `NULL` — this gracefully handles cleared form inputs instead of rejecting them.
 
 #### Scenario: All fields optional
 - GIVEN `{}`
@@ -45,7 +45,7 @@
 - WHEN validated against `profileUpdateSchema`
 - THEN `parse()` fails with Zod error
 
-#### Scenario: Empty skills rejected
+#### Scenario: Empty skills gracefully transformed
 - GIVEN `{ skills: "" }`
 - WHEN validated against `profileUpdateSchema`
-- THEN `parse()` fails with Zod error
+- THEN `parse()` succeeds with `skills: undefined` — the empty string is transformed instead of rejected, so clearing the skills field in the UI saves as NULL
