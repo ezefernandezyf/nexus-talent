@@ -7,10 +7,17 @@ datasource db {
 }
 
 model Profile {
-  id            String   @id
-  email         String   @unique
-  displayName   String?
-  passwordHash  String?
+  id               String   @id
+  email            String   @unique
+  displayName      String?
+  skills           String?
+  experienceLevel  String?
+  roleTitle        String?
+  resumeLink       String?
+  linkedinUrl      String?
+  githubUrl        String?
+  location         String?
+  passwordHash     String?
   googleId      String?  @unique
   avatarUrl     String?
   authProvider  String   @default("email")
