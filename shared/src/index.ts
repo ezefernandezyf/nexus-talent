@@ -9,6 +9,7 @@ export {
   GROQ_JOB_ANALYSIS_JSON_SCHEMA,
   // Profile
   profileSchema,
+  profileUpdateSchema,
   // History / List
   analysisListSchema,
   // Common
@@ -22,6 +23,7 @@ export type {
   AnalysisRequestDTO,
   AnalysisResponseDTO,
   ProfileDTO,
+  ProfileUpdateDTO,
   AnalysisListDTO,
   ErrorResponseDTO,
 } from "./schemas.js";
