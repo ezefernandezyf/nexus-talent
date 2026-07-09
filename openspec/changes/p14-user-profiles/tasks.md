@@ -11,10 +11,10 @@
 | Delivery strategy | ask-on-risk |
 | Chain strategy | pending |
 
-Decision needed before apply: Yes
+Decision needed before apply: Yes (resolved via orchestrator)
 Chained PRs recommended: Yes
-Chain strategy: pending
-400-line budget risk: High
+Chain strategy: stacked-to-main (PR 1 → develop, PR 2 stacks on PR 1)
+400-line budget risk: High (PR 1 within budget)
 
 ### Suggested Work Units
 
@@ -25,24 +25,24 @@ Chain strategy: pending
 
 ## Implementation Tasks
 
-### Group 1: DB + Shared Contracts (Foundation)
+### Group 1: DB + Shared Contracts (Foundation) ✅
 
-- [ ] 1.1 **Prisma schema migration** — `server/prisma/schema.prisma`: add 7 nullable `String?` fields (`skills`, `experienceLevel`, `roleTitle`, `resumeLink`, `linkedinUrl`, `githubUrl`, `location`) to `Profile` model. Run `prisma migrate dev --name add_profile_fields`. ~10 lines schema + ~30 auto-generated migration.
-- [ ] 1.2 **Expand `profileSchema`** — `shared/src/schemas.ts`: add 7 nullable fields to response schema. URL fields use `z.string().url().nullable().or(z.literal(""))`. ~15 lines.
-- [ ] 1.3 **Add `profileUpdateSchema`** — `shared/src/schemas.ts`: new Zod schema, all fields optional, URL validation on URL fields, `skills` requires min 1 char. Export `ProfileUpdateDTO` type. ~20 lines.
-- [ ] 1.4 **Export new schemas** — `shared/src/index.ts`: export `profileUpdateSchema` + `ProfileUpdateDTO`. ~5 lines.
+- [x] 1.1 **Prisma schema migration** — `server/prisma/schema.prisma`: add 7 nullable `String?` fields (`skills`, `experienceLevel`, `roleTitle`, `resumeLink`, `linkedinUrl`, `githubUrl`, `location`) to `Profile` model. Run `prisma migrate dev --name add_profile_fields`. ~10 lines schema + ~30 auto-generated migration.
+- [x] 1.2 **Expand `profileSchema`** — `shared/src/schemas.ts`: add 7 nullable fields to response schema. URL fields use `z.string().url().nullable().or(z.literal(""))`. ~15 lines.
+- [x] 1.3 **Add `profileUpdateSchema`** — `shared/src/schemas.ts`: new Zod schema, all fields optional, URL validation on URL fields, `skills` requires min 1 char. Export `ProfileUpdateDTO` type. ~20 lines.
+- [x] 1.4 **Export new schemas** — `shared/src/index.ts`: export `profileUpdateSchema` + `ProfileUpdateDTO`. ~5 lines.
 
-### Group 2: Server (Profile Endpoints + AI Enrichment)
+### Group 2: Server (Profile Endpoints + AI Enrichment) ✅
 
-- [ ] 2.1 **Refactor `profile.service.ts`** — `server/src/profile/profile.service.ts`: replace `updateDisplayName()` with `updateProfile()` accepting `ProfileUpdateDTO`. Add `toProfileDTO()` helper returning all 10 fields. Update `getProfileByUserId()` to use `toProfileDTO()`. ~25 lines modified.
-- [ ] 2.2 **Zod-validated PUT** — `server/src/profile/profile.router.ts`: replace inline `typeof` check with `profileUpdateSchema.safeParse()`. Wire to `updateProfile()` instead of `updateDisplayName()`. ~10 lines modified.
-- [ ] 2.3 **Profile fetch in analysis controller** — `server/src/analysis/analysis.controller.ts`: import profile service, call `getProfileByUserId(req.userId!)` before `analyze()`. On failure: log warn, proceed with null context. Add `buildProfileContext()` helper. ~20 lines modified.
-- [ ] 2.4 **Profile context in analysis service** — `server/src/analysis/analysis.service.ts`: add `profileContext?: string | null` param to `analyze()`. Inject into `buildGroqMessages()` system prompt when non-null. ~10 lines modified.
-- [ ] 2.5 **Server tests — profile service** — new test file for `updateProfile()`: partial update, full update, empty data, 404 on missing user. `toProfileDTO()` maps all fields. ~50 lines.
-- [ ] 2.6 **Server tests — profile router** — new test file for PUT: valid Zod input, invalid URL, empty skills, returns 400 with Zod issues. ~40 lines.
-- [ ] 2.7 **Server tests — analysis controller** — modify existing: mock profile service, verify `getProfileByUserId()` called before `analyze()`, profile fetch failure → null context, warn log. ~30 lines.
+- [x] 2.1 **Refactor `profile.service.ts`** — `server/src/profile/profile.service.ts`: replace `updateDisplayName()` with `updateProfile()` accepting `ProfileUpdateDTO`. Add `toProfileDTO()` helper returning all 10 fields. Update `getProfileByUserId()` to use `toProfileDTO()`. ~25 lines modified.
+- [x] 2.2 **Zod-validated PUT** — `server/src/profile/profile.router.ts`: replace inline `typeof` check with `profileUpdateSchema.safeParse()`. Wire to `updateProfile()` instead of `updateDisplayName()`. ~10 lines modified.
+- [x] 2.3 **Profile fetch in analysis controller** — `server/src/analysis/analysis.controller.ts`: import profile service, call `getProfileByUserId(req.userId!)` before `analyze()`. On failure: log warn, proceed with null context. Add `buildProfileContext()` helper. ~20 lines modified.
+- [x] 2.4 **Profile context in analysis service** — `server/src/analysis/analysis.service.ts`: add `profileContext?: string | null` param to `analyze()`. Inject into `buildGroqMessages()` system prompt when non-null. ~10 lines modified.
+- [x] 2.5 **Server tests — profile service** — new test file for `updateProfile()`: partial update, full update, empty data, 404 on missing user. `toProfileDTO()` maps all fields. ~50 lines.
+- [x] 2.6 **Server tests — profile router** — new test file for PUT: valid Zod input, invalid URL, empty skills, returns 400 with Zod issues. ~40 lines.
+- [x] 2.7 **Server tests — analysis controller** — modify existing: mock profile service, verify `getProfileByUserId()` called before `analyze()`, profile fetch failure → null context, warn log. ~30 lines.
 
-### Group 3: Frontend (Profile Editor)
+### Group 3: Frontend (Profile Editor) — PR 2
 
 - [ ] 3.1 **Extend frontend validation schemas** — `web/src/features/settings/api/validation.ts`: add 7 new fields matching shared contracts shape (snake_case for record, camelCase for form). ~20 lines modified.
 - [ ] 3.2 **Update profile repository types** — `web/src/features/settings/api/profile-repository.ts`: `ProfileRecord` gains 7 snake_case fields. `save()` sends all fields (Zod strips undefined). `ProfileSaveInput` extended. ~15 lines modified.
