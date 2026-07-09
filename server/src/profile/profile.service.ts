@@ -1,6 +1,39 @@
 import { prisma } from "../infra/prisma.js";
 import { AppError } from "../infra/error-handler.js";
-import type { ProfileDTO } from "../../../shared/src/schemas.js";
+import type { ProfileDTO, ProfileUpdateDTO } from "../../../shared/src/schemas.js";
+
+// ============================================================================
+// Helpers
+// ============================================================================
+
+/**
+ * Map a Prisma Profile row to the shared ProfileDTO shape.
+ */
+function toProfileDTO(profile: {
+  id: string;
+  email: string;
+  displayName: string | null;
+  skills: string | null;
+  experienceLevel: string | null;
+  roleTitle: string | null;
+  resumeLink: string | null;
+  linkedinUrl: string | null;
+  githubUrl: string | null;
+  location: string | null;
+}): ProfileDTO {
+  return {
+    id: profile.id,
+    email: profile.email,
+    displayName: profile.displayName,
+    skills: profile.skills,
+    experienceLevel: profile.experienceLevel,
+    roleTitle: profile.roleTitle,
+    resumeLink: profile.resumeLink,
+    linkedinUrl: profile.linkedinUrl,
+    githubUrl: profile.githubUrl,
+    location: profile.location,
+  };
+}
 
 // ============================================================================
 // Public API
@@ -17,18 +50,18 @@ export async function getProfileByUserId(userId: string): Promise<ProfileDTO> {
     throw new AppError(404, "Profile not found");
   }
 
-  return {
-    id: profile.id,
-    email: profile.email,
-    displayName: profile.displayName,
-  };
+  return toProfileDTO(profile);
 }
 
 /**
- * Update the display name for a user.
+ * Update profile fields for the given user.
+ * Accepts a partial ProfileUpdateDTO — only provided fields are updated.
  * Throws 404 if the user is not found.
  */
-export async function updateDisplayName(userId: string, displayName: string): Promise<ProfileDTO> {
+export async function updateProfile(
+  userId: string,
+  data: ProfileUpdateDTO,
+): Promise<ProfileDTO> {
   const existing = await prisma.profile.findUnique({ where: { id: userId } });
 
   if (!existing) {
@@ -37,12 +70,8 @@ export async function updateDisplayName(userId: string, displayName: string): Pr
 
   const updated = await prisma.profile.update({
     where: { id: userId },
-    data: { displayName },
+    data,
   });
 
-  return {
-    id: updated.id,
-    email: updated.email,
-    displayName: updated.displayName,
-  };
+  return toProfileDTO(updated);
 }
