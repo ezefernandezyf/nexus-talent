@@ -138,7 +138,33 @@ export const profileSchema = z.object({
   id: z.string(),
   email: z.string(),
   displayName: z.string().nullable(),
+  // P14 additions
+  skills: z.string().nullable(),
+  experienceLevel: z.string().nullable(),
+  roleTitle: z.string().nullable(),
+  resumeLink: z.string().url().nullable().or(z.literal("")),
+  linkedinUrl: z.string().url().nullable().or(z.literal("")),
+  githubUrl: z.string().url().nullable().or(z.literal("")),
+  location: z.string().nullable(),
 });
+
+/**
+ * Profile update body for PUT /api/profile.
+ * All fields are optional. URL fields validated when non-empty.
+ * Empty string transforms to undefined so Prisma writes null.
+ */
+export const profileUpdateSchema = z.object({
+  displayName: z.string().trim().optional().or(z.literal("").transform(() => undefined)),
+  skills: z.string().trim().min(1).optional().or(z.literal("").transform(() => undefined)),
+  experienceLevel: z.string().trim().optional().or(z.literal("").transform(() => undefined)),
+  roleTitle: z.string().trim().optional().or(z.literal("").transform(() => undefined)),
+  resumeLink: z.string().url().optional().or(z.literal("")),
+  linkedinUrl: z.string().url().optional().or(z.literal("")),
+  githubUrl: z.string().url().optional().or(z.literal("")),
+  location: z.string().trim().optional().or(z.literal("").transform(() => undefined)),
+});
+
+export type ProfileUpdateDTO = z.infer<typeof profileUpdateSchema>;
 
 // ============================================================================
 // History / List

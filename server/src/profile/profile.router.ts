@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { requireAuth } from "../auth/auth.middleware.js";
+import { profileUpdateSchema } from "../../../shared/src/schemas.js";
 import * as service from "./profile.service.js";
 
 export const profileRouter = Router();
@@ -19,14 +20,14 @@ profileRouter.get("/", requireAuth, async (req, res) => {
 
 profileRouter.put("/", requireAuth, async (req, res) => {
   try {
-    const { displayName } = req.body;
+    const parsed = profileUpdateSchema.safeParse(req.body);
 
-    if (typeof displayName !== "string" || displayName.trim().length === 0) {
-      res.status(400).json({ error: "displayName is required and must be a non-empty string" });
+    if (!parsed.success) {
+      res.status(400).json({ error: parsed.error.issues });
       return;
     }
 
-    const profile = await service.updateDisplayName(req.userId!, displayName.trim());
+    const profile = await service.updateProfile(req.userId!, parsed.data);
     res.json(profile);
   } catch (err) {
     if (err && typeof err === "object" && "statusCode" in err && err.statusCode === 404) {

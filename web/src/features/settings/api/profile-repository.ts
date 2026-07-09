@@ -17,7 +17,7 @@ export function createProfileRepository(): ProfileRepository {
   return {
     async get(userId: string): Promise<ProfileRecord | null> {
       try {
-        const { data } = await apiClient.get<ProfileRecord>(`${BASE_URL}/${userId}`);
+        const { data } = await apiClient.get<ProfileRecord>(BASE_URL);
         return data;
       } catch {
         return null;

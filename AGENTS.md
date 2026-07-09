@@ -111,49 +111,43 @@ Migrated visual design from Lovable reference (editorial-lens). Warm monochrome 
 ### P11quater: Pixel-Perfect Alignment
 Full SDD cycle: 4 stacked PRs achieving pixel-perfect alignment with editorial-lens reference. @utility typography, sticky header layout, 5-section analysis cards, 3-card settings, Spanish landing page, 341 tests.
 
-## ⚠️ P11quin: UX Quality & Copy Alignment (BUILD PASSED — 5 runtime bugs pendientes)
-
-> Prompt y componentes aplicados pero con bugs en runtime. Los 5 fixes son el foco ACTUAL.
+### ✅ P11quin: UX Quality & Copy Alignment (COMPLETED)
+> Merged to main. Build + 5 runtime fixes done.
 
 - [x] Output copy prompt reescrito en server
 - [x] Logout confirmation modal agregado
 - [x] OAuth section hidden
 - [x] Landing buttons WCAG fix
 - [x] AGENTS.md cleanup
-- [ ] **Bug 1**: AI output sigue sonando a reclutador — `applicantSummary` no está en `required` del Groq schema
-- [ ] **Bug 2**: Landing "Empieza gratis" texto invisible — regla global `a { color: var(--color-brand) }` pisa `text-white`
-- [ ] **Bug 3**: Navbar logout no funciona — Modal muere al cerrar dropdown (event bubbling)
-- [ ] **Bug 4**: Settings nombre/email update → 404 — router `/profile` tiene solo un endpoint de test
-- [ ] **Bug 5**: Settings "Exportar datos" sin handler — botón sin onClick
-- [ ] **HARD GATE**: verificar con `pnpm run dev` ANTES de mergear a main
+- [x] **Bug 1**: `applicantSummary` en `required` del Groq schema (3c3c8ce)
+- [x] **Bug 2**: Scope de link color a bare `<a>` tags (4a908b1)
+- [x] **Bug 3**: Logout event propagation fix (a9f2e24)
+- [x] **Bug 4**: Profile GET/PUT endpoint (f69c616)
+- [x] **Bug 5**: Settings export handler con Blob download (88bc2bf)
 
----
-## Future Phases
+### ✅ P12: Polish + Animation (COMPLETED)
+> 4 commits merged to main: springTransition, enter/exit animations, reducedMotion, page transitions.
 
-### ✨ P12: Polish + Animation
-> Micro-interacciones, transiciones, feedback visual.
+- [x] `AnimatedMount` + `springTransition` token (e96e20f)
+- [x] Dropdown, Tooltip, Popover, Button enter/exit (2766576)
+- [x] `useReducedMotion()` en Toast, Modal, Drawer (0486492)
+- [x] Page transitions + skeleton→content reveal (08603e7)
 
-**Skills activas**: taste-skill/high-end-visual-design, impeccable (animate, polish, delight)
+### ✅ P13: Performance + Lighthouse (COMPLETED — core optimizations)
+> Commit 01d56ed merged. Core perf: lazy-load, chunks, fonts, favicon, cache.
 
-- [ ] Page transitions (route changes con framer-motion)
-- [ ] Hover + focus states en todos los componentes interactivos
-- [ ] Loading → Success → Error state transitions
-- [ ] Skeleton → Content reveal animation
-- [ ] Toast enter/exit animations
-- [ ] Modal/Drawer open/close con spring physics
-- [ ] Scroll-triggered reveals (landing page)
-- [ ] `/impeccable animate` review
-- [ ] `/impeccable polish` final pass
+- [x] Dynamic imports + lazy loading (`web/src/core/router.tsx`)
+- [x] Font loading strategy (`font-display: swap` en `index.css`)
+- [x] Bundle split chunks (`vite.config.ts` manualChunks)
+- [x] Favicon SVG (reemplaza .ico)
+- [x] Cache headers (`vercel.json`)
 
-### 🚀 P13: Performance + Lighthouse
-> Core Web Vitals, bundle size, SEO técnico.
+### 🔲 P13bis: Performance Polish (DEFERRED)
+> Optimizaciones incrementales — no bloquean features. Se retoman post-V1.2.1.
 
-- [ ] Fixear E2E port conflict (detectado en verify de P9)
-- [ ] Lighthouse 90+ mobile (Performance, Accessibility, Best Practices, SEO)
-- [ ] Bundle analysis (`vite build --debug`) — split chunks grandes
-- [ ] Dynamic imports + lazy loading de páginas y componentes pesados
+- [ ] Fixear E2E port conflict
+- [ ] Lighthouse 90+ mobile
 - [ ] Image optimization (WebP/AVIF, lazy loading, responsive sizes)
-- [ ] Font loading strategy (font-display: swap, subset, preload)
 - [ ] CSS purge / unused style removal
 - [ ] `npx impeccable detect` — limpiar issues restantes
 - [ ] Google Search Console: submit sitemap (manual)
@@ -161,11 +155,15 @@ Full SDD cycle: 4 stacked PRs achieving pixel-perfect alignment with editorial-l
 ---
 ## V1.2.1 — User Profiles + Brand Authority
 
-### 👤 P14: User Profiles
-- [ ] PUT /api/profile — skills, experiencia, rol, resume, linkedin, github
-- [ ] Profile UI — formulario con validación Zod + React Hook Form
-- [ ] Prompt enrichment — Groq usa datos del perfil en outreach messages
-- [ ] Profile picture / avatar upload (opcional, Cloudinary o similar)
+### ✅ P14: User Profiles (COMPLETED)
+> Merged to main. 398 tests passing, typecheck clean across all 3 packages.
+
+- [x] DB migration: 7 nullable String? fields on Profile model (skills, experienceLevel, roleTitle, resumeLink, linkedinUrl, githubUrl, location)
+- [x] Shared schemas: profileSchema extended, profileUpdateSchema added
+- [x] PUT /api/profile with Zod validation replacing inline typeof check
+- [x] Profile UI — ProfileEditorCard with React Hook Form + Zod resolver
+- [x] Prompt enrichment — profile context injected into Groq system prompt
+- [x] 2 stacked PRs: PR 1 (server-side) + PR 2 (frontend)
 
 ### ⚙️ P15: Settings Backend
 - [ ] CRUD endpoints: GET/PUT /api/settings
