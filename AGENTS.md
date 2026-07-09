@@ -155,11 +155,15 @@ Full SDD cycle: 4 stacked PRs achieving pixel-perfect alignment with editorial-l
 ---
 ## V1.2.1 — User Profiles + Brand Authority
 
-### 👤 P14: User Profiles
-- [ ] PUT /api/profile — skills, experiencia, rol, resume, linkedin, github
-- [ ] Profile UI — formulario con validación Zod + React Hook Form
-- [ ] Prompt enrichment — Groq usa datos del perfil en outreach messages
-- [ ] Profile picture / avatar upload (opcional, Cloudinary o similar)
+### ✅ P14: User Profiles (COMPLETED)
+> Merged to main. 398 tests passing, typecheck clean across all 3 packages.
+
+- [x] DB migration: 7 nullable String? fields on Profile model (skills, experienceLevel, roleTitle, resumeLink, linkedinUrl, githubUrl, location)
+- [x] Shared schemas: profileSchema extended, profileUpdateSchema added
+- [x] PUT /api/profile with Zod validation replacing inline typeof check
+- [x] Profile UI — ProfileEditorCard with React Hook Form + Zod resolver
+- [x] Prompt enrichment — profile context injected into Groq system prompt
+- [x] 2 stacked PRs: PR 1 (server-side) + PR 2 (frontend)
 
 ### ⚙️ P15: Settings Backend
 - [ ] CRUD endpoints: GET/PUT /api/settings
