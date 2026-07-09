@@ -154,6 +154,7 @@ export const profileSchema = z.object({
  * Empty string transforms to undefined so Prisma writes null.
  */
 export const profileUpdateSchema = z.object({
+  displayName: z.string().trim().optional().or(z.literal("").transform(() => undefined)),
   skills: z.string().trim().min(1).optional().or(z.literal("").transform(() => undefined)),
   experienceLevel: z.string().trim().optional().or(z.literal("").transform(() => undefined)),
   roleTitle: z.string().trim().optional().or(z.literal("").transform(() => undefined)),
