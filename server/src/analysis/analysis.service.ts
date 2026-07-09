@@ -27,7 +27,7 @@ interface GroqChatMessage {
 // Internal helpers
 // ============================================================================
 
-function buildGroqMessages(input: AnalysisRequestDTO): GroqChatMessage[] {
+function buildGroqMessages(input: AnalysisRequestDTO, profileContext?: string | null): GroqChatMessage[] {
   const toneInstruction =
     input.messageTone === "casual"
       ? "Usa un tono casual, directo y cercano."
@@ -109,6 +109,7 @@ INSTRUCCIONES PARA CADA CAMPO. TODO desde la perspectiva del POSTULANTE, nunca d
 - applicationTips: Exactamente 5 consejos ACCIONABLES para preparar la postulacion. Cosas como: "adapta tu CV usando estas keywords: [X, Y, Z]", "prepara un mini-portfolio con proyectos de [tecnologia]", "investiga la empresa en LinkedIn y Glassdoor", "preguntas para hacer en la entrevista sobre [tema]", "certificaciones o cursos que suman para este rol".
 
 ${toneInstruction}
+${profileContext ? `\nSobre el postulante:\n${profileContext}\n` : ""}
 
 REGLAS DE ORO:
 - NUNCA escribas desde la perspectiva del reclutador. El usuario es el POSTULANTE.
@@ -178,12 +179,12 @@ function parseGroqEnvelope(envelope: unknown): Record<string, unknown> {
 // Public API
 // ============================================================================
 
-export async function analyze(input: AnalysisRequestDTO): Promise<AnalysisResponseDTO> {
+export async function analyze(input: AnalysisRequestDTO, profileContext?: string | null): Promise<AnalysisResponseDTO> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
 
   try {
-    const messages = buildGroqMessages(input);
+    const messages = buildGroqMessages(input, profileContext);
     const envelope = await fetchGroq(messages, controller.signal);
     const raw = parseGroqEnvelope(envelope);
 
