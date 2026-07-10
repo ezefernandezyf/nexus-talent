@@ -41,12 +41,12 @@ Chain strategy: pending
 
 ## Phase 3: OAuth Linking
 
-- [ ] 3.1 Modify `auth.router.ts` — inject `requireAuth` before `googleLogin` when `?link=true`
-- [ ] 3.2 Modify `auth.controller.ts` `googleLogin` — encode `link:` prefix in state cookie
-- [ ] 3.3 Add `linkIdentity(code, userId)` to `oauth.service.ts` — exchange code, update Profile.googleId + avatarUrl
-- [ ] 3.4 Modify `googleCallback` — detect `link:` state prefix, call `linkIdentity`, redirect to `/app/settings?linked=google`
-- [ ] 3.5 Add `DELETE /api/auth/oauth/google` to `auth.router.ts` — requireAuth, clear googleId, 200 idempotent
-- [ ] 3.6 Update `google-callback.test.ts` — link mode calls linkIdentity, redirects to settings
+- [x] 3.1 Modify `auth.router.ts` — inject `requireAuth` before `googleLogin` when `?link=true`
+- [x] 3.2 Modify `auth.controller.ts` `googleLogin` — encode `link:` prefix in state cookie
+- [x] 3.3 Add `linkIdentity(code, userId)` to `oauth.service.ts` — exchange code, update Profile.googleId + avatarUrl
+- [x] 3.4 Modify `googleCallback` — detect `link:` state prefix, call `linkIdentity`, redirect to `/app/settings?linked=google`
+- [x] 3.5 Add `DELETE /api/auth/oauth/google` to `auth.router.ts` — requireAuth, clear googleId, 200 idempotent
+- [x] 3.6 Update `google-callback.test.ts` — link mode calls linkIdentity, redirects to settings
 
 ## Phase 4: Rate Limiter per-User Tiers
 

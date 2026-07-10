@@ -164,6 +164,23 @@ export async function findOrCreateGoogleUser(googleUser: GoogleUser) {
 }
 
 /**
+ * Link a Google identity to an existing Profile.
+ * Exchanges the code for tokens, fetches the Google user,
+ * and updates the Profile's googleId and avatarUrl.
+ *
+ * Does NOT create a JWT or set a session cookie — the user is
+ * already authenticated via their existing session.
+ */
+export async function linkIdentity(code: string, userId: string): Promise<void> {
+  const tokens = await exchangeCodeForTokens(code);
+  const googleUser = await getGoogleUser(tokens.access_token);
+  await prisma.profile.update({
+    where: { id: userId },
+    data: { googleId: googleUser.sub, avatarUrl: googleUser.picture },
+  });
+}
+
+/**
  * Full OAuth callback flow: exchange code → fetch user → upsert → JWT → cookie.
  */
 export async function handleOAuthCallback(code: string): Promise<OAuthResult> {
