@@ -181,13 +181,13 @@ describe("SettingsFeature", () => {
     expect(screen.getByRole("button", { name: /eliminar cuenta/i })).toBeEnabled();
   });
 
-  it("does not show linked accounts section (OAuth deferred)", async () => {
+  it("shows the linked accounts section (OAuth enabled)", async () => {
     renderSettingsFeature();
 
     await waitFor(() => expect(screen.getByText(/gestioná tu identidad/i)).toBeInTheDocument());
 
-    // OAuth section is hidden — ACCOUNT_LINKING_AVAILABLE = false
-    expect(screen.queryByText(/cuentas vinculadas/i)).not.toBeInTheDocument();
+    // OAuth section is visible — ACCOUNT_LINKING_AVAILABLE = true
+    expect(screen.getByText(/cuentas vinculadas/i)).toBeInTheDocument();
   });
 
   it("reflects the shared theme state in the account summary", async () => {

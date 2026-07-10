@@ -58,7 +58,7 @@ Chain strategy: pending
 
 ## Phase 5: Frontend + OAuth UI Enable
 
-- [ ] 5.1 Create `web/src/features/settings/hooks/useAppSettings.ts` — React Query fetch/sync, localStorage cache
-- [ ] 5.2 Add theme API sync in `ThemeProvider` — on theme change, call background `syncSettings({ theme })`
-- [ ] 5.3 Set `ACCOUNT_LINKING_AVAILABLE = true` in `useSettings.ts`
-- [ ] 5.4 Write test for `useAppSettings` — localStorage fallback, API sync on theme change, authenticated guard
+- [x] 5.1 Create `web/src/features/settings/hooks/useAppSettings.ts` — React Query fetch/sync, localStorage cache
+- [x] 5.2 Add theme API sync in `ThemeProvider` — on theme change, call background `syncSettings({ theme })`
+- [x] 5.3 Set `ACCOUNT_LINKING_AVAILABLE = true` in `useSettings.ts`
+- [x] 5.4 Write test for `useAppSettings` — localStorage fallback, API sync on theme change, authenticated guard
