@@ -192,6 +192,28 @@ export const analysisUpdateSchema = z.object({
 export type AnalysisUpdateDTO = z.infer<typeof analysisUpdateSchema>;
 
 // ============================================================================
+// User Settings
+// ============================================================================
+
+/**
+ * User settings DTO returned by GET /api/settings.
+ */
+export const userSettingsSchema = z.object({
+  theme: z.enum(["light", "dark"]),
+  emailDigest: z.boolean(),
+  rateLimitTier: z.enum(["default", "relaxed", "strict"]),
+});
+
+/**
+ * Partial update body for PUT /api/settings.
+ * Any subset of fields is valid; unknown fields are rejected.
+ */
+export const userSettingsUpdateSchema = userSettingsSchema.partial().strict();
+
+export type UserSettingsDTO = z.infer<typeof userSettingsSchema>;
+export type UserSettingsUpdateDTO = z.infer<typeof userSettingsUpdateSchema>;
+
+// ============================================================================
 // Common
 // ============================================================================
 
