@@ -83,9 +83,16 @@ export async function logout(req: Request, res: Response): Promise<void> {
  * Generates an anti-CSRF state, stores it in a short-lived cookie,
  * and redirects the browser to the Google OAuth consent screen.
  */
-export async function googleLogin(_req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function googleLogin(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const state = oauthService.generateState();
+    const isLink = req.query.link === "true";
+    let state = oauthService.generateState();
+
+    // When linking, prefix the state with "link:" so the callback
+    // can detect linking mode when the user comes back.
+    if (isLink) {
+      state = `link:${state}`;
+    }
 
     res.cookie("nexus-talent-oauth-state", state, {
       httpOnly: true,
@@ -132,6 +139,31 @@ export async function googleCallback(req: Request, res: Response, next: NextFunc
       return;
     }
 
+    // Detect linking mode via "link:" prefix in the state cookie.
+    // Both the cookie and the echoed-back query param have the
+    // "link:" prefix. Strip it from both to compare the actual
+    // CSRF token (the random suffix).
+    if (expectedState.startsWith("link:")) {
+      const cookieSuffix = expectedState.slice(5);
+      const querySuffix = typeof state === "string" ? state.replace(/^link:/, "") : "";
+      if (cookieSuffix !== querySuffix) {
+        res.status(403).json({ message: "Invalid OAuth state" });
+        return;
+      }
+
+      if (!req.userId) {
+        res.status(401).json({ error: "Authentication required" });
+        return;
+      }
+
+      await oauthService.linkIdentity(code, req.userId);
+
+      const clientUrl = process.env.CLIENT_URL ?? "http://localhost:5173";
+      res.redirect(`${clientUrl}/app/settings?linked=google`);
+      return;
+    }
+
+    // Non-link mode: existing OAuth login flow
     const result = await oauthService.handleOAuthCallback(code);
 
     const clientUrl = process.env.CLIENT_URL ?? "http://localhost:5173";
