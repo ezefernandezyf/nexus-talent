@@ -25,6 +25,7 @@ model Profile {
   updatedAt     DateTime @updatedAt
 
   analyses     Analysis[]
+  userSettings UserSettings?
 }
 
 model Analysis {
@@ -52,4 +53,15 @@ model Analysis {
 model Settings {
   id     String @id @default("app-settings")
   config Json   @default("{}")
+}
+
+model UserSettings {
+  userId        String   @id
+  theme         String   @default("light")
+  emailDigest   Boolean  @default(true)
+  rateLimitTier String   @default("default")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

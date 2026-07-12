@@ -2,6 +2,7 @@ import { Router } from "express";
 import { validate } from "../infra/validate.js";
 import { rateLimiter } from "../infra/rate-limiter.js";
 import { requireAuth } from "./auth.middleware.js";
+import { prisma } from "../infra/prisma.js";
 import { authRegisterSchema, authLoginSchema } from "../../../shared/src/schemas.js";
 import * as controller from "./auth.controller.js";
 
@@ -17,9 +18,25 @@ authRouter.post("/login", validate(authLoginSchema), authRateLimit, controller.l
 authRouter.get("/me", requireAuth, controller.me);
 authRouter.post("/logout", requireAuth, controller.logout);
 
-// OAuth
-authRouter.get("/oauth/google", controller.googleLogin);
+// OAuth — Initiation
+// When ?link=true, requireAuth runs first to ensure the user
+// is already logged in before starting the Google OAuth flow.
+authRouter.get("/oauth/google", (req, res, next) => {
+  if (req.query.link === "true") return requireAuth(req, res, next);
+  next();
+}, controller.googleLogin);
+
+// OAuth — Callback
 authRouter.get("/oauth/google/callback", controller.googleCallback);
+
+// OAuth — Unlink (remove Google identity from Profile)
+authRouter.delete("/oauth/google", requireAuth, async (req, res) => {
+  await prisma.profile.update({
+    where: { id: req.userId },
+    data: { googleId: null },
+  });
+  res.status(200).json({ message: "Google account unlinked" });
+});
 
 // Code exchange
 authRouter.post("/exchange", controller.exchangeCode);

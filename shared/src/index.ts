@@ -10,6 +10,9 @@ export {
   // Profile
   profileSchema,
   profileUpdateSchema,
+  // User Settings
+  userSettingsSchema,
+  userSettingsUpdateSchema,
   // History / List
   analysisListSchema,
   // Common
@@ -24,6 +27,8 @@ export type {
   AnalysisResponseDTO,
   ProfileDTO,
   ProfileUpdateDTO,
+  UserSettingsDTO,
+  UserSettingsUpdateDTO,
   AnalysisListDTO,
   ErrorResponseDTO,
 } from "./schemas.js";
