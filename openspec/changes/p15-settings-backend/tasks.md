@@ -50,11 +50,11 @@ Chain strategy: pending
 
 ## Phase 4: Rate Limiter per-User Tiers
 
-- [ ] 4.1 Add `TIER_LIMITS` map + `IP_FALLBACK` to `rate-limiter.ts`
-- [ ] 4.2 Add `getUserRateLimitTier(userId)` to `settings.service.ts`
-- [ ] 4.3 Extend rate-limiter key resolution — auth'd with tier → `${userId}:${tier}`, else IP
-- [ ] 4.4 Ensure `optionalAuth` runs before rate-limiter in `analysis.router.ts`
-- [ ] 4.5 Write rate-limiter test — per-user key, tier resolution, IP fallback
+- [x] 4.1 Add `TIER_LIMITS` map + `IP_FALLBACK` to `rate-limiter.ts`
+- [x] 4.2 Add `getUserRateLimitTier(userId)` to `settings.service.ts` (already existed as `getRateLimitTier`)
+- [x] 4.3 Extend rate-limiter key resolution — auth'd with tier → `${userId}:${tier}`, else IP
+- [x] 4.4 Modify `analysis.router.ts` to pass `getTier: getRateLimitTier` to rate limiter
+- [x] 4.5 Write rate-limiter test — per-user key, tier resolution, IP fallback (18 tests)
 
 ## Phase 5: Frontend + OAuth UI Enable
 
