@@ -93,107 +93,71 @@ npx impeccable detect web/src/
 - `web/src/features/analysis/components/AnalysisResultView.tsx` — 5-section numbered analysis
 - `web/src/features/history/components/HistoryList.tsx` — history with pagination
 - `web/src/features/settings/SettingsFeature.tsx` — 3-card settings (Account/Appearance/Data)
-- `server/prisma/schema.prisma` — data model
+- `server/prisma/schema.prisma` — data model (Profile, Analysis, Settings, UserSettings)
 - `server/src/infra/app.ts` — Express app + route wiring
-- `shared/contracts/` — Zod schemas + DTOs
+- `server/src/infra/rate-limiter.ts` — IP + per-user tier rate limiter
+- `server/src/settings/settings.router.ts` — GET/PUT /api/settings
+- `server/src/settings/settings.service.ts` — getOrCreate, upsert, getRateLimitTier
+- `server/src/auth/oauth.service.ts` — Google OAuth + linkIdentity()
+- `shared/src/schemas.ts` — Zod schemas: auth, analysis, profile, userSettings
 
 ## Completed Phases (V1.2)
 
-### P9-P10: Design System Foundation + Core Components
-Design tokens, 12 component families (Button, Card, Input, Modal, Badge, Toast, Dropdown, Tabs, Tooltip, Skeleton), 345 tests.
+### 🟢 P9-P10: Design System Foundation + Core Components
+Design tokens, 12 component families (Button, Card, Input, Modal, Badge, Toast, Dropdown, Tabs, Tooltip, Skeleton). 345 tests.
 
-### P11: Page Shells + UX States
+### 🟢 P11: Page Shells + UX States
 ErrorBoundary, loading skeletons, empty states, z-index tokens, AppLayout migration.
 
-### P11ter: Editorial Precision Migration
-Migrated visual design from Lovable reference (editorial-lens). Warm monochrome palette + terracotta accent, Switzer + Geist fonts, light-first with dark mode.
+### 🟢 P11ter: Editorial Precision Migration
+Migrated visual design from Lovable reference to Nexus Talent architecture. Warm monochrome + terracotta, Switzer + Geist fonts.
 
-### P11quater: Pixel-Perfect Alignment
-Full SDD cycle: 4 stacked PRs achieving pixel-perfect alignment with editorial-lens reference. @utility typography, sticky header layout, 5-section analysis cards, 3-card settings, Spanish landing page, 341 tests.
+### 🟢 P11quater: Pixel-Perfect Alignment
+SDD cycle: 4 stacked PRs, @utility typography, sticky header, 5-section analysis, 3-card settings, 341 tests.
 
-### ✅ P11quin: UX Quality & Copy Alignment (COMPLETED)
-> Merged to main. Build + 5 runtime fixes done.
+### 🟢 P11quin: UX Quality & Copy Alignment
+Merged to main. Output copy rewrite, logout modal, OAuth hidden, WCAG fixes, 5 runtime bugs.
 
-- [x] Output copy prompt reescrito en server
-- [x] Logout confirmation modal agregado
-- [x] OAuth section hidden
-- [x] Landing buttons WCAG fix
-- [x] AGENTS.md cleanup
-- [x] **Bug 1**: `applicantSummary` en `required` del Groq schema (3c3c8ce)
-- [x] **Bug 2**: Scope de link color a bare `<a>` tags (4a908b1)
-- [x] **Bug 3**: Logout event propagation fix (a9f2e24)
-- [x] **Bug 4**: Profile GET/PUT endpoint (f69c616)
-- [x] **Bug 5**: Settings export handler con Blob download (88bc2bf)
+### 🟢 P12: Polish + Animation
+Spring transitions, enter/exit animations, reducedMotion hook, page transitions. 4 commits.
 
-### ✅ P12: Polish + Animation (COMPLETED)
-> 4 commits merged to main: springTransition, enter/exit animations, reducedMotion, page transitions.
+### 🟢 P13: Performance + Lighthouse (core)
+Lazy loading, font-display swap, manualChunks, favicon SVG, cache headers.
 
-- [x] `AnimatedMount` + `springTransition` token (e96e20f)
-- [x] Dropdown, Tooltip, Popover, Button enter/exit (2766576)
-- [x] `useReducedMotion()` en Toast, Modal, Drawer (0486492)
-- [x] Page transitions + skeleton→content reveal (08603e7)
+### 🔶 P13bis: Performance Polish (DEFERRED)
+> Post-V1.2.1. No bloquea features.
 
-### ✅ P13: Performance + Lighthouse (COMPLETED — core optimizations)
-> Commit 01d56ed merged. Core perf: lazy-load, chunks, fonts, favicon, cache.
-
-- [x] Dynamic imports + lazy loading (`web/src/core/router.tsx`)
-- [x] Font loading strategy (`font-display: swap` en `index.css`)
-- [x] Bundle split chunks (`vite.config.ts` manualChunks)
-- [x] Favicon SVG (reemplaza .ico)
-- [x] Cache headers (`vercel.json`)
-
-### 🔲 P13bis: Performance Polish (DEFERRED)
-> Optimizaciones incrementales — no bloquean features. Se retoman post-V1.2.1.
-
-- [ ] Fixear E2E port conflict
-- [ ] Lighthouse 90+ mobile
-- [ ] Image optimization (WebP/AVIF, lazy loading, responsive sizes)
-- [ ] CSS purge / unused style removal
-- [ ] `npx impeccable detect` — limpiar issues restantes
-- [ ] Google Search Console: submit sitemap (manual)
+- [ ] E2E port conflict, Lighthouse 90+ mobile, image optimization, CSS purge, impeccable detect, sitemap
 
 ---
-## V1.2.1 — User Profiles + Brand Authority
+## V1.2.1 — User Profiles + Settings Backend ✅
 
-### ✅ P14: User Profiles (COMPLETED)
-> Merged to main. 398 tests passing, typecheck clean across all 3 packages.
+### 🟢 P14: User Profiles
+DB: 7 Profile fields. Shared: profileUpdateSchema. API: PUT /api/profile. UI: ProfileEditorCard. AI: prompt enrichment. 398 tests. 2 stacked PRs.
 
-- [x] DB migration: 7 nullable String? fields on Profile model (skills, experienceLevel, roleTitle, resumeLink, linkedinUrl, githubUrl, location)
-- [x] Shared schemas: profileSchema extended, profileUpdateSchema added
-- [x] PUT /api/profile with Zod validation replacing inline typeof check
-- [x] Profile UI — ProfileEditorCard with React Hook Form + Zod resolver
-- [x] Prompt enrichment — profile context injected into Groq system prompt
-- [x] 2 stacked PRs: PR 1 (server-side) + PR 2 (frontend)
+### 🟢 P15: Settings Backend
+> **431 tests — 4 stacked PRs — merged to develop**
 
-### ⚙️ P15: Settings Backend
-- [ ] CRUD endpoints: GET/PUT /api/settings
-- [ ] Settings UI — theme, notifications, account preferences
-- [ ] OAuth identity linking (deferred from P11quin)
-- [ ] Rate limit settings: configuración por usuario
-
-### 🌐 P16: GEO Brand Building (async, paralelo al dev)
-> Semana 3-4 del GEO audit. La mayoría es manual, no código.
-
-- [ ] sameAs links en Organization schema (GEO)
-- [ ] Crear/claim LinkedIn company page (GEO CRITICAL)
-- [ ] Product Hunt launch prep (GEO CRITICAL)
-- [ ] Crunchbase company profile
-- [ ] Poblar GitHub org con README + docs
-- [ ] Registrar en G2 y Capterra
-- [ ] Blog content: 2-3 artículos SSR-rendered
-- [ ] YouTube demo video (2-3 min)
-- [ ] Re-run GEO audit — target: 50-60/100
+**PR #1** — Foundation: `UserSettings` Prisma model + migration, Zod schemas, `GET/PUT /api/settings`, settings service (getOrCreate, upsert, getRateLimitTier)
+**PR #2** — OAuth Linking: `?link=true` flow, `linkIdentity()`, callback detection, `DELETE /api/auth/oauth/google` unlink
+**PR #3** — Rate Limiter per-user tiers: TIER_LIMITS (60/30/10 per minute), per-user key resolution via `getTier`, backward compatible
+**PR #4** — Frontend: `useAppSettings` React Query hook, ThemeProvider API sync, `ACCOUNT_LINKING_AVAILABLE = true`
 
 ---
-## V1.2.2 — CV Generator
+## Roadmap
+
+### 🔶 P13bis: Performance Polish (DEFERRED)
+> E2E, Lighthouse, images, CSS, impeccable, sitemap. Retomar post-V1.2.1.
+
+### 🌐 P16: GEO Brand Building (async, manual)
+- [ ] sameAs schema, LinkedIn company page (CRITICAL), Product Hunt, Crunchbase
+- [ ] GitHub org docs, G2/Capterra, blog (2-3 SSR articles), YouTube demo
+- [ ] Re-run GEO audit — target 50-60/100
 
 ### 📝 P17: CV Generator
-- [ ] POST /api/cv/generate — JD + perfil → CV (Groq + template system)
-- [ ] CV preview UI (live rendering, no export todavía)
-- [ ] Templates: tech, business, creative (por seniority/industria)
-- [ ] PDF export (puppeteer o similar en server)
-- [ ] HTML export (download .html standalone)
-- [ ] CV history — guardar y reutilizar CVs generados
+- [ ] POST /api/cv/generate — Groq + templates
+- [ ] CV preview UI + PDF export (puppeteer) + HTML export
+- [ ] CV history & templates (tech/business/creative)
 
 ## V1.2 Skills Instaladas
 
