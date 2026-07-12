@@ -47,6 +47,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     } catch {
       return;
     }
+
+    // Best-effort: sync theme to API when user is authenticated.
+    // Silently ignore errors (unauthenticated users, network failures).
+    const controller = new AbortController();
+    fetch("/api/settings", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ theme }),
+      signal: controller.signal,
+    }).catch(() => {
+      /* noop — best-effort sync */
+    });
+
+    return () => controller.abort();
   }, [theme]);
 
   const value = useMemo<ThemeContextValue>(
