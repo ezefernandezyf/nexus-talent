@@ -60,4 +60,4 @@ Chain strategy: pending
 - [x] **T7.3** — Deps: Install `@react-pdf/renderer`
 
 ## Group 8: E2E
-- [ ] **T8.1** — Playwright: create experience + education → generate CV → verify sections render
+- [x] **T8.1** — Playwright: create experience + education → generate CV → verify sections render
