@@ -16,6 +16,7 @@ type AppNavItem = {
 const appNavItems: AppNavItem[] = [
   { label: "Análisis", to: "/app/analysis" },
   { label: "Historial", to: "/app/history" },
+  { label: "CV", to: "/app/cv", requiresAuth: true },
   { label: "Settings", to: "/app/settings", requiresAuth: true },
 ];
 
