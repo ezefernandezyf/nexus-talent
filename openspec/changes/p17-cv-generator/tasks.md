@@ -35,9 +35,9 @@ Chain strategy: pending
 - [x] **T2.5** — Tests: ownership, 401, 400, 404 scenarios (22 tests)
 
 ## Group 3: Server Generate
-- [ ] **T3.1** — Service: `generateCV()` — merge data, build prompt, `fetchGroq()`, Zod validate, 502 on errors
-- [ ] **T3.2** — Router: `POST /api/cv/generate` with `cvGenerateRequestSchema` validation
-- [ ] **T3.3** — Tests: mock timeout, malformed response, empty input, full success
+- [x] **T3.1** — Service: `generateCV()` — merge data, build prompt, `fetchGroq()`, Zod validate, 502 on errors
+- [x] **T3.2** — Router: `POST /api/cv/generate` with `cvGenerateRequestSchema` validation
+- [x] **T3.3** — Tests: 401, 400 invalid tone, 400 jobDescription >12k, 200 empty body, 200 full payload, 502 propagation
 
 ## Group 4: Frontend Foundation
 - [ ] **T4.1** — API: `cv-repository.ts` — `apiClient` wrapper for all CV endpoints

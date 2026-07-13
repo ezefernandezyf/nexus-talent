@@ -16,7 +16,7 @@ export async function listExperience(req: Request, res: Response, next: NextFunc
 
 export async function getExperience(req: Request, res: Response, next: NextFunction) {
   try {
-    const item = await cvService.getExperience(req.params.id!, req.userId!);
+    const item = await cvService.getExperience(req.params.id as string, req.userId!);
     res.json(item);
   } catch (err) {
     next(err);
@@ -34,7 +34,7 @@ export async function createExperience(req: Request, res: Response, next: NextFu
 
 export async function updateExperience(req: Request, res: Response, next: NextFunction) {
   try {
-    const item = await cvService.updateExperience(req.params.id!, req.userId!, req.body);
+    const item = await cvService.updateExperience(req.params.id as string, req.userId!, req.body);
     res.json(item);
   } catch (err) {
     next(err);
@@ -43,7 +43,7 @@ export async function updateExperience(req: Request, res: Response, next: NextFu
 
 export async function deleteExperience(req: Request, res: Response, next: NextFunction) {
   try {
-    await cvService.deleteExperience(req.params.id!, req.userId!);
+    await cvService.deleteExperience(req.params.id as string, req.userId!);
     res.status(204).end();
   } catch (err) {
     next(err);
@@ -65,7 +65,7 @@ export async function listEducation(req: Request, res: Response, next: NextFunct
 
 export async function getEducation(req: Request, res: Response, next: NextFunction) {
   try {
-    const item = await cvService.getEducation(req.params.id!, req.userId!);
+    const item = await cvService.getEducation(req.params.id as string, req.userId!);
     res.json(item);
   } catch (err) {
     next(err);
@@ -83,7 +83,7 @@ export async function createEducation(req: Request, res: Response, next: NextFun
 
 export async function updateEducation(req: Request, res: Response, next: NextFunction) {
   try {
-    const item = await cvService.updateEducation(req.params.id!, req.userId!, req.body);
+    const item = await cvService.updateEducation(req.params.id as string, req.userId!, req.body);
     res.json(item);
   } catch (err) {
     next(err);
@@ -92,7 +92,7 @@ export async function updateEducation(req: Request, res: Response, next: NextFun
 
 export async function deleteEducation(req: Request, res: Response, next: NextFunction) {
   try {
-    await cvService.deleteEducation(req.params.id!, req.userId!);
+    await cvService.deleteEducation(req.params.id as string, req.userId!);
     res.status(204).end();
   } catch (err) {
     next(err);
@@ -100,12 +100,13 @@ export async function deleteEducation(req: Request, res: Response, next: NextFun
 }
 
 // ============================================================================
-// Generate (stub — implemented in PR 2)
+// Generate CV
 // ============================================================================
 
 export async function generateCV(req: Request, res: Response, next: NextFunction) {
   try {
-    res.status(501).json({ error: "CV generation not yet implemented" });
+    const result = await cvService.generateCV(req.userId!, req.body);
+    res.json(result);
   } catch (err) {
     next(err);
   }
