@@ -438,5 +438,6 @@ export type WorkExperienceUpdateDTO = z.infer<typeof workExperienceUpdateSchema>
 export type EducationDTO = z.infer<typeof educationSchema>;
 export type EducationCreateDTO = z.infer<typeof educationCreateSchema>;
 export type EducationUpdateDTO = z.infer<typeof educationUpdateSchema>;
+export type CVSection = z.infer<typeof cvSectionSchema>;
 export type CVGenerateRequestDTO = z.infer<typeof cvGenerateRequestSchema>;
 export type CVGenerateResponseDTO = z.infer<typeof cvGenerateResponseSchema>;

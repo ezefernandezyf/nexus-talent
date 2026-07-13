@@ -46,13 +46,13 @@ Chain strategy: pending
 ## Group 5: Frontend Pages
 - [x] **T5.1** — Page: `ExperienceManagerPage.tsx` — CRUD list with inline add/edit/delete
 - [x] **T5.2** — Page: `EducationManagerPage.tsx` — CRUD list with inline add/edit/delete
-- [ ] **T5.3** — Page: `CVPage.tsx` — section ordering, ad-hoc items, preview, export
+- [x] **T5.3** — Page: `CVPage.tsx` — section ordering, ad-hoc items, preview, export
 
 ## Group 6: Frontend Components
-- [ ] **T6.1** — `CVPreview.tsx` — renders sections as formatted document
+- [x] **T6.1** — `CVPreview.tsx` — renders sections as formatted document
 - [x] **T6.2** — `AdHocItemForm.tsx` — inline form for transient section items
-- [ ] **T6.3** — `SectionOrderEditor.tsx` — drag-to-reorder using `@dnd-kit/core`
-- [ ] **T6.4** — Export helpers: `.md`, `.html` download + `.pdf` via `@react-pdf/renderer`
+- [x] **T6.3** — `SectionOrderEditor.tsx` — drag-to-reorder using `@dnd-kit/core`
+- [x] **T6.4** — Export helpers: `.md`, `.html` download (`.pdf` deferred — no `@react-pdf/renderer` usage in this PR slice)
 
 ## Group 7: Routing + Nav
 - [x] **T7.1** — Routes: `/app/cv`, `/app/cv/experience`, `/app/cv/education` in `router.tsx`
