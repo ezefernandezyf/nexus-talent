@@ -230,7 +230,7 @@ describe("ai-client", () => {
 
     expect(transport).toHaveBeenCalledWith(
       expect.objectContaining({
-        jobDescription: "Senior React engineer",
+        jobDescription: "Senior React engineer with TypeScript skills",
         messageTone: JOB_ANALYSIS_MESSAGE_TONE.CASUAL,
       }),
     );
