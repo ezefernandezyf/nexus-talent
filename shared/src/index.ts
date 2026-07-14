@@ -17,6 +17,17 @@ export {
   analysisListSchema,
   // Common
   errorResponseSchema,
+  // CV - Experience & Education
+  workExperienceSchema,
+  workExperienceCreateSchema,
+  workExperienceUpdateSchema,
+  educationSchema,
+  educationCreateSchema,
+  educationUpdateSchema,
+  // CV - Generation
+  cvGenerateRequestSchema,
+  cvSectionSchema,
+  cvGenerateResponseSchema,
 } from "./schemas.js";
 
 export type {
@@ -31,4 +42,14 @@ export type {
   UserSettingsUpdateDTO,
   AnalysisListDTO,
   ErrorResponseDTO,
+  // CV - Experience & Education
+  WorkExperienceDTO,
+  WorkExperienceCreateDTO,
+  WorkExperienceUpdateDTO,
+  EducationDTO,
+  EducationCreateDTO,
+  EducationUpdateDTO,
+  // CV - Generation
+  CVGenerateRequestDTO,
+  CVGenerateResponseDTO,
 } from "./schemas.js";

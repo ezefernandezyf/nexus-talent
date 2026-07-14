@@ -356,6 +356,74 @@ export const GROQ_JOB_ANALYSIS_JSON_SCHEMA = {
 // Inferred Types
 // ============================================================================
 
+// ============================================================================
+// CV - Work Experience & Education
+// ============================================================================
+
+export const workExperienceSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  company: z.string().min(1),
+  role: z.string().min(1),
+  startDate: z.string(),
+  endDate: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
+  location: z.string().nullable().optional(),
+});
+
+export const workExperienceCreateSchema = workExperienceSchema.omit({ id: true, userId: true });
+export const workExperienceUpdateSchema = workExperienceCreateSchema.partial();
+
+export const educationSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  institution: z.string().min(1),
+  degree: z.string().min(1),
+  field: z.string().nullable().optional(),
+  startDate: z.string(),
+  endDate: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
+});
+
+export const educationCreateSchema = educationSchema.omit({ id: true, userId: true });
+export const educationUpdateSchema = educationCreateSchema.partial();
+
+// ============================================================================
+// CV - Generation
+// ============================================================================
+
+export const cvGenerateRequestSchema = z.object({
+  sectionOrder: z.array(z.string()).optional(),
+  adHocItems: z.array(z.object({
+    type: z.enum(["experience", "education", "project", "custom"]),
+    title: z.string(),
+    subtitle: z.string().optional(),
+    date: z.string().optional(),
+    description: z.string().optional(),
+  })).optional(),
+  jobDescription: z.string().max(12000).optional(),
+  tone: z.enum(["professional", "casual", "persuasive"]).optional(),
+});
+
+export const cvSectionSchema = z.object({
+  heading: z.string(),
+  body: z.string(),
+  order: z.number(),
+});
+
+export const cvGenerateResponseSchema = z.object({
+  sections: z.array(cvSectionSchema),
+  metadata: z.object({
+    generatedAt: z.string(),
+    model: z.string(),
+    sectionCount: z.number(),
+  }),
+});
+
+// ============================================================================
+// Inferred Types
+// ============================================================================
+
 export type AuthLoginDTO = z.infer<typeof authLoginSchema>;
 export type AuthRegisterDTO = z.infer<typeof authRegisterSchema>;
 export type AuthSessionDTO = z.infer<typeof authSessionDTOSchema>;
@@ -364,3 +432,12 @@ export type AnalysisResponseDTO = z.infer<typeof analysisResponseSchema>;
 export type ProfileDTO = z.infer<typeof profileSchema>;
 export type AnalysisListDTO = z.infer<typeof analysisListSchema>;
 export type ErrorResponseDTO = z.infer<typeof errorResponseSchema>;
+export type WorkExperienceDTO = z.infer<typeof workExperienceSchema>;
+export type WorkExperienceCreateDTO = z.infer<typeof workExperienceCreateSchema>;
+export type WorkExperienceUpdateDTO = z.infer<typeof workExperienceUpdateSchema>;
+export type EducationDTO = z.infer<typeof educationSchema>;
+export type EducationCreateDTO = z.infer<typeof educationCreateSchema>;
+export type EducationUpdateDTO = z.infer<typeof educationUpdateSchema>;
+export type CVSection = z.infer<typeof cvSectionSchema>;
+export type CVGenerateRequestDTO = z.infer<typeof cvGenerateRequestSchema>;
+export type CVGenerateResponseDTO = z.infer<typeof cvGenerateResponseSchema>;
