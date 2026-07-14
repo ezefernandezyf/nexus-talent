@@ -77,14 +77,16 @@ describe("SettingsFeature", () => {
 
     await waitFor(() => expect(screen.getByText(/gestioná tu identidad/i)).toBeInTheDocument());
 
-    // 3 numbered cards exist
+    // 4 numbered cards exist (P14 adds a 4th card)
     expect(screen.getByText("01")).toBeInTheDocument();
     expect(screen.getByText("02")).toBeInTheDocument();
     expect(screen.getByText("03")).toBeInTheDocument();
+    expect(screen.getByText("04")).toBeInTheDocument();
 
     expect(screen.getByText("Account")).toBeInTheDocument();
     expect(screen.getByText("Appearance")).toBeInTheDocument();
     expect(screen.getByText("Data")).toBeInTheDocument();
+    expect(screen.getByText("Perfil Profesional")).toBeInTheDocument();
 
     // Email and name fields
     expect(screen.getByLabelText(/email/i)).toHaveValue("analyst@nexustalent.dev");
@@ -113,14 +115,21 @@ describe("SettingsFeature", () => {
 
     renderSettingsFeature(repository as never);
 
-    await waitFor(() => expect(screen.getByRole("button", { name: /guardar cambios/i })).toBeEnabled());
+    await waitFor(() => {
+      const buttons = screen.getAllByRole("button", { name: /guardar cambios/i });
+      expect(buttons.length).toBeGreaterThanOrEqual(1);
+      expect(buttons[0]).toBeEnabled();
+    });
 
     await user.clear(screen.getByLabelText(/nombre visible/i));
     await user.type(screen.getByLabelText(/nombre visible/i), "M. Sterling");
-    await user.click(screen.getByRole("button", { name: /guardar cambios/i }));
+    // Click the FIRST "Guardar cambios" button (Account card)
+    const saveButtons = screen.getAllByRole("button", { name: /guardar cambios/i });
+    await user.click(saveButtons[0]);
 
     await waitFor(() => expect(screen.getByText(/temporarily unavailable/i)).toBeInTheDocument());
-    expect(screen.getByRole("button", { name: /guardar cambios/i })).toBeEnabled();
+    const buttonsAfter = screen.getAllByRole("button", { name: /guardar cambios/i });
+    expect(buttonsAfter[0]).toBeEnabled();
   });
 
   it("persists the profile display name through the settings flow", async () => {
@@ -144,11 +153,17 @@ describe("SettingsFeature", () => {
 
     renderSettingsFeature(repository as never);
 
-    await waitFor(() => expect(screen.getByRole("button", { name: /guardar cambios/i })).toBeEnabled());
+    await waitFor(() => {
+      const buttons = screen.getAllByRole("button", { name: /guardar cambios/i });
+      expect(buttons.length).toBeGreaterThanOrEqual(1);
+      expect(buttons[0]).toBeEnabled();
+    });
 
     await user.clear(screen.getByLabelText(/nombre visible/i));
     await user.type(screen.getByLabelText(/nombre visible/i), "M. Sterling");
-    await user.click(screen.getByRole("button", { name: /guardar cambios/i }));
+    // Click the FIRST "Guardar cambios" button (Account card)
+    const saveButtons = screen.getAllByRole("button", { name: /guardar cambios/i });
+    await user.click(saveButtons[0]);
 
     await waitFor(() => expect(screen.getByText(/perfil guardado correctamente/i)).toBeInTheDocument());
     expect(screen.getByLabelText(/nombre visible/i)).toHaveValue("M. Sterling");
@@ -166,13 +181,13 @@ describe("SettingsFeature", () => {
     expect(screen.getByRole("button", { name: /eliminar cuenta/i })).toBeEnabled();
   });
 
-  it("does not show linked accounts section (OAuth deferred)", async () => {
+  it("shows the linked accounts section (OAuth enabled)", async () => {
     renderSettingsFeature();
 
     await waitFor(() => expect(screen.getByText(/gestioná tu identidad/i)).toBeInTheDocument());
 
-    // OAuth section is hidden — ACCOUNT_LINKING_AVAILABLE = false
-    expect(screen.queryByText(/cuentas vinculadas/i)).not.toBeInTheDocument();
+    // OAuth section is visible — ACCOUNT_LINKING_AVAILABLE = true
+    expect(screen.getByText(/cuentas vinculadas/i)).toBeInTheDocument();
   });
 
   it("reflects the shared theme state in the account summary", async () => {

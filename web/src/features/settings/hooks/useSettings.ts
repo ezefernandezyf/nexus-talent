@@ -8,7 +8,7 @@ import type { ProfileSaveInput } from "@/features/settings/api/validation";
 
 export const SETTINGS_QUERY_KEY = ["settings", "profile"] as const;
 
-const ACCOUNT_LINKING_AVAILABLE = false;
+const ACCOUNT_LINKING_AVAILABLE = true;
 const ACCOUNT_DELETION_AVAILABLE = true;
 
 interface UseSettingsOptions {

@@ -14,6 +14,9 @@ const AnalysisPage = lazy(() => import("@/features/analysis/pages/AnalysisPage")
 const HistoryDetailPage = lazy(() => import("@/features/history/pages/HistoryDetailPage").then((module) => ({ default: module.HistoryDetailPage })));
 const HistoryPage = lazy(() => import("@/features/history/pages/HistoryPage").then((module) => ({ default: module.HistoryPage })));
 const SettingsPage = lazy(() => import("@/features/settings/pages/SettingsPage").then((module) => ({ default: module.SettingsPage })));
+const CVPage = lazy(() => import("@/features/cv/pages/CVPage").then((module) => ({ default: module.CVPage })));
+const ExperienceManagerPage = lazy(() => import("@/features/cv/pages/ExperienceManagerPage").then((module) => ({ default: module.ExperienceManagerPage })));
+const EducationManagerPage = lazy(() => import("@/features/cv/pages/EducationManagerPage").then((module) => ({ default: module.EducationManagerPage })));
 const AuthCallbackPage = lazy(() => import("@/features/auth/pages/AuthCallbackPage"));
 const LoginPage = lazy(() => import("@/features/auth/pages/LoginPage"));
 const SignupPage = lazy(() => import("@/features/auth/pages/SignupPage"));
@@ -54,6 +57,11 @@ export function AppRouter() {
               <Route path="analysis" element={<AnalysisPage />} errorElement={<RouteErrorFallback />} />
               <Route path="history" element={<HistoryPage />} errorElement={<RouteErrorFallback />} />
               <Route path="history/:analysisId" element={<HistoryDetailPage />} errorElement={<RouteErrorFallback />} />
+              <Route element={<ProtectedRoute />} path="cv">
+                <Route index element={<CVPage />} errorElement={<RouteErrorFallback />} />
+                <Route path="experience" element={<ExperienceManagerPage />} errorElement={<RouteErrorFallback />} />
+                <Route path="education" element={<EducationManagerPage />} errorElement={<RouteErrorFallback />} />
+              </Route>
               <Route element={<ProtectedRoute />} path="settings">
                 <Route index element={<SettingsPage />} errorElement={<RouteErrorFallback />} />
               </Route>

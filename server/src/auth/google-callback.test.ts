@@ -15,12 +15,14 @@ vi.mock("@prisma/client", () => ({
   PrismaClient: vi.fn(),
 }));
 
-const { mockHandleOAuthCallback } = vi.hoisted(() => ({
+const { mockHandleOAuthCallback, mockLinkIdentity } = vi.hoisted(() => ({
   mockHandleOAuthCallback: vi.fn(),
+  mockLinkIdentity: vi.fn(),
 }));
 
 vi.mock("./oauth.service.js", () => ({
   handleOAuthCallback: mockHandleOAuthCallback,
+  linkIdentity: mockLinkIdentity,
   generateState: vi.fn(),
   getGoogleAuthURL: vi.fn(),
 }));
@@ -101,5 +103,80 @@ describe("googleCallback", () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ message: "Missing authorization code" });
+  });
+
+  // ── Link mode tests ────────────────────────────────────────────
+
+  it("link mode calls linkIdentity and redirects to settings with valid userId", async () => {
+    mockLinkIdentity.mockResolvedValue(undefined);
+
+    // In a real OAuth flow, the state query param echoes what was
+    // sent to Google (including the "link:" prefix), so both the
+    // cookie and query param state contain "link:<suffix>".
+    const { req, res } = mockReqRes({
+      query: { code: "google-auth-code", state: "link:random-suffix" },
+      headers: { cookie: "nexus-talent-oauth-state=link:random-suffix" },
+      userId: "user-123",
+    });
+
+    await googleCallback(req, res, vi.fn());
+
+    expect(mockLinkIdentity).toHaveBeenCalledWith("google-auth-code", "user-123");
+    expect(res.redirect).toHaveBeenCalledWith("http://localhost:5173/app/settings?linked=google");
+    expect(mockHandleOAuthCallback).not.toHaveBeenCalled();
+  });
+
+  it("link mode returns 401 when userId is not set", async () => {
+    mockLinkIdentity.mockResolvedValue(undefined);
+
+    const { req, res } = mockReqRes({
+      query: { code: "google-auth-code", state: "link:random-suffix" },
+      headers: { cookie: "nexus-talent-oauth-state=link:random-suffix" },
+      // userId deliberately not set — no valid session
+    });
+
+    await googleCallback(req, res, vi.fn());
+
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ error: "Authentication required" });
+    expect(mockLinkIdentity).not.toHaveBeenCalled();
+    expect(mockHandleOAuthCallback).not.toHaveBeenCalled();
+  });
+
+  it("link mode returns 403 when state does not match (CSRF)", async () => {
+    // The outer CSRF check catches mismatches before link mode
+    // detection — same behavior as non-link mode.
+    const { req, res } = mockReqRes({
+      query: { code: "google-auth-code", state: "link:sentinel" },
+      headers: { cookie: "nexus-talent-oauth-state=link:wrong-suffix" },
+      userId: "user-123",
+    });
+
+    await googleCallback(req, res, vi.fn());
+
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(res.json).toHaveBeenCalledWith({ message: "Invalid OAuth state" });
+    expect(mockLinkIdentity).not.toHaveBeenCalled();
+    expect(mockHandleOAuthCallback).not.toHaveBeenCalled();
+  });
+
+  it("non-link mode still uses handleOAuthCallback (unchanged)", async () => {
+    mockHandleOAuthCallback.mockResolvedValue({
+      token: "jwt-value-456",
+      redirectTo: "http://localhost:5173/app/analysis",
+    });
+
+    const { req, res } = mockReqRes({
+      query: { code: "google-auth-code", state: "plain-state" },
+      headers: { cookie: "nexus-talent-oauth-state=plain-state" },
+    });
+
+    await googleCallback(req, res, vi.fn());
+
+    expect(mockHandleOAuthCallback).toHaveBeenCalledWith("google-auth-code");
+    expect(mockLinkIdentity).not.toHaveBeenCalled();
+    expect(res.redirect).toHaveBeenCalled();
+    const callArg = (res.redirect as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    expect(callArg).toMatch(/code=[0-9a-f]{64}/);
   });
 });

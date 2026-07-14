@@ -9,6 +9,7 @@ import { LogoutButton } from "@/features/auth/components/LogoutButton";
 import { getOAuthProviderConfig } from "./api/oauth-config";
 import type { ProfileRepository } from "./api/profile-repository";
 import { buildSettingsExportPayload, getDisplayName, getLinkedAccounts } from "./settings-export";
+import { ProfileEditorCard } from "./components/ProfileEditorCard";
 import { SettingsForm } from "./components/SettingsForm";
 import { useSettings } from "./hooks/useSettings";
 import { useTheme } from "@/core/theme";
@@ -291,6 +292,14 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
           </div>
         )}
       </Card>
+
+      {/* ═══ 04 Perfil Profesional ═══ */}
+      <ProfileEditorCard
+        profile={profile}
+        isLoading={profileLoading && !profile}
+        isPending={saveProfilePending}
+        onSave={saveProfile}
+      />
 
       {/* Delete account confirmation modal */}
       <AnimatePresence>

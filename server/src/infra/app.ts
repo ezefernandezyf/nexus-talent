@@ -5,6 +5,8 @@ import { authRouter } from "../auth/auth.router.js";
 import { analysisRouter } from "../analysis/analysis.router.js";
 import { profileRouter } from "../profile/profile.router.js";
 import { historyRouter } from "../history/history.router.js";
+import { settingsRouter } from "../settings/settings.router.js";
+import { cvRouter } from "../cv/cv.router.js";
 import { errorHandler } from "./error-handler.js";
 import { requestId } from "./request.js";
 import { securityHeaders } from "./security-headers.js";
@@ -43,6 +45,8 @@ export function createApp() {
   app.use("/api/ai", analysisRouter);
   app.use("/api/profile", profileRouter);
   app.use("/api/analyses", historyRouter);
+  app.use("/api/settings", settingsRouter);
+  app.use("/api/cv", cvRouter);
 
   // ── Error handler (must be last) ─────────────────────────
   app.use(errorHandler);

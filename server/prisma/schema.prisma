@@ -7,17 +7,27 @@ datasource db {
 }
 
 model Profile {
-  id            String   @id
-  email         String   @unique
-  displayName   String?
-  passwordHash  String?
+  id               String   @id
+  email            String   @unique
+  displayName      String?
+  skills           String?
+  experienceLevel  String?
+  roleTitle        String?
+  resumeLink       String?
+  linkedinUrl      String?
+  githubUrl        String?
+  location         String?
+  passwordHash     String?
   googleId      String?  @unique
   avatarUrl     String?
   authProvider  String   @default("email")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  analyses     Analysis[]
+  analyses       Analysis[]
+  userSettings   UserSettings?
+  workExperience WorkExperience[]
+  education      Education[]
 }
 
 model Analysis {
@@ -45,4 +55,49 @@ model Analysis {
 model Settings {
   id     String @id @default("app-settings")
   config Json   @default("{}")
+}
+
+model UserSettings {
+  userId        String   @id
+  theme         String   @default("light")
+  emailDigest   Boolean  @default(true)
+  rateLimitTier String   @default("default")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model WorkExperience {
+  id          String   @id @default(uuid())
+  userId      String
+  company     String
+  role        String
+  startDate   String
+  endDate     String?
+  description String?
+  location    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Education {
+  id          String   @id @default(uuid())
+  userId      String
+  institution String
+  degree      String
+  field       String?
+  startDate   String
+  endDate     String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

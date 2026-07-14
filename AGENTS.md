@@ -65,7 +65,7 @@ pnpm run dev:server             # terminal 1: backend on :3001
 pnpm run dev:web                # terminal 2: frontend on :5173
 ```
 
-## Design Tools (V1.2)
+## Design Tools (V1.3)
 
 ```bash
 # Anti-slop detector (antes de cada commit de UI)
@@ -93,109 +93,87 @@ npx impeccable detect web/src/
 - `web/src/features/analysis/components/AnalysisResultView.tsx` — 5-section numbered analysis
 - `web/src/features/history/components/HistoryList.tsx` — history with pagination
 - `web/src/features/settings/SettingsFeature.tsx` — 3-card settings (Account/Appearance/Data)
-- `server/prisma/schema.prisma` — data model
+- `server/prisma/schema.prisma` — data model (Profile, Analysis, Settings, UserSettings, WorkExperience, Education)
 - `server/src/infra/app.ts` — Express app + route wiring
-- `shared/contracts/` — Zod schemas + DTOs
+- `server/src/infra/rate-limiter.ts` — IP + per-user tier rate limiter
+- `server/src/settings/settings.router.ts` — GET/PUT /api/settings
+- `server/src/settings/settings.service.ts` — getOrCreate, upsert, getRateLimitTier
+- `server/src/auth/oauth.service.ts` — Google OAuth + linkIdentity()
+- `server/src/cv/cv.router.ts` — 9 rutas CV (experience CRUD + education CRUD + generate)
+- `server/src/cv/cv.service.ts` — CRUD con ownership + generateCV() con Groq
+- `web/src/features/cv/pages/CVPage.tsx` — CV generator con section ordering, ad-hoc items, export
+- `web/src/features/cv/pages/ExperienceManagerPage.tsx` — CRUD work experience
+- `web/src/features/cv/pages/EducationManagerPage.tsx` — CRUD education
+- `shared/src/schemas.ts` — Zod schemas: auth, analysis, profile, userSettings, cv
 
 ## Completed Phases (V1.2)
 
-### P9-P10: Design System Foundation + Core Components
-Design tokens, 12 component families (Button, Card, Input, Modal, Badge, Toast, Dropdown, Tabs, Tooltip, Skeleton), 345 tests.
+### 🟢 P9-P10: Design System Foundation + Core Components
+Design tokens, 12 component families (Button, Card, Input, Modal, Badge, Toast, Dropdown, Tabs, Tooltip, Skeleton). 345 tests.
 
-### P11: Page Shells + UX States
+### 🟢 P11: Page Shells + UX States
 ErrorBoundary, loading skeletons, empty states, z-index tokens, AppLayout migration.
 
-### P11ter: Editorial Precision Migration
-Migrated visual design from Lovable reference (editorial-lens). Warm monochrome palette + terracotta accent, Switzer + Geist fonts, light-first with dark mode.
+### 🟢 P11ter: Editorial Precision Migration
+Migrated visual design from Lovable reference to Nexus Talent architecture. Warm monochrome + terracotta, Switzer + Geist fonts.
 
-### P11quater: Pixel-Perfect Alignment
-Full SDD cycle: 4 stacked PRs achieving pixel-perfect alignment with editorial-lens reference. @utility typography, sticky header layout, 5-section analysis cards, 3-card settings, Spanish landing page, 341 tests.
+### 🟢 P11quater: Pixel-Perfect Alignment
+SDD cycle: 4 stacked PRs, @utility typography, sticky header, 5-section analysis, 3-card settings, 341 tests.
 
-## ⚠️ P11quin: UX Quality & Copy Alignment (BUILD PASSED — 5 runtime bugs pendientes)
+### 🟢 P11quin: UX Quality & Copy Alignment
+Merged to main. Output copy rewrite, logout modal, OAuth hidden, WCAG fixes, 5 runtime bugs.
 
-> Prompt y componentes aplicados pero con bugs en runtime. Los 5 fixes son el foco ACTUAL.
+### 🟢 P12: Polish + Animation
+Spring transitions, enter/exit animations, reducedMotion hook, page transitions. 4 commits.
 
-- [x] Output copy prompt reescrito en server
-- [x] Logout confirmation modal agregado
-- [x] OAuth section hidden
-- [x] Landing buttons WCAG fix
-- [x] AGENTS.md cleanup
-- [ ] **Bug 1**: AI output sigue sonando a reclutador — `applicantSummary` no está en `required` del Groq schema
-- [ ] **Bug 2**: Landing "Empieza gratis" texto invisible — regla global `a { color: var(--color-brand) }` pisa `text-white`
-- [ ] **Bug 3**: Navbar logout no funciona — Modal muere al cerrar dropdown (event bubbling)
-- [ ] **Bug 4**: Settings nombre/email update → 404 — router `/profile` tiene solo un endpoint de test
-- [ ] **Bug 5**: Settings "Exportar datos" sin handler — botón sin onClick
-- [ ] **HARD GATE**: verificar con `pnpm run dev` ANTES de mergear a main
+### 🟢 P13: Performance + Lighthouse (core)
+Lazy loading, font-display swap, manualChunks, favicon SVG, cache headers.
+
+### 🔶 P13bis: Performance Polish (DEFERRED)
+> Post-V1.2.1. No bloquea features.
+
+- [ ] E2E port conflict, Lighthouse 90+ mobile, image optimization, CSS purge, impeccable detect, sitemap
 
 ---
-## Future Phases
+## V1.2.1 — User Profiles + Settings Backend ✅
 
-### ✨ P12: Polish + Animation
-> Micro-interacciones, transiciones, feedback visual.
+### 🟢 P14: User Profiles
+DB: 7 Profile fields. Shared: profileUpdateSchema. API: PUT /api/profile. UI: ProfileEditorCard. AI: prompt enrichment. 398 tests. 2 stacked PRs.
 
-**Skills activas**: taste-skill/high-end-visual-design, impeccable (animate, polish, delight)
+### 🟢 P15: Settings Backend
+> **431 tests — 4 stacked PRs — merged to develop**
 
-- [ ] Page transitions (route changes con framer-motion)
-- [ ] Hover + focus states en todos los componentes interactivos
-- [ ] Loading → Success → Error state transitions
-- [ ] Skeleton → Content reveal animation
-- [ ] Toast enter/exit animations
-- [ ] Modal/Drawer open/close con spring physics
-- [ ] Scroll-triggered reveals (landing page)
-- [ ] `/impeccable animate` review
-- [ ] `/impeccable polish` final pass
+**PR #1** — Foundation: `UserSettings` Prisma model + migration, Zod schemas, `GET/PUT /api/settings`, settings service (getOrCreate, upsert, getRateLimitTier)
+**PR #2** — OAuth Linking: `?link=true` flow, `linkIdentity()`, callback detection, `DELETE /api/auth/oauth/google` unlink
+**PR #3** — Rate Limiter per-user tiers: TIER_LIMITS (60/30/10 per minute), per-user key resolution via `getTier`, backward compatible
+**PR #4** — Frontend: `useAppSettings` React Query hook, ThemeProvider API sync, `ACCOUNT_LINKING_AVAILABLE = true`
 
-### 🚀 P13: Performance + Lighthouse
-> Core Web Vitals, bundle size, SEO técnico.
+### 🟢 P17: CV Generator ✅
+> **212 tests — 6 PRs en feature-branch-chain — merged to main**
 
-- [ ] Fixear E2E port conflict (detectado en verify de P9)
-- [ ] Lighthouse 90+ mobile (Performance, Accessibility, Best Practices, SEO)
-- [ ] Bundle analysis (`vite build --debug`) — split chunks grandes
-- [ ] Dynamic imports + lazy loading de páginas y componentes pesados
-- [ ] Image optimization (WebP/AVIF, lazy loading, responsive sizes)
-- [ ] Font loading strategy (font-display: swap, subset, preload)
-- [ ] CSS purge / unused style removal
-- [ ] `npx impeccable detect` — limpiar issues restantes
-- [ ] Google Search Console: submit sitemap (manual)
+**PR #1** — Foundation: WorkExperience + Education models, migration, Zod schemas, CRUD API. 22 tests.
+**PR #2** — POST /api/cv/generate con Groq: prompt building, fetchGroq, parseGroqEnvelope, Zod validation. 34 tests.
+**PR #3a** — Frontend foundation: CV API repository, React Query hooks (useExperience, useEducation, useCVGenerate), rutas, nav item, deps.
+**PR #3b** — Experience + Education CRUD pages con inline add/edit/delete + AdHocItemForm.
+**PR #3c** — CVPage con section ordering (drag), ad-hoc items, preview, export (.md, .html, .pdf).
+**PR #3d** — Playwright E2E + tech-debt fixes (PDF export, data-testid, forbidOnly).
 
 ---
-## V1.2.1 — User Profiles + Brand Authority
+## V1.3 — CV Generator
 
-### 👤 P14: User Profiles
-- [ ] PUT /api/profile — skills, experiencia, rol, resume, linkedin, github
-- [ ] Profile UI — formulario con validación Zod + React Hook Form
-- [ ] Prompt enrichment — Groq usa datos del perfil en outreach messages
-- [ ] Profile picture / avatar upload (opcional, Cloudinary o similar)
-
-### ⚙️ P15: Settings Backend
-- [ ] CRUD endpoints: GET/PUT /api/settings
-- [ ] Settings UI — theme, notifications, account preferences
-- [ ] OAuth identity linking (deferred from P11quin)
-- [ ] Rate limit settings: configuración por usuario
-
-### 🌐 P16: GEO Brand Building (async, paralelo al dev)
-> Semana 3-4 del GEO audit. La mayoría es manual, no código.
-
-- [ ] sameAs links en Organization schema (GEO)
-- [ ] Crear/claim LinkedIn company page (GEO CRITICAL)
-- [ ] Product Hunt launch prep (GEO CRITICAL)
-- [ ] Crunchbase company profile
-- [ ] Poblar GitHub org con README + docs
-- [ ] Registrar en G2 y Capterra
-- [ ] Blog content: 2-3 artículos SSR-rendered
-- [ ] YouTube demo video (2-3 min)
-- [ ] Re-run GEO audit — target: 50-60/100
+### 🟢 P17: CV Generator
+> WorkExperience y Education models en Prisma, Zod schemas, CRUD API con ownership enforcement, generación de CVs con Groq, frontend completo con preview y export .md/.html/.pdf. 212 tests.
 
 ---
-## V1.2.2 — CV Generator
+## Roadmap
 
-### 📝 P17: CV Generator
-- [ ] POST /api/cv/generate — JD + perfil → CV (Groq + template system)
-- [ ] CV preview UI (live rendering, no export todavía)
-- [ ] Templates: tech, business, creative (por seniority/industria)
-- [ ] PDF export (puppeteer o similar en server)
-- [ ] HTML export (download .html standalone)
-- [ ] CV history — guardar y reutilizar CVs generados
+### 🔶 P13bis: Performance Polish (DEFERRED)
+> E2E, Lighthouse, images, CSS, impeccable, sitemap. Retomar post-V1.3.
+
+### 🌐 P16: GEO Brand Building (async, manual)
+- [ ] sameAs schema, LinkedIn company page (CRITICAL), Product Hunt, Crunchbase
+- [ ] GitHub org docs, G2/Capterra, blog (2-3 SSR articles), YouTube demo
+- [ ] Re-run GEO audit — target 50-60/100
 
 ## V1.2 Skills Instaladas
 
@@ -214,6 +192,7 @@ Skills locales en `.opencode/skills/` y `.agents/skills/` que deben priorizarse:
 - `tailwind-4` — Tailwind CSS 4, cn(), tokens, responsive
 - `typescript` — Tipado estricto, const types, flat interfaces
 - `zod-4` — Validación Zod 4
+- `cognitive-doc-design` — Design docs con baja carga cognitiva: guías, READMEs, RFCs, onboarding
 - `go-testing` — Patrones de testing Go (si aplica)
 
 ## Convenciones V1.2
