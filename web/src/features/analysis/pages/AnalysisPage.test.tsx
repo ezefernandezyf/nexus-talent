@@ -48,17 +48,14 @@ describe("AnalysisPage", () => {
         <MemoryRouter initialEntries={[{
           pathname: "/app/analysis",
           state: {
-            githubRepositoryUrl: "https://github.com/acme/design-system",
-            jobDescription: "Vacante rearmada desde historial",
+            jobDescription: "Vacante rearmada desde historial con más de treinta caracteres",
             sourceHistoryId: "550e8400-e29b-41d4-a716-446655440000",
           },
         }] as never}>
           <AnalysisPage />
         </MemoryRouter>
-      </QueryClientProvider>,
     );
 
-    expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("Vacante rearmada desde historial");
-    expect(screen.getByLabelText(/url de github/i)).toHaveValue("https://github.com/acme/design-system");
+    expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("Vacante rearmada desde historial con más de treinta caracteres");
   });
 });

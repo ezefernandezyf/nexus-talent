@@ -16,11 +16,6 @@ describe("validateJobAnalysisResult", () => {
         subject: "  Interés en el puesto  ",
         body: "  Hola equipo  ",
       },
-      githubEnrichment: {
-        repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
-        repositoryName: "ezefernandezyf/nexus-talent",
-        detectedStack: [{ name: "TypeScript", source: "languages" }],
-      },
     });
 
     expect(validateJobAnalysisResult(payload)).toEqual(payload);

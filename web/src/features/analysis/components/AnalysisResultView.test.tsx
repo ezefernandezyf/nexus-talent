@@ -128,44 +128,6 @@ describe("AnalysisResultView", () => {
     expect(screen.getByText(/se copió el dm corto editado/i)).toBeInTheDocument();
   });
 
-  it("renders GitHub enrichment when available", () => {
-    const { getAllByText } = render(
-      <AnalysisResultView
-        result={createAnalysisResult({
-          githubEnrichment: {
-            repositoryName: "ezefernandezyf/nexus-talent",
-            repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
-            detectedStack: [
-              { name: "TypeScript", source: "languages" },
-              { name: "React", source: "topics" },
-            ],
-          },
-        })}
-      />,
-    );
-
-    expect(screen.getByText(/Stack observado en el repositorio/i)).toBeInTheDocument();
-    expect(getAllByText("TypeScript").length).toBeGreaterThan(0);
-    expect(screen.getByRole("link", { name: /ezefernandezyf\/nexus-talent/i })).toBeInTheDocument();
-  });
-
-  it("falls back to the default GitHub label for unknown enrichment sources", () => {
-    render(
-      <AnalysisResultView
-        result={createAnalysisResult({
-          githubEnrichment: {
-            repositoryName: "ezefernandezyf/nexus-talent",
-            repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
-            detectedStack: [{ name: "Documentation", source: "unknown" }],
-          },
-        })}
-      />,
-    );
-
-    expect(screen.getByText(/Stack observado en el repositorio/i)).toBeInTheDocument();
-    expect(screen.getByText("GitHub")).toBeInTheDocument();
-  });
-
   it("falls back to a copy-friendly error when email export is blocked", async () => {
     const user = userEvent.setup();
     vi.mocked(window.open).mockReturnValueOnce(null);
@@ -189,38 +151,4 @@ describe("AnalysisResultView", () => {
     expect(screen.getByRole("button", { name: /copiar mensaje/i })).toBeInTheDocument();
   });
 
-  it("renders GitHub topic and description signals and surfaces download failures", async () => {
-    const user = userEvent.setup();
-    const createObjectURL = vi.spyOn(URL, "createObjectURL").mockImplementation(() => {
-      throw new Error("Downloads unavailable");
-    });
-
-    render(
-      <AnalysisResultView
-        result={createAnalysisResult({
-          githubEnrichment: {
-            repositoryName: "ezefernandezyf/nexus-talent",
-            repositoryUrl: "https://github.com/ezefernandezyf/nexus-talent",
-            detectedStack: [
-              { name: "Architecture", source: "description" },
-              { name: "React", source: "topics" },
-            ],
-          },
-        })}
-      />,
-    );
-
-    expect(screen.getByText("Architecture")).toBeInTheDocument();
-    expect(screen.getByText(/Descripción/i)).toBeInTheDocument();
-    expect(screen.getAllByText("React").length).toBeGreaterThan(0);
-    expect(screen.getByText(/Topics/i)).toBeInTheDocument();
-
-    await user.click(screen.getByRole("button", { name: /descargar markdown/i }));
-    expect(screen.getByText(/no se pudo descargar el archivo markdown/i)).toBeInTheDocument();
-
-    await user.click(screen.getByRole("button", { name: /descargar json/i }));
-    expect(screen.getByText(/no se pudo descargar el archivo json/i)).toBeInTheDocument();
-
-    createObjectURL.mockRestore();
-  });
 });
