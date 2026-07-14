@@ -65,7 +65,7 @@ pnpm run dev:server             # terminal 1: backend on :3001
 pnpm run dev:web                # terminal 2: frontend on :5173
 ```
 
-## Design Tools (V1.2)
+## Design Tools (V1.3)
 
 ```bash
 # Anti-slop detector (antes de cada commit de UI)
@@ -93,13 +93,18 @@ npx impeccable detect web/src/
 - `web/src/features/analysis/components/AnalysisResultView.tsx` — 5-section numbered analysis
 - `web/src/features/history/components/HistoryList.tsx` — history with pagination
 - `web/src/features/settings/SettingsFeature.tsx` — 3-card settings (Account/Appearance/Data)
-- `server/prisma/schema.prisma` — data model (Profile, Analysis, Settings, UserSettings)
+- `server/prisma/schema.prisma` — data model (Profile, Analysis, Settings, UserSettings, WorkExperience, Education)
 - `server/src/infra/app.ts` — Express app + route wiring
 - `server/src/infra/rate-limiter.ts` — IP + per-user tier rate limiter
 - `server/src/settings/settings.router.ts` — GET/PUT /api/settings
 - `server/src/settings/settings.service.ts` — getOrCreate, upsert, getRateLimitTier
 - `server/src/auth/oauth.service.ts` — Google OAuth + linkIdentity()
-- `shared/src/schemas.ts` — Zod schemas: auth, analysis, profile, userSettings
+- `server/src/cv/cv.router.ts` — 9 rutas CV (experience CRUD + education CRUD + generate)
+- `server/src/cv/cv.service.ts` — CRUD con ownership + generateCV() con Groq
+- `web/src/features/cv/pages/CVPage.tsx` — CV generator con section ordering, ad-hoc items, export
+- `web/src/features/cv/pages/ExperienceManagerPage.tsx` — CRUD work experience
+- `web/src/features/cv/pages/EducationManagerPage.tsx` — CRUD education
+- `shared/src/schemas.ts` — Zod schemas: auth, analysis, profile, userSettings, cv
 
 ## Completed Phases (V1.2)
 
@@ -143,21 +148,32 @@ DB: 7 Profile fields. Shared: profileUpdateSchema. API: PUT /api/profile. UI: Pr
 **PR #3** — Rate Limiter per-user tiers: TIER_LIMITS (60/30/10 per minute), per-user key resolution via `getTier`, backward compatible
 **PR #4** — Frontend: `useAppSettings` React Query hook, ThemeProvider API sync, `ACCOUNT_LINKING_AVAILABLE = true`
 
+### 🟢 P17: CV Generator ✅
+> **212 tests — 6 PRs en feature-branch-chain — merged to main**
+
+**PR #1** — Foundation: WorkExperience + Education models, migration, Zod schemas, CRUD API. 22 tests.
+**PR #2** — POST /api/cv/generate con Groq: prompt building, fetchGroq, parseGroqEnvelope, Zod validation. 34 tests.
+**PR #3a** — Frontend foundation: CV API repository, React Query hooks (useExperience, useEducation, useCVGenerate), rutas, nav item, deps.
+**PR #3b** — Experience + Education CRUD pages con inline add/edit/delete + AdHocItemForm.
+**PR #3c** — CVPage con section ordering (drag), ad-hoc items, preview, export (.md, .html, .pdf).
+**PR #3d** — Playwright E2E + tech-debt fixes (PDF export, data-testid, forbidOnly).
+
+---
+## V1.3 — CV Generator
+
+### 🟢 P17: CV Generator
+> WorkExperience y Education models en Prisma, Zod schemas, CRUD API con ownership enforcement, generación de CVs con Groq, frontend completo con preview y export .md/.html/.pdf. 212 tests.
+
 ---
 ## Roadmap
 
 ### 🔶 P13bis: Performance Polish (DEFERRED)
-> E2E, Lighthouse, images, CSS, impeccable, sitemap. Retomar post-V1.2.1.
+> E2E, Lighthouse, images, CSS, impeccable, sitemap. Retomar post-V1.3.
 
 ### 🌐 P16: GEO Brand Building (async, manual)
 - [ ] sameAs schema, LinkedIn company page (CRITICAL), Product Hunt, Crunchbase
 - [ ] GitHub org docs, G2/Capterra, blog (2-3 SSR articles), YouTube demo
 - [ ] Re-run GEO audit — target 50-60/100
-
-### 📝 P17: CV Generator
-- [ ] POST /api/cv/generate — Groq + templates
-- [ ] CV preview UI + PDF export (puppeteer) + HTML export
-- [ ] CV history & templates (tech/business/creative)
 
 ## V1.2 Skills Instaladas
 
@@ -176,6 +192,7 @@ Skills locales en `.opencode/skills/` y `.agents/skills/` que deben priorizarse:
 - `tailwind-4` — Tailwind CSS 4, cn(), tokens, responsive
 - `typescript` — Tipado estricto, const types, flat interfaces
 - `zod-4` — Validación Zod 4
+- `cognitive-doc-design` — Design docs con baja carga cognitiva: guías, READMEs, RFCs, onboarding
 - `go-testing` — Patrones de testing Go (si aplica)
 
 ## Convenciones V1.2
