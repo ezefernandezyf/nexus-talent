@@ -24,8 +24,10 @@ model Profile {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  analyses     Analysis[]
-  userSettings UserSettings?
+  analyses       Analysis[]
+  userSettings   UserSettings?
+  workExperience WorkExperience[]
+  education      Education[]
 }
 
 model Analysis {
@@ -64,4 +66,38 @@ model UserSettings {
   updatedAt     DateTime @updatedAt
 
   profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model WorkExperience {
+  id          String   @id @default(uuid())
+  userId      String
+  company     String
+  role        String
+  startDate   String
+  endDate     String?
+  description String?
+  location    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Education {
+  id          String   @id @default(uuid())
+  userId      String
+  institution String
+  degree      String
+  field       String?
+  startDate   String
+  endDate     String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
