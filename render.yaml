@@ -2,7 +2,7 @@ services:
   - type: web
     name: nexus-talent-api
     env: node
-    buildCommand: pnpm --filter @nexus-talent/server run build
+    buildCommand: pnpm --filter @nexus-talent/server run build && pnpm --filter @nexus-talent/server run prisma:push
     startCommand: cd server && node dist/server/src/index.js
     healthCheckPath: /api/health
     envVars:
