@@ -11,12 +11,12 @@
 - **Testing**: Vitest (server + web), Playwright (E2E)
 - **AI**: Groq API (server-side proxy, never exposed to client)
 - **Lint/Format**: ESLint 9 flat config + Prettier
-- **Package Manager**: pnpm (workspace monorepo via `pnpm-workspace.yaml`)
+- **Package Manager**: pnpm (workspace monorepo)
 
 ## Architecture
 - **Full Screaming Architecture**: business domains are top-level folders in `server/src/`
 - **Monorepo**: `server/`, `web/`, `shared/`, `e2e/` — each has its own `package.json` with `"type": "module"`
-  - `@nexus-talent/web` — React 19 frontend (migrated from current `src/`)
+  - `@nexus-talent/web` — React 19 frontend
   - `@nexus-talent/server` — Express 5 backend with screaming architecture
   - `@nexus-talent/shared` — Zod schemas, types, and utilities shared front/back
   - `@nexus-talent/e2e` — Playwright end-to-end tests
@@ -65,7 +65,7 @@ pnpm run dev:server             # terminal 1: backend on :3001
 pnpm run dev:web                # terminal 2: frontend on :5173
 ```
 
-## Design Tools (V1.3)
+## Design Tools
 
 ```bash
 # Anti-slop detector (antes de cada commit de UI)
@@ -83,127 +83,6 @@ npx impeccable detect web/src/
 /impeccable distill     # simplificar
 ```
 
-## Key Files
-- `web/src/index.css` — design tokens (Editorial Precision), @utility typography, Tailwind 4 theme
-- `web/src/shared/components/` — all shared components (Button, Card, Badge, Input, Label, Textarea, Modal, Drawer, Dropdown, Select, Tabs, ToggleGroup, Toast, Tooltip, Popover, Eyebrow, Reveal)
-- `web/src/shared/layouts/AppLayout.tsx` — app shell with sticky header, horizontal nav
-- `web/src/shared/components/Footer/Footer.tsx` — marketing footer
-- `web/src/features/landing/pages/LandingPage.tsx` — landing page (editorial design, Spanish)
-- `web/src/features/auth/components/AuthShell.tsx` — auth pages shell
-- `web/src/features/analysis/components/AnalysisResultView.tsx` — 5-section numbered analysis
-- `web/src/features/history/components/HistoryList.tsx` — history with pagination
-- `web/src/features/settings/SettingsFeature.tsx` — 3-card settings (Account/Appearance/Data)
-- `server/prisma/schema.prisma` — data model (Profile, Analysis, Settings, UserSettings, WorkExperience, Education)
-- `server/src/infra/app.ts` — Express app + route wiring
-- `server/src/infra/rate-limiter.ts` — IP + per-user tier rate limiter
-- `server/src/settings/settings.router.ts` — GET/PUT /api/settings
-- `server/src/settings/settings.service.ts` — getOrCreate, upsert, getRateLimitTier
-- `server/src/auth/oauth.service.ts` — Google OAuth + linkIdentity()
-- `server/src/cv/cv.router.ts` — 9 rutas CV (experience CRUD + education CRUD + generate)
-- `server/src/cv/cv.service.ts` — CRUD con ownership + generateCV() con Groq
-- `web/src/features/cv/pages/CVPage.tsx` — CV generator con section ordering, ad-hoc items, export
-- `web/src/features/cv/pages/ExperienceManagerPage.tsx` — CRUD work experience
-- `web/src/features/cv/pages/EducationManagerPage.tsx` — CRUD education
-- `shared/src/schemas.ts` — Zod schemas: auth, analysis, profile, userSettings, cv
-
-## Completed Phases (V1.2)
-
-### 🟢 P9-P10: Design System Foundation + Core Components
-Design tokens, 12 component families (Button, Card, Input, Modal, Badge, Toast, Dropdown, Tabs, Tooltip, Skeleton). 345 tests.
-
-### 🟢 P11: Page Shells + UX States
-ErrorBoundary, loading skeletons, empty states, z-index tokens, AppLayout migration.
-
-### 🟢 P11ter: Editorial Precision Migration
-Migrated visual design from Lovable reference to Nexus Talent architecture. Warm monochrome + terracotta, Switzer + Geist fonts.
-
-### 🟢 P11quater: Pixel-Perfect Alignment
-SDD cycle: 4 stacked PRs, @utility typography, sticky header, 5-section analysis, 3-card settings, 341 tests.
-
-### 🟢 P11quin: UX Quality & Copy Alignment
-Merged to main. Output copy rewrite, logout modal, OAuth hidden, WCAG fixes, 5 runtime bugs.
-
-### 🟢 P12: Polish + Animation
-Spring transitions, enter/exit animations, reducedMotion hook, page transitions. 4 commits.
-
-### 🟢 P13: Performance + Lighthouse (core)
-Lazy loading, font-display swap, manualChunks, favicon SVG, cache headers.
-
-### 🔶 P13bis: Performance Polish (DEFERRED)
-> Post-V1.2.1. No bloquea features.
-
-- [ ] E2E port conflict, Lighthouse 90+ mobile, image optimization, CSS purge, impeccable detect, sitemap
-
----
-## V1.2.1 — User Profiles + Settings Backend ✅
-
-### 🟢 P14: User Profiles
-DB: 7 Profile fields. Shared: profileUpdateSchema. API: PUT /api/profile. UI: ProfileEditorCard. AI: prompt enrichment. 398 tests. 2 stacked PRs.
-
-### 🟢 P15: Settings Backend
-> **431 tests — 4 stacked PRs — merged to develop**
-
-**PR #1** — Foundation: `UserSettings` Prisma model + migration, Zod schemas, `GET/PUT /api/settings`, settings service (getOrCreate, upsert, getRateLimitTier)
-**PR #2** — OAuth Linking: `?link=true` flow, `linkIdentity()`, callback detection, `DELETE /api/auth/oauth/google` unlink
-**PR #3** — Rate Limiter per-user tiers: TIER_LIMITS (60/30/10 per minute), per-user key resolution via `getTier`, backward compatible
-**PR #4** — Frontend: `useAppSettings` React Query hook, ThemeProvider API sync, `ACCOUNT_LINKING_AVAILABLE = true`
-
-### 🟢 P17: CV Generator ✅
-> **212 tests — 6 PRs en feature-branch-chain — merged to main**
-
-**PR #1** — Foundation: WorkExperience + Education models, migration, Zod schemas, CRUD API. 22 tests.
-**PR #2** — POST /api/cv/generate con Groq: prompt building, fetchGroq, parseGroqEnvelope, Zod validation. 34 tests.
-**PR #3a** — Frontend foundation: CV API repository, React Query hooks (useExperience, useEducation, useCVGenerate), rutas, nav item, deps.
-**PR #3b** — Experience + Education CRUD pages con inline add/edit/delete + AdHocItemForm.
-**PR #3c** — CVPage con section ordering (drag), ad-hoc items, preview, export (.md, .html, .pdf).
-**PR #3d** — Playwright E2E + tech-debt fixes (PDF export, data-testid, forbidOnly).
-
----
-## V1.3 — CV Generator
-
-### 🟢 P17: CV Generator
-> WorkExperience y Education models en Prisma, Zod schemas, CRUD API con ownership enforcement, generación de CVs con Groq, frontend completo con preview y export .md/.html/.pdf. 212 tests.
-
----
-## Roadmap
-
-### 🔶 P13bis: Performance Polish (DEFERRED)
-> E2E, Lighthouse, images, CSS, impeccable, sitemap. Retomar post-V1.3.
-
-### 🌐 P16: GEO Brand Building (async, manual)
-- [ ] sameAs schema, LinkedIn company page (CRITICAL), Product Hunt, Crunchbase
-- [ ] GitHub org docs, G2/Capterra, blog (2-3 SSR articles), YouTube demo
-- [ ] Re-run GEO audit — target 50-60/100
-
-## V1.2 Skills Instaladas
-
-Skills locales en `.opencode/skills/` y `.agents/skills/` que deben priorizarse:
-
-### Diseño
-- `impeccable` (`.opencode/skills/impeccable/`) — 23 comandos de diseño, detector anti-slop, `/impeccable audit/polish/critique/animate/bolder/quieter`
-- `design-taste-frontend` (`.agents/skills/design-taste-frontend/`) — taste-skill v2 con diales VARIANCE/MOTION/DENSITY
-- `high-end-visual-design` (`.agents/skills/high-end-visual-design/`) — UI premium, contraste suave, spring motion
-- `minimalist-ui` (`.agents/skills/minimalist-ui/`) — Estilo Notion/Linear, paleta contenida
-- `redesign-existing-projects` (`.agents/skills/redesign-existing-projects/`) — Auditoría de UI existente → fix
-- `portfolio-personality` (`.opencode/skills/portfolio-personality/`) — Anti-convergencia, identidad visual distintiva
-
-### Desarrollo
-- `react-19` — React 19 (Compiler, Actions, ref como prop)
-- `tailwind-4` — Tailwind CSS 4, cn(), tokens, responsive
-- `typescript` — Tipado estricto, const types, flat interfaces
-- `zod-4` — Validación Zod 4
-- `cognitive-doc-design` — Design docs con baja carga cognitiva: guías, READMEs, RFCs, onboarding
-- `go-testing` — Patrones de testing Go (si aplica)
-
-## Convenciones V1.2
-
-- **Design-first**: Siempre `/impeccable init`/`shape` antes de escribir componentes
-- **Anti-slop**: Correr `npx impeccable detect` antes de cada commit de UI
-- **No em-dashes**: Ya limpiados. No reintroducir.
-- **Componentes nuevos en `web/src/shared/components/`**: Reemplazan los viejos de V1.1
-- **Feature flag**: Componentes viejos se mantienen hasta que los nuevos estén completos
-- **Testing**: Snapshot tests para componentes visuales, unit tests para lógica
-
 ## Responsabilidades Clínicas (Orchestrator vs Agents)
 
 - **El Orquestador Principal** coordina la conversación, la creación de ramas y los commits.
@@ -213,45 +92,13 @@ Skills locales en `.opencode/skills/` y `.agents/skills/` que deben priorizarse:
 - **Regla de Hierro**: Toda decisión se toma antes de escribir código. No hay implementación sin spec y diseño aprobados.
 
 ---
-## Pixel-Perfect Reference Alignment
 
-> Guía para verificar que cada página implementada coincide visualmente con la referencia de Lovable (`editorial-lens`).
+## Active Phases
 
-### Las 4 Capas de Verificación (en orden)
+| Phase | Estado | Descripción |
+|-------|--------|-------------|
+| **Phase 1 — Polish** | 🟡 En progreso (specs) | Sacar GitHub URL, validar JD ≥30 chars, reemplazar em dashes, remover eyebrow labels en CV y Settings |
+| **Phase 2 — CV Hub en Settings** | 🔲 Pendiente | Settings completo tipo CV Hub: Educación CRUD, Experiencia CRUD, Skills (técnicas + blandas), Contacto (teléfono, email, portfolio) |
+| **Phase 3 — CV + Analysis unificado** | 🔲 Pendiente | Página única de generación: JD + ad-hoc items + orden + tono → CV preview/export + Analysis output. Estilo Lapis CV. Ocultar secciones sin datos |
 
-| Capa | Qué verifica | Cómo verificarlo |
-|------|-------------|------------------|
-| **1. Tokens** | Valores de color, tipografía, spacing | DevTools computed styles contra `index.css` variables |
-| **2. Primitives** | Card, Button, Input, Badge, Label | Side-by-side con referencia, mismo padding/radius/font |
-| **3. Layout** | Espaciado entre secciones, alineación, proporciones | Screenshot overlay o DevTools layout inspector |
-| **4. Pages** | Composición completa de cada página | Side-by-side navegando ambas apps |
-
-### Acceptance Criteria
-
-Pixel-perfect significa:
-
-- [ ] **Color values match**: cada token CSS resuelve al mismo valor hex/OKLCH que la referencia
-- [ ] **Spacing matches**: padding, margin, gap entre elementos es idéntico
-- [ ] **Typography matches**: font-family, weight, size (clamp), letter-spacing, line-height
-- [ ] **Border-radius / shadow match**: mismos valores de radio y sombra
-- [ ] **Layout proportions match**: mismos anchos relativos, alturas, distribuciones de grid
-- [ ] **Interactive states match**: hover, focus, active tienen los mismos efectos
-- [ ] **Section order matches**: mismos componentes en el mismo orden de arriba a abajo
-- [ ] **Component composition matches**: cada componente usa los mismos sub-componentes internos en el mismo orden
-
-### Lo Que Pixel-Perfect NO Significa
-
-| Exclusión | Razón |
-|-----------|-------|
-| **File structure** | Mantenemos folder-per-component de Nexus Talent |
-| **API / props** | Mantenemos nuestra API de componentes (Button variant, Card padding, etc.) |
-| **Content / copy** | El contenido sigue siendo español. Las etiquetas y copy son nuestros. |
-| **Business logic** | Hooks, stores, queries, Zod schemas — intactos |
-
-### Verification Tools
-
-1. **Manual side-by-side**: abrir la app y la referencia (editorial-lens) en ventanas lado a lado
-2. **DevTools computed-style comparison**: seleccionar el mismo elemento en ambas y comparar valores computados
-3. **Screenshot overlay**: tomar screenshot de la referencia, superponer con la implementación al 50% de opacidad
-4. **Token audit script**: `grep -r 'text-on-surface\|bg-surface-container\|surface-elevated' web/src/` — debe devolver 0 matches
-5. **Anti-pattern detection**: `npx impeccable detect web/src/` — 0 nuevos anti-patrones por PR
+> Las phases se ejecutan con SDD una por una. Cada una pasa por: explore → propose → spec → tasks → apply → verify → archive.
