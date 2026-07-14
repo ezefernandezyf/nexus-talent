@@ -7,13 +7,11 @@ import {
   type JobAnalysisResult,
   type SavedJobAnalysis,
 } from "@/features/analysis/schemas/job-analysis";
-import { createQueryClientWrapper } from "@/test/mocks/query-client";
 
 export function createAnalysisRequest(overrides: Partial<JobAnalysisRequest> = {}): JobAnalysisRequest {
   return {
     jobDescription: "Senior React engineer with TypeScript and testing",
     messageTone: JOB_ANALYSIS_MESSAGE_TONE.FORMAL,
-    githubRepositoryUrl: undefined,
     ...overrides,
   };
 }

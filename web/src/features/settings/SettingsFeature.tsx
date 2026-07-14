@@ -173,7 +173,7 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
         <div className="font-display font-black text-4xl text-text-primary/90">02</div>
         <h2 className="text-h3 mt-2">Appearance</h2>
         <p className="text-body text-text-secondary mt-1">
-          El tema sigue la configuración del sistema automáticamente. No es necesario cambiarlo manualmente — se adapta solo.
+          El tema sigue la configuración del sistema automáticamente. No es necesario cambiarlo manualmente – se adapta solo.
         </p>
         <div className="mt-4 flex items-center gap-2">
           <span className="text-sm text-text-secondary">Tema actual:</span>

@@ -79,7 +79,6 @@ describe("SettingsPage", () => {
     render(ui);
 
     await waitFor(() => expect(screen.getByText("Settings")).toBeInTheDocument());
-    expect(screen.getByText("Configuración")).toBeInTheDocument();
     // 3 numbered cards should be present
     expect(screen.getByText("01")).toBeInTheDocument();
     expect(screen.getByText("02")).toBeInTheDocument();

@@ -6,27 +6,23 @@ import { JOB_ANALYSIS_MESSAGE_TONE, type JobAnalysisMessageTone } from "@/featur
 
 interface JobDescriptionFormProps {
   errorMessage?: string | null;
-  initialGithubRepositoryUrl?: string | null;
   initialJobDescription?: string | null;
   initialPrefillKey?: string | null;
   isPending: boolean;
   onSubmit: (request: {
     jobDescription: string;
     messageTone: JobAnalysisMessageTone;
-    githubRepositoryUrl?: string;
   }) => void;
 }
 
 export function JobDescriptionForm({
   errorMessage,
-  initialGithubRepositoryUrl,
   initialJobDescription,
   initialPrefillKey,
   isPending,
   onSubmit,
 }: JobDescriptionFormProps) {
   const [jobDescription, setJobDescription] = useState(initialJobDescription ?? "");
-  const [githubRepositoryUrl, setGithubRepositoryUrl] = useState(initialGithubRepositoryUrl ?? "");
   const [messageTone, setMessageTone] = useState<JobAnalysisMessageTone>(JOB_ANALYSIS_MESSAGE_TONE.FORMAL);
   const [localError, setLocalError] = useState<string | null>(null);
   const appliedPrefillKeyRef = useRef<string | null>(null);
@@ -42,32 +38,28 @@ export function JobDescriptionForm({
       return;
     }
 
-    if (initialJobDescription === undefined && initialGithubRepositoryUrl === undefined) {
+    if (initialJobDescription === undefined) {
       return;
     }
 
     setJobDescription(initialJobDescription ?? "");
-    setGithubRepositoryUrl(initialGithubRepositoryUrl ?? "");
     setLocalError(null);
     appliedPrefillKeyRef.current = initialPrefillKey;
-  }, [initialGithubRepositoryUrl, initialJobDescription, initialPrefillKey]);
+  }, [initialJobDescription, initialPrefillKey]);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
     const normalizedDescription = jobDescription.trim();
-    if (normalizedDescription.length === 0) {
-      setLocalError("Pegá una descripción del puesto antes de ejecutar el análisis.");
+    if (normalizedDescription.length < 30) {
+      setLocalError("Información insuficiente. La descripción debe tener al menos 30 caracteres.");
       return;
     }
-
-    const normalizedGitHubRepositoryUrl = githubRepositoryUrl.trim();
 
     setLocalError(null);
     onSubmit({
       jobDescription: normalizedDescription,
       messageTone,
-      githubRepositoryUrl: normalizedGitHubRepositoryUrl.length > 0 ? normalizedGitHubRepositoryUrl : undefined,
     });
   };
 
@@ -93,39 +85,19 @@ export function JobDescriptionForm({
           />
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 md:items-end">
-          <div className="space-y-2">
-            <Label htmlFor="message-tone">Tono del mensaje</Label>
-            <select
-              id="message-tone"
-              name="message-tone"
-              value={messageTone}
-              onChange={(event) => setMessageTone(event.target.value as JobAnalysisMessageTone)}
-              className="w-full rounded-md border border-border bg-surface px-4 py-3 text-sm text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors duration-200"
-            >
-              <option value={JOB_ANALYSIS_MESSAGE_TONE.FORMAL}>Formal & Ejecutivo</option>
-              <option value={JOB_ANALYSIS_MESSAGE_TONE.CASUAL}>Casual & Directo</option>
-              <option value={JOB_ANALYSIS_MESSAGE_TONE.PERSUASIVE}>Persuasivo & Entusiasta</option>
-            </select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="github-repository-url">URL de GitHub (opcional)</Label>
-            <input
-              id="github-repository-url"
-              name="github-repository-url"
-              value={githubRepositoryUrl}
-              onChange={(event) => {
-                appliedPrefillKeyRef.current = appliedPrefillKeyRef.current ?? initialPrefillKey ?? null;
-                setGithubRepositoryUrl(event.target.value);
-                setLocalError(null);
-              }}
-              placeholder="https://github.com/owner/repo"
-              inputMode="url"
-              autoComplete="url"
-              className="w-full h-11 rounded-md border border-border bg-surface px-4 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors duration-200"
-            />
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="message-tone">Tono del mensaje</Label>
+          <select
+            id="message-tone"
+            name="message-tone"
+            value={messageTone}
+            onChange={(event) => setMessageTone(event.target.value as JobAnalysisMessageTone)}
+            className="w-full rounded-md border border-border bg-surface px-4 py-3 text-sm text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors duration-200"
+          >
+            <option value={JOB_ANALYSIS_MESSAGE_TONE.FORMAL}>Formal & Ejecutivo</option>
+            <option value={JOB_ANALYSIS_MESSAGE_TONE.CASUAL}>Casual & Directo</option>
+            <option value={JOB_ANALYSIS_MESSAGE_TONE.PERSUASIVE}>Persuasivo & Entusiasta</option>
+          </select>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

@@ -162,8 +162,8 @@ interface EducationCardProps {
 
 function EducationCard({ entry, onEdit, onDelete }: EducationCardProps) {
   const dateRange = entry.endDate
-    ? `${entry.startDate} — ${entry.endDate}`
-    : `${entry.startDate} — Present`;
+    ? `${entry.startDate} – ${entry.endDate}`
+    : `${entry.startDate} – Present`;
 
   return (
     <Card padding="lg">

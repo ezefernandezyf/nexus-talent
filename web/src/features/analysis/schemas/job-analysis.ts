@@ -20,7 +20,7 @@ export const JOB_ANALYSIS_INPUT_SCHEMA = z.object({
   jobDescription: z
     .string({ error: "Pegá una descripción del puesto antes de analizarla." })
     .trim()
-    .min(1, { error: "Pegá una descripción del puesto antes de analizarla." })
+    .min(30, { error: "Información insuficiente. La descripción debe tener al menos 30 caracteres." })
     .max(12_000, { error: "Las descripciones no deberían superar los 12.000 caracteres." }),
 }).strict();
 
@@ -115,34 +115,6 @@ export const JOB_ANALYSIS_RECRUITER_MESSAGES_SCHEMA = z.object({
   }).strict(),
 }).strict();
 
-export const JOB_ANALYSIS_GITHUB_STACK_SIGNAL_SCHEMA = z.object({
-  name: z
-    .string({ error: "El nombre de la señal de GitHub es obligatorio." })
-    .trim()
-    .min(1, { error: "El nombre de la señal de GitHub es obligatorio." }),
-  source: z
-    .string({ error: "La fuente de la señal de GitHub es obligatoria." })
-    .trim()
-    .min(1, { error: "La fuente de la señal de GitHub es obligatoria." }),
-}).strict();
-
-export const JOB_ANALYSIS_GITHUB_ENRICHMENT_SCHEMA = z.object({
-  repositoryUrl: z
-    .string({ error: "La URL del repositorio de GitHub es obligatoria." })
-    .trim()
-    .min(1, { error: "La URL del repositorio de GitHub es obligatoria." }),
-  repositoryName: z
-    .string({ error: "El nombre del repositorio de GitHub es obligatorio." })
-    .trim()
-    .min(1, { error: "El nombre del repositorio de GitHub es obligatorio." }),
-  detectedStack: z.array(JOB_ANALYSIS_GITHUB_STACK_SIGNAL_SCHEMA),
-  warningMessage: z
-    .string({ error: "El aviso de GitHub debe ser texto válido." })
-    .trim()
-    .min(1, { error: "El aviso de GitHub debe ser texto válido." })
-    .optional(),
-}).strict();
-
 export const JOB_ANALYSIS_EDITABLE_OUTREACH_SCHEMA = JOB_ANALYSIS_OUTREACH_SCHEMA.extend({
   draftBody: z.string().trim().min(1, { error: "Draft body is required." }).optional(),
 }).strict();
@@ -158,7 +130,6 @@ export const JOB_ANALYSIS_RESULT_SCHEMA = z.object({
   applicantSummary: z.string().optional(),
   candidateOutreach: JOB_ANALYSIS_OUTREACH_SCHEMA.optional(),
   applicationTips: z.array(z.string()).optional(),
-  githubEnrichment: JOB_ANALYSIS_GITHUB_ENRICHMENT_SCHEMA.optional(),
 }).strict();
 
 export const JOB_ANALYSIS_REQUEST_SCHEMA = z.object({
@@ -168,10 +139,6 @@ export const JOB_ANALYSIS_REQUEST_SCHEMA = z.object({
     JOB_ANALYSIS_MESSAGE_TONE.CASUAL,
     JOB_ANALYSIS_MESSAGE_TONE.PERSUASIVE,
   ]),
-  githubRepositoryUrl: z
-    .string({ error: "La URL de GitHub debe ser texto válido." })
-    .trim()
-    .optional(),
 }).strict();
 
 export const SAVED_JOB_ANALYSIS_SCHEMA = JOB_ANALYSIS_RESULT_SCHEMA.extend({
@@ -195,8 +162,6 @@ export type JobAnalysisVacancySummary = z.infer<typeof JOB_ANALYSIS_VACANCY_SUMM
 export type JobAnalysisKeywords = z.infer<typeof JOB_ANALYSIS_KEYWORDS_SCHEMA>;
 export type JobAnalysisGap = z.infer<typeof JOB_ANALYSIS_GAP_SCHEMA>;
 export type JobAnalysisRecruiterMessages = z.infer<typeof JOB_ANALYSIS_RECRUITER_MESSAGES_SCHEMA>;
-export type JobAnalysisGitHubStackSignal = z.infer<typeof JOB_ANALYSIS_GITHUB_STACK_SIGNAL_SCHEMA>;
-export type JobAnalysisGitHubEnrichment = z.infer<typeof JOB_ANALYSIS_GITHUB_ENRICHMENT_SCHEMA>;
 export type JobAnalysisRequest = z.infer<typeof JOB_ANALYSIS_REQUEST_SCHEMA>;
 export type JobAnalysisEditableOutreach = z.infer<typeof JOB_ANALYSIS_EDITABLE_OUTREACH_SCHEMA>;
 export type JobAnalysisResult = z.infer<typeof JOB_ANALYSIS_RESULT_SCHEMA>;

@@ -5,7 +5,6 @@ import { Card, FeaturePageShell, PageHeader } from "@/shared/components";
 import { useLocation, useSearchParams } from "react-router-dom";
 
 type AnalysisReworkState = {
-  githubRepositoryUrl?: string;
   jobDescription?: string;
   sourceHistoryId?: string;
 };
@@ -40,17 +39,13 @@ export function AnalysisPage() {
 
   const prefillJobDescription =
     reworkState?.jobDescription ?? historyQuery.analysis?.jobDescription ?? null;
-  const prefillGithubRepositoryUrl =
-    reworkState?.githubRepositoryUrl ??
-    historyQuery.analysis?.githubEnrichment?.repositoryUrl ??
-    null;
   const initialPrefillKey =
     sourceHistoryId ?? (prefillJobDescription ? prefillJobDescription : null);
 
   return (
     <FeaturePageShell>
       <PageHeader
-        description="Optimiza tu perfil para la vacante deseada utilizando nuestro motor de inteligencia artificial. GitHub es el único enriquecimiento automatizado; LinkedIn queda como referencia manual por restricciones de la plataforma."
+        description="Optimiza tu perfil para la vacante deseada utilizando nuestro motor de inteligencia artificial."
         title={
           <span className="font-display">
             Análisis de Reclutamiento
@@ -59,7 +54,6 @@ export function AnalysisPage() {
       />
 
       <AnalysisFeature
-        initialGithubRepositoryUrl={prefillGithubRepositoryUrl}
         initialJobDescription={prefillJobDescription}
         initialPrefillKey={initialPrefillKey}
         repository={repository}

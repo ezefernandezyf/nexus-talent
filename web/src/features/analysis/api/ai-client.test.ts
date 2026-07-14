@@ -27,7 +27,7 @@ describe("ai-client", () => {
       }),
     });
 
-    await expect(client.analyzeJobDescription("Senior React engineer")).resolves.toEqual({
+    await expect(client.analyzeJobDescription("Senior React engineer with TypeScript skills")).resolves.toEqual({
       summary: "Un rol enfocado en construir experiencias de producto.",
       skillGroups: [
         {
@@ -109,7 +109,7 @@ describe("ai-client", () => {
         }),
     });
 
-    const result = await client.analyzeJobDescription("Senior React engineer");
+    const result = await client.analyzeJobDescription("Senior React engineer with TypeScript skills");
 
     expect(result.skillGroups[0]?.category).toBe("Stack principal");
     expect(result.recruiterMessages?.dmShort.body).toBeTruthy();
@@ -194,10 +194,10 @@ describe("ai-client", () => {
       }),
     });
 
-    await expect(firstClient.analyzeJobDescription("Senior React engineer")).resolves.toMatchObject({
+    await expect(firstClient.analyzeJobDescription("Senior React engineer with TypeScript")).resolves.toMatchObject({
       summary: "Primer transporte",
     });
-    await expect(secondClient.analyzeJobDescription("Senior React engineer")).resolves.toMatchObject({
+    await expect(secondClient.analyzeJobDescription("Senior React engineer with TypeScript")).resolves.toMatchObject({
       summary: "Segundo transporte",
     });
   });
@@ -226,7 +226,7 @@ describe("ai-client", () => {
 
     const client = createJobAnalysisClient({ transport });
 
-    await client.analyzeJobDescription("Senior React engineer", JOB_ANALYSIS_MESSAGE_TONE.CASUAL);
+    await client.analyzeJobDescription("Senior React engineer with TypeScript skills", JOB_ANALYSIS_MESSAGE_TONE.CASUAL);
 
     expect(transport).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -266,7 +266,7 @@ describe("ai-client", () => {
       }),
     });
 
-    await expect(client.analyzeJobDescription("Senior React engineer")).rejects.toThrow(/La respuesta de IA no es válida/i);
+    await expect(client.analyzeJobDescription("Senior React engineer with TypeScript")).rejects.toThrow(/La respuesta de IA no es válida/i);
   });
 
   it("preserves AI orchestrator errors from the transport layer", async () => {
@@ -276,7 +276,7 @@ describe("ai-client", () => {
       },
     });
 
-    await expect(client.analyzeJobDescription("Senior React engineer")).rejects.toMatchObject({
+    await expect(client.analyzeJobDescription("Senior React engineer with TypeScript")).rejects.toMatchObject({
       name: "AIOrchestratorError",
       code: AI_ERROR_CODES.TRANSIENT_FAILURE,
       retryable: true,
@@ -290,13 +290,13 @@ describe("ai-client", () => {
       },
     });
 
-    await expect(client.analyzeJobDescription("Senior React engineer")).rejects.toThrow(
+    await expect(client.analyzeJobDescription("Senior React engineer with TypeScript")).rejects.toThrow(
       /No se pudo completar la solicitud de análisis/i,
     );
   });
 
   it("rejects empty job descriptions", async () => {
-    await expect(jobAnalysisClient.analyzeJobDescription("   ")).rejects.toThrow(/Pegá una descripción del puesto/i);
+    await expect(jobAnalysisClient.analyzeJobDescription("   ")).rejects.toThrow(/Información insuficiente/i);
   });
 
   it("falls back to general fit signals when the posting has no known keywords", async () => {
@@ -319,7 +319,7 @@ describe("ai-client", () => {
   });
 
   it("keeps sparse input coherent without repeating filler", async () => {
-    const result = await jobAnalysisClient.analyzeJobDescription("Product designer");
+    const result = await jobAnalysisClient.analyzeJobDescription("Senior Product designer with TypeScript skills");
 
     expect(result.summary).toContain("Product designer");
     expect(result.summary).toMatch(/(Lectura rápida|Resumen ejecutivo|Panorama):/);

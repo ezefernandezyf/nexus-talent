@@ -14,7 +14,20 @@ describe("JobDescriptionForm", () => {
     await user.click(screen.getByRole("button", { name: /analizar con ia/i }));
 
     expect(onSubmit).not.toHaveBeenCalled();
-    expect(screen.getByText(/pegá una descripción del puesto antes de ejecutar el análisis/i)).toBeInTheDocument();
+    expect(screen.getByText(/información insuficiente/i)).toBeInTheDocument();
+  });
+
+  it("blocks short submissions under 30 characters inline", async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+
+    render(<JobDescriptionForm isPending={false} onSubmit={onSubmit} />);
+
+    await user.type(screen.getByLabelText(/descripción del puesto/i), "Front-end");
+    await user.click(screen.getByRole("button", { name: /analizar con ia/i }));
+
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(screen.getByText(/información insuficiente/i)).toBeInTheDocument();
   });
 
   it("disables while pending and shows the external error message", () => {
@@ -31,30 +44,12 @@ describe("JobDescriptionForm", () => {
     const onSubmit = vi.fn();
 
     render(<JobDescriptionForm isPending={false} onSubmit={onSubmit} />);
-    await user.type(screen.getByLabelText(/descripción del puesto/i), "  Ingeniero React senior con TypeScript  ");
+    await user.type(screen.getByLabelText(/descripción del puesto/i), "  Senior React engineer with TypeScript and testing  ");
     await user.click(screen.getByRole("button", { name: /analizar con ia/i }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       createAnalysisRequest({
-        jobDescription: "Ingeniero React senior con TypeScript",
-      }),
-    );
-  });
-
-  it("submits an optional GitHub repository URL", async () => {
-    const user = userEvent.setup();
-    const onSubmit = vi.fn();
-
-    render(<JobDescriptionForm isPending={false} onSubmit={onSubmit} />);
-
-    await user.type(screen.getByLabelText(/descripción del puesto/i), "Ingeniero React senior con TypeScript");
-    await user.type(screen.getByLabelText(/url de github/i), "  https://github.com/acme/design-system.git  ");
-    await user.click(screen.getByRole("button", { name: /analizar con ia/i }));
-
-    expect(onSubmit).toHaveBeenCalledWith(
-      createAnalysisRequest({
-        jobDescription: "Ingeniero React senior con TypeScript",
-        githubRepositoryUrl: "https://github.com/acme/design-system.git",
+        jobDescription: "Senior React engineer with TypeScript and testing",
       }),
     );
   });
@@ -67,14 +62,13 @@ describe("JobDescriptionForm", () => {
     render(<JobDescriptionForm isPending={false} onSubmit={onSubmit} />);
 
     expect(screen.getByLabelText(/tono del mensaje/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/url de github/i)).toBeInTheDocument();
 
-    await user.type(screen.getByLabelText(/descripción del puesto/i), "Ingeniero React senior con TypeScript");
+    await user.type(screen.getByLabelText(/descripción del puesto/i), "Senior React engineer with TypeScript and testing");
     await user.click(screen.getByRole("button", { name: /analizar con ia/i }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       createAnalysisRequest({
-        jobDescription: "Ingeniero React senior con TypeScript",
+        jobDescription: "Senior React engineer with TypeScript and testing",
       }),
     );
 
@@ -87,7 +81,6 @@ describe("JobDescriptionForm", () => {
 
     const { rerender } = render(
       <JobDescriptionForm
-        initialGithubRepositoryUrl="https://github.com/acme/design-system"
         initialJobDescription="Frontend Lead para producto"
         initialPrefillKey="history-123"
         isPending={false}
@@ -96,14 +89,12 @@ describe("JobDescriptionForm", () => {
     );
 
     expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("Frontend Lead para producto");
-    expect(screen.getByLabelText(/url de github/i)).toHaveValue("https://github.com/acme/design-system");
 
     await user.clear(screen.getByLabelText(/descripción del puesto/i));
     await user.type(screen.getByLabelText(/descripción del puesto/i), "Reworked vacancy");
 
     rerender(
       <JobDescriptionForm
-        initialGithubRepositoryUrl="https://github.com/acme/other-repo"
         initialJobDescription="Should not override edited draft"
         initialPrefillKey="history-123"
         isPending={false}
@@ -112,7 +103,6 @@ describe("JobDescriptionForm", () => {
     );
 
     expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("Reworked vacancy");
-    expect(screen.getByLabelText(/url de github/i)).toHaveValue("https://github.com/acme/design-system");
   });
 
   it("ignores an empty saved vacancy prefill", () => {
@@ -120,7 +110,6 @@ describe("JobDescriptionForm", () => {
 
     render(
       <JobDescriptionForm
-        initialGithubRepositoryUrl={undefined}
         initialJobDescription={undefined}
         initialPrefillKey="history-123"
         isPending={false}
@@ -129,7 +118,6 @@ describe("JobDescriptionForm", () => {
     );
 
     expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("");
-    expect(screen.getByLabelText(/url de github/i)).toHaveValue("");
   });
 
   it("hydrates a partial saved vacancy prefill", () => {
@@ -137,7 +125,6 @@ describe("JobDescriptionForm", () => {
 
     render(
       <JobDescriptionForm
-        initialGithubRepositoryUrl={undefined}
         initialJobDescription="Frontend Lead para producto"
         initialPrefillKey="history-456"
         isPending={false}
@@ -146,23 +133,5 @@ describe("JobDescriptionForm", () => {
     );
 
     expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("Frontend Lead para producto");
-    expect(screen.getByLabelText(/url de github/i)).toHaveValue("");
-  });
-
-  it("hydrates a partial saved GitHub prefill", () => {
-    const onSubmit = vi.fn();
-
-    render(
-      <JobDescriptionForm
-        initialGithubRepositoryUrl="https://github.com/acme/design-system"
-        initialJobDescription={undefined}
-        initialPrefillKey="history-789"
-        isPending={false}
-        onSubmit={onSubmit}
-      />,
-    );
-
-    expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("");
-    expect(screen.getByLabelText(/url de github/i)).toHaveValue("https://github.com/acme/design-system");
   });
 });
