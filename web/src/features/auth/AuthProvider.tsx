@@ -101,12 +101,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await logoutMutation.mutateAsync();
   }
 
-  // Redirect directly to Render backend so the state cookie is set on
-  // the same domain as the Google callback URL - avoids cookie mismatch.
-  const RENDER_BACKEND_URL = "https://nexus-talent-api-svik.onrender.com";
-
+  // Navigate through Vercel proxy so the state cookie is set on
+  // the same domain that Google redirects back to.
   async function signInWithOAuth(provider: string): Promise<AuthActionResponse> {
-    window.location.href = `${RENDER_BACKEND_URL}/api/auth/oauth/${provider}`;
+    window.location.href = `/api/auth/oauth/${provider}`;
     return { success: true, message: "Redirigiendo..." };
   }
 
