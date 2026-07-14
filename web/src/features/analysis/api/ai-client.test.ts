@@ -323,7 +323,7 @@ describe("ai-client", () => {
 
     expect(result.summary).toContain("Product designer");
     expect(result.summary).toMatch(/(Lectura rápida|Resumen ejecutivo|Panorama):/);
-    expect(result.summary).toContain("Síntesis de requisitos");
+    expect(result.summary).toContain("Señales clave");
     expect(result.outreachMessage.body).toContain("Hola equipo de recruiting");
     expect(result.outreachMessage.body).not.toContain("...");
     expect(result.outreachMessage.body).not.toContain("…");

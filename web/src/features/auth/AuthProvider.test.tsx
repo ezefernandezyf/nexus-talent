@@ -158,7 +158,7 @@ describe("AuthProvider", () => {
 
     await user.click(screen.getByRole("button", { name: /google oauth/i }));
 
-    expect(window.location.href).toBe("https://nexus-talent-api-svik.onrender.com/api/auth/oauth/google");
+    expect(window.location.href).toBe("/api/auth/oauth/google");
 
     Object.defineProperty(window, "location", {
       value: originalLocation,
