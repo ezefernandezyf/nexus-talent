@@ -44,13 +44,13 @@ Chain strategy: pending
 - [x] **T4.2** — Hooks: `useExperience.ts`, `useEducation.ts`, `useCVGenerate.ts` — React Query mutations
 
 ## Group 5: Frontend Pages
-- [ ] **T5.1** — Page: `ExperienceManagerPage.tsx` — CRUD list with inline add/edit/delete
-- [ ] **T5.2** — Page: `EducationManagerPage.tsx` — CRUD list with inline add/edit/delete
+- [x] **T5.1** — Page: `ExperienceManagerPage.tsx` — CRUD list with inline add/edit/delete
+- [x] **T5.2** — Page: `EducationManagerPage.tsx` — CRUD list with inline add/edit/delete
 - [ ] **T5.3** — Page: `CVPage.tsx` — section ordering, ad-hoc items, preview, export
 
 ## Group 6: Frontend Components
 - [ ] **T6.1** — `CVPreview.tsx` — renders sections as formatted document
-- [ ] **T6.2** — `AdHocItemForm.tsx` — inline form for transient section items
+- [x] **T6.2** — `AdHocItemForm.tsx` — inline form for transient section items
 - [ ] **T6.3** — `SectionOrderEditor.tsx` — drag-to-reorder using `@dnd-kit/core`
 - [ ] **T6.4** — Export helpers: `.md`, `.html` download + `.pdf` via `@react-pdf/renderer`
 
