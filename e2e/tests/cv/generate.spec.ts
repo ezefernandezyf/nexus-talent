@@ -28,13 +28,13 @@ test.describe("CV Generator", () => {
     await expect(page.getByText("Proyectos")).toBeVisible();
 
     // Tone selector should be present
-    await expect(page.getByLabelText(/tone/i)).toBeVisible();
+    await expect(page.locator('[data-testid="cv-tone-select"]')).toBeVisible();
 
     // Ad-hoc items section
     await expect(page.getByText("Add Extra Items")).toBeVisible();
 
     // Generate button
-    await expect(page.getByRole("button", { name: /generate cv/i })).toBeVisible();
+    await expect(page.locator('[data-testid="cv-generate-button"]')).toBeVisible();
 
     // Empty state welcome message
     await expect(page.getByText(/generá tu cv/i)).toBeVisible();
@@ -108,15 +108,14 @@ test.describe("CV Generator", () => {
     await page.goto("/app/cv");
     await expect(page).toHaveURL(/\/app\/cv/);
 
-    // Set tone to professional (already the default)
     // Click generate button
-    await page.getByRole("button", { name: /generate cv/i }).click();
+    await page.locator('[data-testid="cv-generate-button"]').click();
 
     // Assert : either loading, error, or result state appears
     // Groq may not be available in the test environment, so the API either:
     //   - shows "Generating..." (loading), OR
     //   - shows "502 — Generation Failed" (error), OR
-    //   - renders the CVPreview (success)
+    //   - renders the CVPreview (success) with export buttons
     await expect(
       page.getByText(/Generating|Generation Failed|Professional Summary|Download.*\.md/),
     ).toBeVisible({ timeout: 20_000 });

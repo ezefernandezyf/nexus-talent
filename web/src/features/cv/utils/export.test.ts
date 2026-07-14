@@ -1,6 +1,21 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
-import { exportAsMarkdown, exportAsHtml, downloadBlob } from "./export";
+import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
+import { exportAsMarkdown, exportAsHtml, downloadBlob, exportAsPdf } from "./export";
 import type { CVSection } from "@nexus-talent/shared";
+
+// ---------------------------------------------------------------------------
+// Mocks for @react-pdf/renderer (jsdom-compatible)
+// ---------------------------------------------------------------------------
+
+vi.mock("@react-pdf/renderer", () => ({
+  pdf: vi.fn(() => ({
+    toBlob: vi.fn().mockResolvedValue(new Blob(["fake-pdf-content"], { type: "application/pdf" })),
+  })),
+  Document: vi.fn(({ children }) => children),
+  Page: vi.fn(({ children }) => children),
+  View: vi.fn(({ children }) => children),
+  Text: vi.fn(({ children }) => children),
+  StyleSheet: { create: vi.fn((styles) => styles) },
+}));
 
 // ---------------------------------------------------------------------------
 // Test data
@@ -222,5 +237,83 @@ describe("downloadBlob", () => {
     }
 
     createElementSpy.mockRestore();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// exportAsPdf
+// ---------------------------------------------------------------------------
+
+describe("exportAsPdf", () => {
+  let anchorClickMock: ReturnType<typeof vi.fn>;
+  let anchorRemoveMock: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    URL.createObjectURL = vi.fn(() => "blob:mock-pdf");
+    URL.revokeObjectURL = vi.fn();
+
+    anchorClickMock = vi.fn();
+    anchorRemoveMock = vi.fn();
+
+    vi.spyOn(document, "createElement").mockImplementation((tagName) => {
+      if (tagName === "a") {
+        return {
+          href: "",
+          download: "",
+          click: anchorClickMock,
+          remove: anchorRemoveMock,
+        } as unknown as HTMLAnchorElement;
+      }
+      return document.createElement(tagName);
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("generates a PDF blob from sections and triggers a download", async () => {
+    const { pdf } = await import("@react-pdf/renderer");
+
+    await exportAsPdf(sampleSections);
+
+    // pdf() was called with a Document
+    expect(pdf).toHaveBeenCalledOnce();
+    // toBlob() was called on the pdf instance
+    const pdfInstance = (pdf as ReturnType<typeof vi.fn>).mock.results[0].value;
+    expect(pdfInstance.toBlob).toHaveBeenCalledOnce();
+
+    // Browser download mechanism was triggered
+    expect(URL.createObjectURL).toHaveBeenCalled();
+    expect(URL.createObjectURL).toHaveBeenCalledWith(
+      expect.objectContaining({ type: "application/pdf" }),
+    );
+    expect(anchorClickMock).toHaveBeenCalledOnce();
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:mock-pdf");
+  });
+
+  it("sets the download filename to cv.pdf", async () => {
+    const createElementSpy = vi.spyOn(document, "createElement");
+
+    await exportAsPdf(sampleSections);
+
+    const anchorCalls = createElementSpy.mock.results.filter(
+      (r) => r.value && typeof r.value === "object" && "download" in r.value,
+    );
+    if (anchorCalls.length > 0) {
+      const anchor = anchorCalls[0].value as HTMLAnchorElement;
+      expect(anchor.download).toBe("cv.pdf");
+    }
+
+    createElementSpy.mockRestore();
+  });
+
+  it("handles empty sections gracefully", async () => {
+    const { pdf } = await import("@react-pdf/renderer");
+
+    await exportAsPdf([]);
+
+    // pdf() is still called (with a Document) even for empty sections
+    expect(pdf).toHaveBeenCalledOnce();
   });
 });

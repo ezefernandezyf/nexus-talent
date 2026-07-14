@@ -10,7 +10,7 @@ import { useCVGenerate } from "@/features/cv/hooks/useCVGenerate";
 import { SectionOrderEditor, type SectionOption } from "@/features/cv/components/SectionOrderEditor";
 import { AdHocItemForm, type AdHocItem } from "@/features/cv/components/AdHocItemForm";
 import { CVPreview } from "@/features/cv/components/CVPreview";
-import { exportAsMarkdown, exportAsHtml, downloadBlob } from "@/features/cv/utils/export";
+import { exportAsMarkdown, exportAsHtml, exportAsPdf, downloadBlob } from "@/features/cv/utils/export";
 
 // ---------------------------------------------------------------------------
 // Default sections
@@ -69,6 +69,11 @@ export function CVPage() {
     downloadBlob(html, "cv.html", "text/html");
   };
 
+  const handleExportPdf = () => {
+    if (!generateMutation.data) return;
+    void exportAsPdf(generateMutation.data.sections);
+  };
+
   return (
     <FeaturePageShell>
       <Eyebrow>CV</Eyebrow>
@@ -79,11 +84,13 @@ export function CVPage() {
         {/* Section order editor */}
         <Card padding="lg">
           <h2 className="mb-3 text-base font-semibold text-text-primary">Section Order</h2>
-          <SectionOrderEditor
-            options={DEFAULT_SECTION_OPTIONS}
-            value={sectionOrder}
-            onChange={setSectionOrder}
-          />
+          <div data-testid="cv-section-order">
+            <SectionOrderEditor
+              options={DEFAULT_SECTION_OPTIONS}
+              value={sectionOrder}
+              onChange={setSectionOrder}
+            />
+          </div>
         </Card>
 
         {/* Ad-hoc items */}
@@ -102,6 +109,7 @@ export function CVPage() {
             Opcional — pegá la descripción del puesto para personalizar el CV.
           </p>
           <textarea
+            data-testid="cv-job-description"
             placeholder="Descripción del puesto (opcional, hasta 12.000 caracteres)"
             className="min-h-32 w-full rounded-md border border-border bg-surface px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary transition-colors duration-200 resize-y font-sans focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]"
             value={jobDescription}
@@ -121,6 +129,7 @@ export function CVPage() {
             </label>
             <select
               id="cv-tone"
+              data-testid="cv-tone-select"
               value={tone}
               onChange={(e) => setTone(e.target.value)}
               className="w-full h-11 rounded-md border border-border bg-surface px-4 text-sm text-text-primary focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]"
@@ -134,6 +143,7 @@ export function CVPage() {
           </div>
 
           <Button
+            data-testid="cv-generate-button"
             onClick={handleGenerate}
             disabled={generateMutation.isPending}
             size="lg"
@@ -201,15 +211,20 @@ export function CVPage() {
         {generateMutation.isSuccess && generateMutation.data && (
           <div className="space-y-6">
             <div className="flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" onClick={handleExportMarkdown}>
+              <Button variant="outline" size="sm" data-testid="cv-export-md" onClick={handleExportMarkdown}>
                 Download .md
               </Button>
-              <Button variant="outline" size="sm" onClick={handleExportHtml}>
+              <Button variant="outline" size="sm" data-testid="cv-export-html" onClick={handleExportHtml}>
                 Download .html
+              </Button>
+              <Button variant="outline" size="sm" data-testid="cv-export-pdf" onClick={handleExportPdf}>
+                Download .pdf
               </Button>
             </div>
 
-            <CVPreview data={generateMutation.data} />
+            <div data-testid="cv-preview">
+              <CVPreview data={generateMutation.data} />
+            </div>
           </div>
         )}
       </div>

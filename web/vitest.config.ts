@@ -14,6 +14,7 @@ export default defineConfig({
   },
   plugins: [react()],
   test: {
+    forbidOnly: !!process.env.CI,
     environment: "jsdom",
     globals: true,
     pool: "forks",
