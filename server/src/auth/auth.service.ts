@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { randomUUID } from "node:crypto";
 import { prisma } from "../infra/prisma.js";
 import { sign } from "../infra/http.js";

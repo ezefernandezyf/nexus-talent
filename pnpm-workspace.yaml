@@ -5,6 +5,6 @@ packages:
   - 'e2e'
 allowBuilds:
   '@prisma/engines': true
-  bcrypt: true
+  bcrypt: set this to true or false
   esbuild: true
   prisma: true
