@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { FeaturePageShell } from "@/shared/components";
@@ -15,15 +14,6 @@ import {
   getHistoryRoleLabel,
   getHistoryUid,
 } from "@/features/history/history-formatters";
-
-function DetailSection({ children, title }: { children: ReactNode; title: string }) {
-  return (
-    <Card className="space-y-4">
-      <h2 className="text-caption font-semibold">{title}</h2>
-      {children}
-    </Card>
-  );
-}
 
 function ResultCard({ number, title, children }: { number: string; title: string; children: ReactNode }) {
   return (
@@ -234,36 +224,6 @@ export function HistoryDetailPage() {
           </ResultCard>
         ) : null}
 
-        {analysis.githubEnrichment ? (
-          <DetailSection title="GitHub">
-            <div className="space-y-3 text-body text-text-secondary">
-              <p>
-                Repositorio:{" "}
-                <a
-                  className="text-[var(--accent)] transition-colors hover:opacity-80"
-                  href={analysis.githubEnrichment.repositoryUrl}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  {analysis.githubEnrichment.repositoryName}
-                </a>
-              </p>
-              <p>
-                {analysis.githubEnrichment.warningMessage ??
-                  "El enriquecimiento de GitHub se resolvió sin advertencias."}
-              </p>
-              {analysis.githubEnrichment.detectedStack.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {analysis.githubEnrichment.detectedStack.map((signal) => (
-                    <Badge key={`${signal.name}-${signal.source}`}>
-                      {signal.name}
-                    </Badge>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          </DetailSection>
-        ) : null}
       </div>
     </FeaturePageShell>
   );

@@ -39,22 +39,6 @@ function levelWeight(level: string): number {
   return 33;
 }
 
-function sourceLabel(source: string) {
-  if (source === "languages") {
-    return "Lenguajes";
-  }
-
-  if (source === "topics") {
-    return "Topics";
-  }
-
-  if (source === "description") {
-    return "Descripción";
-  }
-
-  return "GitHub";
-}
-
 function countWords(value: string) {
   return value.trim().split(/\s+/).filter(Boolean).length;
 }
@@ -401,39 +385,6 @@ export function AnalysisResultView({ result, copyToClipboard = defaultCopyToClip
           ))}
         </div>
 
-        {/* GitHub enrichment — inside Skills Matrix as it relates to technical signals */}
-        {result.githubEnrichment ? (
-          <div className="space-y-4 rounded-lg bg-surface-muted p-4">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <p className="text-sm font-semibold text-text-primary">Stack observado en el repositorio</p>
-              <a
-                href={result.githubEnrichment.repositoryUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="text-sm text-text-secondary transition-colors hover:text-text-primary"
-              >
-                {result.githubEnrichment.repositoryName}
-              </a>
-            </div>
-
-            {result.githubEnrichment.warningMessage ? (
-              <p className="rounded-md bg-warning/10 px-4 py-3 text-sm leading-7 text-warning">{result.githubEnrichment.warningMessage}</p>
-            ) : null}
-
-            {result.githubEnrichment.detectedStack.length > 0 ? (
-              <div className="flex flex-wrap gap-2">
-                {result.githubEnrichment.detectedStack.map((signal) => (
-                  <Badge key={`${signal.name}-${signal.source}`}>
-                    {signal.name}
-                    <span className="text-[0.66rem] uppercase tracking-[0.18em] text-text-secondary">{sourceLabel(signal.source)}</span>
-                  </Badge>
-                ))}
-              </div>
-            ) : (
-              <p className="text-sm leading-7 text-text-secondary">No se detectaron señales claras de stack en este repositorio.</p>
-            )}
-          </div>
-        ) : null}
       </Card>
 
       {/* 03 Keywords */}
