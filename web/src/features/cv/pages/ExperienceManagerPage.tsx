@@ -162,8 +162,8 @@ interface ExperienceCardProps {
 
 function ExperienceCard({ entry, onEdit, onDelete }: ExperienceCardProps) {
   const dateRange = entry.endDate
-    ? `${entry.startDate} — ${entry.endDate}`
-    : `${entry.startDate} — Present`;
+    ? `${entry.startDate} – ${entry.endDate}`
+    : `${entry.startDate} – Present`;
 
   return (
     <Card padding="lg">

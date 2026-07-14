@@ -76,7 +76,6 @@ export function CVPage() {
 
   return (
     <FeaturePageShell>
-      <Eyebrow>CV</Eyebrow>
       <h1 className="text-h1 mt-2">CV Generator</h1>
 
       {/* Configuration panel */}
@@ -106,7 +105,7 @@ export function CVPage() {
         <Card padding="lg">
           <h2 className="mb-3 text-base font-semibold text-text-primary">Job Description</h2>
           <p className="mb-4 text-sm text-text-secondary">
-            Opcional — pegá la descripción del puesto para personalizar el CV.
+            Opcional – pegá la descripción del puesto para personalizar el CV.
           </p>
           <textarea
             data-testid="cv-job-description"
@@ -188,7 +187,7 @@ export function CVPage() {
           <Card padding="lg" className="border-[var(--color-error)]/30">
             <div className="py-6 text-center">
               <p className="text-lg font-semibold text-[var(--color-error)]">
-                502 — Generation Failed
+                502 – Generation Failed
               </p>
               <p className="mt-2 text-sm text-text-secondary">
                 {(generateMutation.error as Error)?.message ??
