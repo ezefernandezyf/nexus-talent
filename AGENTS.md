@@ -97,7 +97,7 @@ npx impeccable detect web/src/
 
 | Phase | Estado | Descripción |
 |-------|--------|-------------|
-| **Phase 1 — Polish** | 🟡 En progreso (specs) | Sacar GitHub URL, validar JD ≥30 chars, reemplazar em dashes, remover eyebrow labels en CV y Settings |
+| **Phase 1 — Polish** | ✅ Completado (#86) | Sacar GitHub URL, validar JD ≥30 chars, reemplazar em dashes, remover eyebrow labels en CV y Settings |
 | **Phase 2 — CV Hub en Settings** | 🔲 Pendiente | Settings completo tipo CV Hub: Educación CRUD, Experiencia CRUD, Skills (técnicas + blandas), Contacto (teléfono, email, portfolio) |
 | **Phase 3 — CV + Analysis unificado** | 🔲 Pendiente | Página única de generación: JD + ad-hoc items + orden + tono → CV preview/export + Analysis output. Estilo Lapis CV. Ocultar secciones sin datos |
 

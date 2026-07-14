@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEventHandler } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { Label } from "@/shared/components/label/Label";
@@ -47,7 +47,7 @@ export function JobDescriptionForm({
     appliedPrefillKeyRef.current = initialPrefillKey;
   }, [initialJobDescription, initialPrefillKey]);
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const normalizedDescription = jobDescription.trim();
