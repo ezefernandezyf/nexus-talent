@@ -1,3 +1,4 @@
+import { pdf, Document, Page, View, Text, StyleSheet } from "@react-pdf/renderer";
 import type { CVSection } from "@nexus-talent/shared";
 
 // ---------------------------------------------------------------------------
@@ -80,6 +81,49 @@ export function downloadBlob(content: string, filename: string, mimeType: string
   anchor.download = filename;
   anchor.click();
   anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+// ---------------------------------------------------------------------------
+// PDF Export
+// ---------------------------------------------------------------------------
+
+const pdfStyles = StyleSheet.create({
+  page: { padding: 30, fontFamily: "Helvetica" },
+  heading: { fontSize: 18, fontWeight: "bold", marginBottom: 8, color: "#333" },
+  body: { fontSize: 11, lineHeight: 1.6, marginBottom: 16 },
+  separator: { borderBottom: "1 solid #ccc", marginVertical: 12 },
+  footer: { fontSize: 9, textAlign: "center", color: "#999", marginTop: 20 },
+});
+
+function CVPDFDocument({ sections }: { sections: CVSection[] }) {
+  return (
+    <Document>
+      <Page size="A4" style={pdfStyles.page}>
+        {sections.sort((a, b) => a.order - b.order).map((section, i) => (
+          <View key={i}>
+            <Text style={pdfStyles.heading}>{section.heading}</Text>
+            <Text style={pdfStyles.body}>{section.body}</Text>
+            {i < sections.length - 1 && <View style={pdfStyles.separator} />}
+          </View>
+        ))}
+        <Text style={pdfStyles.footer} render={({ pageNumber, totalPages }: { pageNumber: number; totalPages: number }) => `Page ${pageNumber} of ${totalPages}`} fixed />
+      </Page>
+    </Document>
+  );
+}
+
+/**
+ * Generates a PDF document from CV sections and triggers a browser download.
+ */
+export async function exportAsPdf(sections: CVSection[]): Promise<void> {
+  const blob = await pdf(<CVPDFDocument sections={sections} />).toBlob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "cv.pdf";
+  a.click();
+  a.remove();
   URL.revokeObjectURL(url);
 }
 
