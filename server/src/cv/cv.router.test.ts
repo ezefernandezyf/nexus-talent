@@ -16,6 +16,7 @@ const {
   mockCreateEducation,
   mockUpdateEducation,
   mockDeleteEducation,
+  mockGenerateCV,
 } = vi.hoisted(() => ({
   mockListExperience: vi.fn(),
   mockCreateExperience: vi.fn(),
@@ -25,6 +26,7 @@ const {
   mockCreateEducation: vi.fn(),
   mockUpdateEducation: vi.fn(),
   mockDeleteEducation: vi.fn(),
+  mockGenerateCV: vi.fn(),
 }));
 
 vi.mock("./cv.service.js", () => ({
@@ -36,6 +38,7 @@ vi.mock("./cv.service.js", () => ({
   createEducation: mockCreateEducation,
   updateEducation: mockUpdateEducation,
   deleteEducation: mockDeleteEducation,
+  generateCV: mockGenerateCV,
 }));
 
 // ---------------------------------------------------------------------------
@@ -443,5 +446,103 @@ describe("cv router — education", () => {
       expect.objectContaining({ error: "Validation failed" }),
     );
     expect(mockCreateEducation).not.toHaveBeenCalled();
+  });
+});
+
+describe("cv router — generate CV", () => {
+  const mockSuccessResponse = {
+    sections: [
+      { heading: "Professional Summary", body: "Experienced engineer with 5+ years...", order: 0 },
+      { heading: "Skills", body: "- React\n- TypeScript", order: 1 },
+    ],
+    metadata: {
+      generatedAt: "2026-07-12T19:00:00.000Z",
+      model: "llama-3.3-70b-versatile",
+      sectionCount: 2,
+    },
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("returns 401 on POST /generate without auth", async () => {
+    setAuth(false);
+    const { req, res } = mockReqRes("/generate", { body: {} });
+
+    await callHandler(cvRouter, "post", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ error: "Authentication required" });
+  });
+
+  it("returns 400 with invalid tone", async () => {
+    setAuth(true);
+    const { req, res } = mockReqRes("/generate", { body: { tone: "invalid" } });
+
+    await callHandler(cvRouter, "post", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ error: "Validation failed" }),
+    );
+    expect(mockGenerateCV).not.toHaveBeenCalled();
+  });
+
+  it("returns 400 with jobDescription exceeding 12,000 chars", async () => {
+    setAuth(true);
+    const { req, res } = mockReqRes("/generate", {
+      body: { jobDescription: "x".repeat(12001) },
+    });
+
+    await callHandler(cvRouter, "post", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ error: "Validation failed" }),
+    );
+    expect(mockGenerateCV).not.toHaveBeenCalled();
+  });
+
+  it("returns 200 with minimal body (empty object)", async () => {
+    setAuth(true);
+    mockGenerateCV.mockResolvedValue(mockSuccessResponse);
+    const { req, res } = mockReqRes("/generate", { body: {} });
+
+    await callHandler(cvRouter, "post", req, res);
+
+    expect(res.json).toHaveBeenCalledWith(mockSuccessResponse);
+    expect(mockGenerateCV).toHaveBeenCalledWith("user-1", {});
+  });
+
+  it("returns 200 with full payload (ad-hoc items + jobDescription + tone)", async () => {
+    setAuth(true);
+    const input = {
+      sectionOrder: ["summary", "experience", "skills"],
+      adHocItems: [
+        { type: "project" as const, title: "Portfolio", description: "Built with Next.js" },
+      ],
+      jobDescription: "Senior FE role requiring React expertise",
+      tone: "casual" as const,
+    };
+    mockGenerateCV.mockResolvedValue(mockSuccessResponse);
+    const { req, res } = mockReqRes("/generate", { body: input });
+
+    await callHandler(cvRouter, "post", req, res);
+
+    expect(res.json).toHaveBeenCalledWith(mockSuccessResponse);
+    expect(mockGenerateCV).toHaveBeenCalledWith("user-1", input);
+  });
+
+  it("returns 502 when generateCV throws AppError", async () => {
+    setAuth(true);
+    const error = new AppError(502, "Groq API timed out");
+    mockGenerateCV.mockRejectedValue(error);
+    const { req, res } = mockReqRes("/generate", { body: {} });
+
+    await callHandler(cvRouter, "post", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(502);
+    expect(res.json).toHaveBeenCalledWith({ error: "Groq API timed out" });
   });
 });

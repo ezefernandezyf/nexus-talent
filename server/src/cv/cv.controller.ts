@@ -100,12 +100,13 @@ export async function deleteEducation(req: Request, res: Response, next: NextFun
 }
 
 // ============================================================================
-// Generate (stub — implemented in PR 2)
+// Generate CV
 // ============================================================================
 
 export async function generateCV(req: Request, res: Response, next: NextFunction) {
   try {
-    res.status(501).json({ error: "CV generation not yet implemented" });
+    const result = await cvService.generateCV(req.userId!, req.body);
+    res.json(result);
   } catch (err) {
     next(err);
   }

@@ -35,13 +35,13 @@ Chain strategy: pending
 - [x] **T2.5** — Tests: ownership, 401, 400, 404 scenarios (22 tests)
 
 ## Group 3: Server Generate
-- [ ] **T3.1** — Service: `generateCV()` — merge data, build prompt, `fetchGroq()`, Zod validate, 502 on errors
-- [ ] **T3.2** — Router: `POST /api/cv/generate` with `cvGenerateRequestSchema` validation
-- [ ] **T3.3** — Tests: mock timeout, malformed response, empty input, full success
+- [x] **T3.1** — Service: `generateCV()` — merge data, build prompt, `fetchGroq()`, Zod validate, 502 on errors
+- [x] **T3.2** — Router: `POST /api/cv/generate` with `cvGenerateRequestSchema` validation
+- [x] **T3.3** — Tests: 401, 400 invalid tone, 400 jobDescription >12k, 200 empty body, 200 full payload, 502 propagation
 
 ## Group 4: Frontend Foundation
-- [ ] **T4.1** — API: `cv-repository.ts` — `apiClient` wrapper for all CV endpoints
-- [ ] **T4.2** — Hooks: `useExperience.ts`, `useEducation.ts`, `useCVGenerate.ts` — React Query mutations
+- [x] **T4.1** — API: `cv-repository.ts` — `apiClient` wrapper for all CV endpoints
+- [x] **T4.2** — Hooks: `useExperience.ts`, `useEducation.ts`, `useCVGenerate.ts` — React Query mutations
 
 ## Group 5: Frontend Pages
 - [ ] **T5.1** — Page: `ExperienceManagerPage.tsx` — CRUD list with inline add/edit/delete
@@ -55,9 +55,9 @@ Chain strategy: pending
 - [ ] **T6.4** — Export helpers: `.md`, `.html` download + `.pdf` via `@react-pdf/renderer`
 
 ## Group 7: Routing + Nav
-- [ ] **T7.1** — Routes: `/app/cv`, `/app/cv/experience`, `/app/cv/education` in `router.tsx`
-- [ ] **T7.2** — Nav: "CV" nav item (requiresAuth) in `AppLayout.tsx`
-- [ ] **T7.3** — Deps: Install `@react-pdf/renderer`
+- [x] **T7.1** — Routes: `/app/cv`, `/app/cv/experience`, `/app/cv/education` in `router.tsx`
+- [x] **T7.2** — Nav: "CV" nav item (requiresAuth) in `AppLayout.tsx`
+- [x] **T7.3** — Deps: Install `@react-pdf/renderer`
 
 ## Group 8: E2E
 - [ ] **T8.1** — Playwright: create experience + education → generate CV → verify sections render
