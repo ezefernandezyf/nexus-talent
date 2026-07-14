@@ -42,9 +42,8 @@ export const authSessionDTOSchema = z.object({
  * `githubRepositoryUrl` preserved from current `JOB_ANALYSIS_REQUEST_SCHEMA`.
  */
 export const analysisRequestSchema = z.object({
-  jobDescription: z.string().min(1).max(12_000),
+  jobDescription: z.string().min(30).max(12_000),
   messageTone: z.enum(["formal", "casual", "persuasive"]).optional(),
-  githubRepositoryUrl: z.string().optional(),
 });
 
 /**
