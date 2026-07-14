@@ -39,7 +39,7 @@ export const authSessionDTOSchema = z.object({
 /**
  * Analysis request sent to POST /api/ai/analyze.
  * `messageTone` aligns with existing frontend enum values.
- * `githubRepositoryUrl` preserved from current `JOB_ANALYSIS_REQUEST_SCHEMA`.
+ * `jobDescription` minimum 30 characters to ensure sufficient context.
  */
 export const analysisRequestSchema = z.object({
   jobDescription: z.string().min(30).max(12_000),

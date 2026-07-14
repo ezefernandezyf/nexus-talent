@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FeaturePageShell } from "@/shared/components";
-import { Eyebrow } from "@/shared/components/eyebrow/Eyebrow";
 import { Button } from "@/shared/components/button";
 import { Card } from "@/shared/components/card";
 import { Input } from "@/shared/components/input";

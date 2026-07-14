@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { FeaturePageShell } from "@/shared/components";

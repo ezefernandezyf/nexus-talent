@@ -54,6 +54,7 @@ describe("AnalysisPage", () => {
         }] as never}>
           <AnalysisPage />
         </MemoryRouter>
+      </QueryClientProvider>
     );
 
     expect(screen.getByLabelText(/descripción del puesto/i)).toHaveValue("Vacante rearmada desde historial con más de treinta caracteres");

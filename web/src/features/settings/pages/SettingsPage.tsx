@@ -1,5 +1,4 @@
 import { FeaturePageShell } from "@/shared/components";
-import { Eyebrow } from "@/shared/components/eyebrow/Eyebrow";
 import { SettingsPageSkeleton } from "@/features/settings/components/SettingsPageSkeleton";
 import { useAuth } from "@/features/auth";
 import { SettingsFeature } from "..";
