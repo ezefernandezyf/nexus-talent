@@ -19,6 +19,8 @@ function toProfileDTO(profile: {
   resumeLink: string | null;
   linkedinUrl: string | null;
   githubUrl: string | null;
+  phone: string | null;
+  portfolioUrl: string | null;
   location: string | null;
 }): ProfileDTO {
   return {
@@ -31,6 +33,8 @@ function toProfileDTO(profile: {
     resumeLink: profile.resumeLink,
     linkedinUrl: profile.linkedinUrl,
     githubUrl: profile.githubUrl,
+    phone: profile.phone,
+    portfolioUrl: profile.portfolioUrl,
     location: profile.location,
   };
 }

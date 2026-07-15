@@ -16,6 +16,8 @@ model Profile {
   resumeLink       String?
   linkedinUrl      String?
   githubUrl        String?
+  phone            String?
+  portfolioUrl     String?
   location         String?
   passwordHash     String?
   googleId      String?  @unique
