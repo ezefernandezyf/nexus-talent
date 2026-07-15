@@ -144,6 +144,8 @@ export const profileSchema = z.object({
   resumeLink: z.string().url().nullable().or(z.literal("")),
   linkedinUrl: z.string().url().nullable().or(z.literal("")),
   githubUrl: z.string().url().nullable().or(z.literal("")),
+  phone: z.string().nullable(),
+  portfolioUrl: z.string().url().nullable().or(z.literal("")),
   location: z.string().nullable(),
 });
 
@@ -160,6 +162,8 @@ export const profileUpdateSchema = z.object({
   resumeLink: z.string().url().optional().or(z.literal("")),
   linkedinUrl: z.string().url().optional().or(z.literal("")),
   githubUrl: z.string().url().optional().or(z.literal("")),
+  phone: z.string().trim().optional().or(z.literal("").transform(() => undefined)),
+  portfolioUrl: z.string().url().optional().or(z.literal("")),
   location: z.string().trim().optional().or(z.literal("").transform(() => undefined)),
 });
 

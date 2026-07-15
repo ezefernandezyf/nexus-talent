@@ -77,16 +77,16 @@ describe("SettingsFeature", () => {
 
     await waitFor(() => expect(screen.getByText(/gestioná tu identidad/i)).toBeInTheDocument());
 
-    // 4 numbered cards exist (P14 adds a 4th card)
+    // Accordion sections: 3 numbered + Contact + Skills
     expect(screen.getByText("01")).toBeInTheDocument();
     expect(screen.getByText("02")).toBeInTheDocument();
     expect(screen.getByText("03")).toBeInTheDocument();
-    expect(screen.getByText("04")).toBeInTheDocument();
 
     expect(screen.getByText("Account")).toBeInTheDocument();
     expect(screen.getByText("Appearance")).toBeInTheDocument();
     expect(screen.getByText("Data")).toBeInTheDocument();
-    expect(screen.getByText("Perfil Profesional")).toBeInTheDocument();
+    expect(screen.getByText("Contact")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Skills" })).toBeInTheDocument();
 
     // Email and name fields
     expect(screen.getByLabelText(/email/i)).toHaveValue("analyst@nexustalent.dev");

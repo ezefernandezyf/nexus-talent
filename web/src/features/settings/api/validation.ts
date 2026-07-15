@@ -22,6 +22,8 @@ export const PROFILE_RECORD_SCHEMA = z.object({
   resume_link: PROFILE_URL_SCHEMA,
   linkedin_url: PROFILE_URL_SCHEMA,
   github_url: PROFILE_URL_SCHEMA,
+  phone: z.string().nullable(),
+  portfolio_url: PROFILE_URL_SCHEMA,
   location: z.string().nullable(),
 });
 
@@ -36,6 +38,8 @@ export const PROFILE_SAVE_INPUT_SCHEMA = z.object({
   resumeLink: z.string().url().optional().or(z.literal("")),
   linkedinUrl: z.string().url().optional().or(z.literal("")),
   githubUrl: z.string().url().optional().or(z.literal("")),
+  phone: z.string().trim().optional(),
+  portfolioUrl: z.string().url().optional().or(z.literal("")),
   location: z.string().trim().optional(),
 });
 
