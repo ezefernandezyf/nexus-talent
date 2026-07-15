@@ -17,6 +17,8 @@ import {
 import { SettingsForm } from "./components/SettingsForm";
 import { ContactSection } from "./components/ContactSection";
 import { SkillsSection } from "./components/SkillsSection";
+import { ExperienceSection } from "./components/ExperienceSection";
+import { EducationSection } from "./components/EducationSection";
 import { useSettings } from "./hooks/useSettings";
 import { useTheme } from "@/core/theme";
 
@@ -414,6 +416,24 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
               isPending={saveProfilePending}
               onSave={saveProfile}
             />
+          </Accordion.Content>
+        </Accordion.Item>
+
+        {/* ─── Experience ─── */}
+        <Accordion.Item id="experience">
+          <Accordion.Trigger>Experience</Accordion.Trigger>
+          <Accordion.Content className="p-4">
+            <h3 className="text-h3 mb-1">Experiencia</h3>
+            <ExperienceSection />
+          </Accordion.Content>
+        </Accordion.Item>
+
+        {/* ─── Education ─── */}
+        <Accordion.Item id="education">
+          <Accordion.Trigger>Education</Accordion.Trigger>
+          <Accordion.Content className="p-4">
+            <h3 className="text-h3 mb-1">Formación</h3>
+            <EducationSection />
           </Accordion.Content>
         </Accordion.Item>
       </Accordion.Root>
