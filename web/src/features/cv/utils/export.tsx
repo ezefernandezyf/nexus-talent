@@ -43,20 +43,56 @@ export function exportAsHtml(sections: CVSection[]): string {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CV</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.0.0/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.0.0/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.0/index.css" />
 <style>
   body {
-    font-family: "Switzer", "Geist", -apple-system, sans-serif;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 0 24px;
-    line-height: 1.6;
-    color: #1a1a1a;
+    font-family: "Noto Sans SC", sans-serif;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 20mm;
+    font-size: 9.5pt;
+    line-height: 1.55;
+    color: #353a42;
+    background: #fff;
   }
-  h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
-  h2 { font-size: 1.5rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.5rem; }
-  p { margin-bottom: 1rem; white-space: pre-wrap; }
+  h1 {
+    font-family: "Noto Serif SC", serif;
+    font-size: 14pt;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    color: #353a42;
+  }
+  h2 {
+    font-family: "Noto Serif SC", serif;
+    font-size: 10.5pt;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #dae3ea;
+    padding-bottom: 2pt;
+    color: #353a42;
+  }
+  p {
+    margin-bottom: 0.75rem;
+    white-space: pre-wrap;
+    color: #353a42;
+  }
+  a, code {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9pt;
+  }
+  a { color: #4870ad; }
+  .meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8pt;
+    color: #8a8e94;
+    margin-bottom: 1rem;
+  }
   @media print {
-    body { margin: 0; padding: 0.5in; }
+    body { margin: 0; padding: 0; }
   }
 </style>
 </head>
