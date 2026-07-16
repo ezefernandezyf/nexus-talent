@@ -10,7 +10,7 @@ import { createTestQueryClient } from "@/test/mocks/query-client";
 import { AppRouter } from "./router";
 
 // Eager imports for tests that bypass lazy-load reliability issues
-import { AnalysisPage } from "@/features/analysis/pages/AnalysisPage";
+import { UnifiedPage } from "@/features/cv/pages/UnifiedPage";
 import { AppLayout } from "@/shared/layouts/AppLayout";
 
 // ---------------------------------------------------------------------------
@@ -84,19 +84,19 @@ describe("AppRouter", () => {
     });
   });
 
-  it("renders the app shell and analysis page for anonymous users", () => {
+  it("renders the unified CV + Analysis page for authenticated users", () => {
     // Bypass lazy-loaded router to avoid import-on-mount reliability issues in test env
     const queryClient = createTestQueryClient();
-    queryClient.setQueryData(["auth", "session"], null);
-    useAuthStatus.setState({ status: "unauthenticated" });
+    queryClient.setQueryData(["auth", "session"], { user: { id: "test", email: "test@test.com" } });
+    useAuthStatus.setState({ status: "authenticated", user: { id: "test", email: "test@test.com" } });
 
     render(
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <MemoryRouter initialEntries={["/app/analysis"]}>
+          <MemoryRouter initialEntries={["/app/cv"]}>
             <Routes>
               <Route element={<AppLayout />}>
-                <Route path="/app/analysis" element={<AnalysisPage />} />
+                <Route path="/app/cv" element={<UnifiedPage />} />
               </Route>
             </Routes>
           </MemoryRouter>
@@ -104,8 +104,7 @@ describe("AppRouter", () => {
       </QueryClientProvider>,
     );
 
-    expect(screen.getByRole("heading", { name: /análisis de reclutamiento/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /iniciar sesión/i })).toHaveAttribute("href", "/auth/sign-in");
+    expect(screen.getByRole("heading", { name: /generador de cv/i })).toBeInTheDocument();
   });
 
   it("returns 404 for removed admin routes", async () => {
