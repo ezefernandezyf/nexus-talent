@@ -32,15 +32,15 @@ Chain strategy: pending
 
 ## Phase 2: Core Implementation
 
-- [ ] 2.1 Create `UnifiedPage.tsx` — vertical stack: config panel (JD ≥30 chars, tone, GitHub URL, SectionOrderEditor, AdHocItemForm) → GENERATE → results
-- [ ] 2.2 Implement parallel API orchestration: `useCVGenerate.mutateAsync()` + `useJobAnalysis().submitAnalysis()` via `Promise.allSettled`, per-API loading/error/success states
-- [ ] 2.3 Filter empty CV sections (empty/null/whitespace body) in UnifiedPage before passing to CVPreview and exports
+- [x] 2.1 Create `UnifiedPage.tsx` — vertical stack: config panel (JD ≥30 chars, tone, SectionOrderEditor, AdHocItemForm) → GENERATE → results
+- [x] 2.2 Implement parallel API orchestration: `useCVGenerate.mutateAsync()` + `useJobAnalysis().submitAnalysis()` — fire both, observe per-API states reactively. NOT Promise.allSettled (design decisions: one is promise-based, the other is reactive fire-and-forget with ref-synced callbacks)
+- [x] 2.3 Filter empty CV sections (empty/null/whitespace body) in UnifiedPage before passing to CVPreview and exports
 
 ## Phase 3: Integration
 
 - [ ] 3.1 Modify `AnalysisFeature.tsx` — accept `jd`, `tone`, `githubUrl` as props, hide own form when props provided
 - [ ] 3.2 Update `export.tsx` with Lapis inline CSS in HTML export + empty-section-aware output
-- [ ] 3.3 Wire `export.tsx` changes in UnifiedPage (pass filtered sections to all export functions)
+- [x] 3.3 Wire `export.tsx` changes in UnifiedPage (pass filtered sections to all export functions)
 
 ## Phase 4: Route Cleanup
 
