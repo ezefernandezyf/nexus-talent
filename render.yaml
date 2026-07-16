@@ -13,4 +13,4 @@ services:
       - key: GROQ_API_KEY
         sync: false
       - key: CORS_ORIGIN
-        value: https://nexus-talent.vercel.app
+        value: https://nexustalent.vercel.app
