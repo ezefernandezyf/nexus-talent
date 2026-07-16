@@ -19,7 +19,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://nexus-talent-api-svik.onrender.com/api/$1"
+      "destination": "https://nexus-talent-api.onrender.com/api/$1"
     },
     {
       "source": "/",
