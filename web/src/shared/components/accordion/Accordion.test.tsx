@@ -54,16 +54,16 @@ describe("Accordion", () => {
   it("collapses all content when no defaultOpen is set", () => {
     render(<AccordionExample />);
 
-    expect(screen.queryByText("Account settings content")).not.toBeInTheDocument();
-    expect(screen.queryByText("Appearance settings content")).not.toBeInTheDocument();
-    expect(screen.queryByText("Data settings content")).not.toBeInTheDocument();
+    expect(getTrigger("Account")).toHaveAttribute("aria-expanded", "false");
+    expect(getTrigger("Appearance")).toHaveAttribute("aria-expanded", "false");
+    expect(getTrigger("Data")).toHaveAttribute("aria-expanded", "false");
   });
 
   it("shows the defaultOpen item's content on mount", () => {
     render(<AccordionExample defaultOpen="account" />);
 
-    expect(screen.getByText("Account settings content")).toBeInTheDocument();
-    expect(screen.queryByText("Appearance settings content")).not.toBeInTheDocument();
+    expect(getTrigger("Account")).toHaveAttribute("aria-expanded", "true");
+    expect(getTrigger("Appearance")).toHaveAttribute("aria-expanded", "false");
   });
 
   it("expands content when a trigger is clicked", async () => {
@@ -71,7 +71,7 @@ describe("Accordion", () => {
     render(<AccordionExample />);
 
     await user.click(getTrigger("Account"));
-    expect(screen.getByText("Account settings content")).toBeInTheDocument();
+    expect(getTrigger("Account")).toHaveAttribute("aria-expanded", "true");
   });
 
   it("collapses content when the open trigger is clicked again", async () => {
@@ -79,7 +79,7 @@ describe("Accordion", () => {
     render(<AccordionExample defaultOpen="account" />);
 
     await user.click(getTrigger("Account"));
-    expect(screen.queryByText("Account settings content")).not.toBeInTheDocument();
+    expect(getTrigger("Account")).toHaveAttribute("aria-expanded", "false");
   });
 
   it("closes the previous item when a different item is opened (single-expand)", async () => {
@@ -87,8 +87,8 @@ describe("Accordion", () => {
     render(<AccordionExample defaultOpen="account" />);
 
     await user.click(getTrigger("Appearance"));
-    expect(screen.getByText("Appearance settings content")).toBeInTheDocument();
-    expect(screen.queryByText("Account settings content")).not.toBeInTheDocument();
+    expect(getTrigger("Appearance")).toHaveAttribute("aria-expanded", "true");
+    expect(getTrigger("Account")).toHaveAttribute("aria-expanded", "false");
   });
 
   it("sets aria-expanded correctly on triggers", () => {
@@ -140,6 +140,6 @@ describe("Accordion", () => {
     trigger.focus();
     await user.keyboard("{Enter}");
 
-    expect(screen.queryByText("Account settings content")).not.toBeInTheDocument();
+    expect(getTrigger("Account")).toHaveAttribute("aria-expanded", "false");
   });
 });

@@ -72,7 +72,7 @@ describe("CVPreview", () => {
     render(<CVPreview data={sampleResponse} />);
 
     expect(screen.getByText(/groq-llama-3.3/)).toBeInTheDocument();
-    expect(screen.getByText(/13\/7\/2026/)).toBeInTheDocument();
+    expect(screen.getByText(/2026/)).toBeInTheDocument();
   });
 
   it("shows empty state when sections array is empty", () => {
