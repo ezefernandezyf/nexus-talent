@@ -68,12 +68,11 @@ describe("CVPreview", () => {
     expect(headings[2]).toHaveTextContent("Experience");
   });
 
-  it("shows metadata info (generated date and model)", () => {
+  it("shows metadata info (model and date)", () => {
     render(<CVPreview data={sampleResponse} />);
 
     expect(screen.getByText(/groq-llama-3.3/)).toBeInTheDocument();
-    expect(screen.getByText(/generated/i)).toBeInTheDocument();
-    expect(screen.getByText(/3 sections/i)).toBeInTheDocument();
+    expect(screen.getByText(/13\/7\/2026/)).toBeInTheDocument();
   });
 
   it("shows empty state when sections array is empty", () => {
