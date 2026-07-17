@@ -48,7 +48,7 @@ function ProviderIcon({ provider }: { provider: "google" }) {
 function StatusPill({ connected }: { connected: boolean }) {
   return (
     <Badge
-      variant={connected ? "success" : "neutral"}
+      className={connected ? "bg-success/10 text-success" : "bg-[--color-surface-muted] text-text-secondary"}
       data-state={connected ? "connected" : "disconnected"}
     >
       {connected ? "Conectado" : "No conectado"}
@@ -387,7 +387,6 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
         <Accordion.Item id="contact">
           <Accordion.Trigger>Contact</Accordion.Trigger>
           <Accordion.Content className="p-4">
-            <h3 className="text-h3 mb-1">Contacto</h3>
             <p className="text-body text-text-secondary mb-6">
               Tu información de contacto se usa en el CV y en los mensajes
               generados.
@@ -406,7 +405,6 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
         <Accordion.Item id="skills">
           <Accordion.Trigger>Skills</Accordion.Trigger>
           <Accordion.Content className="p-4">
-            <h3 className="text-h3 mb-1">Skills</h3>
             <p className="text-body text-text-secondary mb-6">
               Agregá tus habilidades técnicas separadas por coma. Se mostrarán
               como etiquetas en el CV.
@@ -423,7 +421,6 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
         <Accordion.Item id="experience">
           <Accordion.Trigger>Experience</Accordion.Trigger>
           <Accordion.Content className="p-4">
-            <h3 className="text-h3 mb-1">Experiencia</h3>
             <ExperienceSection />
           </Accordion.Content>
         </Accordion.Item>
@@ -432,7 +429,6 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
         <Accordion.Item id="education">
           <Accordion.Trigger>Education</Accordion.Trigger>
           <Accordion.Content className="p-4">
-            <h3 className="text-h3 mb-1">Formación</h3>
             <EducationSection />
           </Accordion.Content>
         </Accordion.Item>

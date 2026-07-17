@@ -157,19 +157,22 @@ function Content({ children, className }: ContentProps) {
   const triggerId = `${baseId}-${itemId}-trigger`;
 
   return (
+    <div className={cn("overflow-hidden", className)}>
     <div
       id={contentId}
       role="region"
       aria-labelledby={triggerId}
+      className={cn("overflow-hidden", className)}
       style={{
         display: "grid",
         gridTemplateRows: isOpen ? "1fr" : "0fr",
         transition: "grid-template-rows 200ms ease-out",
       }}
     >
-      <div className={cn("overflow-hidden", className)}>
+      <div>
         {children}
       </div>
+    </div>
     </div>
   );
 }

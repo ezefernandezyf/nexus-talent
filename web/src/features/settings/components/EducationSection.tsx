@@ -282,7 +282,7 @@ export function EducationSection() {
     <div className="space-y-4">
       {/* Help text */}
       <p className="text-sm text-text-secondary">
-        Agregá tu formación académica — títulos, certificaciones, cursos
+        Agregá tu formación académica – títulos, certificaciones, cursos
         relevantes.
       </p>
 
