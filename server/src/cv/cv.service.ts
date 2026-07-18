@@ -165,7 +165,7 @@ function formatAdHocItems(items: CVGenerateRequestDTO["adHocItems"]): string {
 function buildCVPrompt(
   experience: Array<{ company: string; role: string; startDate: string; endDate: string | null; description: string | null; location: string | null }>,
   education: Array<{ institution: string; degree: string; field: string | null; startDate: string; endDate: string | null; description: string | null }>,
-  profile: { skills: string | null; experienceLevel: string | null; roleTitle: string | null } | null,
+  profile: { skills: string | null; experienceLevel: string | null; roleTitle: string | null; phone: string | null; portfolioUrl: string | null; linkedinUrl: string | null; githubUrl: string | null } | null,
   input: CVGenerateRequestDTO,
 ): GroqChatMessage[] {
   const sectionOrder = input.sectionOrder?.length ? input.sectionOrder.join(", ") : "auto (AI determines order)";
@@ -191,6 +191,10 @@ function buildCVPrompt(
     if (profile.skills) profileParts.push(`Skills: ${profile.skills}`);
     if (profile.roleTitle) profileParts.push(`Rol deseado: ${profile.roleTitle}`);
     if (profile.experienceLevel) profileParts.push(`Nivel de experiencia: ${profile.experienceLevel}`);
+    if (profile.phone) profileParts.push(`Teléfono: ${profile.phone}`);
+    if (profile.portfolioUrl) profileParts.push(`Portfolio: ${profile.portfolioUrl}`);
+    if (profile.linkedinUrl) profileParts.push(`LinkedIn: ${profile.linkedinUrl}`);
+    if (profile.githubUrl) profileParts.push(`GitHub: ${profile.githubUrl}`);
     if (profileParts.length > 0) {
       userPrompt += `\n## Perfil del usuario\n${profileParts.join("\n")}\n`;
     }
@@ -230,11 +234,23 @@ Formato exacto requerido:
   }
 }
 
-Reglas:
-- Cada heading debe ser un string no vacio.
-- Cada body debe ser un string no vacio en Markdown.
-- El numero de secciones debe coincidir con sectionCount en metadata.
-- generatedAt debe ser el timestamp actual ISO.
+REGLAS DE ESTILO (obligatorias):
+1. HEADER: La PRIMERA seccion (order: 0) debe llamarse "Contacto" y contener el nombre completo del usuario (usando el campo "Rol deseado" o generando un nombre generico si no hay), seguido de telefono, email, LinkedIn, GitHub y portfolio. Cada dato en su propia linea. Ej:
+   Juan Perez
+   Tel: +54 11 5555-5555
+   Email: juan@email.com
+   LinkedIn: linkedin.com/in/juanperez
+   GitHub: github.com/juanperez
+
+2. ANTI-AI VOICE: NO uses frases genericas como "apasionado por", "results-driven", "proven track record", "spearheaded", "leveraged", "team player", "detail-oriented", "thrive in fast-paced environments". Suenan a IA y los reclutadores las detectan.
+
+3. BULLETS CON TEXTURA TECNICA: Cada bullet point debe incluir tecnologia especifica (React 19, Node.js, PostgreSQL, Prisma, etc.) + accion concreta + resultado medible cuando sea posible. Ej:
+   ❌ "Encargado del desarrollo frontend"
+   ✅ "Desarrollé el frontend con React 19 + TypeScript, reduciendo el tiempo de carga en un 40%"
+
+4. VARIACION: No todos los bullets deben seguir el mismo patron. Mezcla bullets cortos, tecnicos y de resultados.
+
+5. SECCIONES SIN DATOS: Si el usuario no tiene datos para una seccion (educacion, experiencia, proyectos), NO incluyas esa seccion en el JSON.
 
 ${toneInstruction}`,
     },
