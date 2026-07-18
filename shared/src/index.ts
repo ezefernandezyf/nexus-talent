@@ -24,6 +24,9 @@ export {
   educationSchema,
   educationCreateSchema,
   educationUpdateSchema,
+  projectSchema,
+  projectCreateSchema,
+  projectUpdateSchema,
   // CV - Generation
   cvGenerateRequestSchema,
   cvSectionSchema,
@@ -49,6 +52,9 @@ export type {
   EducationDTO,
   EducationCreateDTO,
   EducationUpdateDTO,
+  ProjectDTO,
+  ProjectCreateDTO,
+  ProjectUpdateDTO,
   // CV - Generation
   CVGenerateRequestDTO,
   CVGenerateResponseDTO,

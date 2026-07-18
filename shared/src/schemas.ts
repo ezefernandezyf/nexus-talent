@@ -392,6 +392,26 @@ export const educationCreateSchema = educationSchema.omit({ id: true, userId: tr
 export const educationUpdateSchema = educationCreateSchema.partial();
 
 // ============================================================================
+// CV - Projects
+// ============================================================================
+
+export const projectSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  name: z.string().min(1),
+  role: z.string().nullable().optional(),
+  startDate: z.string(),
+  endDate: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
+  technologies: z.string().nullable().optional(),
+  demoUrl: z.string().nullable().optional(),
+  repoUrl: z.string().nullable().optional(),
+});
+
+export const projectCreateSchema = projectSchema.omit({ id: true, userId: true });
+export const projectUpdateSchema = projectCreateSchema.partial();
+
+// ============================================================================
 // CV - Generation
 // ============================================================================
 
@@ -441,6 +461,9 @@ export type WorkExperienceUpdateDTO = z.infer<typeof workExperienceUpdateSchema>
 export type EducationDTO = z.infer<typeof educationSchema>;
 export type EducationCreateDTO = z.infer<typeof educationCreateSchema>;
 export type EducationUpdateDTO = z.infer<typeof educationUpdateSchema>;
+export type ProjectDTO = z.infer<typeof projectSchema>;
+export type ProjectCreateDTO = z.infer<typeof projectCreateSchema>;
+export type ProjectUpdateDTO = z.infer<typeof projectUpdateSchema>;
 export type CVSection = z.infer<typeof cvSectionSchema>;
 export type CVGenerateRequestDTO = z.infer<typeof cvGenerateRequestSchema>;
 export type CVGenerateResponseDTO = z.infer<typeof cvGenerateResponseSchema>;

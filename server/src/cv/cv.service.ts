@@ -7,6 +7,8 @@ import type {
   WorkExperienceUpdateDTO,
   EducationCreateDTO,
   EducationUpdateDTO,
+  ProjectCreateDTO,
+  ProjectUpdateDTO,
   CVGenerateRequestDTO,
   CVGenerateResponseDTO,
 } from "../../../shared/src/schemas.js";
@@ -92,6 +94,39 @@ export async function deleteEducation(id: string, userId: string) {
   const existing = await prisma.education.findFirst({ where: { id, userId } });
   if (!existing) throw new AppError(404, "Education not found");
   await prisma.education.delete({ where: { id } });
+}
+
+// ============================================================================
+// Projects
+// ============================================================================
+
+export async function listProjects(userId: string) {
+  return prisma.project.findMany({
+    where: { userId },
+    orderBy: { startDate: "desc" },
+  });
+}
+
+export async function getProject(id: string, userId: string) {
+  const item = await prisma.project.findFirst({ where: { id, userId } });
+  if (!item) throw new AppError(404, "Project not found");
+  return item;
+}
+
+export async function createProject(userId: string, data: ProjectCreateDTO) {
+  return prisma.project.create({ data: { ...data, userId } });
+}
+
+export async function updateProject(id: string, userId: string, data: ProjectUpdateDTO) {
+  const existing = await prisma.project.findFirst({ where: { id, userId } });
+  if (!existing) throw new AppError(404, "Project not found");
+  return prisma.project.update({ where: { id }, data });
+}
+
+export async function deleteProject(id: string, userId: string) {
+  const existing = await prisma.project.findFirst({ where: { id, userId } });
+  if (!existing) throw new AppError(404, "Project not found");
+  await prisma.project.delete({ where: { id } });
 }
 
 // ============================================================================

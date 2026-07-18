@@ -19,6 +19,7 @@ import { ContactSection } from "./components/ContactSection";
 import { SkillsSection } from "./components/SkillsSection";
 import { ExperienceSection } from "./components/ExperienceSection";
 import { EducationSection } from "./components/EducationSection";
+import { ProjectsSection } from "./components/ProjectsSection";
 import { useSettings } from "./hooks/useSettings";
 import { useTheme } from "@/core/theme";
 
@@ -430,6 +431,14 @@ export function SettingsFeature({ repository }: SettingsFeatureProps) {
           <Accordion.Trigger>Education</Accordion.Trigger>
           <Accordion.Content className="p-4">
             <EducationSection />
+          </Accordion.Content>
+        </Accordion.Item>
+
+        {/* ─── Projects ─── */}
+        <Accordion.Item id="projects">
+          <Accordion.Trigger>Projects</Accordion.Trigger>
+          <Accordion.Content className="p-4">
+            <ProjectsSection />
           </Accordion.Content>
         </Accordion.Item>
       </Accordion.Root>

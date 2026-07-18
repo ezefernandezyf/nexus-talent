@@ -100,6 +100,55 @@ export async function deleteEducation(req: Request, res: Response, next: NextFun
 }
 
 // ============================================================================
+// Projects
+// ============================================================================
+
+export async function listProjects(req: Request, res: Response, next: NextFunction) {
+  try {
+    const items = await cvService.listProjects(req.userId!);
+    res.json(items);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getProject(req: Request, res: Response, next: NextFunction) {
+  try {
+    const item = await cvService.getProject(req.params.id as string, req.userId!);
+    res.json(item);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function createProject(req: Request, res: Response, next: NextFunction) {
+  try {
+    const item = await cvService.createProject(req.userId!, req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateProject(req: Request, res: Response, next: NextFunction) {
+  try {
+    const item = await cvService.updateProject(req.params.id as string, req.userId!, req.body);
+    res.json(item);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function deleteProject(req: Request, res: Response, next: NextFunction) {
+  try {
+    await cvService.deleteProject(req.params.id as string, req.userId!);
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================================
 // Generate CV
 // ============================================================================
 
