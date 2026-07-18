@@ -6,6 +6,8 @@ import {
   workExperienceUpdateSchema,
   educationCreateSchema,
   educationUpdateSchema,
+  projectCreateSchema,
+  projectUpdateSchema,
   cvGenerateRequestSchema,
 } from "../../../shared/src/schemas.js";
 import * as controller from "./cv.controller.js";
@@ -23,6 +25,12 @@ cvRouter.get("/education", requireAuth, controller.listEducation);
 cvRouter.post("/education", requireAuth, validate(educationCreateSchema), controller.createEducation);
 cvRouter.put("/education/:id", requireAuth, validate(educationUpdateSchema), controller.updateEducation);
 cvRouter.delete("/education/:id", requireAuth, controller.deleteEducation);
+
+// ── Projects CRUD ────────────────────────────────────────────
+cvRouter.get("/projects", requireAuth, controller.listProjects);
+cvRouter.post("/projects", requireAuth, validate(projectCreateSchema), controller.createProject);
+cvRouter.put("/projects/:id", requireAuth, validate(projectUpdateSchema), controller.updateProject);
+cvRouter.delete("/projects/:id", requireAuth, controller.deleteProject);
 
 // ── CV Generation (stub — full implementation in PR 2) ───────
 cvRouter.post("/generate", requireAuth, validate(cvGenerateRequestSchema), controller.generateCV);

@@ -100,7 +100,7 @@ npx impeccable detect web/src/
 | **Phase 1 — Polish** | ✅ Completado (#86) | Sacar GitHub URL, validar JD ≥30 chars, reemplazar em dashes, remover eyebrow labels en CV y Settings |
 | **Phase 2 — CV Hub en Settings** | ✅ Completado (#87-89) | Settings tipo CV Hub: Accordion, Educación CRUD, Experiencia CRUD, Skills con Tags, Contacto (teléfono, email, portfolio, LinkedIn, GitHub) |
 | **Phase 3 — CV + Analysis unificado** | ✅ Completado (#90-93) | Página única (/app/cv): JD + ad-hoc items + orden + tono → CV preview/export + Analysis output. Estilo Lapis CV. Secciones sin datos ocultas. CV manager pages eliminadas |
-| **Phase 4 — Polish II** | 🔲 Pendiente | Navbar (CV→Historial→Settings), em dashes visibles, accordion bug (contenido visible al cerrar), títulos duplicados en secciones de accordion |
-| **Phase 5 — CV Builder** | 🔲 Pendiente | Projects section en Settings (separado de Experiencia), mejorar prompt CV con reglas cv-builder (anti-AI voice, header nombre/contacto, ATS) |
+| **Phase 4 — Polish II** | ✅ Completado | Navbar (CV→Historial→Settings), em dashes visibles, accordion bug, títulos duplicados en accordion, Badge variant fix |
+| **Phase 5 — CV Builder** | 🟡 En progreso (feat/cv-builder) | Projects section (modelo Prisma + API + hook + componente), prompt CV mejorado (header contacto, anti-AI voice, ATS) |
 
 > Las phases se ejecutan con SDD una por una. Cada una pasa por: explore → propose → spec → tasks → apply → verify → archive.

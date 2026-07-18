@@ -6,6 +6,9 @@ import type {
   EducationDTO,
   EducationCreateDTO,
   EducationUpdateDTO,
+  ProjectDTO,
+  ProjectCreateDTO,
+  ProjectUpdateDTO,
   CVGenerateRequestDTO,
   CVGenerateResponseDTO,
 } from "@nexus-talent/shared";
@@ -50,6 +53,26 @@ export function updateEducation(id: string, data: EducationUpdateDTO): Promise<E
 
 export function deleteEducation(id: string): Promise<void> {
   return apiClient.delete(`${BASE}/education/${id}`).then(() => undefined);
+}
+
+// ---------------------------------------------------------------------------
+// Projects
+// ---------------------------------------------------------------------------
+
+export function listProjects(): Promise<ProjectDTO[]> {
+  return apiClient.get<ProjectDTO[]>(`${BASE}/projects`).then((res) => res.data);
+}
+
+export function createProject(data: ProjectCreateDTO): Promise<ProjectDTO> {
+  return apiClient.post<ProjectDTO>(`${BASE}/projects`, data).then((res) => res.data);
+}
+
+export function updateProject(id: string, data: ProjectUpdateDTO): Promise<ProjectDTO> {
+  return apiClient.put<ProjectDTO>(`${BASE}/projects/${id}`, data).then((res) => res.data);
+}
+
+export function deleteProject(id: string): Promise<void> {
+  return apiClient.delete(`${BASE}/projects/${id}`).then(() => undefined);
 }
 
 // ---------------------------------------------------------------------------
