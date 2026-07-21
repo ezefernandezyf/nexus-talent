@@ -61,7 +61,7 @@ export function MobileDrawer({ actions, heading, isOpen, items, onClose }: Mobil
         <>
           <motion.button
             aria-label="Cerrar menú"
-            className="fixed inset-0 cursor-default bg-surface-container-lowest/75 backdrop-blur-sm md:hidden [z-index:var(--z-drawer-backdrop)]"
+            className="fixed inset-0 cursor-default bg-surface-container-lowest/75 md:hidden [z-index:var(--z-drawer-backdrop)]"
             initial={prefersReducedMotion ? false : { opacity: 0 }}
             animate={prefersReducedMotion ? undefined : { opacity: 1 }}
             exit={prefersReducedMotion ? undefined : { opacity: 0 }}

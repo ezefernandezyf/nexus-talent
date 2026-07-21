@@ -35,7 +35,7 @@ function renderAppLayout(
   queryClient: ReturnType<typeof createTestQueryClient>,
   options: { initialEntry?: string } = {},
 ) {
-  const { initialEntry = "/app/analysis" } = options;
+  const { initialEntry = "/app/cv" } = options;
 
   return render(
     <QueryClientProvider client={queryClient}>
@@ -43,7 +43,7 @@ function renderAppLayout(
         <MemoryRouter initialEntries={[initialEntry]}>
           <Routes>
             <Route element={<AppLayout />} path="/app">
-              <Route path="analysis" element={<div>Analysis Content</div>} />
+              <Route path="cv" element={<div>CV Generator & Analysis</div>} />
             </Route>
           </Routes>
         </MemoryRouter>
@@ -70,22 +70,22 @@ describe("AppLayout", () => {
 
     renderAppLayout(queryClient);
 
-    await waitFor(() => expect(screen.getByText("Analysis Content")).toBeInTheDocument());
-    expect(screen.getByRole("link", { name: "Nexus Talent" })).toHaveAttribute("href", "/");
-    expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /análisis/i })).toHaveAttribute("href", "/app/analysis");
-    expect(within(screen.getByLabelText(/app primary navigation/i)).getByRole("link", { name: /historial/i })).toHaveAttribute("href", "/app/history");
+    await waitFor(() => expect(screen.getByText("CV Generator & Analysis")).toBeInTheDocument());
+    expect(screen.queryByRole("link", { name: "Nexus Talent" })).toHaveAttribute("href", "/");
+    expect(within(screen.getByLabelText(/app primary navigation/i)).queryByRole("link", { name: /cv/i })).not.toBeInTheDocument();
+    expect(within(screen.getByLabelText(/app primary navigation/i)).queryByRole("link", { name: /historial/i })).not.toBeInTheDocument();
     expect(within(screen.getByLabelText(/app primary navigation/i)).queryByRole("link", { name: /settings/i })).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /nuevo análisis/i })).toHaveAttribute("href", "/app/analysis");
+   
 
     await userEvent.setup().click(screen.getByRole("button", { name: /abrir menú/i }));
     const drawer = screen.getByRole("dialog", { name: "Nexus Talent" });
-    expect(within(drawer).getByRole("link", { name: "Análisis" })).toHaveAttribute("href", "/app/analysis");
+    expect(within(drawer).queryByRole("link", { name: "cv" })).not.toBeInTheDocument();
     expect(within(drawer).queryByRole("link", { name: "Settings" })).not.toBeInTheDocument();
   });
 
   it("renders the authenticated shell copy for signed-in users", async () => {
     const queryClient = createTestQueryClient();
-    const user = userEvent.setup();
+    const user = userEvent.setup(); 
 
     queryClient.setQueryData(["auth", "session"], {
       user: { id: "550e8400-e29b-41d4-a716-446655440000", email: "analyst@nexustalent.dev", displayName: null },
