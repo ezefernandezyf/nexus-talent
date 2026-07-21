@@ -19,7 +19,7 @@ export default function PrivacyPage() {
           <Button variant="filled" type="button" onClick={() => navigate("/")}>
             Volver al inicio
           </Button>
-          <Button variant="outline" type="button" onClick={() => navigate("/app/analysis")}>
+          <Button variant="outline" type="button" onClick={() => navigate("/app/cv")}>
             Ir al análisis
           </Button>
         </div>

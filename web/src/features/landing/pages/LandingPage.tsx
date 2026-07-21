@@ -41,7 +41,7 @@ const linkOutline = cn(
 
 const publicDrawerItems = [
   { label: "Inicio", to: "/" },
-  { label: "Análisis", to: "/app/analysis" },
+  { label: "CV", to: "/app/cv" },
   { label: "Historial", to: "/app/history" },
 ] as const;
 
@@ -124,7 +124,7 @@ export function LandingPage() {
                 transition={{ duration: 0.8, ease: EASE, delay: 0.3 }}
                 className="mt-10"
               >
-                <Link className={cn(linkOutline, "h-12 px-6 text-label text-lg gap-2.5")} to="/app/analysis">
+                <Link className={cn(linkOutline, "h-12 px-6 text-label text-lg gap-2.5")} to="/app/cv">
                   Empieza a analizar <ArrowRight size={18} weight="regular" />
                 </Link>
               </motion.div>
@@ -397,7 +397,7 @@ export function LandingPage() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="mt-10">
-              <Link className={cn(linkOutline, "h-12 px-6 text-label text-lg gap-2.5")} to="/app/analysis">
+              <Link className={cn(linkOutline, "h-12 px-6 text-label text-lg gap-2.5")} to="/app/cv">
                 Empieza a analizar ahora{" "}
                 <ArrowRight size={18} weight="regular" />
               </Link>

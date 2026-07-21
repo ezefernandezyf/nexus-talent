@@ -21,7 +21,7 @@ function getHistoryErrorMessage(error: unknown) {
 
 const PAGE_SIZE = 10;
 
-export function HistoryFeature({ analysisHref = "/app/analysis", repository, scope }: HistoryFeatureProps) {
+export function HistoryFeature({ analysisHref = "/app/cv", repository, scope }: HistoryFeatureProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const history = useAnalysisHistory({
     repository,
