@@ -97,7 +97,7 @@ describe("HistoryFeature", () => {
     );
 
     await waitFor(() => expect(screen.getByRole("link", { name: /ir al análisis/i })).toBeInTheDocument());
-    expect(screen.getByRole("link", { name: /ir al análisis/i })).toHaveAttribute("href", "/app/analysis");
+    expect(screen.getByRole("link", { name: /ir al análisis/i })).toHaveAttribute("href", "/app/cv");
   });
 
   it("renders analyses sorted by most recent first", async () => {
