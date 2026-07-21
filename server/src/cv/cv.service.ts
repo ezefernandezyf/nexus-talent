@@ -265,7 +265,7 @@ REGLAS DE ESTILO (obligatorias):
 
 4. VARIACION: No todos los bullets deben seguir el mismo patron. Mezcla bullets cortos, tecnicos y de resultados.
 
-5. SECCIONES SIN DATOS: Si el usuario no tiene datos para una seccion (educacion, experiencia, proyectos), NO incluyas esa seccion en el JSON.
+5. SECCIONES SIN DATOS: Si el usuario no tiene datos para una seccion (experiencia, educacion, proyectos), NO incluyas esa seccion en el JSON. Esto significa que no debes generar frases como "No hay experiencia registrada", "None listed" ni ningun texto de relleno. Si no hay datos, simplemente no incluyas la seccion — el JSON final debe contener SOLO las secciones con datos reales.
 
 ${toneInstruction}`,
     },
