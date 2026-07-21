@@ -153,6 +153,16 @@ function formatEducation(items: Array<{ institution: string; degree: string; fie
     .join("\n");
 }
 
+function formatProjects(items: Array<{ name: string; role: string | null; startDate: string; endDate: string | null; description: string | null; technologies: string | null; demoUrl: string | null; repoUrl: string | null }>): string {
+  if (items.length === 0) return "None listed.";
+  return items
+    .map(
+      (p) =>
+        `- ${p.name}${p.role ? ` — ${p.role}` : ""} (${p.startDate} – ${p.endDate ?? "Present"})${p.technologies ? `\n  Tech: ${p.technologies}` : ""}${p.description ? `\n  ${p.description}` : ""}${p.demoUrl ? `\n  Demo: ${p.demoUrl}` : ""}${p.repoUrl ? `\n  Repo: ${p.repoUrl}` : ""}`,
+    )
+    .join("\n");
+}
+
 function formatAdHocItems(items: CVGenerateRequestDTO["adHocItems"]): string {
   if (!items || items.length === 0) return "";
   return items
@@ -165,6 +175,7 @@ function formatAdHocItems(items: CVGenerateRequestDTO["adHocItems"]): string {
 function buildCVPrompt(
   experience: Array<{ company: string; role: string; startDate: string; endDate: string | null; description: string | null; location: string | null }>,
   education: Array<{ institution: string; degree: string; field: string | null; startDate: string; endDate: string | null; description: string | null }>,
+  projects: Array<{ name: string; role: string | null; startDate: string; endDate: string | null; description: string | null; technologies: string | null; demoUrl: string | null; repoUrl: string | null }>,
   profile: { skills: string | null; experienceLevel: string | null; roleTitle: string | null; phone: string | null; portfolioUrl: string | null; linkedinUrl: string | null; githubUrl: string | null } | null,
   input: CVGenerateRequestDTO,
 ): GroqChatMessage[] {
@@ -184,6 +195,10 @@ function buildCVPrompt(
 
   if (education.length > 0) {
     userPrompt += `\n## Educacion\n${formatEducation(education)}\n`;
+  }
+
+  if (projects.length > 0) {
+    userPrompt += `\n## Proyectos\n${formatProjects(projects)}\n`;
   }
 
   if (profile) {
@@ -235,7 +250,7 @@ Formato exacto requerido:
 }
 
 REGLAS DE ESTILO (obligatorias):
-1. HEADER: La PRIMERA seccion (order: 0) debe llamarse "Contacto" y contener el nombre completo del usuario (usando el campo "Rol deseado" o generando un nombre generico si no hay), seguido de telefono, email, LinkedIn, GitHub y portfolio. Cada dato en su propia linea. Ej:
+1. HEADER: La PRIMERA seccion (order: 0) debe contener el nombre completo del usuario (usando el campo "Rol deseado" o generando un nombre generico si no hay), seguido de telefono, email, LinkedIn, GitHub y portfolio. Cada dato en su propia linea. Ej:
    Juan Perez
    Tel: +54 11 5555-5555
    Email: juan@email.com
@@ -329,7 +344,7 @@ export async function generateCV(userId: string, input: CVGenerateRequestDTO): P
 
   try {
     // Fetch user data in parallel
-    const [experience, education, profile] = await Promise.all([
+    const [experience, education, projects, profile] = await Promise.all([
       prisma.workExperience.findMany({
         where: { userId },
         orderBy: { startDate: "desc" },
@@ -338,11 +353,15 @@ export async function generateCV(userId: string, input: CVGenerateRequestDTO): P
         where: { userId },
         orderBy: { startDate: "desc" },
       }),
+      prisma.project.findMany({
+        where: { userId },
+        orderBy: { startDate: "desc" },
+      }),
       prisma.profile.findUnique({ where: { id: userId } }),
     ]);
 
-    // Build prompt — empty experience list still proceeds
-    const messages = buildCVPrompt(experience, education, profile, input);
+    // Build prompt — empty project list still proceeds
+    const messages = buildCVPrompt(experience, education, projects, profile, input);
     const envelope = await fetchGroq(messages, controller.signal);
     const raw = parseGroqEnvelope(envelope);
 
