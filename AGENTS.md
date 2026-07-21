@@ -101,6 +101,20 @@ npx impeccable detect web/src/
 | **Phase 2 — CV Hub en Settings** | ✅ Completado (#87-89) | Settings tipo CV Hub: Accordion, Educación CRUD, Experiencia CRUD, Skills con Tags, Contacto (teléfono, email, portfolio, LinkedIn, GitHub) |
 | **Phase 3 — CV + Analysis unificado** | ✅ Completado (#90-93) | Página única (/app/cv): JD + ad-hoc items + orden + tono → CV preview/export + Analysis output. Estilo Lapis CV. Secciones sin datos ocultas. CV manager pages eliminadas |
 | **Phase 4 — Polish II** | ✅ Completado | Navbar (CV→Historial→Settings), em dashes visibles, accordion bug, títulos duplicados en accordion, Badge variant fix |
-| **Phase 5 — CV Builder** | 🟡 En progreso (feat/cv-builder) | Projects section (modelo Prisma + API + hook + componente), prompt CV mejorado (header contacto, anti-AI voice, ATS) |
+| **Phase 5 — CV Builder** | ✅ Completado (#94) | Projects section (modelo Prisma + API + hook + componente), prompt CV mejorado (header contacto, anti-AI voice, ATS). Mergeado a develop → main |
+| **Phase 6 — Final Polish & Hardening** | 🟡 En progreso (fix/cv-ci-hardening) | Fix CI + CV bugs + auditoría completa. Ver tareas abajo |
+
+### Phase 6 — Tareas
+
+| # | Prioridad | Tarea | Archivos |
+|---|-----------|-------|----------|
+| 1 | 🔴 Crítico | **Fix CI**: AppLayout.test.tsx actualizado — no busca "Análisis" (sacado en Phase 4) | `web/src/shared/layouts/AppLayout.test.tsx` |
+| 2 | 🔴 Crítico | **CV: Projects en generateCV** — agregar `projects` al `Promise.all` en `generateCV()`, crear `formatProjects()`, pasarlos a `buildCVPrompt()` | `server/src/cv/cv.service.ts` |
+| 3 | 🔴 Crítico | **CV: Reforzar prompt anti-secciones-vacías** — mejorar system prompt para que la IA no genere "No hay experiencia..." y reforzar `filterEmptySections()` | `server/src/cv/cv.service.ts`, `web/src/features/cv/pages/UnifiedPage.tsx` |
+| 4 | 🟡 Media | **Navbar: botón "Nuevo análisis" obsoleto** — apunta a `/app/analysis`, debería apuntar a `/app/cv` | `web/src/shared/layouts/AppLayout.tsx` |
+| 5 | 🟡 Media | **AppRouter.test.tsx** — referencias a /app/analysis desactualizadas | `web/src/core/__tests__/AppRouter.test.tsx` |
+| 6 | 🟡 Media | **Tests faltantes** — projects CRUD router test + get individual endpoints | `server/src/cv/cv.router.test.ts` |
+| 7 | 🟡 Baja | **Otras referencias a /app/analysis** — LandingPage, PrivacyPage, AuthCallbackPage, etc | Varios archivos |
+| 8 | 🔴 Crítico | **CI verde en el PR** — lint + tests (web + server) pasando | — |
 
 > Las phases se ejecutan con SDD una por una. Cada una pasa por: explore → propose → spec → tasks → apply → verify → archive.

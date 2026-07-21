@@ -11,6 +11,9 @@ const { mockPrisma } = vi.hoisted(() => ({
     education: {
       findMany: vi.fn(),
     },
+    project: {
+      findMany: vi.fn(),
+    },
     profile: {
       findUnique: vi.fn(),
     },
@@ -113,6 +116,7 @@ describe("cv.service — generateCV", () => {
   it("returns valid CV when all data is present", async () => {
     mockPrisma.workExperience.findMany.mockResolvedValue([mockExperience]);
     mockPrisma.education.findMany.mockResolvedValue([mockEducation]);
+    mockPrisma.project.findMany.mockResolvedValue([]);
     mockPrisma.profile.findUnique.mockResolvedValue(mockProfile);
     mockFetch.mockResolvedValue({
       ok: true,
@@ -148,6 +152,10 @@ describe("cv.service — generateCV", () => {
       where: { userId: "user-1" },
       orderBy: { startDate: "desc" },
     });
+    expect(mockPrisma.project.findMany).toHaveBeenCalledWith({
+      where: { userId: "user-1" },
+      orderBy: { startDate: "desc" },
+    });
     expect(mockPrisma.profile.findUnique).toHaveBeenCalledWith({
       where: { id: "user-1" },
     });
@@ -170,6 +178,7 @@ describe("cv.service — generateCV", () => {
   it("proceeds when experience list is empty", async () => {
     mockPrisma.workExperience.findMany.mockResolvedValue([]);
     mockPrisma.education.findMany.mockResolvedValue([mockEducation]);
+    mockPrisma.project.findMany.mockResolvedValue([]);
     mockPrisma.profile.findUnique.mockResolvedValue(mockProfile);
     mockFetch.mockResolvedValue({
       ok: true,
@@ -191,6 +200,7 @@ describe("cv.service — generateCV", () => {
   it("throws 502 when Groq request times out", async () => {
     mockPrisma.workExperience.findMany.mockResolvedValue([mockExperience]);
     mockPrisma.education.findMany.mockResolvedValue([mockEducation]);
+    mockPrisma.project.findMany.mockResolvedValue([]);
     mockPrisma.profile.findUnique.mockResolvedValue(mockProfile);
 
     const abortError = new Error("The operation was aborted");
@@ -210,6 +220,7 @@ describe("cv.service — generateCV", () => {
   it("throws 502 when Groq returns invalid JSON content", async () => {
     mockPrisma.workExperience.findMany.mockResolvedValue([mockExperience]);
     mockPrisma.education.findMany.mockResolvedValue([mockEducation]);
+    mockPrisma.project.findMany.mockResolvedValue([]);
     mockPrisma.profile.findUnique.mockResolvedValue(mockProfile);
     mockFetch.mockResolvedValue({
       ok: true,
@@ -228,6 +239,7 @@ describe("cv.service — generateCV", () => {
   it("throws 502 when Groq response fails Zod validation", async () => {
     mockPrisma.workExperience.findMany.mockResolvedValue([mockExperience]);
     mockPrisma.education.findMany.mockResolvedValue([mockEducation]);
+    mockPrisma.project.findMany.mockResolvedValue([]);
     mockPrisma.profile.findUnique.mockResolvedValue(mockProfile);
     mockFetch.mockResolvedValue({
       ok: true,
@@ -248,6 +260,7 @@ describe("cv.service — generateCV", () => {
     vi.stubEnv("GROQ_API_KEY", "");
     mockPrisma.workExperience.findMany.mockResolvedValue([mockExperience]);
     mockPrisma.education.findMany.mockResolvedValue([mockEducation]);
+    mockPrisma.project.findMany.mockResolvedValue([]);
     mockPrisma.profile.findUnique.mockResolvedValue(mockProfile);
 
     await expect(generateCV("user-1", {})).rejects.toThrow(AppError);

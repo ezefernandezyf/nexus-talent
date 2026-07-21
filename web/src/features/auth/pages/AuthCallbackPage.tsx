@@ -44,7 +44,7 @@ export default function AuthCallbackPage() {
   }, [refetch, searchParams]);
 
   if (status === AUTH_STATUS.AUTHENTICATED) {
-    return <Navigate replace to="/app/analysis" />;
+    return <Navigate replace to="/app/cv" />;
   }
 
   const callbackErrorMessage = getCallbackErrorMessage(searchParams);

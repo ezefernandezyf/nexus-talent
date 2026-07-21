@@ -16,6 +16,10 @@ const {
   mockCreateEducation,
   mockUpdateEducation,
   mockDeleteEducation,
+  mockListProjects,
+  mockCreateProject,
+  mockUpdateProject,
+  mockDeleteProject,
   mockGenerateCV,
 } = vi.hoisted(() => ({
   mockListExperience: vi.fn(),
@@ -26,6 +30,10 @@ const {
   mockCreateEducation: vi.fn(),
   mockUpdateEducation: vi.fn(),
   mockDeleteEducation: vi.fn(),
+  mockListProjects: vi.fn(),
+  mockCreateProject: vi.fn(),
+  mockUpdateProject: vi.fn(),
+  mockDeleteProject: vi.fn(),
   mockGenerateCV: vi.fn(),
 }));
 
@@ -38,6 +46,10 @@ vi.mock("./cv.service.js", () => ({
   createEducation: mockCreateEducation,
   updateEducation: mockUpdateEducation,
   deleteEducation: mockDeleteEducation,
+  listProjects: mockListProjects,
+  createProject: mockCreateProject,
+  updateProject: mockUpdateProject,
+  deleteProject: mockDeleteProject,
   generateCV: mockGenerateCV,
 }));
 
@@ -251,6 +263,46 @@ describe("cv router — authentication", () => {
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ error: "Authentication required" });
   });
+
+  it("returns 401 on GET /projects without auth", async () => {
+    setAuth(false);
+    const { req, res } = mockReqRes("/projects");
+
+    await callHandler(cvRouter, "get", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ error: "Authentication required" });
+  });
+
+  it("returns 401 on POST /projects without auth", async () => {
+    setAuth(false);
+    const { req, res } = mockReqRes("/projects", { body: {} });
+
+    await callHandler(cvRouter, "post", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ error: "Authentication required" });
+  });
+
+  it("returns 401 on PUT /projects/:id without auth", async () => {
+    setAuth(false);
+    const { req, res } = mockReqRes("/projects/abc");
+
+    await callHandler(cvRouter, "put", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ error: "Authentication required" });
+  });
+
+  it("returns 401 on DELETE /projects/:id without auth", async () => {
+    setAuth(false);
+    const { req, res } = mockReqRes("/projects/abc");
+
+    await callHandler(cvRouter, "delete", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ error: "Authentication required" });
+  });
 });
 
 describe("cv router — work experience", () => {
@@ -446,6 +498,108 @@ describe("cv router — education", () => {
       expect.objectContaining({ error: "Validation failed" }),
     );
     expect(mockCreateEducation).not.toHaveBeenCalled();
+  });
+});
+
+describe("cv router — projects", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    setAuth(true);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("returns empty list when no projects exist", async () => {
+    mockListProjects.mockResolvedValue([]);
+    const { req, res } = mockReqRes("/projects");
+
+    await callHandler(cvRouter, "get", req, res);
+
+    expect(res.json).toHaveBeenCalledWith([]);
+    expect(mockListProjects).toHaveBeenCalledWith("user-1");
+  });
+
+  it("creates a project entry", async () => {
+    const input = {
+      name: "Nexus Talent",
+      role: "Full-stack dev",
+      startDate: "2025-01-01",
+      endDate: "2025-06-01",
+      description: "AI copilot for job apps",
+      technologies: "React, Node.js, Prisma",
+      demoUrl: "https://demo.example.com",
+      repoUrl: "https://github.com/example/repo",
+    };
+    const created = { id: "proj-1", userId: "user-1", ...input };
+    mockCreateProject.mockResolvedValue(created);
+    const { req, res } = mockReqRes("/projects", { body: input });
+
+    await callHandler(cvRouter, "post", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith(created);
+    expect(mockCreateProject).toHaveBeenCalledWith("user-1", input);
+  });
+
+  it("updates a project entry", async () => {
+    const update = { role: "Lead dev" };
+    const updated = { id: "proj-1", userId: "user-1", name: "Nexus Talent", role: "Lead dev", startDate: "2025-01-01", endDate: "2025-06-01", description: null, technologies: null, demoUrl: null, repoUrl: null };
+    mockUpdateProject.mockResolvedValue(updated);
+    const { req, res } = mockReqRes("/projects/proj-1", { body: update });
+
+    await callHandler(cvRouter, "put", req, res);
+
+    expect(res.json).toHaveBeenCalledWith(updated);
+    expect(mockUpdateProject).toHaveBeenCalledWith("proj-1", "user-1", update);
+  });
+
+  it("deletes a project entry", async () => {
+    mockDeleteProject.mockResolvedValue(undefined);
+    const { req, res } = mockReqRes("/projects/proj-1");
+
+    await callHandler(cvRouter, "delete", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(204);
+    expect(res.end).toHaveBeenCalled();
+    expect(mockDeleteProject).toHaveBeenCalledWith("proj-1", "user-1");
+  });
+
+  it("returns 404 when updating non-owned project", async () => {
+    const error = new AppError(404, "Project not found");
+    mockUpdateProject.mockRejectedValue(error);
+    const { req, res } = mockReqRes("/projects/not-owned", { body: { role: "Hacker" } });
+
+    await callHandler(cvRouter, "put", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ error: "Project not found" });
+    expect(mockUpdateProject).toHaveBeenCalledWith("not-owned", "user-1", { role: "Hacker" });
+  });
+
+  it("returns 404 when deleting non-owned project", async () => {
+    const error = new AppError(404, "Project not found");
+    mockDeleteProject.mockRejectedValue(error);
+    const { req, res } = mockReqRes("/projects/not-owned");
+
+    await callHandler(cvRouter, "delete", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ error: "Project not found" });
+    expect(mockDeleteProject).toHaveBeenCalledWith("not-owned", "user-1");
+  });
+
+  it("returns 400 when creating with missing required fields", async () => {
+    const { req, res } = mockReqRes("/projects", { body: { name: "OnlyName" } });
+
+    await callHandler(cvRouter, "post", req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ error: "Validation failed" }),
+    );
+    expect(mockCreateProject).not.toHaveBeenCalled();
   });
 });
 
