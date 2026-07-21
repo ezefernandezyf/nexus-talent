@@ -73,9 +73,9 @@ function AppLayoutContent() {
                 "h-9 px-4 text-sm",
                 "hidden md:inline-flex",
               )}
-              to="/app/analysis"
+              to="/app/cv"
             >
-              Nuevo análisis
+              Nuevo CV
             </Link>
 
             <MobileMenuButton isOpen={isMobileMenuOpen} onClick={() => setIsMobileMenuOpen((current) => !current)} />
