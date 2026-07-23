@@ -199,6 +199,6 @@ export async function handleOAuthCallback(code: string): Promise<OAuthResult> {
 
   return {
     token,
-    redirectTo: `${clientUrl}/app/analysis`,
+    redirectTo: `${clientUrl}/app/cv`,
   };
 }
