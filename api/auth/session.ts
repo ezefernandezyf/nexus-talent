@@ -8,13 +8,13 @@
  * → POSTs code to Render exchange endpoint → gets JWT → sets cookie → redirects
  */
 
-const RENDER_URL = process.env.RENDER_URL ?? "https://nexus-talent-api-svik.onrender.com";
+const RENDER_URL = process.env.RENDER_URL ?? "https://nexus-talent-5n8v.onrender.com";
 const EXCHANGE_SECRET = process.env.EXCHANGE_SECRET ?? "";
 
 export default async function handler(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
-  const rawRedirect = url.searchParams.get("redirect") ?? "/app/analysis";
+  const rawRedirect = url.searchParams.get("redirect") ?? "/app/cv";
   const redirectTo = safeOrigin(url.origin, rawRedirect);
 
   if (!code) {
@@ -87,7 +87,7 @@ export const config = {
 function safeOrigin(origin: string, path: string): string {
   // Only allow absolute paths starting with /
   if (!path.startsWith("/")) {
-    return origin + "/app/analysis";
+    return origin + "/app/cv";
   }
   return origin + path;
 }

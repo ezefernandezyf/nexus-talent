@@ -169,7 +169,7 @@ export async function googleCallback(req: Request, res: Response, next: NextFunc
     const clientUrl = process.env.CLIENT_URL ?? "http://localhost:5173";
     // Generate one-time code and store JWT, no JWT in redirect URL
     const oneTimeCode = codeStore.set(result.token);
-    res.redirect(`${clientUrl}/api/auth/session?code=${oneTimeCode}&redirect=/app/analysis`);
+    res.redirect(`${clientUrl}/api/auth/session?code=${oneTimeCode}&redirect=/app/cv`);
   } catch (err) {
     next(err);
   }
