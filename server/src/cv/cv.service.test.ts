@@ -80,7 +80,7 @@ const mockValidResponse = {
   ],
   metadata: {
     generatedAt: "2026-07-12T20:00:00.000Z",
-    model: "llama-3.3-70b-versatile",
+    model: "openai/gpt-oss-120b",
     sectionCount: 2,
   },
 };
@@ -101,7 +101,7 @@ describe("cv.service — generateCV", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubEnv("GROQ_API_KEY", "test-groq-key");
-    vi.stubEnv("GROQ_MODEL", "llama-3.3-70b-versatile");
+    vi.stubEnv("GROQ_MODEL", "openai/gpt-oss-120b");
     mockFetch = vi.spyOn(globalThis, "fetch") as unknown as ReturnType<typeof vi.fn>;
   });
 
@@ -139,7 +139,7 @@ describe("cv.service — generateCV", () => {
     });
     expect(result.metadata).toMatchObject({
       generatedAt: expect.any(String),
-      model: "llama-3.3-70b-versatile",
+model: "openai/gpt-oss-120b",
       sectionCount: 2,
     });
 

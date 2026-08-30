@@ -61,7 +61,7 @@ describe("googleCallback", () => {
   it("redirects with ?code= instead of ?token= in the URL", async () => {
     mockHandleOAuthCallback.mockResolvedValue({
       token: "jwt-value-123",
-      redirectTo: "http://localhost:5173/app/analysis",
+      redirectTo: "http://localhost:5173/app/cv",
     });
 
     const { req, res } = mockReqRes({
@@ -78,7 +78,7 @@ describe("googleCallback", () => {
     expect(callArg).not.toContain("token=");
     // Must contain a one-time code
     expect(callArg).toMatch(/code=[0-9a-f]{64}/);
-    expect(callArg).toContain("redirect=/app/analysis");
+    expect(callArg).toContain("redirect=/app/cv");
   });
 
   it("returns 403 when OAuth state is missing or mismatched", async () => {
@@ -163,7 +163,7 @@ describe("googleCallback", () => {
   it("non-link mode still uses handleOAuthCallback (unchanged)", async () => {
     mockHandleOAuthCallback.mockResolvedValue({
       token: "jwt-value-456",
-      redirectTo: "http://localhost:5173/app/analysis",
+      redirectTo: "http://localhost:5173/app/cv",
     });
 
     const { req, res } = mockReqRes({

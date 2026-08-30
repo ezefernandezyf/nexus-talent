@@ -611,7 +611,7 @@ describe("cv router — generate CV", () => {
     ],
     metadata: {
       generatedAt: "2026-07-12T19:00:00.000Z",
-      model: "llama-3.3-70b-versatile",
+      model: "openai/gpt-oss-120b",
       sectionCount: 2,
     },
   };

@@ -11,7 +11,7 @@ const groqResponseSchema = analysisResponseSchema.omit({ id: true, createdAt: tr
 // ============================================================================
 
 const GROQ_CHAT_COMPLETIONS_URL = "https://api.groq.com/openai/v1/chat/completions";
-const DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile";
+const DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b";
 const GROQ_TIMEOUT_MS = 90_000;
 
 // ============================================================================
